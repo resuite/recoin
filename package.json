@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "dev:site": "cd ./apps/site && bun run dev",
+    "build:site": "cd ./apps/site && bun run build"
+  },
+  "workspaces": [
+    "./apps/site"
+  ]
+}
