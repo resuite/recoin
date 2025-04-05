@@ -4,6 +4,7 @@ import (
 	"recoin/config"
 	"recoin/dtos"
 	"recoin/models"
+	"recoin/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -59,5 +60,5 @@ func AddEmailToMailingList(c *gin.Context) {
 		return
 	}
 
-	c.JSON(201, gin.H{"message": "Email added successfully"})
+	c.JSON(201, response.Success(map[string]string{"message": "Email added to mailing list"}))
 }

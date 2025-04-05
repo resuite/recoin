@@ -1,0 +1,17 @@
+@mixin Grid {
+  --GridLinesColor: #ffffff0d;
+  --GridLinesStroke: 1.5px;
+  background-color: var(--ColorBase);
+  background-image: linear-gradient(
+      var(--GridLinesColor) var(--GridLinesStroke),
+      transparent var(--GridLinesStroke)
+    ),
+    linear-gradient(
+      90deg,
+      var(--GridLinesColor) var(--GridLinesStroke),
+      transparent var(--GridLinesStroke)
+    );
+  background-position: calc(-1 * var(--GridLinesStroke))
+    calc(-1 * var(--GridLinesStroke));
+  background-size: 50px 50px; /* Adjust grid size */
+}

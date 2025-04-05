@@ -6,6 +6,7 @@ import (
 	"recoin/handlers"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/time/rate"
 )
@@ -25,6 +26,20 @@ func main() {
 
 	router := gin.Default()
 
+	// CORS Middleware Configuration
+	corsConfig := cors.DefaultConfig()
+	if appConfig.FrontendURL != "" {
+		corsConfig.AllowOrigins = []string{appConfig.FrontendURL}
+	} else {
+		corsConfig.AllowAllOrigins = true
+	}
+	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"} // Add any other headers your frontend sends
+	corsConfig.AllowCredentials = true                                                              // If your frontend needs to send cookies or auth headers
+
+	router.Use(cors.New(corsConfig))
+
+	// Rate Limiter Middleware
 	limiter := rate.NewLimiter(rate.Every(3*time.Second), 20)
 	router.Use(RateLimiterMiddleware(limiter))
 

@@ -1,0 +1,66 @@
+@use './typography.scss' as typography;
+@use './variables.scss';
+@use './animations.scss';
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  transition-timing-function: var(--AnimationEase);
+  animation-timing-function: var(--AnimationEase);
+}
+
+@mixin CanvasColor($bg: var(--ColorBase)) {
+  --BackgroundColor: #{$bg};
+  background-color: $bg;
+
+  @if $bg == var(--ColorBase) {
+    color: var(--ColorLightYellow);
+    --TextColor: var(--ColorLightYellow);
+  } @else {
+    color: var(--ColorBase);
+    --TextColor: var(--ColorBase);
+  }
+}
+
+html {
+  @include CanvasColor();
+
+  ::selection {
+    background-color: var(--ColorSelectionBackground);
+  }
+}
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+li,
+menu {
+  margin: 0;
+}
+
+/* Default Layout */
+body {
+  text-wrap: pretty;
+  font-family: 'Instrument Sans', sans-serif;
+  font-style: normal;
+  @include typography.ButtonText;
+}
+
+main {
+  padding-inline: var(--SpacingDouble);
+}
+
+header {
+  position: fixed;
+  top: 0;
+  padding-inline: var(--SpacingDouble);
+  padding-block: var(--Spacing);
+  @include typography.BiggerText;
+}

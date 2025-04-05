@@ -21,8 +21,12 @@
 go.work
 go.work.sum
 
+spec
+
 # env file
 .env
+apps/site/.env
+dist
 
 node_modules
 documentation/prompts

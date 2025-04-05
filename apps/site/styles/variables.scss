@@ -1,0 +1,44 @@
+:root {
+  --Rounded: 10px;
+  --FormInputMinHeight: 50px;
+  --Stroke: 3px;
+
+  /* Spacing */
+  --Spacing: 25px;
+  --SpacingHalf: calc(var(--Spacing) / 2);
+  --SpacingQuarter: calc(var(--Spacing) / 4);
+  --SpacingDouble: calc(var(--Spacing) * 2);
+  --SpacingTriple: calc(var(--Spacing) * 3);
+  --SpacingQuadruple: calc(var(--Spacing) * 4);
+  --SpacingQuintuple: calc(var(--Spacing) * 5);
+
+  /* Colors */
+  --ColorBase: rgba(39, 39, 39, 1);
+  --ColorAmaranth: rgba(211, 52, 67, 1);
+  --ColorIndianRed: rgba(229, 92, 102, 1);
+  --ColorBrightPink: rgba(231, 101, 109, 1);
+  --ColorLightCoral: rgba(233, 109, 115, 1);
+  --ColorMelon: rgba(250, 179, 169, 1);
+  --ColorPaleDogwood: rgba(249, 217, 199, 1);
+  --ColorAntiqueWhite: rgba(249, 236, 214, 1);
+  --ColorLightYellow: rgba(250, 255, 237, 1);
+  --ColorSelectionBackground: rgba(247, 241, 220, 0.293);
+
+  --ColorWhite: rgba(255, 255, 255, 1);
+  --ColorTeal: rgba(23, 87, 72, 1);
+  --ColorBarelyWhite: rgba(255, 255, 255, 0.2);
+  --ColorYaleBlue: rgba(89, 25, 46, 1);
+  --ColorBlack: rgba(0, 0, 0, 1);
+  --ColorOverlay: rgba(0, 0, 0, 0.4);
+  --ColorRecurring: rgba(65, 90, 128, 1);
+
+  /* Animation */
+  --AnimationDuration: 0.2s;
+  --AnimationDurationBitSlow: calc(var(--AnimationDuration) * 1.5);
+  --AnimationDurationSlow: calc(var(--AnimationDuration) * 2);
+  --AnimationDurationSlower: calc(var(--AnimationDuration) * 3);
+  --AnimationDurationSlowest: calc(var(--AnimationDuration) * 15);
+  --AnimationDurationFast: calc(var(--AnimationDuration) * 0.5);
+  --AnimationDurationFaster: calc(var(--AnimationDuration) * 0.25);
+  --AnimationEase: ease;
+}

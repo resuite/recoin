@@ -1,0 +1,17 @@
+.Loader {
+  --LoaderStroke: calc(var(--LoaderSize) / 5);
+  width: var(--LoaderSize);
+  height: var(--LoaderSize);
+  border-width: min(var(--Stroke), calc(var(--LoaderStroke) * 0.95));
+  border-style: solid;
+  border-color: currentColor;
+  border-radius: var(--LoaderStroke);
+  animation: spin var(--AnimationDurationSlower) linear infinite;
+  aspect-ratio: 1;
+}
+
+@keyframes spin {
+  from {
+    rotate: 360deg;
+  }
+}

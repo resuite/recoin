@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "dev:site": "cd ./apps/site && bun run dev",
-    "build:site": "cd ./apps/site && bun run build"
+    "site:dev": "cd ./apps/site && bun run dev",
+    "site:build": "cd ./apps/site && bun run build",
+    "site:preview": "cd ./apps/site && bun run preview"
   },
   "workspaces": [
     "./apps/site"

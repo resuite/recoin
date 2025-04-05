@@ -1,0 +1,58 @@
+/* Text Styles */
+@mixin LogoText {
+  letter-spacing: -0.03em;
+  font-size: 65px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin ButtonText {
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin HeaderText {
+  letter-spacing: -0.03em;
+  font-size: 21.66666603088379px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin SmallText {
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin TitleText {
+  letter-spacing: -0.03em;
+  font-size: 30px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin SmallerText {
+  font-size: 10px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin BoldNumberText {
+  letter-spacing: -0.03em;
+  font-size: 50px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin EvenSmallerText {
+  font-size: 8px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin BiggerText {
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: none;
+}
