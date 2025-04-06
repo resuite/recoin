@@ -1,6 +1,10 @@
 @use '@/styles/typography.scss' as typography;
 @use '@/styles/backgrounds.scss' as backgrounds;
 
+html:has(#ComingSoonPage) {
+  @include backgrounds.Grid;
+}
+
 #ComingSoonPage {
   display: grid;
   width: 100dvw;
@@ -9,7 +13,6 @@
   place-items: center;
   place-content: center;
   gap: var(--Spacing);
-  @include backgrounds.Grid;
 
   @media (orientation: landscape) {
     align-items: center;

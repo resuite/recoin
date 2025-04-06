@@ -19,8 +19,6 @@ interface SuccessfulServerResponse<T> {
 const addToListHandler = async (
   email: string
 ): Promise<SuccessfulServerResponse<{ message: string }>> => {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  console.log('addToListHandler', email);
   const res = await fetch(`${API_URL}/mailing-list`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -47,7 +45,7 @@ const ComingSoon: RouteComponent<PageMeta> = () => {
 
   error.listen((err) => {
     if (!err) return;
-    showToast({ message: `Error: ${err.message}`, timeout: 3000 });
+    showToast({ message: `Error: ${err.message}`, timeout: 2500 });
   });
 
   data.listen((data) => {

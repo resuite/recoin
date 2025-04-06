@@ -1,6 +1,10 @@
 @use '@/styles/typography.scss' as typography;
 @use '@/styles/backgrounds.scss' as backgrounds;
 
+body:has(#ComingSoonWaitlistSuccessPage) {
+  @include backgrounds.Grid;
+}
+
 #ComingSoonWaitlistSuccessPage {
   display: grid;
   width: 100dvw;
@@ -9,7 +13,6 @@
   place-items: center;
   place-content: center;
   gap: var(--Spacing);
-  @include backgrounds.Grid;
 
   section {
     display: grid;
