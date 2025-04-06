@@ -41,7 +41,7 @@ func AddEmailToMailingList(c *gin.Context) {
 	var input dtos.MailingListRegistrationDTO
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(400, gin.H{"error": "Invalid request body: " + err.Error()})
+		c.JSON(400, response.Error(response.MALFORMED_REQUEST, "Invalid request body", err.Error()))
 		return
 	}
 
@@ -56,7 +56,7 @@ func AddEmailToMailingList(c *gin.Context) {
 	_, _, err := client.From("mailing-list").Insert(insertData, false, "", "", "minimal").Execute()
 
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Failed to add email to mailing list: " + err.Error()})
+		c.JSON(500, response.Error(response.RESOURCE_NOT_FOUND, "Failed to add email to mailing list", err.Error()))
 		return
 	}
 
