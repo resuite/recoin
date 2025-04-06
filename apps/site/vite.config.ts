@@ -11,7 +11,7 @@ export default defineConfig({
     outDir: '../../dist/site',
   },
   server: {
-    allowedHosts: ['eyd.adebola.online'],
+    allowedHosts: true,
   },
   plugins: [
     retend(),
