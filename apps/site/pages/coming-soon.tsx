@@ -9,6 +9,7 @@ import { ArrowIcon } from '@/components/icons/arrow-icon';
 import { showToast } from '@/components/toast';
 import { API_URL } from '@/constants';
 import './coming-soon.scss';
+import { state } from '@/state';
 
 interface SuccessfulServerResponse<T> {
   success: true;
@@ -51,6 +52,7 @@ const ComingSoon: RouteComponent<PageMeta> = () => {
 
   data.listen((data) => {
     if (!data?.success) return;
+    state.waitListSuccess.value = true;
     router.navigate('/coming-soon-waitlist-success');
   });
 

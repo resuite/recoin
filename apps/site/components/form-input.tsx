@@ -11,7 +11,7 @@ type BaseButtonProps = {
   inlinePadding?: JSX.ValueOrCell<string>;
   squeezeX?: JSX.ValueOrCell<number>;
   alignmentX?: JSX.ValueOrCell<boolean>;
-  Icon?: JSX.ValueOrCell<() => JSX.Template>;
+  Icon?: JSX.ValueOrCell<(props: JSX.IntrinsicElements['svg']) => JSX.Template>;
   href?: string;
 };
 
@@ -27,6 +27,7 @@ export const Button = (props: ButtonProps) => {
     squeezeX = 1,
     alignmentX = 'left',
     Icon,
+    href,
     ...rest
   } = props;
 
@@ -40,11 +41,10 @@ export const Button = (props: ButtonProps) => {
     Object.assign(buttonStyle, rest.style);
   }
 
-  if (props.href) {
-    const { href, ...anchorProps } = props;
+  if (href) {
     return (
       <router.Link
-        {...anchorProps}
+        {...rest}
         href={href}
         data-align-x={alignmentX}
         class={['Button', rest.class]}
@@ -53,7 +53,7 @@ export const Button = (props: ButtonProps) => {
         <div class="ButtonContentContainer">
           <div class="ButtonIconContainer">
             {If(Icon, (IconValue) => (
-              <IconValue />
+              <IconValue class="ButtonIcon" />
             ))}
           </div>
           {props.children}

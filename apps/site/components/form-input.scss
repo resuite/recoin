@@ -52,6 +52,7 @@
   background-color: transparent;
 
   transition: scale var(--AnimationDurationFast);
+  text-decoration: none;
   grid:
     auto /
     var(--ButtonInlinePadding) 1fr var(--ButtonInlinePadding);
@@ -115,6 +116,7 @@
   .ButtonContentContainer {
     position: relative;
     display: grid;
+    align-items: center;
     width: 100%;
     height: 100%;
     color: var(--BackgroundColor);
@@ -140,5 +142,14 @@
       position: relative;
       transition: translate var(--ButtonTransition);
     }
+  }
+
+  .ButtonIconContainer {
+    display: grid;
+    place-items: center;
+  }
+
+  .ButtonIcon {
+    width: 14px;
   }
 }

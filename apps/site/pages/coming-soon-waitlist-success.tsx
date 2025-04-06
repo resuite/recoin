@@ -1,9 +1,18 @@
 import { Button } from '@/components/form-input';
 import { Checkmark } from '@/components/icons/checkmark';
 import { sty } from '@/utils';
+import { GithubIcon } from '@/components/icons/github';
+import { useRouter } from 'retend/router';
+import { state } from '@/state';
 import './coming-soon-waitlist-success.scss';
 
 const ComingSoonWaitlistSuccess = () => {
+  const router = useRouter();
+
+  if (!state.waitListSuccess.value) {
+    return router.navigate('/coming-soon');
+  }
+
   return (
     <main id="ComingSoonWaitlistSuccessPage">
       <section>
@@ -17,7 +26,11 @@ const ComingSoonWaitlistSuccess = () => {
           launch.
         </p>
       </section>
-      <Button width="300px">
+      <Button
+        href="https://github.com/resuite/recoin"
+        width="300px"
+        Icon={GithubIcon}
+      >
         <span>View recoin's source</span>
       </Button>
     </main>
