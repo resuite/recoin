@@ -24,10 +24,9 @@ const addToListHandler = async (
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
   });
-  if (res.status !== 201) {
-    throw new Error('Failed to add email to mailing list');
-  }
-  return res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error.message);
+  return data;
 };
 
 const ComingSoon: RouteComponent<PageMeta> = () => {

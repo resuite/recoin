@@ -17,6 +17,7 @@ const (
 	INVALID_OAUTH_TOKEN     ErrorCode = 10
 	ACCOUNT_SUSPENDED       ErrorCode = 11
 	TOO_MANY_REQUESTS       ErrorCode = 12
+	INTERNAL_SERVER_ERROR   ErrorCode = 13
 )
 
 func Success(data any) gin.H {
