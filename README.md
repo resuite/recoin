@@ -1,19 +1,21 @@
 # recoin
 
-Open-source, local-first finance tracker. ⬛⬜
+recoin is an open-source, local-first finance tracker designed to empower individuals to take control of their financial data. It is built with Go, Bun, Vite, Retend, and Supabase.
 
 > This project is a work in progress and is not yet ready for production use.
 
 ## Project Structure
 
-This project is a monorepo managed with Bun workspaces. It contains the following applications:
+This project is a monorepo managed with workspaces, containing the following applications:
 
-- `apps/api`: A backend API written in Go.
-- `apps/site`: The frontend website built with Vite, TypeScript, Sass, and Retend.
+- `apps/api`: A backend API built with Go, responsible for data management and API endpoints.
+- `apps/site`: The frontend website built with Vite, TypeScript, Sass, and Retend, providing the user interface.
 
 ## Getting Started
 
 ### Prerequisites
+
+Ensure you have the following installed:
 
 - [Bun](https://bun.sh/)
 - [Go](https://go.dev/) (for the API)
@@ -32,7 +34,7 @@ This project is a monorepo managed with Bun workspaces. It contains the followin
    bun run site:dev
    ```
 
-   This will start the Vite development server for the `apps/site` application, typically available at `http://localhost:5229`.
+   This will launch the Vite development server for the `apps/site` application, typically accessible at `http://localhost:5229`.
 
 ### Running the API Locally
 
@@ -42,28 +44,11 @@ This project is a monorepo managed with Bun workspaces. It contains the followin
    bun run api:dev
    ```
 
-   This command navigates to the `apps/api` directory and runs the Go application using `go run main.go`.
-   _(Note: Ensure you have Go installed and configured correctly, and that the required environment variables are set in `apps/api/.env`.)_
-
-### Running the API with Docker
-
-1. **Build the Docker image:**
-
-   ```bash
-   docker build -t recoin-api .
-   ```
-
-2. **Run the container:**
-
-   ```bash
-   docker run -p 3000:3000 --env-file ./apps/api/.env recoin-api
-   ```
-
-   This will start the API server in a container, accessible at `http://localhost:3000`.
+   This command navigates to the `apps/api` directory and runs the Go application using `go run main.go`. Ensure Go is correctly installed and configured.
 
 ## Environment Variables
 
-Both the API and the site rely on environment variables for configuration. These are typically managed using `.env` files.
+The API and site rely on environment variables for configuration, managed via `.env` files.
 
 ### API (`apps/api`)
 
@@ -93,4 +78,4 @@ Contributions are welcome! Please follow these steps:
 
 ## License
 
-This project is licensed under the [MIT License](./LICENSE).
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
