@@ -51,6 +51,10 @@ func main() {
 
 	handlers.DefineMailingListRoutes(router)
 
+	router.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "Server is running.")
+	})
+
 	router.Run(":" + appConfig.Port)
 
 }
