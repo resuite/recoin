@@ -16,6 +16,11 @@ const Site: RouteComponent<PageMeta> = () => {
 
 Site.metadata = {
   themeColor: '#272727',
+  charset: 'UTF-8',
+  viewport: 'width=device-width, initial-scale=1',
+  title: 'recoin',
+  description:
+    'recoin is your private, simple companion for managing finances.',
 };
 
 export default Site;
