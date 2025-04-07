@@ -43,7 +43,7 @@ const ComingSoon: RouteComponent<PageMeta> = () => {
 
   error.listen((err) => {
     if (!err) return;
-    showToast({ message: `Error: ${err.message}`, timeout: 2500 });
+    showToast({ message: `${err.message}`, timeout: 2500 });
   });
 
   data.listen((data) => {

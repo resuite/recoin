@@ -63,7 +63,7 @@ func AddEmailToMailingList(c *gin.Context) {
 
 	// If email already exists, return a duplicate entry error
 	if len(existingEntries) > 0 {
-		c.JSON(409, response.Error(response.DUPLICATE_ENTRY, "Email already exists in mailing list.", nil))
+		c.JSON(409, response.Error(response.DUPLICATE_ENTRY, "Your email is already in the mailing list.", nil))
 		return
 	}
 
