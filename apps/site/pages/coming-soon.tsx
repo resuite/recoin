@@ -1,5 +1,6 @@
 import { useRouter, type RouteComponent } from 'retend/router';
 import type { PageMeta } from 'retend-server/client';
+import coins from '@/assets/coins.svg';
 import { sty } from '@/utils';
 import { Cell, If } from 'retend';
 import { Button, Input } from '@/components/form-input';
@@ -61,7 +62,7 @@ const ComingSoon: RouteComponent<PageMeta> = () => {
         </span>
       </h1>
 
-      <img src="/coins.svg" alt="Illustration of Dollar, Euro, and Yen coins" />
+      <img src={coins} alt="Illustration of Dollar, Euro, and Yen coins" />
 
       <section>
         <p>
