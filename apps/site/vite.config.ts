@@ -2,6 +2,11 @@ import { defineConfig } from 'vite';
 import path from 'node:path';
 import { retend } from 'retend/plugin';
 import { retendSSG } from 'retend-server/plugin';
+import dotenv from 'dotenv';
+
+dotenv.config({
+  path: path.resolve(__dirname, '../../.env'),
+});
 
 export default defineConfig({
   resolve: {

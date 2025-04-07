@@ -15,6 +15,7 @@
   },
   "type": "module",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "retend": "https://pkg.pr.new/resuite/retend@e874fcb",
     "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@e874fcb"
   }
