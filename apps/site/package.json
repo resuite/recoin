@@ -15,7 +15,7 @@
   },
   "type": "module",
   "dependencies": {
-    "retend": "https://pkg.pr.new/adebola-io/retend@358a727",
-    "retend-server": "https://pkg.pr.new/adebola-io/retend/retend-server@358a727"
+    "retend": "https://pkg.pr.new/resuite/retend@e874fcb",
+    "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@e874fcb"
   }
 }
