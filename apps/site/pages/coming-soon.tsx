@@ -109,22 +109,4 @@ const ComingSoon: RouteComponent<PageMeta> = () => {
   );
 };
 
-ComingSoon.metadata = {
-  title: 'recoin - coming soon',
-  description:
-    'recoin is your private, simple companion for managing finances.',
-  // Open Graph
-  ogTitle: 'recoin - coming soon',
-  ogDescription:
-    'recoin is your private, simple companion for managing finances.',
-  ogUrl: 'https://recoin.app/coming-soon',
-  ogImage: 'https://recoin.app/assets/recoin-og-image.png',
-  ogSiteName: 'recoin',
-  // Twitter
-  twitterTitle: 'recoin - coming soon',
-  twitterDescription:
-    'recoin is your private, simple companion for managing finances.',
-  twitterImage: 'https://recoin.app/assets/recoin-og-image.png',
-};
-
 export default ComingSoon;
