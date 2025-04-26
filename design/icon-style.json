@@ -1,0 +1,72 @@
+{
+  "style_name": "Minimalist Isometric Line Art",
+  "description": "A formal specification for generating visual assets adhering to a consistent minimalist, isometric line art style, based on the provided reference images.",
+  "overall_aesthetic": {
+    "summary": "Clean, technical, and modern, characterized by high-contrast monochrome line work rendered in an isometric or near-isometric perspective.",
+    "impression": "Creates a sense of clarity, structure, and abstract representation, suitable for diagrams, icons, or conceptual illustrations."
+  },
+  "visual_elements": {
+    "perspective": {
+      "type": "Isometric or Axonometric",
+      "details": "Employs a consistent isometric or closely related axonometric projection across all elements within a composition. Parallel lines remain parallel; there is no perspective convergence or vanishing points.",
+      "effect": "Provides a clear, objective view of three-dimensional forms and spatial relationships without distortion, lending a technical or schematic feel."
+    },
+    "dimensionality": {
+      "representation": "3D forms rendered using 2D line art.",
+      "technique": "Volume and depth are conveyed solely through the strategic placement of lines defining edges, contours, and planar surfaces. No shading or gradients are used to imply volume, except for occasional simple hatching.",
+      "clarity": "Maintains a clear distinction between different planes and structural components of the depicted objects."
+    },
+    "line_art": {
+      "quality": "Crisp, clean, and precise lines.",
+      "weight": "Consistent, typically medium to thick, uniform line weight throughout the entire illustration. No variation in thickness for emphasis or depth, ensuring a flat, graphic quality.",
+      "style": "Solid lines define primary outlines and visible edges. Dashed or dotted lines may be used sparingly to indicate hidden connections, assembly paths (as in exploded views), or underlying structure, maintaining the same line weight.",
+      "continuity": "Lines are generally continuous unless intentionally broken for stylistic reasons (e.g., dashed lines)."
+    },
+    "color_palette": {
+      "scheme": "Strictly Monochrome",
+      "variants": [
+        "White lines on a pure black background.",
+        "Black lines on a pure white background."
+      ],
+      "contrast": "Maximum contrast between lines and background, ensuring high legibility and visual impact."
+    },
+    "shading_and_texture": {
+      "shading": "Generally absent. Form and volume are defined by line placement and perspective.",
+      "texture": "No surface textures are applied. Surfaces are represented as flat, uniform areas defined by their outlines.",
+      "exceptions": "Minimalist hatching using parallel lines, consistent with the overall line weight and style, may occasionally be used to denote the thickness or side plane of an object (e.g., the edge of a coin)."
+    },
+    "composition": {
+      "arrangement": "Objects are often arranged in structured layouts, such as diagonal sequences, stacked layers, exploded views, or simple groupings.",
+      "spacing": "Clear visual separation is maintained between distinct elements or components, enhancing readability.",
+      "negative_space": "Effective use of negative space (the background color) to define and isolate forms.",
+      "balance": "Compositions often exhibit a sense of balance and order, reflecting the technical nature of the style."
+    },
+    "geometry_and_form": {
+      "simplification": "Objects are reduced to their essential geometric forms. Complex details are omitted in favor of clarity of structure.",
+      "edges_and_corners": "Edges are clearly defined by lines. Corners are often depicted as slightly rounded, contributing to a softer, more modern feel, although sharp corners consistent with geometric primitives (like cubes) are also permissible within the style.",
+      "consistency": "The treatment of geometry (e.g., corner rounding) should be consistent within a given illustration or set of related icons."
+    },
+    "detail_level": {
+      "level": "Minimalist / Low Detail",
+      "focus": "Emphasis is placed on the overall shape, structure, and spatial relationship of elements rather than surface intricacies.",
+      "symbolism": "Any internal details or symbols (like currency signs or numbers) are rendered using the same consistent line art style, integrated cleanly into the form."
+    }
+  },
+  "intended_feel": [
+    "Technical",
+    "Diagrammatic",
+    "Clean",
+    "Modern",
+    "Abstract",
+    "Informative",
+    "Structured"
+  ],
+  "potential_use_cases": [
+    "Technical illustrations",
+    "Software icons",
+    "User interface elements",
+    "Infographics",
+    "Conceptual diagrams",
+    "Instructional visuals"
+  ]
+}
