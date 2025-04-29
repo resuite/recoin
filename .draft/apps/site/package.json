@@ -10,13 +10,13 @@
   "private": true,
   "scripts": {
     "dev": "vite --port 5229",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "type": "module",
   "dependencies": {
-    "dotenv": "^16.4.7",
-    "retend": "https://pkg.pr.new/resuite/retend@b75a49c",
-    "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@b75a49c"
+    "retend": "https://pkg.pr.new/resuite/retend@8503f6c",
+    "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@8503f6c",
+    "dotenv": "^16.4.7"
   }
 }

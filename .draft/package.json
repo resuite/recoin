@@ -6,6 +6,7 @@
     "api:dev": "cd ./apps/api && go run main.go"
   },
   "workspaces": [
-    "./apps/site"
+    "./apps/site",
+    "./components"
   ]
 }

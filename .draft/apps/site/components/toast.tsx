@@ -10,7 +10,8 @@ interface ToastDetails {
 }
 
 const activeToasts = Cell.source<ToastDetails[]>([]);
-const totalToasts = Cell.derived(() => activeToasts.value.length);
+const toastsProxy = activeToasts.get();
+const totalToasts = Cell.derived(() => activeToasts.get().length);
 
 export const Toast = (details: ToastDetails, index: Cell<number>) => {
   const observer = useObserver();
@@ -18,14 +19,15 @@ export const Toast = (details: ToastDetails, index: Cell<number>) => {
   let timeoutId = undefined as ReturnType<typeof setTimeout> | undefined;
 
   const close = async () => {
-    if (!toastRef.value) return;
+    const toastElement = toastRef.get();
+    if (!toastElement) return;
 
-    toastRef.value.classList.add('ToastLeaving');
+    toastElement.classList.add('ToastLeaving');
     await Promise.allSettled(
-      toastRef.value.getAnimations().map((a) => a.finished)
+      toastElement.getAnimations().map((a) => a.finished)
     );
     clearTimeout(timeoutId);
-    activeToasts.value.splice(activeToasts.value.indexOf(details), 1);
+    toastsProxy.splice(toastsProxy.indexOf(details), 1);
     details.onClose?.();
   };
 
@@ -72,5 +74,5 @@ export const ToastOutlet = () => {
  * @param toastDetails - The configuration object for the toast.
  */
 export async function showToast(toastDetails: ToastDetails): Promise<void> {
-  activeToasts.value.push(toastDetails);
+  toastsProxy.push(toastDetails);
 }

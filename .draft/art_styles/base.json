@@ -1,0 +1,72 @@
+{
+  "style_name": "Rough Isometric Line Art",
+  "description": "A formal specification for generating visual assets adhering to a consistent isometric line art style characterized by rough, sketchy linework, based on the provided reference image.",
+  "overall_aesthetic": {
+    "summary": "Illustrative and structured, featuring high-contrast monochrome line work with a hand-drawn, sketchy quality, rendered in an isometric or near-isometric perspective.",
+    "impression": "Creates a feeling of conceptual sketching, organic structure, and approachable clarity, suitable for less formal diagrams, illustrations, or UI elements needing a human touch."
+  },
+  "visual_elements": {
+    "perspective": {
+      "type": "Isometric or Axonometric",
+      "details": "Employs a consistent isometric or closely related axonometric projection. Parallel lines remain parallel; no perspective convergence.",
+      "effect": "Provides a clear view of three-dimensional forms and spatial relationships with a structured, yet illustrative feel."
+    },
+    "dimensionality": {
+      "representation": "3D forms rendered using 2D line art.",
+      "technique": "Volume and depth are conveyed solely through the placement of sketchy lines defining edges, contours, and planar surfaces. No shading or gradients are used, except for occasional rough hatching.",
+      "clarity": "Maintains reasonable clarity between planes and components, though the line style adds a degree of looseness."
+    },
+    "line_art": {
+      "quality": "Rough, sketchy, hand-drawn, slightly irregular lines.",
+      "weight": "Relatively consistent, typically medium weight, but with slight variations and unevenness inherent to the sketchy, hand-drawn style. Does not use weight variation for emphasis.",
+      "style": "Solid but uneven/sketchy lines define primary outlines and visible edges. Dashed or dotted lines (if used) would follow the same rough quality and weight.",
+      "continuity": "Lines are generally continuous, though the sketchy nature may introduce minor apparent breaks, overlaps, or slight wobbles."
+    },
+    "color_palette": {
+      "scheme": "Strictly Monochrome",
+      "variants": [
+        "Off-white/light grey lines on a dark grey/near-black background.",
+        "Dark grey/near-black lines on an off-white/light grey background."
+      ],
+      "contrast": "High contrast between lines and background for clear visibility."
+    },
+    "shading_and_texture": {
+      "shading": "Generally absent. Form defined by line placement and perspective.",
+      "texture": "No applied surface textures. The line art itself provides a 'sketchy' texture.",
+      "exceptions": "Minimalist hatching using parallel, sketchy lines, consistent with the overall line style and weight, may be used to denote thickness or side planes (as seen on the coin edges)."
+    },
+    "composition": {
+      "arrangement": "Objects often arranged in structured layouts like diagonal sequences, stacks, or simple groupings, similar to cleaner isometric styles.",
+      "spacing": "Clear visual separation generally maintained between distinct elements.",
+      "negative_space": "Effective use of negative space (background color) to define and isolate forms.",
+      "balance": "Compositions often exhibit a sense of balance and order, despite the rougher line quality."
+    },
+    "geometry_and_form": {
+      "simplification": "Objects are reduced to their essential geometric forms, similar to minimalist approaches.",
+      "edges_and_corners": "Edges are defined by lines but appear slightly softened or less precise due to the sketchy line quality. Corners may appear slightly rounded as a byproduct of the line style rather than intentional, uniform rounding.",
+      "consistency": "The rough, sketchy treatment of geometry and lines should be applied consistently across all elements within an illustration."
+    },
+    "detail_level": {
+      "level": "Minimalist / Low Detail",
+      "focus": "Emphasis remains on the overall shape, structure, and spatial relationship, not fine details.",
+      "symbolism": "Internal details or symbols (like the currency signs shown) are rendered using the same consistent sketchy line art style, integrated into the form."
+    }
+  },
+  "intended_feel": [
+    "Illustrative",
+    "Hand-drawn",
+    "Conceptual",
+    "Structured",
+    "Organic",
+    "Approachable",
+    "Clear"
+  ],
+  "potential_use_cases": [
+    "Conceptual illustrations",
+    "Sketch-style diagrams",
+    "Informal infographics",
+    "User interface elements (where a less rigid feel is desired)",
+    "Storyboarding",
+    "Educational materials"
+  ]
+}

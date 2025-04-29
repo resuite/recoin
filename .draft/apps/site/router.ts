@@ -3,6 +3,7 @@ import ComingSoon from './pages/coming-soon';
 import Site from './pages';
 import ComingSoonWaitlistSuccess from './pages/coming-soon-waitlist-success';
 
+export * as context from 'retend/context';
 export function createRouter() {
   return createWebRouter({
     routes: [

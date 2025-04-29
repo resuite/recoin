@@ -9,7 +9,7 @@ import './coming-soon-waitlist-success.scss';
 const ComingSoonWaitlistSuccess = () => {
   const router = useRouter();
 
-  if (!state.waitListSuccess.value) {
+  if (!state.waitListSuccess.get()) {
     return router.navigate('/coming-soon');
   }
 

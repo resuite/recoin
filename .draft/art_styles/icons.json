@@ -1,0 +1,73 @@
+{
+  "style_name": "Clean Outline UI Icons",
+  "description": "A formal specification for generating icon assets adhering to a consistent, clean, primarily outline-based style, as observed within the provided UI mockups.",
+  "overall_aesthetic": {
+    "summary": "Minimalist, functional, and modern, characterized by clean, typically monochrome outlines with consistent line weight. Some icons utilize simple filled shapes.",
+    "impression": "Creates a sense of clarity, usability, and unobtrusive guidance within a digital interface."
+  },
+  "visual_elements": {
+    "perspective": {
+      "type": "Flat / 2D",
+      "details": "Icons are rendered flat, without any perspective projection or isometric view. Presented face-on.",
+      "effect": "Provides direct, unambiguous recognition suitable for functional interface elements."
+    },
+    "dimensionality": {
+      "representation": "Purely 2D forms.",
+      "technique": "Defined primarily by outlines. Simple, flat filled shapes are used for certain icons (e.g., user profile silhouette). No techniques are used to imply 3D volume.",
+      "clarity": "High clarity achieved through simplified forms and clean execution."
+    },
+    "line_art": {
+      "quality": "Crisp, clean, and precise lines.",
+      "weight": "Consistent, generally thin to medium-thin, uniform line weight across all outline icons. No intentional variation in weight.",
+      "style": "Predominantly solid outlines defining the shape of the symbol. Some specific icons are represented by simple, solid filled shapes.",
+      "continuity": "Lines are continuous and closed to form shapes or symbols."
+    },
+    "color_palette": {
+      "scheme": "Monochrome (Contextual)",
+      "variants": [
+        "Typically light (white/light grey) lines/fills on darker container backgrounds.",
+        "Typically dark (black/dark grey) lines/fills on lighter container backgrounds.",
+        "Accent colors (like red for delete) may be applied to the icon or its container in specific states, but the base icon style is monochrome."
+      ],
+      "contrast": "High contrast against their immediate background element (button, list item, etc.) to ensure legibility."
+    },
+    "shading_and_texture": {
+      "shading": "Completely absent. No gradients or tonal variations.",
+      "texture": "Absent. Surfaces are flat and uniform (either outline or solid fill).",
+      "exceptions": "None regarding shading or texture."
+    },
+    "composition": {
+      "arrangement": "Self-contained symbols representing a single concept or action.",
+      "spacing": "Internal elements are spaced clearly to maintain readability even at small sizes.",
+      "negative_space": "Effective use of internal and surrounding negative space to define the icon's form clearly.",
+      "balance": "Icons generally exhibit visual balance (symmetrical or asymmetrical as appropriate for the symbol)."
+    },
+    "geometry_and_form": {
+      "simplification": "Highly simplified, representing objects or concepts in their most essential form.",
+      "edges_and_corners": "Clean, well-defined edges. Corners within the icon shapes are often slightly rounded, contributing to a softer, modern, and friendly feel.",
+      "consistency": "Strong consistency across the icon set in terms of line weight, corner rounding style, level of detail, and overall visual language."
+    },
+    "detail_level": {
+      "level": "Minimalist / Low Detail",
+      "focus": "Instant recognizability and clear communication of function or meaning.",
+      "symbolism": "Icons function as direct symbolic representations of actions (e.g., back, add, delete), categories (e.g., food, transport), or objects (e.g., user, settings)."
+    }
+  },
+  "intended_feel": [
+    "Clean",
+    "Modern",
+    "Functional",
+    "Minimalist",
+    "User-Friendly",
+    "Clear",
+    "Consistent",
+    "Unobtrusive"
+  ],
+  "potential_use_cases": [
+    "User Interface design (buttons, navigation bars, tab bars, list items)",
+    "Mobile applications",
+    "Web applications",
+    "Software interfaces",
+    "Visual communication within digital products"
+  ]
+}

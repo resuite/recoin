@@ -33,9 +33,9 @@ const ComingSoon: RouteComponent<PageMeta> = () => {
   const router = useRouter();
   const { run: addToList, pending, error, data } = Cell.async(addToListHandler);
 
-  const buttonSqueeze = Cell.derived(() => (pending.value ? 0.7 : 1));
+  const buttonSqueeze = Cell.derived(() => (pending.get() ? 0.7 : 1));
   const handleSubmit = function (this: HTMLFormElement) {
-    if (pending.value) return;
+    if (pending.get()) return;
 
     const formData = new FormData(this);
     const email = formData.get('email') as string;
@@ -49,7 +49,7 @@ const ComingSoon: RouteComponent<PageMeta> = () => {
 
   data.listen((data) => {
     if (!data?.success) return;
-    state.waitListSuccess.value = true;
+    state.waitListSuccess.set(true);
     router.navigate('/coming-soon-waitlist-success');
   });
 

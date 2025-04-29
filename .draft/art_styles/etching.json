@@ -1,0 +1,75 @@
+{
+  "style_name": "Engraving/Etching Style",
+  "description": "A formal specification for generating visual assets adhering to a classical engraving or etching style, characterized by fine, detailed line work (hatching and cross-hatching) to create tone and form, based on the provided reference images.",
+  "overall_aesthetic": {
+    "summary": "Detailed, textural, and traditional, featuring high-contrast monochrome imagery built from meticulous arrangements of fine lines (hatching, cross-hatching, and contour lines) to simulate light, shadow, and form.",
+    "impression": "Creates a sense of classical artistry, precision, depth, and textural richness, often associated with historical illustrations, printmaking, and currency design."
+  },
+  "visual_elements": {
+    "perspective": {
+      "type": "Linear Perspective (Implied or Explicit)",
+      "details": "Generally adheres to principles of linear perspective for realistic depiction, although close-ups may focus primarily on form rendering rather than deep spatial recession. Parallel lines converge towards vanishing points if depicting scenes.",
+      "effect": "Provides a realistic sense of depth, volume, and spatial relationships appropriate to the subject matter."
+    },
+    "dimensionality": {
+      "representation": "3D forms rendered using 2D line techniques.",
+      "technique": "Volume, shading, and texture are conveyed entirely through the meticulous application of hatching (parallel lines), cross-hatching (intersecting lines), stippling (dots - less prominent in refs but related), and contour lines that follow the form's surface.",
+      "clarity": "High clarity of form achieved through the skillful modulation of line density and direction to represent light and shadow."
+    },
+    "line_art": {
+      "quality": "Precise, fine, controlled, and deliberate lines.",
+      "weight": "Typically very fine and consistent line weight. Apparent thickness or darkness is achieved through the density and layering of lines (cross-hatching), not by varying the weight of individual lines.",
+      "style": "Dominated by hatching and cross-hatching patterns. Lines often curve to follow the contours of the represented surface. Outlines may be present but are often subtle or integrated into the shading lines.",
+      "continuity": "Lines are continuous within their hatching paths. Dense areas are built up from many individual, distinct lines."
+    },
+    "color_palette": {
+      "scheme": "Strictly Monochrome",
+      "variants": [
+        "Black lines on an off-white, cream, or light tan background (simulating aged paper).",
+        "Occasionally, dark brown or sepia lines on a similar background."
+      ],
+      "contrast": "High contrast between the ink lines and the paper background is essential for the style's clarity and impact."
+    },
+    "shading_and_texture": {
+      "shading": "Achieved exclusively through line techniques. Density, direction, and layering of hatching/cross-hatching determine tonal values from light to dark.",
+      "texture": "Surface textures (skin, fabric, hair, metal) are simulated through specific patterns, densities, and directions of the line work. The line work itself creates the texture.",
+      "exceptions": "None. Shading and texture are integral to the line-based rendering method."
+    },
+    "composition": {
+      "arrangement": "Typically follows principles of realistic representation, including portraiture, anatomical studies, narrative scenes, or detailed object rendering.",
+      "spacing": "Determined by the realistic depiction of the subject and its environment.",
+      "negative_space": "The un-inked paper background represents the lightest areas and highlights, playing a crucial role in defining form through contrast.",
+      "balance": "Often employs classical compositional balance (rule of thirds, etc.) suited to realistic or illustrative work."
+    },
+    "geometry_and_form": {
+      "simplification": "Low simplification. Aims for a high degree of naturalism or realism in representing forms and surfaces.",
+      "edges_and_corners": "Edges are defined by the termination of hatched areas, shifts in tonal value created by line density, or sometimes by a fine contour line. Sharpness or softness of edges is controlled by the transition in line work.",
+      "consistency": "A high degree of consistency in the application of the line technique across the entire illustration is crucial for a cohesive result."
+    },
+    "detail_level": {
+      "level": "High Detail / Realistic",
+      "focus": "Emphasis on accurately rendering form, volume, light, shadow, and surface texture using complex line work.",
+      "symbolism": "Can be used for symbolic representation, but the focus of the technique itself is on realistic rendering."
+    }
+  },
+  "intended_feel": [
+    "Detailed",
+    "Traditional",
+    "Classical",
+    "Sophisticated",
+    "Textural",
+    "Realistic",
+    "Formal",
+    "Meticulous",
+    "Artistic"
+  ],
+  "potential_use_cases": [
+    "Book illustrations (especially historical or classical texts)",
+    "Fine art prints",
+    "Currency and banknote design",
+    "Certificates and formal documents",
+    "Brand identities seeking a traditional or sophisticated feel",
+    "Scientific or anatomical illustration (historical style)",
+    "Decorative elements"
+  ]
+}
