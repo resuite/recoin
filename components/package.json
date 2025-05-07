@@ -1,0 +1,20 @@
+{
+   "name": "@recoin/components",
+   "description": "UI library for the recoin project",
+   "version": "0.0.0",
+   "private": true,
+   "scripts": {
+      "dev": "vite --port 5229",
+      "build": "vite build",
+      "preview": "vite preview"
+   },
+   "exports": {
+      "./css": "./base.css"
+   },
+   "type": "module",
+   "dependencies": {
+      "retend": "https://pkg.pr.new/resuite/retend@8fbea24",
+      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@8fbea24",
+      "retend-utils": "^0.0.11"
+   }
+}

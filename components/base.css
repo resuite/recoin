@@ -1,0 +1,362 @@
+@import "tailwindcss";
+
+@source "./";
+
+@font-face {
+   font-family: "Instrument Sans";
+   src: url(./fonts/instrument-sans.ttf) format("truetype");
+}
+
+@property --scroll-unit {
+   syntax: "<number>";
+   initial-value: 0;
+   inherits: true;
+}
+
+@property --stack-view-group-pull-progress {
+   syntax: "<number>";
+   initial-value: 0;
+   inherits: true;
+}
+
+:root {
+   --e: 2.718281828459045;
+   font-size: 16px;
+   scrollbar-width: none;
+}
+
+::selection {
+   background-color: rgb(250, 255, 237, 0.3);
+}
+
+body {
+   font-family: "Instrument Sans", sans-serif;
+   font-weight: 500;
+
+   @apply light-scheme;
+}
+
+@theme {
+   --spacing: 25px;
+   --half-spacing: calc(var(--spacing) / 2);
+
+   --color-base: rgb(39, 39, 39);
+   --color-light-yellow: rgb(250, 255, 237);
+   --color-white: rgb(255, 255, 255);
+   --color-amaranth: rgb(211, 52, 67);
+
+   --text-smallest: 0.5rem;
+   --text-smaller: 0.625rem;
+   --text-small: 0.75rem;
+   --text-normal: 0.9375rem;
+   --text-big: 1.0625rem;
+   --text-bigger: 1.5rem;
+   --text-header: 1.35625rem;
+   --text-title: 1.875rem;
+   --text-large: 3.125rem;
+   --text-logo: 4.0625rem;
+
+   --default-speed: 150ms;
+   --slow: calc(var(--default-speed) * 2);
+   --slower: calc(var(--default-speed) * 4.5);
+   --much-slower: calc(var(--default-speed) * 6);
+   --slowest: calc(var(--default-speed) * 8);
+
+   --animate-spin: spin var(--slowest) linear infinite;
+   --animate-toast-leave: toast-leave var(--slow) ease;
+   --animate-toast-slide-in: toast-slide-in var(--slow) ease;
+}
+
+@layer base {
+   p,
+   span {
+      @apply text-normal;
+   }
+
+   button {
+      &:disabled {
+         visibility: hidden;
+      }
+
+      @apply text-(--canvas) bg-(--canvas-text) border-3 border-(--canvas);
+      @apply rounded-(--half-spacing) whitespace-nowrap px-0.25 py-0.5 text-normal min-w-[min(calc(var(--spacing)*10),30dvw)];
+      @apply active:scale-[95%] duration-(--default-speed) transition-[scale] active:ease-out not-[active]:ease-in;
+      @apply has-[.btn-icon]:flex has-[.btn-icon]:items-center has-[.btn-icon]:justify-center has-[.btn-icon]:gap-0.125;
+   }
+
+   input {
+      @apply border-b-3 min-h-2 text-(--canvas-text);
+   }
+
+   select {
+      @apply border-b-3 min-h-2;
+      @apply [&>option]:bg-(--canvas-background) [&>option]:text-(--canvas-text) [&>option]:hover:text-(--canvas);
+
+      @supports (appearance: base-select) {
+         &::picker-icon {
+            content: var(--caret);
+         }
+
+         @apply flex items-center [appearance:base-select];
+
+         ::picker(select) {
+            border: none;
+         }
+      }
+   }
+
+   label:has(input[type="checkbox" i]) {
+      &:has(:checked) {
+         @apply before:translate-x-[150%];
+      }
+
+      &:not(:has(:checked)) {
+         @apply after:opacity-60 before:opacity-60;
+      }
+
+      @apply grid grid-cols-[auto_auto] items-center justify-between min-h-2;
+      @apply before:[grid-area:1/2] before:bg-(--canvas-text) before:w-[calc(var(--text-normal)*0.55)] before:h-[calc(var(--text-normal)*0.55)] before:rounded-[50%] before:[margin-inline-start:15%];
+      @apply after:[grid-area:1/2] after:w-[calc(var(--text-normal)*2)] after:h-[calc(var(--text-normal)*1.25)] after:border-3 after:rounded-xl;
+      @apply before:transition-transform after:transition-opacity before:duration-(--default-speed) after:duration-(--default-speed) before:ease-in-out after:ease-in-out;
+
+      input[type="checkbox"] {
+         @apply appearance-none w-0 h-0 [grid-area:1/2];
+      }
+   }
+
+   a {
+      @apply grid py-0.75 border-b-2 w-full;
+      @apply has-[.link-icon]:flex has-[.link-icon]:items-center has-[.link-icon]:gap-0.125;
+   }
+}
+
+@utility light-scheme {
+   --canvas-text: var(--color-base);
+   --canvas: var(--color-light-yellow);
+   --canvas-background: white;
+   --grid-lines-color: rgb(39, 39, 39, 0.05);
+   --grid-bg-color: white;
+   --caret: url("./svg/caret-light.svg");
+
+   color: var(--color-base);
+   background-color: white;
+
+   input,
+   select {
+      color-scheme: light;
+      accent-color: var(--color-base);
+   }
+}
+
+@utility dark-scheme {
+   --canvas-text: var(--color-light-yellow);
+   --canvas: var(--color-base);
+   --canvas-background: var(--color-base);
+   --grid-lines-color: rgb(250, 255, 237, 0.05);
+   --grid-bg-color: var(--color-base);
+   --caret: url("./svg/caret-dark.svg");
+
+   color: var(--color-light-yellow);
+   background-color: var(--color-base);
+
+   input,
+   select {
+      color-scheme: dark;
+      accent-color: var(--color-light-yellow);
+   }
+}
+
+@utility gap-0.125 {
+   gap: calc(var(--spacing) * 0.125);
+}
+
+@utility h-screen {
+   height: 100dvh;
+}
+
+@utility w-screen {
+   width: 100dvw;
+}
+
+@utility grid-lines {
+   --grid-lines-stroke: 2px;
+   background-color: var(--color-base);
+   background-color: var(--grid-bg-color);
+   background-image: linear-gradient(
+         var(--grid-lines-color) var(--grid-lines-stroke),
+         transparent var(--grid-lines-stroke)
+      ),
+      linear-gradient(
+         90deg,
+         var(--grid-lines-color) var(--grid-lines-stroke),
+         transparent var(--grid-lines-stroke)
+      );
+   background-position: calc(-1 * var(--grid-lines-stroke))
+      calc(-1 * var(--grid-lines-stroke));
+   background-size: 50px 50px; /* Adjust grid size */
+}
+
+@utility button-bare {
+   @apply border-none px-0 justify-start flex bg-transparent text-(--canvas-text);
+   @apply active:scale-100;
+}
+
+@utility btn-danger {
+   @apply text-light-yellow bg-amaranth;
+}
+
+@utility btn-outline {
+   @apply bg-transparent text-(--canvas-text) border-(--canvas-text);
+}
+
+@utility btn-danger-outline {
+   @apply text-amaranth bg-transparent border-3 border-amaranth;
+}
+
+@utility btn-icon {
+   @apply w-[calc(var(--text-normal)*1.5)] h-[calc(var(--text-normal)*1.5)];
+}
+
+@utility link-icon {
+   @apply w-1 h-1;
+}
+
+@utility text-logo {
+   letter-spacing: -3px;
+}
+
+@utility no-scrollbar {
+   scrollbar-width: none;
+   &::-webkit-scrollbar {
+      display: none;
+   }
+}
+
+/* ---NAVIGATION STACK--- */
+@utility stack-view-group {
+   @apply grid overflow-hidden;
+}
+
+@utility stack-view-group-view {
+   &:not(:first-child) {
+      @apply translate-x-[100%];
+   }
+
+   &:not([data-open]) {
+      @apply duration-(--slow);
+   }
+
+   &:nth-last-child(1 of [data-open]) {
+      @apply translate-x-0 duration-(--slow);
+
+      .stack-view-group[data-dragging] &:not(:first-child) {
+         --peek: calc(100% * (1 - var(--stack-view-group-pull-progress)));
+         @apply translate-x-(--peek) duration-0;
+      }
+   }
+
+   /* Select open views under the top view. */
+   &[data-open]:not(:nth-last-child(1 of [data-open])) {
+      /* Select the last open view. */
+      &:nth-last-child(2 of [data-open]) {
+         @apply translate-x-[-20%] opacity-75 duration-(--slower);
+
+         .stack-view-group[data-dragging] & {
+            --peek: calc(-20% * var(--stack-view-group-pull-progress));
+            --opacity: calc(1 - var(--stack-view-group-pull-progress) + 0.5);
+            @apply translate-x-(--peek) duration-0 opacity-(--opacity);
+         }
+      }
+
+      @apply pointer-events-none opacity-0 duration-0;
+   }
+
+   @apply grid [&>*]:[grid-area:1/1] [grid-area:1/1] h-full w-full sticky left-0 top-0;
+   @apply bg-(--canvas-background);
+   @apply transition-[translate,opacity] ease-in-out;
+}
+
+@utility stack-view-group-view-pull-handle {
+   display: none;
+
+   .stack-view-group-view:nth-last-child(1 of [data-open]) > & {
+      @apply block w-[10%] touch-none overscroll-none;
+   }
+}
+
+@utility toasts-group {
+   @apply fixed left-0 top-0 empty:hidden pointer-events-none;
+   @apply w-screen h-screen grid grid-rows-[auto_1fr] pt-1;
+}
+
+/* Toast */
+@utility toast-container {
+   /* Constrains the toast downward animation to a maximum of 2 toasts. */
+   --inverse: calc(var(--toasts-count) - var(--toast-index));
+   --clamped-inverse: min(var(--inverse), 2);
+   --translate-y: calc((var(--clamped-inverse) - 1) * (100% + var(--toast-gap)));
+
+   &:first-child:not(.animate-toast-leave) {
+      animation-duration: var(--default-speed);
+   }
+
+   /* Selects any older toasts to shrink. */
+   &:nth-last-child(n + 3) {
+      --translate-y-shrunk: calc(
+         var(--translate-y) +
+         min((var(--inverse) * 2px), 20px)
+      );
+      @apply translate-y-(--translate-y-shrunk);
+   }
+
+   @apply grid grid-cols-[1fr_auto] grid-rows-1 gap-0.5 relative [grid-area:1/1] self-end;
+   @apply mx-auto p-0.5 z-50 pointer-events-auto;
+   @apply bg-(--canvas-background) text-(--canvas-text) border-2 rounded-xl;
+   @apply w-[calc(100dvw-(var(--spacing)*2))] max-w-20 min-h-2;
+   @apply translate-y-(--translate-y) duration-(--slow) ease-in-out transition-[translate,scale,opacity];
+   @apply animate-toast-slide-in;
+}
+
+/* Animations */
+@utility animate-scrolling {
+   animation-name: scrolling;
+   animation-timing-function: linear;
+   animation-timeline: scroll(self inline);
+
+   @supports not (animation-timeline: scroll(self inline)) {
+      animation-duration: 1000ms;
+      animation-timing-function: linear;
+   }
+}
+
+@keyframes spin {
+   from {
+      transform: rotate(0deg);
+   }
+   to {
+      transform: rotate(360deg);
+   }
+}
+
+@keyframes scrolling {
+   from {
+      --scroll-unit: 0;
+   }
+
+   to {
+      --scroll-unit: 1;
+   }
+}
+
+@keyframes toast-slide-in {
+   from {
+      opacity: 0.5;
+      transform: translateY(-100%);
+   }
+}
+
+@keyframes toast-leave {
+   to {
+      opacity: 0;
+   }
+}
