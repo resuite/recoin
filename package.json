@@ -1,0 +1,7 @@
+{
+   "name": "recoin",
+   "module": "index.ts",
+   "type": "module",
+   "private": true,
+   "workspaces": ["application/styleguide", "components"]
+}
