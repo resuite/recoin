@@ -19,9 +19,6 @@
       "baseUrl": ".",
       "skipLibCheck": true,
       "outDir": "dist",
-      "paths": {
-         "@recoin/components": ["./components/index.tsx"]
-      }
    },
    "include": ["./"]
 }

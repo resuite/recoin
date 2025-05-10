@@ -1,15 +1,8 @@
 import { useRouter } from "retend/router";
-import { AllIcons, Icon, useToast } from "@recoin/components";
+import { AllIcons, Icon } from "@recoin/components";
 
 const Styleguide = () => {
    const { Link } = useRouter();
-   const { showToast, ToastContainer } = useToast();
-
-   const triggerToast = () =>
-      showToast({
-         content: <div>Hello, world!</div>,
-         duration: 3000,
-      });
 
    return (
       <div class="grid-lines">
@@ -104,14 +97,6 @@ const Styleguide = () => {
                      <input type="checkbox" />
                   </label>
                </div>
-            </div>
-            {/* Toast */}
-            <div class="py-1 px-1 w-full">
-               <h2 class="text-header">Toast</h2>
-               <ToastContainer />
-               <button type="button" onClick={triggerToast}>
-                  Show Toast
-               </button>
             </div>
          </div>
       </div>

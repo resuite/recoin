@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* 
+   NOTE: The component styles are imported here and not 
+   in the components themselves so that Tailwind
+   can resolve the utilities. 
+*/
+@import "./pull-zone.css";
+@import "./toast.css";
+@import "./stack-view-group.css";
+
 @source "./";
 
 @font-face {
@@ -33,7 +42,7 @@ body {
    font-family: "Instrument Sans", sans-serif;
    font-weight: 500;
 
-   @apply light-scheme;
+   @apply dark-scheme;
 }
 
 @theme {
@@ -63,8 +72,6 @@ body {
    --slowest: calc(var(--default-speed) * 8);
 
    --animate-spin: spin var(--slowest) linear infinite;
-   --animate-toast-leave: toast-leave var(--slow) ease;
-   --animate-toast-slide-in: toast-slide-in var(--slow) ease;
 }
 
 @layer base {
@@ -232,91 +239,6 @@ body {
    }
 }
 
-/* ---NAVIGATION STACK--- */
-@utility stack-view-group {
-   @apply grid overflow-hidden;
-}
-
-@utility stack-view-group-view {
-   &:not(:first-child) {
-      @apply translate-x-[100%];
-   }
-
-   &:not([data-open]) {
-      @apply duration-(--slow);
-   }
-
-   &:nth-last-child(1 of [data-open]) {
-      @apply translate-x-0 duration-(--slow);
-
-      .stack-view-group[data-dragging] &:not(:first-child) {
-         --peek: calc(100% * (1 - var(--stack-view-group-pull-progress)));
-         @apply translate-x-(--peek) duration-0;
-      }
-   }
-
-   /* Select open views under the top view. */
-   &[data-open]:not(:nth-last-child(1 of [data-open])) {
-      /* Select the last open view. */
-      &:nth-last-child(2 of [data-open]) {
-         @apply translate-x-[-20%] opacity-75 duration-(--slower);
-
-         .stack-view-group[data-dragging] & {
-            --peek: calc(-20% * var(--stack-view-group-pull-progress));
-            --opacity: calc(1 - var(--stack-view-group-pull-progress) + 0.5);
-            @apply translate-x-(--peek) duration-0 opacity-(--opacity);
-         }
-      }
-
-      @apply pointer-events-none opacity-0 duration-0;
-   }
-
-   @apply grid [&>*]:[grid-area:1/1] [grid-area:1/1] h-full w-full sticky left-0 top-0;
-   @apply bg-(--canvas-background);
-   @apply transition-[translate,opacity] ease-in-out;
-}
-
-@utility stack-view-group-view-pull-handle {
-   display: none;
-
-   .stack-view-group-view:nth-last-child(1 of [data-open]) > & {
-      @apply block w-[10%] touch-none overscroll-none;
-   }
-}
-
-@utility toasts-group {
-   @apply fixed left-0 top-0 empty:hidden pointer-events-none;
-   @apply w-screen h-screen grid grid-rows-[auto_1fr] pt-1;
-}
-
-/* Toast */
-@utility toast-container {
-   /* Constrains the toast downward animation to a maximum of 2 toasts. */
-   --inverse: calc(var(--toasts-count) - var(--toast-index));
-   --clamped-inverse: min(var(--inverse), 2);
-   --translate-y: calc((var(--clamped-inverse) - 1) * (100% + var(--toast-gap)));
-
-   &:first-child:not(.animate-toast-leave) {
-      animation-duration: var(--default-speed);
-   }
-
-   /* Selects any older toasts to shrink. */
-   &:nth-last-child(n + 3) {
-      --translate-y-shrunk: calc(
-         var(--translate-y) +
-         min((var(--inverse) * 2px), 20px)
-      );
-      @apply translate-y-(--translate-y-shrunk);
-   }
-
-   @apply grid grid-cols-[1fr_auto] grid-rows-1 gap-0.5 relative [grid-area:1/1] self-end;
-   @apply mx-auto p-0.5 z-50 pointer-events-auto;
-   @apply bg-(--canvas-background) text-(--canvas-text) border-2 rounded-xl;
-   @apply w-[calc(100dvw-(var(--spacing)*2))] max-w-20 min-h-2;
-   @apply translate-y-(--translate-y) duration-(--slow) ease-in-out transition-[translate,scale,opacity];
-   @apply animate-toast-slide-in;
-}
-
 /* Animations */
 @utility animate-scrolling {
    animation-name: scrolling;
@@ -329,10 +251,18 @@ body {
    }
 }
 
-@keyframes spin {
-   from {
-      transform: rotate(0deg);
+@utility animate-scrolling-block {
+   animation-name: scrolling;
+   animation-timing-function: linear;
+   animation-timeline: scroll(self block);
+
+   @supports not (animation-timeline: scroll(self block)) {
+      animation-duration: 1000ms;
+      animation-timing-function: linear;
    }
+}
+
+@keyframes spin {
    to {
       transform: rotate(360deg);
    }
@@ -345,18 +275,5 @@ body {
 
    to {
       --scroll-unit: 1;
-   }
-}
-
-@keyframes toast-slide-in {
-   from {
-      opacity: 0.5;
-      transform: translateY(-100%);
-   }
-}
-
-@keyframes toast-leave {
-   to {
-      opacity: 0;
    }
 }

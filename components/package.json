@@ -9,7 +9,7 @@
       "preview": "vite preview"
    },
    "exports": {
-      "./css": "./base.css"
+      ".": "./index.tsx"
    },
    "type": "module",
    "dependencies": {

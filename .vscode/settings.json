@@ -5,7 +5,11 @@
    "[typescriptreact]": {
       "editor.defaultFormatter": "biomejs.biome"
    },
-   "cSpell.words": ["retend"],
+   "cSpell.words": [
+      "actiontriggered",
+      "retend",
+      "thresholdreached"
+   ],
    "[css]": {
       "editor.defaultFormatter": "biomejs.biome"
    },

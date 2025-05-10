@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 import { hydrate } from "retend-server/client";
 import { createRouter } from "./router";
-import "@recoin/components";
 
 hydrate(createRouter).then(() => {
    console.log("[retend-server] app successfully hydrated.");

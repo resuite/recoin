@@ -1,0 +1,55 @@
+@property --pull-zone-scroll-top {
+   syntax: "<number>";
+   initial-value: 0;
+   inherits: true;
+}
+
+@utility pull-zone {
+   --pull-progress: calc(var(--pull-zone-scroll-top) * (13 / 2));
+   &.pull-zone-can-pull,
+   &.pull-zone-can-pull * {
+      @apply touch-pan-x;
+   }
+
+   @apply overflow-hidden pointer-coarse:no-scrollbar;
+}
+
+/* 
+   The threshold marker is 10% of the pull-zone, 
+   the feedback layer is 20%, and the content
+   is 100%, making 130%.
+*/
+@utility pull-zone-scroll-container {
+   grid-template-rows:
+      calc(1000% / 130) /* 10*% of 130% */
+      calc(2000% / 130) /* 20*% of 130% */
+      calc(10000% / 130); /* 100*% of 130% */
+   @apply grid w-full h-[130%] duration-(--slow) ease-in-out transition-[translate];
+
+   .pull-zone-dragging > & {
+      --translate-y: calc(min(var(--pull-zone-scroll-top) * 1%, 3000% / 130));
+      @apply translate-y-(--translate-y) duration-0;
+   }
+
+   .pull-zone-action-triggered > & {
+      --translate-y: calc(2000% / 130);
+      @apply translate-y-(--translate-y);
+   }
+}
+
+@utility pull-zone-triggered {
+   @apply overflow-hidden pointer-events-none overscroll-none;
+}
+
+@utility pull-zone-content {
+   @apply h-full w-full min-h-full overflow-y-scroll overscroll-none no-scrollbar;
+   @apply bg-(--canvas-background);
+
+   .pull-zone-action-triggered > .pull-zone-scroll-container > & {
+      @apply overflow-hidden pointer-events-none;
+   }
+}
+
+@utility pull-zone-content-top-marker {
+   @apply w-full h-0.25 pointer-events-none;
+}

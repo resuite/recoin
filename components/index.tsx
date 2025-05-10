@@ -7,3 +7,4 @@ export type { IconName, AsyncIconProps } from "./icon-name";
 export * from "./tab-switcher";
 export * from "./stack-view-group";
 export * from "./toast";
+export * from "./pull-zone";
