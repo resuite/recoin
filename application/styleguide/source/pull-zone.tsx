@@ -1,5 +1,5 @@
 import { Icon, type PullState, PullZone } from "@recoin/components";
-import { Cell, If } from "retend";
+import { Cell } from "retend";
 
 const PullZoneTest = () => {
    const state = Cell.source<PullState>("idle");
@@ -17,11 +17,12 @@ const PullZoneTest = () => {
             <Icon
                name="loader"
                class={[
-                  "w-1.5 h-1.5 duration-(--slow) transition-[translate,scale]",
+                  "w-1.5 h-1.5 duration-(--slow) transition-[translate,scale,opacity]",
                   {
                      "rotate-[calc(var(--pull-progress)*0.61deg)]": pullActive,
                      "scale-[calc(var(--pull-progress)*0.01)]": pullActive,
-                     "opacity-[calc(var(--pull-progress)*0.005)]": pullActive,
+                     "opacity-[calc((var(--pull-progress)*0.005)-0.3)]":
+                        pullActive,
                      "duration-0": pullActive,
                      "animate-spin!": actionTriggered,
                   },
@@ -36,7 +37,7 @@ const PullZoneTest = () => {
                   },
                ]}
             >
-               Refreshing data...
+               Refreshing your data...
             </div>
          </div>
       );
@@ -44,7 +45,7 @@ const PullZoneTest = () => {
 
    return (
       <PullZone
-         class="h-screen"
+         class="h-screen mt-2.5"
          feedback={FeedbackContent}
          onStateChange={(newState) => state.set(newState)}
          onActionTriggered={async () => {
@@ -53,9 +54,11 @@ const PullZoneTest = () => {
          content:class="rounded-t-2xl light-scheme rounded-t-3xl"
          contentTopMarker={topMarker}
       >
-         <div class="min-h-[200dvh] text-big">
+         <div class="text-big h-full">
             <div ref={topMarker} class="h-0.25 w-full" />
-            {state}
+            <div class="grid place-items-center pb-7 h-full w-full">
+               {state}
+            </div>
          </div>
       </PullZone>
    );

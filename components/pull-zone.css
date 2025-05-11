@@ -15,24 +15,25 @@
 }
 
 /* 
-   The threshold marker is 10% of the pull-zone, 
+   The threshold marker is 15% of the pull-zone, 
    the feedback layer is 20%, and the content
-   is 100%, making 130%.
+   is 100%, making 135%.
 */
 @utility pull-zone-scroll-container {
    grid-template-rows:
-      calc(1000% / 130) /* 10*% of 130% */
-      calc(2000% / 130) /* 20*% of 130% */
-      calc(10000% / 130); /* 100*% of 130% */
-   @apply grid w-full h-[130%] duration-(--slow) ease-in-out transition-[translate];
+      calc(1500% / 135) /* 15*% of 135% */
+      calc(2000% / 135) /* 20*% of 135% */
+      calc(10000% / 135); /* 100*% of 135% */
+   @apply grid w-full h-[135%] duration-(--slow) ease-in-out transition-[translate];
 
    .pull-zone-dragging > & {
-      --translate-y: calc(min(var(--pull-zone-scroll-top) * 1%, 3000% / 130));
+      --translate-y: calc(min(var(--pull-zone-scroll-top) * 1%, 3500% / 135));
       @apply translate-y-(--translate-y) duration-0;
    }
 
    .pull-zone-action-triggered > & {
-      --translate-y: calc(2000% / 130);
+      /* Translate to 20% down, which shows the feedback layer, but hides the threshold marker. */
+      --translate-y: calc(2000% / 135);
       @apply translate-y-(--translate-y);
    }
 }

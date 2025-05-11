@@ -11,7 +11,6 @@ export type PullState =
    | "thresholdreached"
    | "pulling"
    | "idle"
-   | "closing"
    | "actiontriggered";
 
 type DivProps = JSX.IntrinsicElements["div"];
@@ -134,12 +133,12 @@ export function PullZone(props: PullZoneProps): JSX.Template {
          pullZone.classList.add("pull-zone-action-triggered");
          await onActionTriggered?.();
       }
-      changeState("closing");
       pullZone.classList.remove("pull-zone-action-triggered");
       changeState("idle");
    };
 
    const handlePointerDown = (event: PointerEvent) => {
+      console.log(event);
       if (pullState === "actiontriggered") return;
       const pullZone = event.currentTarget as HTMLElement;
       const pointerOriginTarget = event.target as HTMLElement;
@@ -216,7 +215,7 @@ export function PullZone(props: PullZoneProps): JSX.Template {
             changeState("pulling");
          }
       },
-      () => ({ root: pullZoneRef.peek(), threshold: 0.01 }),
+      () => ({ root: pullZoneRef.peek(), threshold: 0.4 }),
    );
 
    useIntersectionObserver(
@@ -297,7 +296,7 @@ const KEYFRAMES = [
       "--pull-zone-scroll-top": 100,
    },
 ];
-const MAX_PULL_ZONE_SCROLL_TOP = (3000 / 130) * 10;
+const MAX_PULL_ZONE_SCROLL_TOP = (3500 / 135) * 10;
 
 const ANIMATION_OPTIONS = { duration: 1000, easing: "linear" };
 const LISTENER_OPTIONS = { passive: true };
