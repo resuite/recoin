@@ -13,8 +13,8 @@
    },
    "type": "module",
    "dependencies": {
-      "retend": "https://pkg.pr.new/resuite/retend@8fbea24",
-      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@8fbea24",
-      "retend-utils": "^0.0.12"
+      "retend": "https://pkg.pr.new/resuite/retend@4069acc",
+      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@4069acc",
+      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@4069acc"
    }
 }
