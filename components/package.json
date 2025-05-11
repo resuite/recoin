@@ -15,6 +15,6 @@
    "dependencies": {
       "retend": "https://pkg.pr.new/resuite/retend@8fbea24",
       "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@8fbea24",
-      "retend-utils": "^0.0.11"
+      "retend-utils": "^0.0.12"
    }
 }
