@@ -98,7 +98,7 @@ export async function DynamicIcon(props: AsyncIconProps) {
    return iconModule.default(rest) as JSX.Template;
 }
 
-export const Icon = createStaticComponent(DynamicIcon);
+export const Icon = DynamicIcon;
 
 export function AllIcons() {
   return (
