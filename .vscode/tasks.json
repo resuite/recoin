@@ -1,0 +1,30 @@
+{
+   "version": "2.0.0",
+   "tasks": [
+      {
+         "icon": {
+            "color": "terminal.ansiBlue",
+            "id": "play-circle"
+         },
+         "type": "npm",
+         "script": "build",
+         "path": "components",
+         "group": "build",
+         "problemMatcher": [],
+         "label": "Build UI Library",
+         "detail": "Builds the recoin UI library."
+      },
+      {
+         "icon": {
+            "color": "terminal.ansiGreen",
+            "id": "globe"
+         },
+         "type": "npm",
+         "script": "dev",
+         "path": "application/web",
+         "problemMatcher": ["$tsc"],
+         "label": "Start Web App",
+         "detail": "Starts the recoin web app in development mode."
+      }
+   ]
+}

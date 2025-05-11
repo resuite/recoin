@@ -6,8 +6,8 @@ const page3IsOpen = Cell.source(false);
 
 const NavStack = () => {
    return (
-      <div class="w-full">
-         <StackViewGroup class="h-screen text-white text-large">
+      <div class="w-full rounded-t-3xl light-scheme overflow-hidden">
+         <StackViewGroup class="h-screen text-large">
             <StackView root content={Page1} />
             <StackView
                isOpen={page2IsOpen}
@@ -25,7 +25,7 @@ const NavStack = () => {
 };
 
 const Page1 = () => (
-   <div class="w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5 bg-gray-400">
+   <div class="w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5">
       <div class="mb-2">1</div>
       <button type="button" onClick={() => page2IsOpen.set(true)}>
          Next Page
@@ -35,7 +35,7 @@ const Page1 = () => (
 );
 
 const Page2 = () => (
-   <div class="w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5 bg-gray-500">
+   <div class="w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5">
       <div class="mb-2">2</div>
       <button type="button" onClick={() => page2IsOpen.set(false)}>
          <Icon name="caret" direction="left" class="btn-icon" />
@@ -49,7 +49,7 @@ const Page2 = () => (
 );
 
 const Page3 = () => (
-   <div class="w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5 bg-gray-600">
+   <div class="w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5">
       <div class="mb-2">3</div>
       <button type="button" onClick={() => page3IsOpen.set(false)}>
          <Icon name="caret" direction="left" class="btn-icon" />

@@ -98,6 +98,13 @@ const Styleguide = () => {
                   </label>
                </div>
             </div>
+            {/* Other pages */}
+            <div class="py-1 px-1 w-full">
+               <Link href="/nav-stack">Go to nav stack page</Link>
+               <Link href="/tabs">Go to tabs page</Link>
+               <Link href="/pull-zone">Go to pull zone page</Link>
+               <Link href="/toast">Go to toast page</Link>
+            </div>
          </div>
       </div>
    );
