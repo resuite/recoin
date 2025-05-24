@@ -27,7 +27,7 @@ async function generateIconNames() {
     // AsyncIconProps interface definition (extracted from icon.tsx)
     const iconPropsContent = `
 import type { JSX } from "retend/jsx-runtime";
-import { createStaticComponent } from "retend-server/client";
+import { noHydrate } from "retend-server/client";
 
 type SvgProps = JSX.IntrinsicElements["svg"];
 
@@ -39,12 +39,11 @@ export interface AsyncIconProps extends SvgProps {
     const iconComponentContent = `
 export async function DynamicIcon(props: AsyncIconProps) {
    const { name, ...rest } = props;
-   // Adjust import path relative to the new file location
    const iconModule = await import(\`./icons/\${name}.tsx\`);
    return iconModule.default(rest) as JSX.Template;
 }
 
-export const Icon = createStaticComponent(DynamicIcon);`;
+export const Icon = noHydrate(DynamicIcon);`;
 
     // AllIcons component definition
     const allIconsComponentContent = `

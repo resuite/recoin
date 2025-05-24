@@ -1,0 +1,61 @@
+.container {
+   --expand-origin: calc(50% - 10px) calc(50% - 10px);
+   --expand-color: var(--canvas-background);
+   --expand-size: var(--fab-size);
+   display: contents;
+}
+
+.content {
+   width: 100%;
+   height: 100%;
+
+   /* This should just be 0ms, but if it is, compositing fails. */
+   transition-duration: 0.05ms;
+   transition-property: opacity;
+   isolation: isolate;
+
+   &:not([data-open]) {
+      opacity: 0;
+      pointer-events: none;
+   }
+
+   &[data-open] {
+      opacity: 1;
+      /* Ensures that the transition to being visible occurs at the exact same time
+      on the document timeline as the clipPath element being transitioned to
+      invisible.*/
+      transition-delay: calc(var(--speed-bit-slower) - 0.05ms);
+   }
+}
+
+/* 
+   We couldn't use the clip-path property, because it isn't hardware accelerated
+   (yet?) and animations with it are buggy in Firefox.
+
+   This element instead uses a scale transform to create the clipping effect, where
+   it covers the entire viewport and then disappears, allowing the content to be
+   visible.
+*/
+.clipPath {
+   position: fixed;
+   width: var(--expand-size);
+   height: var(--expand-size);
+   border-radius: 50%;
+   background-color: var(--expand-color);
+   pointer-events: none;
+   inset: var(--expand-origin);
+
+   .container:has(> .content[data-open]) > & {
+      opacity: 0;
+      /* Opacity should just be 0ms, but if it is, compositing fails. */
+      transition: scale var(--speed-bit-slower) ease-in-out, opacity 0.05ms
+         var(--speed-bit-slower);
+      scale: 20;
+   }
+
+   .container:has(> .content:not([data-open])) > & {
+      /* Opacity should just be 0ms, but if it is, compositing fails. */
+      transition: scale var(--speed-bit-slower) ease-in-out, opacity 0.05ms;
+      scale: 0;
+   }
+}

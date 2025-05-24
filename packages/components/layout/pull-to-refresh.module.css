@@ -1,0 +1,78 @@
+@property --pull-zone-scroll-top {
+   syntax: "<number>";
+   initial-value: 0;
+   inherits: true;
+}
+
+.pullZone {
+   --pull-progress: calc(var(--pull-zone-scroll-top) * (13 / 2));
+   overflow: hidden;
+
+   &.pullZoneCanPull,
+   &.pullZoneCanPull * {
+      touch-action: pan-x;
+   }
+
+   @media (pointer: coarse) {
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+         display: none;
+      }
+   }
+}
+
+/*
+   The threshold marker is 15% of the pull-zone,
+   the feedback layer is 20%, and the content
+   is 100%, making 135%.
+*/
+.pullZoneScrollContainer {
+   display: grid;
+   width: 100%;
+   height: 135%;
+   transition-timing-function: ease-in-out;
+   transition-duration: var(--speed-slow);
+   transition-property: translate;
+   grid-template-rows:
+      calc(1500% / 135) /* 15*% of 135% */
+      calc(2000% / 135) /* 20*% of 135% */
+      calc(10000% / 135); /* 100*% of 135% */
+
+   .pullZoneDragging > & {
+      --translate-y: calc(min(var(--pull-zone-scroll-top) * 1%, 3500% / 135));
+      transition-duration: 0s;
+      translate: 0 var(--translate-y);
+   }
+
+   .pullZoneActionTriggered > & {
+      /* Translate to 20% down, which shows the feedback layer, but hides the threshold marker. */
+      --translate-y: calc(2000% / 135);
+      translate: 0 var(--translate-y);
+   }
+}
+
+.pullZoneTriggered {
+   overflow: hidden;
+   pointer-events: none;
+   overscroll-behavior: none;
+}
+
+.pullZoneContent {
+   overflow-y: scroll;
+   width: 100%;
+   height: 100%;
+   min-height: 100%;
+   background-color: var(--canvas-background);
+   overscroll-behavior: none;
+
+   .pullZoneActionTriggered > .pullZoneScrollContainer > & {
+      overflow: hidden;
+      pointer-events: none;
+   }
+}
+
+.pullZoneContentTopMarker {
+   width: 100%;
+   height: 0.25rem;
+   pointer-events: none;
+}

@@ -1,0 +1,59 @@
+.floatingActionButton {
+   position: absolute;
+   z-index: 99;
+   display: grid;
+   width: var(--fab-size);
+   min-width: unset;
+   height: var(--fab-size);
+   border-radius: 50%;
+   place-items: center;
+
+   &:active {
+      scale: 0.7;
+   }
+
+   &:disabled {
+      /* Overrides the default disabled state of buttons. */
+      visibility: unset;
+   }
+
+   &.block-top {
+      top: calc(var(--spacing) * 3);
+      bottom: unset;
+   }
+
+   &.block-bottom {
+      top: unset;
+      bottom: calc(var(--spacing) * 3);
+   }
+
+   &.block-center {
+      top: calc(50% - calc(var(--fab-size) / 2));
+      bottom: unset;
+   }
+
+   &.inline-right {
+      right: calc(var(--spacing) * 2);
+      left: unset;
+   }
+
+   &.inline-left {
+      right: unset;
+      left: calc(var(--spacing) * 2);
+   }
+
+   &.inline-center {
+      right: calc(50% - calc(var(--fab-size) / 2));
+      left: unset;
+   }
+
+   & > svg {
+      width: calc(var(--spacing) * 1.75);
+      height: calc(var(--spacing) * 1.75);
+   }
+
+   &[data-outlined] {
+      border: 3px solid var(--canvas-text);
+      background-color: transparent;
+   }
+}

@@ -1,0 +1,24 @@
+.provider {
+   --sidebar-reveal: calc(1 - var(--scroll-unit));
+
+   display: grid;
+   overflow-x: scroll;
+   width: 100%;
+   height: 100%;
+   grid-template-columns: auto 100%;
+   grid-template-rows: 1fr;
+   scroll-snap-type: x mandatory;
+
+   scrollbar-width: none;
+   &::-webkit-scrollbar {
+      display: none;
+   }
+}
+
+.sidebar {
+   scroll-snap-align: start;
+}
+
+.content {
+   scroll-snap-align: start;
+}

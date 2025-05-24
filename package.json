@@ -3,5 +3,9 @@
    "module": "index.ts",
    "type": "module",
    "private": true,
-   "workspaces": ["application/styleguide", "components"]
+   "workspaces": ["packages/*"],
+   "scripts": {
+      "start-styleguide": "cd packages/styleguide && bun dev",
+      "build-components": "cd packages/components && bun run build"
+   }
 }
