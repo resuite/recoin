@@ -6,7 +6,11 @@
    "workspaces": ["packages/*", "application/*"],
    "scripts": {
       "phone-test": "cd application/phone && bun dev",
+
       "start-styleguide": "cd application/styleguide && bun dev",
+      "build-styleguide": "cd application/styleguide && bun run build",
+      "preview-styleguide": "cd application/styleguide && bun run preview",
+
       "generate-icons": "bun run packages/scripts/generate-icon-names.ts"
    },
    "devDependencies": {
