@@ -1,0 +1,10 @@
+{
+   "name": "@recoin/styleguide",
+   "private": true,
+   "type": "module",
+   "scripts": {
+      "dev": "vite --port 5230",
+      "build": "vite build",
+      "preview": "vite preview"
+   }
+}

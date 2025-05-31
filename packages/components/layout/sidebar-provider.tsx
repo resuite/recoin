@@ -1,7 +1,7 @@
 import type { JSX } from "retend/jsx-runtime";
 import styles from "./sidebar-provider.module.css";
 import { Cell, useObserver } from "retend";
-import { scrollTimelineFallback } from "../utils";
+import { scrollTimelineFallback } from "../../utilities/utils";
 import { useDerivedValue, useIntersectionObserver } from "retend-utils/hooks";
 
 type DivProps = JSX.IntrinsicElements["div"];

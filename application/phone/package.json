@@ -1,0 +1,11 @@
+{
+   "name": "demonstration",
+   "private": true,
+   "version": "0.0.0",
+   "type": "module",
+   "scripts": {
+      "dev": "vite --port 5231",
+      "build": "vite build",
+      "preview": "vite preview"
+   }
+}

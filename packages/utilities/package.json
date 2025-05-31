@@ -1,0 +1,9 @@
+{
+   "name": "@recoin/utilities",
+   "private": true,
+   "type": "module",
+   "exports": {
+      "./animations": "./animations.ts",
+      "./miscellaneous": "./miscellaneous.ts"
+   }
+}

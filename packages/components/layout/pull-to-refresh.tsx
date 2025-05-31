@@ -1,6 +1,6 @@
 import { Cell, type SourceCell, useObserver } from "retend";
 import type { JSX } from "retend/jsx-runtime";
-import { getScrollableY, GESTURE_ANIMATION_MS } from "../utils";
+import { getScrollableY, GESTURE_ANIMATION_MS } from "../../utilities/utils";
 import {
    useMatchMedia,
    useWindowSize,
@@ -126,7 +126,8 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    const allowPull = useDerivedValue(allowPullProp);
    const canPull = Cell.derived(
       // allowPull can be undefined.
-      () => reachedTop.get() && supportsTouch.get() && allowPull.get() !== false
+      () =>
+         reachedTop.get() && supportsTouch.get() && allowPull.get() !== false,
    );
    let scrollable: HTMLElement | null = null;
 
@@ -175,7 +176,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
       window.addEventListener(
          "pointermove",
          handlePointerMove,
-         LISTENER_OPTIONS
+         LISTENER_OPTIONS,
       );
       window.addEventListener("pointerup", handlePointerUp);
       window.addEventListener("pointercancel", handlePointerUp);
@@ -194,7 +195,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
             const newTime = (delta / pullZoneHeight) * GESTURE_ANIMATION_MS;
             pullScrollAnimation.currentTime = Math.min(
                newTime,
-               MAX_PULL_ZONE_SCROLL_TOP
+               MAX_PULL_ZONE_SCROLL_TOP,
             );
          }
       });
@@ -236,7 +237,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
             changeState("pulling");
          }
       },
-      () => ({ root: pullZoneRef.peek(), threshold: 0.4 })
+      () => ({ root: pullZoneRef.peek(), threshold: 0.4 }),
    );
 
    useIntersectionObserver(
@@ -248,7 +249,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
          if (!thresholdMarker) return;
          if (feedbackLayerIsVisible) changeState("pulling");
       },
-      () => ({ root: pullZoneRef.peek(), threshold: 0.01 })
+      () => ({ root: pullZoneRef.peek(), threshold: 0.01 }),
    );
 
    // Another marker to indicate when pull-to-refresh can be used,
@@ -261,7 +262,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
          // and start the pull-to-refresh process.
          reachedTop.set(entry.isIntersecting);
       },
-      () => ({ root: pullZoneRef.peek(), threshold: 0.9 })
+      () => ({ root: pullZoneRef.peek(), threshold: 0.9 }),
    );
 
    canPull.listen((canPull) => {

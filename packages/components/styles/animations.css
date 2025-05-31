@@ -1,0 +1,83 @@
+/* Animations */
+
+@utility animate-delay-* {
+   animation-delay: --value(--speed-\*);
+}
+
+@utility duration-* {
+   transition-duration: --value(--speed-\*);
+}
+
+@utility delay-* {
+   transition-delay: --value(--speed-\*);
+}
+
+@utility animate-scrolling {
+   animation-name: scrolling;
+   animation-timing-function: linear;
+   will-change: --scroll-unit;
+   animation-timeline: scroll(self inline);
+
+   @supports not (animation-timeline: scroll(self inline)) {
+      animation-duration: 1000ms;
+      animation-timing-function: linear;
+   }
+}
+
+@utility animate-underlining {
+   transform-origin: 0 0;
+}
+
+@utility animate-scrolling-block {
+   animation-name: scrolling;
+   animation-timing-function: linear;
+   will-change: --scroll-unit;
+   animation-timeline: scroll(self block);
+
+   @supports not (animation-timeline: scroll(self block)) {
+      animation-duration: 1000ms;
+      animation-timing-function: linear;
+   }
+}
+
+@keyframes spin {
+   to {
+      transform: rotate(360deg);
+   }
+}
+
+@keyframes scrolling {
+   from {
+      --scroll-unit: 0;
+   }
+
+   to {
+      --scroll-unit: 1;
+   }
+}
+
+@keyframes toast-slide-in {
+   from {
+      opacity: 0.5;
+      transform: translateY(-100%);
+   }
+}
+
+@keyframes toast-leave {
+   to {
+      opacity: 0;
+   }
+}
+
+@keyframes fade-in {
+   from {
+      opacity: var(--starting-opacity, 0);
+      translate: var(--starting-translate, 0 80%);
+   }
+}
+
+@keyframes underlining {
+   from {
+      scale: 0 1;
+   }
+}

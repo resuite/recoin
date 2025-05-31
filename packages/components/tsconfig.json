@@ -1,35 +1,37 @@
 {
-  "compilerOptions": {
-    // Environment setup & latest features
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "jsxImportSource": "retend",
-    "allowJs": true,
+   "compilerOptions": {
+      // Environment setup & latest features
+      "lib": ["ESNext", "DOM", "DOM.Iterable"],
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleDetection": "force",
+      "jsx": "react-jsx",
+      "jsxImportSource": "retend",
+      "allowJs": true,
 
-    "outDir": "./dist",
+      "outDir": "./dist",
 
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
+      // Bundler mode
+      "moduleResolution": "bundler",
+      "allowImportingTsExtensions": true,
+      "verbatimModuleSyntax": true,
+      "noEmit": true,
 
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
+      // Best practices
+      "strict": true,
+      "skipLibCheck": true,
+      "noFallthroughCasesInSwitch": true,
+      "noUncheckedIndexedAccess": true,
 
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
+      // Some stricter flags (disabled by default)
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "noPropertyAccessFromIndexSignature": false,
 
-    "declaration": true,
-    "emitDeclarationOnly": true
-  },
-  "include": ["./"]
+      "declaration": true,
+      "emitDeclarationOnly": true,
+
+      "types": ["vite/client"]
+   },
+   "include": ["./"]
 }

@@ -1,23 +1,12 @@
 {
    "name": "@recoin/components",
    "module": "index.tsx",
-   "devDependencies": {
-      "@tailwindcss/vite": "^4.1.6",
-      "retend": "^0.0.13",
-      "retend-server": "^0.0.13",
-      "retend-utils": "^0.0.13",
-      "vite-plugin-dts": "^4.5.3",
-      "rolldown-vite": "^6.3.9"
-   },
    "private": true,
-   "scripts": {
-      "build": "vite build"
-   },
+   "type": "module",
    "exports": {
       ".": "./index.tsx",
+      "./icons": "./icons/index.tsx",
       "./layout": "./layout/index.ts",
-      "./utils": "./utils.ts",
-      "./css": "./base.css"
-   },
-   "type": "module"
+      "./css": "./styles/base.css"
+   }
 }

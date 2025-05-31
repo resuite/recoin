@@ -1,7 +1,7 @@
 import type { JSX } from "retend/jsx-runtime";
 import { useDerivedValue } from "retend-utils/hooks";
 import { Cell, If } from "retend";
-import { defer } from "../utils";
+import { defer } from "@recoin/utilities/miscellaneous";
 import styles from "./expanding-view.module.css";
 
 type DivProps = JSX.IntrinsicElements["div"];
