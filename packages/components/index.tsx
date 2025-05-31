@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-import "./base.css";
 
 export { default as Loader } from "./icons/loader";
 export type { IconProps } from "./icon";

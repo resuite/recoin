@@ -27,10 +27,11 @@ export interface StackViewProps extends DivProps {
    root?: boolean;
    /**
     * A function that returns the content to be rendered within the view.
+    * This can be a static function or a reactive cell.
     * Navigation is lazy, which means that the content is only rendered when the view is open,
     * and will be unmounted when the view is closed.
     */
-   content: () => JSX.Template;
+   content: JSX.ValueOrCell<() => JSX.Template>;
    /**
     * A ref to the underlying HTML element of the view.
     */
@@ -113,7 +114,7 @@ export function StackViewGroup(props: StackViewGroupProps) {
  */
 export function StackView(props: StackViewProps) {
    const {
-      content,
+      content: contentProp,
       isOpen: isOpenProp,
       ref: containerRef = Cell.source<HTMLElement | null>(null),
       onCloseRequested,
@@ -123,6 +124,7 @@ export function StackView(props: StackViewProps) {
    } = props;
 
    const isOpen = useDerivedValue(isOpenProp);
+   const content = useDerivedValue(contentProp);
    const canSwipe = useDerivedValue(canSwipeProp);
    const observer = useObserver();
    const contentLoaded = Cell.source(root || isOpen.get());
@@ -216,7 +218,7 @@ export function StackView(props: StackViewProps) {
          data-open={root || isOpen}
          class={[styles.stackViewGroupView, rest.class]}
       >
-         {If(contentLoaded, content)}
+         {If(content, (content) => If(contentLoaded, content))}
          {If(canSwipe, () => (
             <div
                class={styles.stackViewGroupViewPullHandle}

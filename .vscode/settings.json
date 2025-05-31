@@ -1,25 +1,25 @@
 {
-  "explorer.compactFolders": false,
-  "scm.compactFolders": true,
-  "editor.defaultFormatter": "biomejs.biome",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "cSpell.words": ["actiontriggered", "retend", "thresholdreached"],
-  "[css]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[svg]": {
-    "editor.defaultFormatter": "jock.svg"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "denoland.vscode-deno"
-  },
-  "typescript.experimental.useTsgo": false
+   "explorer.compactFolders": false,
+   "scm.compactFolders": true,
+   "editor.defaultFormatter": "biomejs.biome",
+   "[typescriptreact]": {
+      "editor.defaultFormatter": "biomejs.biome"
+   },
+   "cSpell.words": ["actiontriggered", "retend", "thresholdreached"],
+   "[css]": {
+      "editor.defaultFormatter": "biomejs.biome"
+   },
+   "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+   },
+   "[json]": {
+      "editor.defaultFormatter": "biomejs.biome"
+   },
+   "[svg]": {
+      "editor.defaultFormatter": "jock.svg"
+   },
+   "[typescript]": {
+      "editor.defaultFormatter": "biomejs.biome"
+   },
+   "typescript.experimental.useTsgo": false
 }

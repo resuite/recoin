@@ -33,27 +33,6 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
          >
             {props?.children}
          </div>
-         <ExpandingView
-            expandOrigin="auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)"
-            class="dark-scheme h-full w-full grid place-items-center place-content-center gap-1 [grid-area:1/1]"
-            isOpen={isOpen}
-            content={() => (
-               <>
-                  <div class="after:block after:h-0.15 after:bg-canvas-text after:animate-underlining overflow-hidden">
-                     <div class="text-title animate-fade-in animate-delay-bit-slower">
-                        hello recoin!
-                     </div>
-                  </div>
-                  <button
-                     type="button"
-                     class="animate-fade-in animate-delay-bit-slower"
-                     onClick={toggleButtonState}
-                  >
-                     Toggle Button state.
-                  </button>
-               </>
-            )}
-         />
          <FloatingActionButton
             outlined
             disabled={buttonsClosed}
@@ -83,6 +62,27 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
          >
             <Icon name="add" />
          </FloatingActionButton>
+         <ExpandingView
+            expandOrigin="auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)"
+            class="dark-scheme h-full w-full grid place-items-center place-content-center gap-1 [grid-area:1/1]"
+            isOpen={isOpen}
+            content={() => (
+               <>
+                  <div class="after:block after:h-0.15 after:bg-canvas-text after:animate-underlining overflow-hidden">
+                     <div class="text-title animate-fade-in animate-delay-bit-slower">
+                        hello recoin!
+                     </div>
+                  </div>
+                  <button
+                     type="button"
+                     class="animate-fade-in animate-delay-bit-slower"
+                     onClick={toggleButtonState}
+                  >
+                     Toggle Button state.
+                  </button>
+               </>
+            )}
+         />
       </div>
    );
 };

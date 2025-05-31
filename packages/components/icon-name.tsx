@@ -89,6 +89,7 @@ type SvgProps = JSX.IntrinsicElements["svg"];
 
 export interface AsyncIconProps extends SvgProps {
    name: IconName;
+   direction?: string;
 }
 
 export async function DynamicIcon(props: AsyncIconProps) {

@@ -3,9 +3,9 @@
    "module": "index.tsx",
    "devDependencies": {
       "@tailwindcss/vite": "^4.1.6",
-      "retend": "https://pkg.pr.new/resuite/retend@47533c7",
-      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@47533c7",
-      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@47533c7",
+      "retend": "^0.0.13",
+      "retend-server": "^0.0.13",
+      "retend-utils": "^0.0.13",
       "vite-plugin-dts": "^4.5.3",
       "rolldown-vite": "^6.3.9"
    },
@@ -16,7 +16,8 @@
    "exports": {
       ".": "./index.tsx",
       "./layout": "./layout/index.ts",
-      "./utils": "./utils.ts"
+      "./utils": "./utils.ts",
+      "./css": "./base.css"
    },
    "type": "module"
 }

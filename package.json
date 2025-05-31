@@ -7,5 +7,8 @@
    "scripts": {
       "start-styleguide": "cd packages/styleguide && bun dev",
       "build-components": "cd packages/components && bun run build"
+   },
+   "devDependencies": {
+      "@biomejs/biome": "1.9.4"
    }
 }

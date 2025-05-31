@@ -1,11 +1,10 @@
 import { Icon, type IconName } from "@recoin/components";
-import { SidebarProvider } from "@recoin/components/layout";
+import { useSidebar } from "@recoin/components/layout";
 import { createPartitions } from "@recoin/components/utils";
 import { Cell, For } from "retend";
 import { useRouter } from "retend/router";
 import FloatingActionButtonTest from "./fab";
 import PullToRefreshTest from "./pull-zone";
-import Tabs from "./tabs";
 
 interface LinkInfo {
    name: string;
@@ -142,6 +141,7 @@ const SidebarHeader = (props: SidebarHeaderProps) => {
 };
 
 const SidebarTest = () => {
+   const { sidebarState, SidebarProvider } = useSidebar();
    const upperLinks: Array<LinkInfo> = [
       {
          name: "Home",
@@ -184,12 +184,12 @@ const SidebarTest = () => {
 
    const sidebarRevealCssVar = "var(--sidebar-reveal)";
    const upperLinksSwipeProgressValuesOptions = {
-      from: 0.8,
+      from: 0.6,
       overlap: 0.2,
       count: upperLinks.length,
    };
    const lowerLinksSwipeProgressValuesOptions = {
-      from: 0.8,
+      from: 0.6,
       overlap: 0.2,
       count: lowerLinks.length,
    };
@@ -197,17 +197,23 @@ const SidebarTest = () => {
    const headerAnimationOptions = { from: 0.7, to: 0.9 };
    const upperLinksSwipeProgressValues = createPartitions(
       sidebarRevealCssVar,
-      upperLinksSwipeProgressValuesOptions
+      upperLinksSwipeProgressValuesOptions,
    );
    const lowerLinksSwipeProgressValues = createPartitions(
       sidebarRevealCssVar,
-      lowerLinksSwipeProgressValuesOptions
+      lowerLinksSwipeProgressValuesOptions,
    );
    const [lineScale] = createPartitions(sidebarRevealCssVar, lineScaleOptions);
    const [headerProgressValue] = createPartitions(
       sidebarRevealCssVar,
-      headerAnimationOptions
+      headerAnimationOptions,
    );
+
+   const sidebarState = Cell.source<"open" | "closed">("closed");
+
+   const onSidebarStateChange = (state: "open" | "closed") => {
+      sidebarState.set(state);
+   };
 
    const InnerSidebar = () => {
       return (
@@ -242,14 +248,19 @@ const SidebarTest = () => {
 
    return (
       <PullToRefreshTest contentTopMarkerRef={contentTopMarkerRef}>
-         <SidebarProvider class="h-screen dark-scheme" sidebar={InnerSidebar}>
+         <SidebarProvider
+            class="h-screen dark-scheme"
+            sidebar={InnerSidebar}
+            onSidebarStateChange={onSidebarStateChange}
+         >
             <FloatingActionButtonTest>
-               <div class="h-full w-full relative">
+               <div class="h-full w-full relative grid place-items-center place-content-center">
                   <div
                      ref={contentTopMarkerRef}
                      class="h-0.25 fixed top-0 left-0 w-full"
                   />
-                  <Tabs />
+                  <h1 class="text-header">recoin.</h1>
+                  <p>Sidebar state: {sidebarState}</p>
                </div>
             </FloatingActionButtonTest>
          </SidebarProvider>
