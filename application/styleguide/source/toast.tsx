@@ -1,4 +1,4 @@
-import { useToast } from "@recoin/components";
+import { useToast } from "@recoin/components/ui";
 
 const Toast = () => {
    const { showToast, ToastContainer } = useToast();

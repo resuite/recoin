@@ -3,7 +3,7 @@
    "private": true,
    "type": "module",
    "scripts": {
-      "dev": "vite --port 5230",
+      "dev": "vite --port 5229",
       "build": "vite build",
       "preview": "vite preview"
    }

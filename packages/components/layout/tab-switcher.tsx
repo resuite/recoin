@@ -1,7 +1,7 @@
 import { Cell, For, useObserver, type SourceCell } from "retend";
 import type { JSX } from "retend/jsx-runtime";
 import { useDerivedValue } from "retend-utils/hooks";
-import { scrollTimelineFallback } from "../../utilities/utils";
+import { scrollTimelineFallback } from "@recoin/utilities/scrolling";
 import styles from "./tab-switcher.module.css";
 
 type SectionProps = JSX.IntrinsicElements["section"];

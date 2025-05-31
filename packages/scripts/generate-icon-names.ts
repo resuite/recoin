@@ -1,9 +1,11 @@
+/// <reference types="node" />
+
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const iconsDir = path.resolve("components/icons/svg");
+const iconsDir = path.resolve("./packages/components/icons/svg");
 // Change output file extension to .tsx
-const outputFile = path.resolve("components/icons/index.tsx");
+const outputFile = path.resolve("./packages/components/icons/index.tsx");
 
 async function generateIconNames() {
    try {
@@ -31,16 +33,18 @@ import { noHydrate } from "retend-server/client";
 
 type SvgProps = JSX.IntrinsicElements["svg"];
 
+export interface IconProps extends SvgProps {}
+
 export interface AsyncIconProps extends SvgProps {
    name: IconName;
-   direction?: string;
+   direction?: unknown;
 }`;
 
       // Icon component definition (extracted from icon.tsx)
       const iconComponentContent = `
 export async function DynamicIcon(props: AsyncIconProps) {
    const { name, ...rest } = props;
-   const iconModule = await import(\`./icons/\${name}.tsx\`);
+   const iconModule = await import(\`./svg/\${name}.tsx\`);
    return iconModule.default(rest) as JSX.Template;
 }
 
@@ -68,7 +72,7 @@ ${allIconsComponentContent}
 
       await fs.writeFile(outputFile, fileContent, "utf8");
       console.log(
-         `Successfully generated ${outputFile} with ${iconNames.length} icon names and components.`
+         `Successfully generated ${outputFile} with ${iconNames.length} icon names and components.`,
       );
    } catch (error) {
       console.error("Error generating icon names:", error);

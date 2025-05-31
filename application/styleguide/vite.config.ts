@@ -3,6 +3,8 @@ import { retend } from "retend/plugin";
 import { retendSSG } from "retend-server/plugin";
 import tailwindcss from "@tailwindcss/vite";
 
+const pages = ["/", "/nav-stack", "/tabs", "/pull-zone", "/toast", "/sidebar"];
+
 export default defineConfig({
    server: {
       // abeg abeg abeg
@@ -15,14 +17,7 @@ export default defineConfig({
       tailwindcss(),
       retend(),
       retendSSG({
-         pages: [
-            "/",
-            "/nav-stack",
-            "/tabs",
-            "/pull-zone",
-            "/toast",
-            "/sidebar",
-         ],
+         pages,
          routerModulePath: "./source/router.ts",
       }),
    ],

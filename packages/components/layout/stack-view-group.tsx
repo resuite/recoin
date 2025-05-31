@@ -1,7 +1,8 @@
 import { Cell, If, useObserver, type SourceCell } from "retend";
 import { useDerivedValue } from "retend-utils/hooks";
 import type { JSX } from "retend/jsx-runtime";
-import { defer, GESTURE_ANIMATION_MS } from "../../utilities/utils";
+import { defer } from "@recoin/utilities/miscellaneous";
+import { GESTURE_ANIMATION_MS } from "@recoin/utilities/scrolling";
 import styles from "./stack-view-group.module.css";
 
 type DivProps = JSX.IntrinsicElements["div"];
@@ -68,9 +69,7 @@ export function StackViewGroup(props: StackViewGroupProps) {
          draggable="false"
          class={[styles.stackViewGroup, rest.class]}
       >
-         <div class="grid [grid-area:1/1] grid-cols-2 w-[200%] h-full">
-            {children}
-         </div>
+         <div class={styles.stackViewGroupContent}>{children}</div>
       </div>
    );
 }

@@ -5,13 +5,21 @@
 }
 
 body {
-   --stack-view-slide: calc(var(--default-speed) * 2);
+   --stack-view-slide: calc(var(--default-speed) * 3.5);
 }
 
 /* ---NAVIGATION STACK--- */
 .stackViewGroup {
    display: grid;
    overflow: hidden;
+}
+
+.stackViewGroupContent {
+   display: grid;
+   width: 200%;
+   height: 100%;
+   grid-area: 1 / 1;
+   grid-template-columns: 50% 50%;
 }
 
 .stackViewGroupView {
@@ -23,7 +31,7 @@ body {
    width: 100%;
    height: 100%;
    background-color: var(--canvas-background);
-   transition-timing-function: ease-out;
+   transition-timing-function: cubic-bezier(0.7, 0, 0.05, 1);
    transition-property: translate, opacity;
    grid-area: 1 / 1;
    &:not(:first-child) {
@@ -31,7 +39,6 @@ body {
    }
 
    &:not([data-open]) {
-      transition-timing-function: ease-out;
       transition-duration: var(--stack-view-slide);
    }
 
@@ -84,7 +91,7 @@ body {
       opacity: 0;
       background-color: black;
       content: "";
-      transition-timing-function: ease-in-out;
+      transition-timing-function: inherit;
       transition-duration: var(--stack-view-slide);
       transition-property: opacity;
       pointer-events: none;

@@ -3,7 +3,7 @@
    --animate-toast-slide-in: toast-slide-in var(--speed-slow) ease;
 }
 
-.toasts-group {
+.toastsGroup {
    position: fixed;
    top: 0;
    left: 0;
@@ -19,7 +19,7 @@
    }
 }
 
-.toast-container {
+.toastContainer {
    /* Constrains the toast downward animation to a maximum of 2 toasts. */
    --inverse: calc(var(--toasts-count) - var(--toast-index));
    --clamped-inverse: min(var(--inverse), 3);
@@ -62,7 +62,7 @@
    }
 }
 
-.toast-dismiss-marker {
+.toastDismissMarker {
    width: 100%;
    height: 100%;
    scroll-snap-align: start;
@@ -95,4 +95,19 @@
    scroll-margin: var(--spacing);
    scroll-snap-stop: always;
    grid-area: 1 / 2;
+}
+
+.toastCloseButton {
+   min-width: fit-content;
+   padding: 0;
+   border: none;
+   color: var(--color-canvas-text);
+   background-color: transparent;
+   padding-inline: 0;
+}
+
+.toastCloseButtonIcon {
+   width: var(--spacing);
+   height: var(--spacing);
+   rotate: 45deg;
 }

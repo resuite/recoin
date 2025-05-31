@@ -1,5 +1,6 @@
 import { Cell } from "retend";
-import { FloatingActionButton, Icon } from "@recoin/components";
+import { Icon } from "@recoin/components/icons";
+import { FloatingActionButton } from "@recoin/components/ui";
 import { ExpandingView } from "@recoin/components/layout";
 
 const FloatingActionButtonTest = (props?: { children?: unknown }) => {

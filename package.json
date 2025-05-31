@@ -6,16 +6,19 @@
    "workspaces": ["packages/*", "application/*"],
    "scripts": {
       "phone-test": "cd application/phone && bun dev",
-      "start-styleguide": "cd application/styleguide && bun dev"
+      "start-styleguide": "cd application/styleguide && bun dev",
+      "generate-icons": "bun run packages/scripts/generate-icon-names.ts"
    },
    "devDependencies": {
-      "@recoin/components": "workspace:./packages/components",
-      "@recoin/utilities": "workspace:./packages/utilities",
+      "@recoin/components": "file:./packages/components",
+      "@recoin/utilities": "file:./packages/utilities",
+
       "@biomejs/biome": "1.9.4",
       "retend": "^0.0.13",
       "retend-server": "^0.0.13",
       "retend-utils": "^0.0.13",
       "vite": "npm:rolldown-vite@latest",
-      "@tailwindcss/vite": "^4.1.5"
+      "@tailwindcss/vite": "^4.1.5",
+      "@types/node": "^22.15.29"
    }
 }

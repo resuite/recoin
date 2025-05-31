@@ -1,4 +1,4 @@
-import type { IconProps } from "../../icon";
+import type { IconProps } from "../index";
 import { Cell } from "retend";
 import { useDerivedValue } from "retend-utils/hooks";
 import type { JSX } from "retend/jsx-runtime";
@@ -10,22 +10,28 @@ export interface CaretProps extends IconProps {
 export default function Caret(props: CaretProps) {
    const { direction, ...rest } = props;
    const dir = useDerivedValue(direction);
-   const caretDirection = Cell.derived(() => {
+
+   const rotate = Cell.derived(() => {
       const value = dir.get();
       switch (value) {
          case "left":
-            return "rotate-90";
+            return "90deg";
          case "top":
-            return "rotate-180";
+            return "180deg";
          case "right":
-            return "rotate-270";
+            return "270deg";
       }
    });
+
+   const style = { rotate };
+   if (rest.style && typeof rest.style === "object") {
+      Object.assign(rest.style, style);
+   }
 
    return (
       <svg
          {...rest}
-         class={[caretDirection, rest.class]}
+         style={style}
          viewBox="0 0 25 25"
          fill="none"
          xmlns="http://www.w3.org/2000/svg"

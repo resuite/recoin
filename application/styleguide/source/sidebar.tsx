@@ -1,6 +1,6 @@
-import { Icon, type IconName } from "@recoin/components";
+import { Icon, type IconName } from "@recoin/components/icons";
 import { useSidebar } from "@recoin/components/layout";
-import { createPartitions } from "@recoin/components/utils";
+import { createPartitions } from "@recoin/utilities/animations";
 import { Cell, For } from "retend";
 import { useRouter } from "retend/router";
 import FloatingActionButtonTest from "./fab";
@@ -141,7 +141,7 @@ const SidebarHeader = (props: SidebarHeaderProps) => {
 };
 
 const SidebarTest = () => {
-   const { sidebarState, SidebarProvider } = useSidebar();
+   const { SidebarProvider, SidebarToggle } = useSidebar();
    const upperLinks: Array<LinkInfo> = [
       {
          name: "Home",
@@ -209,12 +209,6 @@ const SidebarTest = () => {
       headerAnimationOptions,
    );
 
-   const sidebarState = Cell.source<"open" | "closed">("closed");
-
-   const onSidebarStateChange = (state: "open" | "closed") => {
-      sidebarState.set(state);
-   };
-
    const InnerSidebar = () => {
       return (
          <div class="w-[65dvw] dark-scheme h-full py-2 text-header grid grid-rows-[auto_auto_auto_1fr]">
@@ -248,11 +242,7 @@ const SidebarTest = () => {
 
    return (
       <PullToRefreshTest contentTopMarkerRef={contentTopMarkerRef}>
-         <SidebarProvider
-            class="h-screen dark-scheme"
-            sidebar={InnerSidebar}
-            onSidebarStateChange={onSidebarStateChange}
-         >
+         <SidebarProvider class="h-screen dark-scheme" sidebar={InnerSidebar}>
             <FloatingActionButtonTest>
                <div class="h-full w-full relative grid place-items-center place-content-center">
                   <div
@@ -260,7 +250,7 @@ const SidebarTest = () => {
                      class="h-0.25 fixed top-0 left-0 w-full"
                   />
                   <h1 class="text-header">recoin.</h1>
-                  <p>Sidebar state: {sidebarState}</p>
+                  <SidebarToggle>Toggle Sidebar</SidebarToggle>
                </div>
             </FloatingActionButtonTest>
          </SidebarProvider>

@@ -5,8 +5,26 @@ import { useIntersectionObserver } from "retend-utils/hooks";
 import styles from "./toast.module.css";
 
 export interface ToastProps {
+   /**
+    * The content to display in the toast notification.
+    * Can be a string, JSX element, or any valid JSX template.
+    * @example
+    * // Simple text content
+    * content: "Success!"
+    *
+    * // JSX content
+    * content: <div><strong>Important:</strong> Please review.</div>
+    */
    content: JSX.Template;
+   /**
+    * Optional duration in milliseconds before the toast auto-dismisses.
+    * If not provided, the toast will persist until manually dismissed.
+    */
    duration?: number;
+   /**
+    * Optional click handler for the toast.
+    * @param {MouseEvent | KeyboardEvent} event - The click or keyboard event that triggered the handler.
+    */
    onClick?: (event: MouseEvent | KeyboardEvent) => void;
 }
 
@@ -139,28 +157,31 @@ export function useToast(): ToastDetails {
 
       return (
          <div
-            class="toast-container"
+            class={styles.toastContainer}
             style={{ "--toast-index": index }}
             ref={toastContainerRef}
          >
-            <div ref={leftDismissMarkerRef} class="toast-dismiss-marker" />
+            <div ref={leftDismissMarkerRef} class={styles.toastDismissMarker} />
             <dialog
                open
                ref={toastElementRef}
-               class="toast"
+               class={styles.toast}
                onClick={handleClick}
                onKeyDown={handleClick}
             >
                <div>{content}</div>
                <button
                   type="button"
-                  class="button-bare min-w-fit p-0"
+                  class={styles.toastCloseButton}
                   onClick={closeToast}
                >
-                  <Add class="w-1 h-1 rotate-45" />
+                  <Add class={styles.toastCloseButtonIcon} />
                </button>
             </dialog>
-            <div ref={rightDismissMarkerRef} class="toast-dismiss-marker" />
+            <div
+               ref={rightDismissMarkerRef}
+               class={styles.toastDismissMarker}
+            />
          </div>
       );
    }
@@ -169,7 +190,7 @@ export function useToast(): ToastDetails {
       const toastsCount = Cell.derived(() => activeToasts.get().length);
       return (
          <div
-            class="toasts-group"
+            class={styles.toastsGroup}
             style={{
                "--toasts-count": toastsCount,
                "--toast-gap": "calc(var(--spacing) * 0.5)",

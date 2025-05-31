@@ -4,6 +4,7 @@
    "type": "module",
    "exports": {
       "./animations": "./animations.ts",
+      "./scrolling": "./scrolling.ts",
       "./miscellaneous": "./miscellaneous.ts"
    }
 }

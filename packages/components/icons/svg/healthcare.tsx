@@ -1,4 +1,4 @@
-import type { IconProps } from "../../icon";
+import type { IconProps } from "../index";
 
 export default function Healthcare(props: IconProps) {
    return (

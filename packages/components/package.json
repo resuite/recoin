@@ -4,7 +4,7 @@
    "private": true,
    "type": "module",
    "exports": {
-      ".": "./index.tsx",
+      "./ui": "./ui/index.tsx",
       "./icons": "./icons/index.tsx",
       "./layout": "./layout/index.ts",
       "./css": "./styles/base.css"

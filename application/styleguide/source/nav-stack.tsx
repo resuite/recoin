@@ -1,4 +1,4 @@
-import { Icon } from "@recoin/components";
+import { Icon } from "@recoin/components/icons";
 import { StackView, StackViewGroup } from "@recoin/components/layout";
 import { Cell } from "retend";
 

@@ -5,13 +5,26 @@
    overflow-x: scroll;
    width: 100%;
    height: 100%;
+
+   animation-name: var(--animation-scrolling);
+   animation-timing-function: linear;
    grid-template-columns: auto 100%;
    grid-template-rows: 1fr;
    scroll-snap-type: x mandatory;
 
    scrollbar-width: none;
+   will-change: --scroll-unit;
+   animation-timeline: scroll(self inline);
    &::-webkit-scrollbar {
       display: none;
+   }
+
+   &[data-not-revealable] {
+      overflow: hidden;
+   }
+   @supports not (animation-timeline: scroll(self inline)) {
+      animation-duration: 1000ms;
+      animation-timing-function: linear;
    }
 }
 
@@ -21,4 +34,9 @@
 
 .content {
    scroll-snap-align: start;
+
+   &[data-opened] {
+      pointer-events: none;
+      touch-action: none;
+   }
 }

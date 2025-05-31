@@ -1,7 +1,7 @@
-import { DynamicIcon } from "@recoin/components";
+import { DynamicIcon } from "@recoin/components/icons";
 import { PullToRefresh, type PullState } from "@recoin/components/layout";
 import { Cell, type SourceCell } from "retend";
-import { JSX } from "retend/jsx-runtime";
+import type { JSX } from "retend/jsx-runtime";
 
 interface PullToRefreshTestProps {
    contentTopMarkerRef?: SourceCell<HTMLElement | null>;
@@ -11,12 +11,12 @@ interface PullToRefreshTestProps {
 
 const PullToRefreshTest = (props?: PullToRefreshTestProps) => {
    const state = Cell.source<PullState>("idle");
-   const pulling = Cell.derived(
-      () => state.get() === "pulling" || state.get() === "thresholdreached"
-   );
-   const actionTriggered = Cell.derived(
-      () => state.get() === "actiontriggered"
-   );
+   const pulling = Cell.derived(() => {
+      return state.get() === "pulling" || state.get() === "thresholdreached";
+   });
+   const actionTriggered = Cell.derived(() => {
+      return state.get() === "actiontriggered";
+   });
    const topMarker = Cell.source<HTMLElement | null>(null);
 
    const FeedbackContent = () => {
@@ -67,11 +67,9 @@ const PullToRefreshTest = (props?: PullToRefreshTestProps) => {
          allowPull={props?.allowPull}
       >
          {props?.children ?? (
-            <div class="rounded-t-2xl text-big h-full light-scheme rounded-t-4xl">
+            <div class="text-big h-full light-scheme rounded-t-4xl">
                <div ref={topMarker} class="h-0.25 w-full" />
-               <div class="grid place-items-center pb-7 h-full w-full">
-                  {state}
-               </div>
+               <div class="grid place-items-center h-full w-full">{state}</div>
             </div>
          )}
       </PullToRefresh>

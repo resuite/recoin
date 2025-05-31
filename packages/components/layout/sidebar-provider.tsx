@@ -1,7 +1,7 @@
 import type { JSX } from "retend/jsx-runtime";
 import styles from "./sidebar-provider.module.css";
 import { Cell, useObserver } from "retend";
-import { scrollTimelineFallback } from "../../utilities/utils";
+import { scrollTimelineFallback } from "@recoin/utilities/scrolling";
 import { useDerivedValue, useIntersectionObserver } from "retend-utils/hooks";
 
 type DivProps = JSX.IntrinsicElements["div"];
@@ -40,7 +40,7 @@ export interface SidebarToggleProps extends ButtonProps {}
  * Includes smooth scrolling and intersection observer for sidebar visibility.
  *
  * @returns An object containing:
- *   - sidebarState: Cell tracking open/closed state
+ *   - sidebarState: Mutable cell tracking open/closed state
  *   - SidebarProvider: Component to wrap sidebar and content
  *   - SidebarToggle: Button component to toggle sidebar
  */
@@ -88,10 +88,12 @@ export function useSidebar() {
       observer.onConnected(providerRef, () => {
          return sidebarState.listen((state) => {
             onSidebarStateChange?.(state);
-            const target =
-               state === "open" ? sidebarRef.get() : contentRef.get();
-            if (!target) return;
-            target.scrollIntoView({ behavior: "instant", inline: "start" });
+            const isOpen = state === "open";
+            const isClosed = state === "closed";
+            if (isOpen && isAlreadyRevealedFlag) return;
+            if (isClosed && !isAlreadyRevealedFlag) return;
+            const target = isOpen ? sidebarRef.get() : contentRef.get();
+            target?.scrollIntoView({ behavior: "smooth", inline: "start" });
          });
       });
 
@@ -99,22 +101,16 @@ export function useSidebar() {
          <div
             {...rest}
             ref={providerRef}
-            class={[
-               styles.provider,
-               "animate-scrolling",
-               { "overflow-hidden": sidebarNotRevealable },
-               rest.class,
-            ]}
+            data-not-revealable={sidebarNotRevealable}
+            class={[styles.provider, rest.class]}
          >
             <div ref={sidebarRef} class={styles.sidebar}>
                {sidebar()}
             </div>
             <div
                ref={contentRef}
-               class={[
-                  styles.content,
-                  { "touch-none pointer-events-none": sidebarOpened },
-               ]}
+               data-opened={sidebarOpened}
+               class={styles.content}
             >
                {children}
             </div>
@@ -125,7 +121,7 @@ export function useSidebar() {
    function SidebarToggle(props: SidebarToggleProps) {
       return (
          <button {...props} type="button" onClick={toggleSidebar}>
-            Toggle
+            {props.children}
          </button>
       );
    }

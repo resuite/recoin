@@ -1,6 +1,9 @@
 import { Cell, type SourceCell, useObserver } from "retend";
 import type { JSX } from "retend/jsx-runtime";
-import { getScrollableY, GESTURE_ANIMATION_MS } from "../../utilities/utils";
+import {
+   getScrollableY,
+   GESTURE_ANIMATION_MS,
+} from "@recoin/utilities/scrolling";
 import {
    useMatchMedia,
    useWindowSize,
@@ -124,11 +127,12 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    const { height } = useWindowSize();
    const reachedTop = Cell.source(false);
    const allowPull = useDerivedValue(allowPullProp);
-   const canPull = Cell.derived(
-      // allowPull can be undefined.
-      () =>
-         reachedTop.get() && supportsTouch.get() && allowPull.get() !== false,
-   );
+   const canPull = Cell.derived(() => {
+      return (
+         // allowPull can be undefined.
+         reachedTop.get() && supportsTouch.get() && allowPull.get() !== false
+      );
+   });
    let scrollable: HTMLElement | null = null;
 
    let pullState: PullState = "idle";
@@ -152,7 +156,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
       if (thresholdMarkerIsVisible) {
          changeState("actiontriggered");
          pullZone.classList.add(styles.pullZoneActionTriggered as string);
-         navigator.vibrate([15, 15]);
+         navigator.vibrate?.([15, 15]);
          await onActionTriggered?.();
       }
       pullZone.classList.remove(styles.pullZoneActionTriggered as string);

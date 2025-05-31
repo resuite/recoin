@@ -3,14 +3,13 @@
    in the components themselves so that Tailwind
    can resolve the utilities.
 */
-
 @import "./animations.css";
 
 @source "./";
 
 @font-face {
    font-family: "Instrument Sans";
-   src: url(./fonts/instrument-sans.ttf) format("truetype");
+   src: url(../fonts/instrument-sans.ttf) format("truetype");
 }
 
 @property --scroll-unit {
@@ -20,6 +19,7 @@
 }
 
 :root {
+   --animation-scrolling: scrolling;
    font-size: 16px;
    scrollbar-width: none;
 }
@@ -81,8 +81,6 @@ body {
    --animate-fade-in: fade-in var(--speed-fast) ease-in backwards;
    --animate-underlining: underlining var(--speed-slow) ease-in-out
       var(--speed-slow) backwards;
-
-   --animation-scrolling: scrolling;
 
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
    --fab-size: max(12dvh, 50px);

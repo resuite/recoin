@@ -37,6 +37,7 @@
       calc(1500% / 135) /* 15*% of 135% */
       calc(2000% / 135) /* 20*% of 135% */
       calc(10000% / 135); /* 100*% of 135% */
+   grid-template-columns: 1fr;
 
    .pullZoneDragging > & {
       --translate-y: calc(min(var(--pull-zone-scroll-top) * 1%, 3500% / 135));

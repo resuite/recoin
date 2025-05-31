@@ -1,4 +1,4 @@
-import type { IconProps } from "../../icon";
+import type { IconProps } from "../index";
 
 export default function Hamburger(props: IconProps) {
    return (
