@@ -13,6 +13,14 @@
       touch-action: pan-x;
    }
 
+   &.pullZoneInitialState {
+      scroll-snap-type: y mandatory;
+
+      .pullZoneContent {
+         scroll-snap-align: start;
+      }
+   }
+
    @media (pointer: coarse) {
       scrollbar-width: none;
       &::-webkit-scrollbar {

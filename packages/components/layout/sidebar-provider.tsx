@@ -63,11 +63,13 @@ export function useSidebar() {
       const contentRef = Cell.source<HTMLElement | null>(null);
       const sidebarRef = Cell.source<HTMLElement | null>(null);
       const observer = useObserver();
-      const sidebarOpened = Cell.derived(() => sidebarState.get() === 'open');
+      const sidebarOpened = Cell.derived(() => {
+         return sidebarState.get() === 'open';
+      });
       const allowReveal = useDerivedValue(allowRevealProp);
-      const sidebarNotRevealable = Cell.derived(
-         () => allowReveal.get() === false,
-      );
+      const sidebarNotRevealable = Cell.derived(() => {
+         return allowReveal.get() === false;
+      });
 
       let isAlreadyRevealedFlag = false;
       useIntersectionObserver(
@@ -82,14 +84,19 @@ export function useSidebar() {
          () => ({ root: providerRef.peek(), threshold: 0.9 }),
       );
 
-      observer.onConnected(contentRef, (content) => {
-         content.scrollIntoView({ behavior: 'instant', inline: 'start' });
+      observer.onConnected(sidebarRef, (sidebar) => {
+         requestAnimationFrame(() => {
+            // When the component loads without JS in prerender mode,
+            // The content needs to be the initial scroll-snapped view.
+            // Adding the sidebar scroll-snap only after the content is loaded
+            // ensures that.
+            sidebar.classList.add(styles.sidebar as string);
+         });
       });
 
       observer.onConnected(providerRef, scrollTimelineFallback);
       observer.onConnected(providerRef, () => {
          return sidebarState.listen((state) => {
-            onSidebarStateChange?.(state);
             const isOpen = state === 'open';
             const isClosed = state === 'closed';
             if (isOpen && isAlreadyRevealedFlag) {
@@ -98,6 +105,7 @@ export function useSidebar() {
             if (isClosed && !isAlreadyRevealedFlag) {
                return;
             }
+            onSidebarStateChange?.(state);
             const target = isOpen ? sidebarRef.get() : contentRef.get();
             target?.scrollIntoView({ behavior: 'smooth', inline: 'start' });
          });
@@ -110,9 +118,7 @@ export function useSidebar() {
             data-not-revealable={sidebarNotRevealable}
             class={[styles.provider, rest.class]}
          >
-            <div ref={sidebarRef} class={styles.sidebar}>
-               {sidebar()}
-            </div>
+            <div ref={sidebarRef}>{sidebar()}</div>
             <div
                ref={contentRef}
                data-opened={sidebarOpened}

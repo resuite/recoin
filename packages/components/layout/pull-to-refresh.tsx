@@ -295,15 +295,19 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
 
    height.listen(() => {
       // Prevents any funny behavior when the window resizes.
-      const pullZone = getPullToRefreshElement();
-      if (pullZone) {
-         pullZone.scrollTop = pullZone.clientHeight;
-      }
+      contentRef.get()?.scrollIntoView({ behavior: 'instant', block: 'end' });
    });
 
    observer.onConnected(pullZoneRef, (pullZone) => {
-      height; // Prevents GC until the pull-zone is unmounted.
-      pullZone.scrollTop = pullZone.clientHeight;
+      requestAnimationFrame(() => {
+         // The initial state class makes the pull-zone "snap" to the content
+         // area bu default. This is removed after the content is loaded.
+         pullZone.classList.remove(styles.pullZoneInitialState as string);
+      })
+      return () => {
+         height; // Prevents GC until the pull-zone is unmounted.
+         pullZone.classList.add(styles.pullZoneInitialState as string);
+      };
    });
 
    return (
@@ -312,6 +316,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
          ref={pullZoneRef}
          class={[
             styles.pullZone,
+            styles.pullZoneInitialState,
             { [styles.pullZoneCanPull as string]: canPull },
             rest.class,
          ]}
