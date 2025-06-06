@@ -1,0 +1,49 @@
+@use '@/styles/typography.scss' as typography;
+@use '@/styles/backgrounds.scss' as backgrounds;
+
+body:has(#ComingSoonWaitlistSuccessPage) {
+  @include backgrounds.Grid;
+}
+
+#ComingSoonWaitlistSuccessPage {
+  display: grid;
+  width: 100dvw;
+  height: 100dvh;
+  text-align: center;
+  place-items: center;
+  place-content: center;
+  gap: var(--Spacing);
+
+  section {
+    display: grid;
+    place-items: center;
+    gap: var(--SpacingHalf);
+
+    svg {
+      width: 70px;
+    }
+
+    svg path {
+      animation: Line var(--AnimationDurationSlowest) var(--AnimationDuration)
+        forwards;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+    }
+  }
+
+  h1 {
+    animation: FadeInFromBottom var(--AnimationDuration)
+      var(--AnimationDurationFaster) backwards;
+    @include typography.HeaderText;
+  }
+
+  p {
+    animation: FadeInFromBottom var(--AnimationDuration)
+      var(--AnimationDurationFast) backwards;
+  }
+
+  button {
+    animation: FadeInFromBottom var(--AnimationDuration)
+      var(--AnimationDuration) backwards;
+  }
+}

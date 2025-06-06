@@ -1,0 +1,9 @@
+{
+   "name": "@recoin/services",
+   "private": true,
+   "type": "module",
+   "exports": {
+      "./server": "./server.index.ts",
+      "./modules": "./modules"
+   }
+}

@@ -1,11 +1,11 @@
-import type { JSX } from "retend/jsx-runtime";
-import styles from "./sidebar-provider.module.css";
-import { Cell, useObserver } from "retend";
-import { scrollTimelineFallback } from "@recoin/utilities/scrolling";
-import { useDerivedValue, useIntersectionObserver } from "retend-utils/hooks";
+import type { JSX } from 'retend/jsx-runtime';
+import styles from './sidebar-provider.module.css';
+import { Cell, useObserver } from 'retend';
+import { scrollTimelineFallback } from '@recoin/utilities/scrolling';
+import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks';
 
-type DivProps = JSX.IntrinsicElements["div"];
-type ButtonProps = JSX.IntrinsicElements["button"];
+type DivProps = JSX.IntrinsicElements['div'];
+type ButtonProps = JSX.IntrinsicElements['button'];
 
 export interface SidebarProviderProps extends DivProps {
    /**
@@ -22,7 +22,7 @@ export interface SidebarProviderProps extends DivProps {
    /**
     * Callback function that is invoked when the sidebar state changes.
     */
-   onSidebarStateChange?: (state: "open" | "closed") => void;
+   onSidebarStateChange?: (state: 'open' | 'closed') => void;
 }
 
 export interface SidebarToggleProps extends ButtonProps {}
@@ -45,10 +45,10 @@ export interface SidebarToggleProps extends ButtonProps {}
  *   - SidebarToggle: Button component to toggle sidebar
  */
 export function useSidebar() {
-   const sidebarState = Cell.source<"open" | "closed">("closed");
+   const sidebarState = Cell.source<'open' | 'closed'>('closed');
 
    function toggleSidebar() {
-      sidebarState.set(sidebarState.get() === "open" ? "closed" : "open");
+      sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open');
    }
 
    function SidebarProvider(props: SidebarProviderProps) {
@@ -63,7 +63,7 @@ export function useSidebar() {
       const contentRef = Cell.source<HTMLElement | null>(null);
       const sidebarRef = Cell.source<HTMLElement | null>(null);
       const observer = useObserver();
-      const sidebarOpened = Cell.derived(() => sidebarState.get() === "open");
+      const sidebarOpened = Cell.derived(() => sidebarState.get() === 'open');
       const allowReveal = useDerivedValue(allowRevealProp);
       const sidebarNotRevealable = Cell.derived(
          () => allowReveal.get() === false,
@@ -73,27 +73,33 @@ export function useSidebar() {
       useIntersectionObserver(
          sidebarRef,
          ([entry]) => {
-            if (entry === undefined) return;
+            if (entry === undefined) {
+               return;
+            }
             isAlreadyRevealedFlag = entry.isIntersecting;
-            sidebarState.set(isAlreadyRevealedFlag ? "open" : "closed");
+            sidebarState.set(isAlreadyRevealedFlag ? 'open' : 'closed');
          },
          () => ({ root: providerRef.peek(), threshold: 0.9 }),
       );
 
       observer.onConnected(contentRef, (content) => {
-         content.scrollIntoView({ behavior: "instant", inline: "start" });
+         content.scrollIntoView({ behavior: 'instant', inline: 'start' });
       });
 
       observer.onConnected(providerRef, scrollTimelineFallback);
       observer.onConnected(providerRef, () => {
          return sidebarState.listen((state) => {
             onSidebarStateChange?.(state);
-            const isOpen = state === "open";
-            const isClosed = state === "closed";
-            if (isOpen && isAlreadyRevealedFlag) return;
-            if (isClosed && !isAlreadyRevealedFlag) return;
+            const isOpen = state === 'open';
+            const isClosed = state === 'closed';
+            if (isOpen && isAlreadyRevealedFlag) {
+               return;
+            }
+            if (isClosed && !isAlreadyRevealedFlag) {
+               return;
+            }
             const target = isOpen ? sidebarRef.get() : contentRef.get();
-            target?.scrollIntoView({ behavior: "smooth", inline: "start" });
+            target?.scrollIntoView({ behavior: 'smooth', inline: 'start' });
          });
       });
 

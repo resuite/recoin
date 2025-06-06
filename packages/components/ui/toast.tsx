@@ -1,8 +1,8 @@
-import { Cell, For, useObserver } from "retend";
-import type { JSX } from "retend/jsx-runtime";
-import Add from "../icons/svg/add";
-import { useIntersectionObserver } from "retend-utils/hooks";
-import styles from "./toast.module.css";
+import { Cell, For, useObserver } from 'retend';
+import type { JSX } from 'retend/jsx-runtime';
+import Add from '../icons/svg/add';
+import { useIntersectionObserver } from 'retend-utils/hooks';
+import styles from './toast.module.css';
 
 export interface ToastProps {
    /**
@@ -107,8 +107,10 @@ export function useToast(): ToastDetails {
       // becomes fully visible (meaning the user has swiped the toast off-screen).
       const closeToast = async () => {
          const element = toastElementRef.get();
-         if (!element) return;
-         element.classList.add("animate-toast-leave");
+         if (!element) {
+            return;
+         }
+         element.classList.add('animate-toast-leave');
          await Promise.allSettled(
             element.getAnimations().map((a) => a.finished),
          );
@@ -118,8 +120,12 @@ export function useToast(): ToastDetails {
       };
 
       const handleClick = (event: MouseEvent | KeyboardEvent) => {
-         if (event instanceof KeyboardEvent && event.key !== "Enter") return;
-         if (onClick) onClick(event);
+         if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+            return;
+         }
+         if (onClick) {
+            onClick(event);
+         }
       };
 
       observer.onConnected(toastElementRef, (toastElement) => {
@@ -128,10 +134,14 @@ export function useToast(): ToastDetails {
          // The wrapper (`div.toast-container`) has a 3-column grid:
          // [left-marker, toast-content, right-marker] with large gaps,
          // making markers initially off-screen.
-         toastElement.scrollIntoView({ inline: "center" });
-         if (duration !== undefined) timeout = setTimeout(closeToast, duration);
+         toastElement.scrollIntoView({ inline: 'center' });
+         if (duration !== undefined) {
+            timeout = setTimeout(closeToast, duration);
+         }
          return () => {
-            if (timeout !== null) clearTimeout(timeout);
+            if (timeout !== null) {
+               clearTimeout(timeout);
+            }
          };
       });
 
@@ -140,7 +150,9 @@ export function useToast(): ToastDetails {
          entries,
       ) => {
          for (const entry of entries) {
-            if (!entry?.isIntersecting) continue;
+            if (!entry?.isIntersecting) {
+               continue;
+            }
             // No point waiting for an animation, because the toast
             // itself will not be visible.
             activeToasts.get().splice(index.get(), 1);
@@ -158,7 +170,7 @@ export function useToast(): ToastDetails {
       return (
          <div
             class={styles.toastContainer}
-            style={{ "--toast-index": index }}
+            style={{ '--toast-index': index }}
             ref={toastContainerRef}
          >
             <div ref={leftDismissMarkerRef} class={styles.toastDismissMarker} />
@@ -192,8 +204,8 @@ export function useToast(): ToastDetails {
          <div
             class={styles.toastsGroup}
             style={{
-               "--toasts-count": toastsCount,
-               "--toast-gap": "calc(var(--spacing) * 0.5)",
+               '--toasts-count': toastsCount,
+               '--toast-gap': 'calc(var(--spacing) * 0.5)',
             }}
          >
             {For(activeToasts, Toast)}

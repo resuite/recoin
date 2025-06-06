@@ -1,10 +1,10 @@
-import type { JSX } from "retend/jsx-runtime";
-import { useDerivedValue } from "retend-utils/hooks";
-import { Cell, If } from "retend";
-import { defer } from "@recoin/utilities/miscellaneous";
-import styles from "./expanding-view.module.css";
+import type { JSX } from 'retend/jsx-runtime';
+import { useDerivedValue } from 'retend-utils/hooks';
+import { Cell, If } from 'retend';
+import { defer } from '@recoin/utilities/miscellaneous';
+import styles from './expanding-view.module.css';
 
-type DivProps = JSX.IntrinsicElements["div"];
+type DivProps = JSX.IntrinsicElements['div'];
 
 /**
  * Props for the ExpandingView component.
@@ -89,21 +89,25 @@ export function ExpandingView(props: ExpandingViewProps) {
       // needed animations can be collected.
       defer(async () => {
          const clipPath = clipPathRef.get();
-         if (!clipPath) return;
+         if (!clipPath) {
+            return;
+         }
          const closingViewTransitions = clipPath.getAnimations();
          await Promise.allSettled(
             closingViewTransitions.map((c) => c.finished),
          );
          // We need to check again, in case the transition and closing
          // was cancelled.
-         if (!isOpen.get()) contentLoaded.set(false);
+         if (!isOpen.get()) {
+            contentLoaded.set(false);
+         }
       });
    });
 
    const style = {
-      "--expand-origin": expandOrigin,
-      "--expand-size": expandSize,
-      "--expand-color": expandColor,
+      '--expand-origin': expandOrigin,
+      '--expand-size': expandSize,
+      '--expand-color': expandColor,
    };
 
    return (

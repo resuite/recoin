@@ -11,5 +11,24 @@
       "indentWidth": 3,
       "bracketSpacing": true
    },
-   "organizeImports": { "enabled": true }
+   "javascript": {
+      "formatter": {
+         "quoteStyle": "single"
+      }
+   },
+   "organizeImports": { "enabled": true },
+   "linter": {
+      "enabled": true,
+      "rules": {
+         "nursery": {
+            "noNestedTernary": "error"
+         },
+         "style": {
+            "useBlockStatements": "error"
+         },
+         "suspicious": {
+            "useAwait": "error"
+         }
+      }
+   }
 }

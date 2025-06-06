@@ -1,12 +1,15 @@
 {
    "compilerOptions": {
       // Environment setup & latest features
-      "lib": ["ESNext", "DOM"],
+      "lib": ["ESNext", "DOM", "DOM.Iterable"],
       "target": "ESNext",
       "module": "ESNext",
       "moduleDetection": "force",
       "jsx": "react-jsx",
+      "jsxImportSource": "retend",
       "allowJs": true,
+
+      "outDir": "./dist",
 
       // Bundler mode
       "moduleResolution": "bundler",
@@ -23,7 +26,9 @@
       // Some stricter flags (disabled by default)
       "noUnusedLocals": false,
       "noUnusedParameters": false,
-      "noPropertyAccessFromIndexSignature": false
+      "noPropertyAccessFromIndexSignature": false,
+      "declaration": true,
+      "emitDeclarationOnly": true
    },
    "include": ["./"]
 }

@@ -1,11 +1,11 @@
-import { Cell, If, useObserver, type SourceCell } from "retend";
-import { useDerivedValue } from "retend-utils/hooks";
-import type { JSX } from "retend/jsx-runtime";
-import { defer } from "@recoin/utilities/miscellaneous";
-import { GESTURE_ANIMATION_MS } from "@recoin/utilities/scrolling";
-import styles from "./stack-view-group.module.css";
+import { Cell, If, useObserver, type SourceCell } from 'retend';
+import { useDerivedValue } from 'retend-utils/hooks';
+import type { JSX } from 'retend/jsx-runtime';
+import { defer } from '@recoin/utilities/miscellaneous';
+import { GESTURE_ANIMATION_MS } from '@recoin/utilities/scrolling';
+import styles from './stack-view-group.module.css';
 
-type DivProps = JSX.IntrinsicElements["div"];
+type DivProps = JSX.IntrinsicElements['div'];
 
 export interface StackViewGroupProps extends DivProps {
    ref?: SourceCell<HTMLElement | null>;
@@ -134,15 +134,17 @@ export function StackView(props: StackViewProps) {
 
    const startDragging = (event: PointerEvent) => {
       const stack = getStackGroupElement(containerRef.get());
-      if (!stack) return;
-      stack.setAttribute("data-dragging", "");
+      if (!stack) {
+         return;
+      }
+      stack.setAttribute('data-dragging', '');
       startingPositionX = event.clientX;
       stackWidth = stack.clientWidth;
       navigator.vibrate?.([15, 15]);
-      window.addEventListener("pointermove", drag, { passive: true });
-      window.addEventListener("pointerup", stopDragging);
-      window.addEventListener("pointerleave", stopDragging);
-      window.addEventListener("pointercancel", stopDragging);
+      window.addEventListener('pointermove', drag, { passive: true });
+      window.addEventListener('pointerup', stopDragging);
+      window.addEventListener('pointerleave', stopDragging);
+      window.addEventListener('pointercancel', stopDragging);
 
       animation = stack.animate(ANIMATION_KEYFRAMES, ANIMATION_OPTIONS);
       animation.pause();
@@ -150,7 +152,9 @@ export function StackView(props: StackViewProps) {
 
    const drag = (event: PointerEvent) => {
       requestAnimationFrame(() => {
-         if (startingPositionX === null) return;
+         if (startingPositionX === null) {
+            return;
+         }
          const deltaX = event.clientX - startingPositionX;
          if (deltaX > 0 && animation !== null && stackWidth !== null) {
             animation.currentTime =
@@ -163,25 +167,31 @@ export function StackView(props: StackViewProps) {
       startingPositionX = null;
       stackWidth = null;
       const stack = getStackGroupElement(containerRef.get());
-      stack?.removeAttribute("data-dragging");
-      if (viewOutOfViewport) onCloseRequested?.();
+      stack?.removeAttribute('data-dragging');
+      if (viewOutOfViewport) {
+         onCloseRequested?.();
+      }
       animation?.play();
       animation = null;
-      window.removeEventListener("pointermove", drag);
-      window.removeEventListener("pointerleave", stopDragging);
-      window.removeEventListener("pointerup", stopDragging);
-      window.removeEventListener("pointercancel", stopDragging);
+      window.removeEventListener('pointermove', drag);
+      window.removeEventListener('pointerleave', stopDragging);
+      window.removeEventListener('pointerup', stopDragging);
+      window.removeEventListener('pointercancel', stopDragging);
    };
 
    let intersectObserver: IntersectionObserver;
    let viewOutOfViewport = false;
    const callback: IntersectionObserverCallback = ([entry]) => {
-      if (!entry) return;
+      if (!entry) {
+         return;
+      }
       viewOutOfViewport = !entry.isIntersecting;
    };
    observer.onConnected(containerRef, (element) => {
       const stack = getStackGroupElement(element);
-      if (!stack) return;
+      if (!stack) {
+         return;
+      }
 
       const options = { root: stack, threshold: 0.6 };
       intersectObserver = new IntersectionObserver(callback, options);
@@ -199,14 +209,18 @@ export function StackView(props: StackViewProps) {
       // needed animations can be collected.
       defer(async () => {
          const container = containerRef.get();
-         if (!container) return;
+         if (!container) {
+            return;
+         }
          const closingViewTransitions = container.getAnimations();
          await Promise.allSettled(
             closingViewTransitions.map((c) => c.finished),
          );
          // We need to check again, in case the transition and closing
          // was cancelled.
-         if (!isOpen.get()) contentLoaded.set(false);
+         if (!isOpen.get()) {
+            contentLoaded.set(false);
+         }
       });
    });
 
@@ -230,13 +244,13 @@ export function StackView(props: StackViewProps) {
 
 const ANIMATION_KEYFRAMES = [
    {
-      "--stack-view-group-pull-progress": 1,
+      '--stack-view-group-pull-progress': 1,
    },
    {
-      "--stack-view-group-pull-progress": 0,
+      '--stack-view-group-pull-progress': 0,
    },
 ];
-const ANIMATION_OPTIONS = { duration: 1000, easing: "linear" };
+const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' };
 
 function getStackGroupElement(element: HTMLElement | null): HTMLElement | null {
    const stack = element?.parentElement?.parentElement;

@@ -1,24 +1,24 @@
-import { Cell, type SourceCell, useObserver } from "retend";
-import type { JSX } from "retend/jsx-runtime";
+import { Cell, type SourceCell, useObserver } from 'retend';
+import type { JSX } from 'retend/jsx-runtime';
 import {
    getScrollableY,
    GESTURE_ANIMATION_MS,
-} from "@recoin/utilities/scrolling";
+} from '@recoin/utilities/scrolling';
 import {
    useMatchMedia,
    useWindowSize,
    useIntersectionObserver,
    useDerivedValue,
-} from "retend-utils/hooks";
-import styles from "./pull-to-refresh.module.css";
+} from 'retend-utils/hooks';
+import styles from './pull-to-refresh.module.css';
 
 export type PullState =
-   | "thresholdreached"
-   | "pulling"
-   | "idle"
-   | "actiontriggered";
+   | 'thresholdreached'
+   | 'pulling'
+   | 'idle'
+   | 'actiontriggered';
 
-type DivProps = JSX.IntrinsicElements["div"];
+type DivProps = JSX.IntrinsicElements['div'];
 export interface PullToRefreshProps extends DivProps {
    /**
     * The content to be rendered in the feedback layer behind the scrollable content.
@@ -40,7 +40,7 @@ export interface PullToRefreshProps extends DivProps {
    /**
     * Classes to be applied to the content element.
     */
-   "content:class"?: unknown;
+   'content:class'?: unknown;
    /**
     * A ref to a top marker in a scrollable content element.
     * This is used to determine when the pull-to-refresh can be triggered, which
@@ -111,7 +111,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
       onActionTriggered,
       onStateChange,
       ref: pullZoneRef = Cell.source(null),
-      "content:class": contentClasses,
+      'content:class': contentClasses,
       contentTopMarker: contentTopMarkerProp,
       allowPull: allowPullProp = Cell.source(true),
       ...rest
@@ -123,7 +123,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    const contentTopMarkerRef =
       contentTopMarkerProp ?? Cell.source<HTMLElement | null>(null);
    const observer = useObserver();
-   const supportsTouch = useMatchMedia("(pointer: coarse)");
+   const supportsTouch = useMatchMedia('(pointer: coarse)');
    const { height } = useWindowSize();
    const reachedTop = Cell.source(false);
    const allowPull = useDerivedValue(allowPullProp);
@@ -135,7 +135,7 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    });
    let scrollable: HTMLElement | null = null;
 
-   let pullState: PullState = "idle";
+   let pullState: PullState = 'idle';
    let initialPointerY = 0;
    let feedbackLayerIsVisible = false;
    let thresholdMarkerIsVisible = false;
@@ -154,17 +154,19 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    const handlePullRelease = async () => {
       const pullZone = getPullToRefreshElement();
       if (thresholdMarkerIsVisible) {
-         changeState("actiontriggered");
+         changeState('actiontriggered');
          pullZone.classList.add(styles.pullZoneActionTriggered as string);
          navigator.vibrate?.([15, 15]);
          await onActionTriggered?.();
       }
       pullZone.classList.remove(styles.pullZoneActionTriggered as string);
-      changeState("idle");
+      changeState('idle');
    };
 
    const handlePointerDown = (event: PointerEvent) => {
-      if (pullState === "actiontriggered") return;
+      if (pullState === 'actiontriggered') {
+         return;
+      }
       const pullZone = event.currentTarget as HTMLElement;
       const pointerOriginTarget = event.target as HTMLElement;
       scrollable = getScrollableY(pointerOriginTarget, pullZone);
@@ -178,19 +180,21 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
       pullScrollAnimation.pause();
 
       window.addEventListener(
-         "pointermove",
+         'pointermove',
          handlePointerMove,
          LISTENER_OPTIONS,
       );
-      window.addEventListener("pointerup", handlePointerUp);
-      window.addEventListener("pointercancel", handlePointerUp);
+      window.addEventListener('pointerup', handlePointerUp);
+      window.addEventListener('pointercancel', handlePointerUp);
    };
 
    const handlePointerMove = (event: PointerEvent) => {
       requestAnimationFrame(() => {
          const delta = event.clientY - initialPointerY;
          if (delta < 0) {
-            if (!scrollable || delta > -30) return;
+            if (!scrollable || delta > -30) {
+               return;
+            }
             scrollable.scrollTop = -delta;
             return;
          }
@@ -209,9 +213,9 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
       pullScrollAnimation?.play();
       pullScrollAnimation = null;
       scrollable = null;
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", handlePointerUp);
-      window.removeEventListener("pointercancel", handlePointerUp);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', handlePointerUp);
       const pullZone = getPullToRefreshElement();
       pullZone.classList.remove(styles.pullZoneDragging as string);
       handlePullRelease();
@@ -234,11 +238,14 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    useIntersectionObserver(
       thresholdMarkerRef,
       ([entry]) => {
-         if (entry === undefined) return;
+         if (entry === undefined) {
+            return;
+         }
          thresholdMarkerIsVisible = entry.isIntersecting;
-         if (thresholdMarkerIsVisible) changeState("thresholdreached");
-         else if (pullState !== "actiontriggered" && pullState !== "idle") {
-            changeState("pulling");
+         if (thresholdMarkerIsVisible) {
+            changeState('thresholdreached');
+         } else if (pullState !== 'actiontriggered' && pullState !== 'idle') {
+            changeState('pulling');
          }
       },
       () => ({ root: pullZoneRef.peek(), threshold: 0.4 }),
@@ -247,11 +254,17 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    useIntersectionObserver(
       feedbackLayerRef,
       ([entry]) => {
-         if (entry === undefined) return;
+         if (entry === undefined) {
+            return;
+         }
          feedbackLayerIsVisible = entry.isIntersecting;
          const thresholdMarker = thresholdMarkerRef.peek();
-         if (!thresholdMarker) return;
-         if (feedbackLayerIsVisible) changeState("pulling");
+         if (!thresholdMarker) {
+            return;
+         }
+         if (feedbackLayerIsVisible) {
+            changeState('pulling');
+         }
       },
       () => ({ root: pullZoneRef.peek(), threshold: 0.01 }),
    );
@@ -261,7 +274,9 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    useIntersectionObserver(
       contentTopMarkerRef,
       ([entry]) => {
-         if (entry === undefined) return;
+         if (entry === undefined) {
+            return;
+         }
          // on startup, this will trigger canPull to be true,
          // and start the pull-to-refresh process.
          reachedTop.set(entry.isIntersecting);
@@ -272,9 +287,9 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
    canPull.listen((canPull) => {
       const pullZone = getPullToRefreshElement();
       if (canPull) {
-         pullZone?.addEventListener("pointerdown", handlePointerDown);
+         pullZone?.addEventListener('pointerdown', handlePointerDown);
       } else {
-         pullZone?.removeEventListener("pointerdown", handlePointerDown);
+         pullZone?.removeEventListener('pointerdown', handlePointerDown);
       }
    });
 
@@ -328,13 +343,13 @@ export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
 
 const KEYFRAMES = [
    {
-      "--pull-zone-scroll-top": 0,
+      '--pull-zone-scroll-top': 0,
    },
    {
-      "--pull-zone-scroll-top": 100,
+      '--pull-zone-scroll-top': 100,
    },
 ];
 const MAX_PULL_ZONE_SCROLL_TOP = (3500 / 135) * 10;
 
-const ANIMATION_OPTIONS = { duration: 1000, easing: "linear" };
+const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' };
 const LISTENER_OPTIONS = { passive: true };

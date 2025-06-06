@@ -8,7 +8,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
    const buttonsOpened = Cell.source(false);
    const buttonsClosed = Cell.derived(() => !buttonsOpened.get());
 
-   const toggleOpenState = async () => {
+   const toggleOpenState = () => {
       navigator.vibrate?.([15, 15]);
       isOpen.set(!isOpen.get());
       if (!isOpen.get()) {
@@ -35,7 +35,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
             {props?.children}
          </div>
          <FloatingActionButton
-            outlined
+            outlined={true}
             disabled={buttonsClosed}
             class={[
                "dark-scheme transition-transform ease-in-out scale-[0.85] absolute",

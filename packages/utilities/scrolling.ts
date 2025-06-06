@@ -6,10 +6,14 @@
 export const GESTURE_ANIMATION_MS = 999;
 
 export function scrollTimelineFallbackBlock(element: HTMLElement) {
-   if ("ScrollTimeline" in window) return;
+   if ('ScrollTimeline' in window) {
+      return;
+   }
 
    const scrollAnimation = element.getAnimations()[0];
-   if (!scrollAnimation) return;
+   if (!scrollAnimation) {
+      return;
+   }
    scrollAnimation.pause();
 
    const scrollListener = () => {
@@ -18,19 +22,23 @@ export function scrollTimelineFallbackBlock(element: HTMLElement) {
          (scrollTop / (scrollHeight - clientHeight)) * GESTURE_ANIMATION_MS;
       scrollAnimation.currentTime = newTime;
    };
-   element.addEventListener("scroll", scrollListener, { passive: true });
+   element.addEventListener('scroll', scrollListener, { passive: true });
 
    return () => {
       scrollAnimation.finish();
-      element.removeEventListener("scroll", scrollListener);
+      element.removeEventListener('scroll', scrollListener);
    };
 }
 
 export function scrollTimelineFallback(element: HTMLElement) {
-   if ("ScrollTimeline" in window) return;
+   if ('ScrollTimeline' in window) {
+      return;
+   }
 
    const scrollAnimation = element.getAnimations()[0];
-   if (!scrollAnimation) return;
+   if (!scrollAnimation) {
+      return;
+   }
    scrollAnimation.pause();
 
    const scrollListener = () => {
@@ -39,11 +47,11 @@ export function scrollTimelineFallback(element: HTMLElement) {
          (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS;
       scrollAnimation.currentTime = newTime;
    };
-   element.addEventListener("scroll", scrollListener, { passive: true });
+   element.addEventListener('scroll', scrollListener, { passive: true });
 
    return () => {
       scrollAnimation.finish();
-      element.removeEventListener("scroll", scrollListener);
+      element.removeEventListener('scroll', scrollListener);
    };
 }
 
@@ -59,8 +67,9 @@ export function getScrollableY(
    element: HTMLElement,
    boundary: HTMLElement,
 ): HTMLElement | null {
-   // If no element is provided, return null
-   if (!element) return null;
+   if (!element) {
+      return null;
+   }
 
    // Start checking from the provided element
    let current = element as HTMLElement | null;
@@ -74,16 +83,13 @@ export function getScrollableY(
 
       // Check if the element is vertically scrollable
       const style = window.getComputedStyle(current);
-      const overflowY = style.getPropertyValue("overflow-y");
+      const overflowY = style.getPropertyValue('overflow-y');
+      const { scrollHeight, clientHeight, scrollTop } = current;
       const hasVerticalScroll =
-         ["auto", "scroll"].includes(overflowY) &&
-         current.scrollHeight > current.clientHeight;
+         SCROLLABLE_OVERFLOW.includes(overflowY) && scrollHeight > clientHeight;
 
       // If the element has vertical scroll capability and room to scroll down
-      if (
-         hasVerticalScroll &&
-         current.scrollTop < current.scrollHeight - current.clientHeight
-      ) {
+      if (hasVerticalScroll && scrollTop < scrollHeight - clientHeight) {
          return current;
       }
 
@@ -91,15 +97,13 @@ export function getScrollableY(
       current = current.parentElement;
    }
 
-   // Check if the body itself is scrollable
-   if (
-      document.body.scrollHeight > document.body.clientHeight &&
-      document.body.scrollTop <
-         document.body.scrollHeight - document.body.clientHeight
-   ) {
+   const { scrollHeight, clientHeight, scrollTop } = document.body;
+   if (scrollHeight > clientHeight && scrollTop < scrollHeight - clientHeight) {
       return document.body;
    }
 
    // No scrollable container found
    return null;
 }
+
+const SCROLLABLE_OVERFLOW = ['auto', 'scroll'];

@@ -1,10 +1,10 @@
-import { Cell, For, useObserver, type SourceCell } from "retend";
-import type { JSX } from "retend/jsx-runtime";
-import { useDerivedValue } from "retend-utils/hooks";
-import { scrollTimelineFallback } from "@recoin/utilities/scrolling";
-import styles from "./tab-switcher.module.css";
+import { Cell, For, useObserver, type SourceCell } from 'retend';
+import type { JSX } from 'retend/jsx-runtime';
+import { useDerivedValue } from 'retend-utils/hooks';
+import { scrollTimelineFallback } from '@recoin/utilities/scrolling';
+import styles from './tab-switcher.module.css';
 
-type SectionProps = JSX.IntrinsicElements["section"];
+type SectionProps = JSX.IntrinsicElements['section'];
 export interface Tab {
    heading: () => JSX.Template;
    body: () => JSX.Template;
@@ -27,7 +27,7 @@ export interface TabsProps<T extends Tab> extends SectionProps {
    /**
     * Classes to be applied to the header element.
     */
-   "header:class"?: unknown;
+   'header:class'?: unknown;
 }
 
 /**
@@ -61,7 +61,7 @@ export function TabSwitcher<T extends Tab>(props: TabsProps<T>) {
    const {
       tabs: tabsProp,
       ref: tabContainerRef = Cell.source<HTMLElement | null>(null),
-      "header:class": headerClasses,
+      'header:class': headerClasses,
       onActiveTabChange,
       ...rest
    } = props;
@@ -82,7 +82,9 @@ export function TabSwitcher<T extends Tab>(props: TabsProps<T>) {
 
    const scrollToTab = (index: number) => {
       const tabContainer = tabContainerRef.get();
-      if (!tabContainer) return;
+      if (!tabContainer) {
+         return;
+      }
 
       detectActiveTabOnScroll = false;
       tabContainer.scrollTo({ left: index * tabContainer.clientWidth });
@@ -91,25 +93,32 @@ export function TabSwitcher<T extends Tab>(props: TabsProps<T>) {
 
    activeTab.listen((index) => {
       const header = headerRef.peek();
-      if (!header) return;
+      if (!header) {
+         return;
+      }
 
       const paddingLeft = getComputedStyle(header).paddingLeft.slice(0, -2);
       header.scrollTo({
          left: index * ((header.scrollWidth + -paddingLeft) / tabCount.get()),
       });
       const newTab = tabs.get()[index];
-      if (!newTab) return;
+      if (!newTab) {
+         return;
+      }
       onActiveTabChange?.(newTab);
    });
 
    // Intersection observer to determine the active tab
    let intersectObserver: IntersectionObserver;
    const callback: IntersectionObserverCallback = ([entry]) => {
-      if (!entry?.isIntersecting) return;
+      if (!entry?.isIntersecting) {
+         return;
+      }
       const tab = entry.target as HTMLElement;
       const index = Number(tab.dataset.tabIndex);
-      if (detectActiveTabOnScroll) activeTab.set(index);
-      else if (index === activeTab.get()) {
+      if (detectActiveTabOnScroll) {
+         activeTab.set(index);
+      } else if (index === activeTab.get()) {
          // When the active tab is done being scrolled into view,
          // we need a way to reset the flag so that swipes can be detected.
          // We can't use the scrollend event because it doesn't fire on iOS.
@@ -131,7 +140,7 @@ export function TabSwitcher<T extends Tab>(props: TabsProps<T>) {
       <section
          {...rest}
          ref={tabContainerRef}
-         style={{ "--tabs": tabCount }}
+         style={{ '--tabs': tabCount }}
          class={[styles.tabSwitcherContainer, rest.class]}
       >
          <header ref={headerRef} class={[styles.header, headerClasses]}>
