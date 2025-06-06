@@ -1,4 +1,4 @@
-import { TabSwitcher } from "@recoin/components/layout";
+import { TabSwitcher } from '@recoin/components/layout';
 
 const Tabs = () => {
    const handleTabChange = (tab: (typeof tabs)[number]) => {
@@ -6,11 +6,11 @@ const Tabs = () => {
    };
 
    return (
-      <div class="py-1 w-full h-screen grid grid-rows-[auto_1fr] light-scheme rounded-t-4xl">
-         <h2 class="text-title px-1">Tabs</h2>
+      <div class='py-1 w-full h-screen grid grid-rows-[auto_1fr] light-scheme rounded-t-4xl'>
+         <h2 class='text-title px-1'>Tabs</h2>
          <TabSwitcher
-            class="tab-container"
-            header:class="px-1"
+            class='tab-container'
+            header:class='px-1'
             onActiveTabChange={handleTabChange}
             tabs={tabs}
          />
@@ -20,57 +20,57 @@ const Tabs = () => {
 
 const tabs = [
    {
-      heading: () => "Tab 1",
+      heading: () => 'Tab 1',
       body: () => (
-         <div class="flex items-center justify-center w-full h-full">Tab 1</div>
+         <div class='flex items-center justify-center w-full h-full'>Tab 1</div>
       ),
    },
    {
-      heading: () => "Tab 2",
+      heading: () => 'Tab 2',
       body: () => (
-         <div class="flex h-full items-center justify-center w-full">Tab 2</div>
+         <div class='flex h-full items-center justify-center w-full'>Tab 2</div>
       ),
    },
    {
-      heading: () => "Tab 3",
+      heading: () => 'Tab 3',
       body: () => (
-         <div class="flex h-full items-center justify-center w-full">Tab 3</div>
+         <div class='flex h-full items-center justify-center w-full'>Tab 3</div>
       ),
    },
    {
-      heading: () => "Tab 4",
+      heading: () => 'Tab 4',
       body: () => (
-         <div class="flex items-center justify-center w-full h-full">Tab 4</div>
+         <div class='flex items-center justify-center w-full h-full'>Tab 4</div>
       ),
    },
    {
-      heading: () => "Tab 5",
+      heading: () => 'Tab 5',
       body: () => (
-         <div class="flex items-center justify-center w-full h-full">Tab 5</div>
+         <div class='flex items-center justify-center w-full h-full'>Tab 5</div>
       ),
    },
    {
-      heading: () => "Tab 6",
+      heading: () => 'Tab 6',
       body: () => (
-         <div class="flex items-center justify-center w-full h-full">Tab 6</div>
+         <div class='flex items-center justify-center w-full h-full'>Tab 6</div>
       ),
    },
    {
-      heading: () => "Tab 7",
+      heading: () => 'Tab 7',
       body: () => (
-         <div class="flex items-center justify-center w-full h-full">Tab 7</div>
+         <div class='flex items-center justify-center w-full h-full'>Tab 7</div>
       ),
    },
    {
-      heading: () => "Tab 8",
+      heading: () => 'Tab 8',
       body: () => (
-         <div class="flex items-center justify-center w-full h-full">Tab 8</div>
+         <div class='flex items-center justify-center w-full h-full'>Tab 8</div>
       ),
    },
    {
-      heading: () => "Tab 9",
+      heading: () => 'Tab 9',
       body: () => (
-         <div class="flex items-center justify-center w-full h-full">Tab 9</div>
+         <div class='flex items-center justify-center w-full h-full'>Tab 9</div>
       ),
    },
 ];

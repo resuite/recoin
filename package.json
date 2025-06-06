@@ -12,7 +12,8 @@
       "generate-icons": "bun run packages/scripts/generate-icon-names.ts",
       "api-dev": "wrangler dev functions/index.ts",
 
-      "lint": "biome lint"
+      "lint": "biome lint",
+      "format": "biome format --write ./packages ./application"
    },
    "devDependencies": {
       "@biomejs/biome": "1.9.4",

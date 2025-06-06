@@ -1,4 +1,4 @@
-import type { ErrorCode } from "./error.ts";
+import type { ErrorCode } from './error.ts';
 
 export interface SuccessResponse<T> {
    success: true;
@@ -13,8 +13,6 @@ export interface ErrorResponse {
 export type ServerResponse<T> = Promise<SuccessResponse<T> | ErrorResponse>;
 
 export interface RecoinApiEnv {
-   // biome-ignore lint/style/useNamingConvention: Hono expects PascalCase
-   Bindings: {};
-   // biome-ignore lint/style/useNamingConvention: Hono expects PascalCase
-   Variables: {};
+   Bindings: Record<string, unknown>;
+   Variables: Record<string, unknown>;
 }

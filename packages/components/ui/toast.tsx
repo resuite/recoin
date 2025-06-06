@@ -183,7 +183,7 @@ export function useToast(): ToastDetails {
             >
                <div>{content}</div>
                <button
-                  type="button"
+                  type='button'
                   class={styles.toastCloseButton}
                   onClick={closeToast}
                >

@@ -1,7 +1,7 @@
-import { DynamicIcon } from "@recoin/components/icons";
-import { PullToRefresh, type PullState } from "@recoin/components/layout";
-import { Cell, type SourceCell } from "retend";
-import type { JSX } from "retend/jsx-runtime";
+import { DynamicIcon } from '@recoin/components/icons';
+import { PullToRefresh, type PullState } from '@recoin/components/layout';
+import { Cell, type SourceCell } from 'retend';
+import type { JSX } from 'retend/jsx-runtime';
 
 interface PullToRefreshTestProps {
    contentTopMarkerRef?: SourceCell<HTMLElement | null>;
@@ -10,37 +10,37 @@ interface PullToRefreshTestProps {
 }
 
 const PullToRefreshTest = (props?: PullToRefreshTestProps) => {
-   const state = Cell.source<PullState>("idle");
+   const state = Cell.source<PullState>('idle');
    const pulling = Cell.derived(() => {
-      return state.get() === "pulling" || state.get() === "thresholdreached";
+      return state.get() === 'pulling' || state.get() === 'thresholdreached';
    });
    const actionTriggered = Cell.derived(() => {
-      return state.get() === "actiontriggered";
+      return state.get() === 'actiontriggered';
    });
    const topMarker = Cell.source<HTMLElement | null>(null);
 
    const FeedbackContent = () => {
       return (
-         <div class="grid place-items-center place-content-center gap-0.5 h-full">
+         <div class='grid place-items-center place-content-center gap-0.5 h-full'>
             <DynamicIcon
-               name="loader"
+               name='loader'
                class={[
-                  "w-1.5 h-1.5 duration-slow transition-[translate,scale,opacity]",
+                  'w-1.5 h-1.5 duration-slow transition-[translate,scale,opacity]',
                   {
-                     "rotate-[calc(var(--pull-progress)*0.61deg)]": pulling,
-                     "scale-[calc(var(--pull-progress)*0.01)]": pulling,
-                     "opacity-[calc((var(--pull-progress)*0.005)-0.3)]":
+                     'rotate-[calc(var(--pull-progress)*0.61deg)]': pulling,
+                     'scale-[calc(var(--pull-progress)*0.01)]': pulling,
+                     'opacity-[calc((var(--pull-progress)*0.005)-0.3)]':
                         pulling,
-                     "duration-0": pulling,
-                     "animate-spin!": actionTriggered,
+                     'duration-0': pulling,
+                     'animate-spin!': actionTriggered,
                   },
                ]}
-               style={{ animation: "none" }}
+               style={{ animation: 'none' }}
             />
             <div
                class={[
-                  "text-center opacity-0 duration-slower transition-opacity",
-                  { "opacity-75": actionTriggered },
+                  'text-center opacity-0 duration-slower transition-opacity',
+                  { 'opacity-75': actionTriggered },
                ]}
             >
                Refreshing your data...
@@ -59,7 +59,7 @@ const PullToRefreshTest = (props?: PullToRefreshTestProps) => {
 
    return (
       <PullToRefresh
-         class="h-screen"
+         class='h-screen'
          feedback={FeedbackContent}
          onStateChange={handleStateChange}
          onActionTriggered={handleActionTriggered}
@@ -67,9 +67,9 @@ const PullToRefreshTest = (props?: PullToRefreshTestProps) => {
          allowPull={props?.allowPull}
       >
          {props?.children ?? (
-            <div class="text-big h-full light-scheme rounded-t-4xl">
-               <div ref={topMarker} class="h-0.25 w-full" />
-               <div class="grid place-items-center h-full w-full">{state}</div>
+            <div class='text-big h-full light-scheme rounded-t-4xl'>
+               <div ref={topMarker} class='h-0.25 w-full' />
+               <div class='grid place-items-center h-full w-full'>{state}</div>
             </div>
          )}
       </PullToRefresh>

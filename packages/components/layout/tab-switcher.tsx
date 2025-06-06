@@ -153,7 +153,7 @@ export function TabSwitcher<T extends Tab>(props: TabsProps<T>) {
                );
                return (
                   <button
-                     type="button"
+                     type='button'
                      style={style}
                      data-tab-heading-index={index}
                      data-active={isActiveTab}

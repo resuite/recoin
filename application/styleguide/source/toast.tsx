@@ -1,4 +1,4 @@
-import { useToast } from "@recoin/components/ui";
+import { useToast } from '@recoin/components/ui';
 
 const Toast = () => {
    const { showToast, ToastContainer } = useToast();
@@ -12,12 +12,12 @@ const Toast = () => {
    };
 
    return (
-      <div class="h-screen grid place-items-center place-content-center">
+      <div class='h-screen grid place-items-center place-content-center'>
          <ToastContainer />
-         <button type="button" onClick={handleShowSuccessToast}>
+         <button type='button' onClick={handleShowSuccessToast}>
             Show Success
          </button>
-         <button type="button" onClick={handleShowErrorToast}>
+         <button type='button' onClick={handleShowErrorToast}>
             Show Persistent Error
          </button>
       </div>

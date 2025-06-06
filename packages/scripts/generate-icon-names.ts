@@ -1,21 +1,21 @@
 /// <reference types="node" />
 
-import fs from "node:fs/promises";
-import path from "node:path";
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-const iconsDir = path.resolve("./packages/components/icons/svg");
+const iconsDir = path.resolve('./packages/components/icons/svg');
 // Change output file extension to .tsx
-const outputFile = path.resolve("./packages/components/icons/index.tsx");
+const outputFile = path.resolve('./packages/components/icons/index.tsx');
 
 async function generateIconNames() {
    try {
       const files = await fs.readdir(iconsDir);
       const iconNames = files
-         .filter((file) => file.endsWith(".tsx") && file !== "index.tsx") // Exclude index.tsx if present
-         .map((file) => path.basename(file, ".tsx"));
+         .filter((file) => file.endsWith('.tsx') && file !== 'index.tsx') // Exclude index.tsx if present
+         .map((file) => path.basename(file, '.tsx'));
 
       if (iconNames.length === 0) {
-         console.log("No icon components found in", iconsDir);
+         console.log('No icon components found in', iconsDir);
          return;
       }
 
@@ -55,7 +55,7 @@ export const Icon = noHydrate(DynamicIcon);`;
 export function AllIcons() {
   return (
     <>
-      ${iconNames.map((name) => `<Icon name='${name}' />`).join("\n      ")}
+      ${iconNames.map((name) => `<Icon name='${name}' />`).join('\n      ')}
     </>
   );
 }`;
@@ -70,12 +70,12 @@ ${iconComponentContent}
 ${allIconsComponentContent}
 `;
 
-      await fs.writeFile(outputFile, fileContent, "utf8");
+      await fs.writeFile(outputFile, fileContent, 'utf8');
       console.log(
          `Successfully generated ${outputFile} with ${iconNames.length} icon names and components.`,
       );
    } catch (error) {
-      console.error("Error generating icon names:", error);
+      console.error('Error generating icon names:', error);
       process.exit(1);
    }
 }

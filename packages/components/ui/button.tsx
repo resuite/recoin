@@ -1,6 +1,6 @@
-import type { JSX } from "retend/jsx-runtime";
+import type { JSX } from 'retend/jsx-runtime';
 
-type IntrinsicButtonProps = JSX.IntrinsicElements["button"];
+type IntrinsicButtonProps = JSX.IntrinsicElements['button'];
 
 export interface ButtonProps extends IntrinsicButtonProps {}
 

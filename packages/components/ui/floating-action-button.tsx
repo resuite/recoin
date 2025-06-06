@@ -1,9 +1,9 @@
-import type { JSX } from "retend/jsx-runtime";
-import styles from "./floating-action-button.module.css";
-import { useDerivedValue } from "retend-utils/hooks";
-import { Cell } from "retend";
+import type { JSX } from 'retend/jsx-runtime';
+import styles from './floating-action-button.module.css';
+import { useDerivedValue } from 'retend-utils/hooks';
+import { Cell } from 'retend';
 
-type ButtonProps = JSX.IntrinsicElements["button"];
+type ButtonProps = JSX.IntrinsicElements['button'];
 
 /**
  * Props for the FloatingActionButton component.
@@ -12,11 +12,11 @@ export interface FloatingActionButtonProps extends ButtonProps {
    /**
     * The vertical position of the button. Can be "top", "bottom", or "center". Defaults to "bottom".
     */
-   block?: JSX.ValueOrCell<"top" | "bottom" | "center">;
+   block?: JSX.ValueOrCell<'top' | 'bottom' | 'center'>;
    /**
     * The horizontal position of the button. Can be "left", "right", or "center". Defaults to "center".
     */
-   inline?: JSX.ValueOrCell<"left" | "right" | "center">;
+   inline?: JSX.ValueOrCell<'left' | 'right' | 'center'>;
    /**
     * Whether the button should be outlined. Defaults to false.
     */
@@ -40,8 +40,8 @@ export interface FloatingActionButtonProps extends ButtonProps {
 export function FloatingActionButton(props: FloatingActionButtonProps) {
    const {
       children,
-      block: blockProp = "bottom",
-      inline: inlineProp = "center",
+      block: blockProp = 'bottom',
+      inline: inlineProp = 'center',
       outlined: outlinedProp = false,
       ...rest
    } = props;

@@ -1,10 +1,10 @@
-import { Icon, type IconName } from "@recoin/components/icons";
-import { useSidebar } from "@recoin/components/layout";
-import { createPartitions } from "@recoin/utilities/animations";
-import { Cell, For } from "retend";
-import { useRouter } from "retend/router";
-import FloatingActionButtonTest from "./fab";
-import PullToRefreshTest from "./pull-zone";
+import { Icon, type IconName } from '@recoin/components/icons';
+import { useSidebar } from '@recoin/components/layout';
+import { createPartitions } from '@recoin/utilities/animations';
+import { Cell, For } from 'retend';
+import { useRouter } from 'retend/router';
+import FloatingActionButtonTest from './fab';
+import PullToRefreshTest from './pull-zone';
 
 interface LinkInfo {
    name: string;
@@ -52,9 +52,9 @@ const SidebarLink = (props: SidebarLinkProps) => {
    const {
       link,
       progressValue,
-      height = "8dvh",
+      height = '8dvh',
       isActive = false,
-      href = "#",
+      href = '#',
    } = props;
    const { Link } = useRouter();
    const { translate, opacity } = createLinkAnimationValues(progressValue);
@@ -63,15 +63,15 @@ const SidebarLink = (props: SidebarLinkProps) => {
       <Link
          href={href}
          class={[
-            "border-none py-0.5 px-1 ease-out duration-slow transition-[translate,opacity] gap-[10px]",
-            "active:bg-gray-100/0.5",
+            'border-none py-0.5 px-1 ease-out duration-slow transition-[translate,opacity] gap-[10px]',
+            'active:bg-gray-100/0.5',
          ]}
          style={{ translate, opacity, height }}
       >
          <div
-            class={["flex items-center gap-0.5", { "opacity-70": !isActive }]}
+            class={['flex items-center gap-0.5', { 'opacity-70': !isActive }]}
          >
-            <Icon name={link.icon} class="link-icon" />
+            <Icon name={link.icon} class='link-icon' />
             {link.name}
          </div>
       </Link>
@@ -83,12 +83,12 @@ const AnimatedLinkGroup = (props: AnimatedLinkGroupProps) => {
    const {
       links,
       progressValues,
-      linkHeight = "8dvh",
+      linkHeight = '8dvh',
       activeIndex = 0,
    } = props;
    return (
       <div
-         class="grid"
+         class='grid'
          style={{ gridTemplateRows: `repeat(${links.length}, auto) 1fr` }}
       >
          {For(links, (link, index) => {
@@ -101,7 +101,7 @@ const AnimatedLinkGroup = (props: AnimatedLinkGroupProps) => {
                   progressValue={progressValues[progressIndex]}
                   height={linkHeight}
                   isActive={isActive}
-                  href="#"
+                  href='#'
                />
             );
          })}
@@ -114,15 +114,15 @@ const SidebarDivider = (props: SidebarDividerProps) => {
    const { scaleValue } = props;
    return (
       <div
-         class="h-[2.5dvh] border-b-[3px] opacity-[0.5] ml-1 mx-2"
-         style={{ scale: `${scaleValue} 1`, transformOrigin: "0 0" }}
+         class='h-[2.5dvh] border-b-[3px] opacity-[0.5] ml-1 mx-2'
+         style={{ scale: `${scaleValue} 1`, transformOrigin: '0 0' }}
       />
    );
 };
 
 // Reusable component for sidebar header
 const SidebarHeader = (props: SidebarHeaderProps) => {
-   const { title = "recoin.", className = "pl-1 pb-1", progressValue } = props;
+   const { title = 'recoin.', className = 'pl-1 pb-1', progressValue } = props;
    const { translate, opacity } = progressValue
       ? createLinkAnimationValues(progressValue)
       : { translate: undefined, opacity: undefined };
@@ -131,7 +131,7 @@ const SidebarHeader = (props: SidebarHeaderProps) => {
       <h2
          class={[
             className,
-            "ease-out duration-slow transition-[translate,opacity]",
+            'ease-out duration-slow transition-[translate,opacity]',
          ]}
          style={{ translate, opacity }}
       >
@@ -144,45 +144,45 @@ const SidebarTest = () => {
    const { SidebarProvider, SidebarToggle } = useSidebar();
    const upperLinks: Array<LinkInfo> = [
       {
-         name: "Home",
-         icon: "house",
+         name: 'Home',
+         icon: 'house',
       },
       {
-         name: "Chat",
-         icon: "sparkle",
+         name: 'Chat',
+         icon: 'sparkle',
       },
       {
-         name: "Reports",
-         icon: "chart",
+         name: 'Reports',
+         icon: 'chart',
       },
       {
-         name: "Budgets",
-         icon: "pie-chart",
+         name: 'Budgets',
+         icon: 'pie-chart',
       },
       {
-         name: "Categories",
-         icon: "grid",
+         name: 'Categories',
+         icon: 'grid',
       },
       {
-         name: "Profile",
-         icon: "profile",
+         name: 'Profile',
+         icon: 'profile',
       },
    ];
 
    const lowerLinks: Array<LinkInfo> = [
       {
-         name: "Feedback",
-         icon: "chat-bubble",
+         name: 'Feedback',
+         icon: 'chat-bubble',
       },
       {
-         name: "Settings",
-         icon: "settings",
+         name: 'Settings',
+         icon: 'settings',
       },
    ];
 
    const contentTopMarkerRef = Cell.source<HTMLElement | null>(null);
 
-   const sidebarRevealCssVar = "var(--sidebar-reveal)";
+   const sidebarRevealCssVar = 'var(--sidebar-reveal)';
    const upperLinksSwipeProgressValuesOptions = {
       from: 0.6,
       overlap: 0.2,
@@ -211,20 +211,20 @@ const SidebarTest = () => {
 
    const InnerSidebar = () => {
       return (
-         <div class="w-[65dvw] dark-scheme h-full py-2 text-header grid grid-rows-[auto_auto_auto_1fr]">
+         <div class='w-[65dvw] dark-scheme h-full py-2 text-header grid grid-rows-[auto_auto_auto_1fr]'>
             <SidebarHeader progressValue={headerProgressValue} />
 
             <AnimatedLinkGroup
                links={upperLinks}
                progressValues={upperLinksSwipeProgressValues}
-               linkHeight="8dvh"
+               linkHeight='8dvh'
                activeIndex={0}
             />
 
             <SidebarDivider scaleValue={lineScale} />
 
             <div
-               class="grid pt-auto before:[grid-area:1/1]"
+               class='grid pt-auto before:[grid-area:1/1]'
                style={{
                   gridTemplateRows: `1fr repeat(${lowerLinks.length}, auto)`,
                }}
@@ -232,7 +232,7 @@ const SidebarTest = () => {
                <AnimatedLinkGroup
                   links={lowerLinks}
                   progressValues={lowerLinksSwipeProgressValues}
-                  linkHeight="7.5dvh"
+                  linkHeight='7.5dvh'
                   activeIndex={-1}
                />
             </div>
@@ -242,14 +242,14 @@ const SidebarTest = () => {
 
    return (
       <PullToRefreshTest contentTopMarkerRef={contentTopMarkerRef}>
-         <SidebarProvider class="h-screen dark-scheme" sidebar={InnerSidebar}>
+         <SidebarProvider class='h-screen dark-scheme' sidebar={InnerSidebar}>
             <FloatingActionButtonTest>
-               <div class="h-full w-full relative grid place-items-center place-content-center">
+               <div class='h-full w-full relative grid place-items-center place-content-center'>
                   <div
                      ref={contentTopMarkerRef}
-                     class="h-0.25 fixed top-0 left-0 w-full"
+                     class='h-0.25 fixed top-0 left-0 w-full'
                   />
-                  <h1 class="text-header">recoin.</h1>
+                  <h1 class='text-header'>recoin.</h1>
                   <SidebarToggle>Toggle Sidebar</SidebarToggle>
                </div>
             </FloatingActionButtonTest>

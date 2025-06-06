@@ -66,7 +66,7 @@ export function StackViewGroup(props: StackViewGroupProps) {
       <div
          {...rest}
          ref={ref}
-         draggable="false"
+         draggable='false'
          class={[styles.stackViewGroup, rest.class]}
       >
          <div class={styles.stackViewGroupContent}>{children}</div>

@@ -1,4 +1,4 @@
-import { Cell } from "retend";
+import { Cell } from 'retend';
 
 export function useDerivedAsync<T>(
    initialValue: T,
@@ -15,7 +15,7 @@ export function useDerivedAsync<T>(
          console.error(error);
       }
    });
-   Reflect.set(cell, "__promise", promise); // keeps the promise alive
+   Reflect.set(cell, '__promise', promise); // keeps the promise alive
    return cell;
 }
 

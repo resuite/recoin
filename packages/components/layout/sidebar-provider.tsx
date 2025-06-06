@@ -126,7 +126,7 @@ export function useSidebar() {
 
    function SidebarToggle(props: SidebarToggleProps) {
       return (
-         <button {...props} type="button" onClick={toggleSidebar}>
+         <button {...props} type='button' onClick={toggleSidebar}>
             {props.children}
          </button>
       );
