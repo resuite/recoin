@@ -8,7 +8,7 @@
       "#config": "./config.ts",
       "#errors": "./error.ts",
       "#route": "./route.ts",
-      "#/*": "./modules/*.ts"
+      "#modules/*": "./modules/*.ts"
    },
    "exports": {
       "./server": "./server.index.ts",
@@ -16,6 +16,11 @@
       "./config": "./config.ts",
       "./errors": "./error.ts",
       "./route": "./route.ts",
-      "./*": "./modules/*.ts"
+      "./modules/*": "./modules/*.ts"
+   },
+   "scripts": {
+      "dev": "vite dev",
+      "build": "vite build",
+      "preview": "npm run build && vite preview"
    }
 }

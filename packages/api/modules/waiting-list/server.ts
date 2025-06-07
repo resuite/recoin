@@ -3,9 +3,7 @@ import type { RecoinApiEnv } from '#types';
 import { route } from '#route';
 import { z } from 'zod';
 
-const app = new Hono<RecoinApiEnv>();
-
-app.post(
+export default new Hono<RecoinApiEnv>().post(
    '/',
    ...route({
       body: z.object({
@@ -19,5 +17,3 @@ app.post(
       },
    }),
 );
-
-export default app;

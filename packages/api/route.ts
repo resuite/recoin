@@ -20,7 +20,7 @@ export type CustomContext<Env, ParamSchema, BodySchema> = Env extends RawEnv
                     : C['req']['json'];
                  valid: C['req']['valid'] &
                     ((
-                       type: 'json' | 'param',
+                       type: 'json',
                     ) => BodySchema extends z.ZodObject<z.ZodRawShape>
                        ? z.infer<BodySchema>
                        : never);
@@ -39,7 +39,7 @@ export type RouteController<Env, Params, Body> = (
 ) => Response | Promise<Response>;
 
 export type RouteConfig<Params, Body> = {
-   paramSchema?: Params;
+   param?: Params;
    body?: Body;
    controller: RouteController<RecoinApiEnv, Params, Body>;
    middleware?: MiddlewareHandler[];
@@ -53,8 +53,8 @@ export function route<
       ...(config.middleware || []),
    ];
 
-   if (config.paramSchema) {
-      handlers.push(zValidator('param', config.paramSchema));
+   if (config.param) {
+      handlers.push(zValidator('param', config.param));
    }
 
    if (config.body) {

@@ -3,25 +3,30 @@
    "module": "index.ts",
    "type": "module",
    "private": true,
-   "workspaces": ["packages/*", "application/*"],
+   "workspaces": [
+      "packages/*",
+      "application/*"
+   ],
    "scripts": {
       "phone-test": "cd application/phone && pnpm dev",
       "start-styleguide": "cd application/styleguide && pnpm dev",
       "build-styleguide": "cd application/styleguide && pnpm build",
       "preview-styleguide": "cd application/styleguide && pnpm preview",
       "generate-icons": "bun run packages/scripts/generate-icon-names.js",
-      "api-dev": "wrangler pages dev ./",
+      "api-dev": "cd packages/api && pnpm dev",
       "lint": "biome lint",
       "format": "biome format --write ./packages ./application"
    },
    "devDependencies": {
       "@biomejs/biome": "1.9.4",
+      "@cloudflare/vite-plugin": "^1.5.0",
+      "@cloudflare/workers-types": "^4.20250607.0",
       "@recoin/api": "file:./packages/api",
       "@recoin/components": "file:./packages/components",
       "@recoin/utilities": "file:./packages/utilities",
-      "tailwindcss": "^4.1.8",
       "@tailwindcss/vite": "^4.1.5",
       "@types/node": "^22.15.29",
+      "tailwindcss": "^4.1.8",
       "vite": "npm:rolldown-vite@latest",
       "wrangler": "^4.18.0"
    },
