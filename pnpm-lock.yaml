@@ -36,15 +36,6 @@ importers:
       '@cloudflare/workers-types':
         specifier: ^4.20250607.0
         version: 4.20250607.0
-      '@recoin/api':
-        specifier: file:./packages/api
-        version: link:packages/api
-      '@recoin/components':
-        specifier: file:./packages/components
-        version: link:packages/components
-      '@recoin/utilities':
-        specifier: file:./packages/utilities
-        version: link:packages/utilities
       '@tailwindcss/vite':
         specifier: ^4.1.5
         version: 4.1.8(rolldown-vite@6.3.18(@types/node@22.15.30)(esbuild@0.25.4)(jiti@2.4.2))
@@ -60,20 +51,6 @@ importers:
       wrangler:
         specifier: ^4.18.0
         version: 4.19.1(@cloudflare/workers-types@4.20250607.0)
-
-  application/phone: {}
-
-  application/styleguide: {}
-
-  application/waiting-list: {}
-
-  application/web: {}
-
-  packages/api: {}
-
-  packages/components: {}
-
-  packages/utilities: {}
 
 packages:
 

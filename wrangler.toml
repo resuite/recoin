@@ -1,0 +1,6 @@
+name = "recoin-worker"
+compatibility_date = "2025-04-03"
+main = "./router.server.ts"
+
+[assets]
+not_found_handling = "single-page-application"
