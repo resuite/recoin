@@ -5,7 +5,7 @@ export async function addEmailToWaitingList(
    email: string,
 ): ServerResponse<{ message: string }> {
    const apiUrl = getBaseUrl();
-   const endpoint = `${apiUrl}/waiting-list`;
+   const endpoint = `${apiUrl}/server/waiting-list`;
    const requestInit: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -3,17 +3,14 @@
    "module": "index.ts",
    "type": "module",
    "private": true,
-   "workspaces": [
-      "packages/*",
-      "application/*"
-   ],
+   "workspaces": ["packages/*", "application/*"],
    "scripts": {
       "phone-test": "cd application/phone && pnpm dev",
       "start-styleguide": "cd application/styleguide && pnpm dev",
       "build-styleguide": "cd application/styleguide && pnpm build",
       "preview-styleguide": "cd application/styleguide && pnpm preview",
       "generate-icons": "bun run packages/scripts/generate-icon-names.js",
-      "api-dev": "wrangler dev functions/index.ts",
+      "api-dev": "wrangler pages dev ./",
       "lint": "biome lint",
       "format": "biome format --write ./packages ./application"
    },
