@@ -23,9 +23,6 @@ importers:
       retend-utils:
         specifier: ^0.0.13
         version: 0.0.13(retend@0.0.13)
-      tailwindcss:
-        specifier: ^4.1.8
-        version: 4.1.8
       zod:
         specifier: ^3.25.46
         version: 3.25.56
@@ -48,6 +45,9 @@ importers:
       '@types/node':
         specifier: ^22.15.29
         version: 22.15.30
+      tailwindcss:
+        specifier: ^4.1.8
+        version: 4.1.8
       vite:
         specifier: npm:rolldown-vite@latest
         version: rolldown-vite@6.3.18(@types/node@22.15.30)(esbuild@0.25.4)(jiti@2.4.2)
