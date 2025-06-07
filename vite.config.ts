@@ -5,8 +5,16 @@ import { retendSSG } from 'retend-server/plugin';
 import tailwindcss from '@tailwindcss/vite';
 import { cloudflare } from '@cloudflare/vite-plugin';
 
-const routerModulePath = './source/router.client.ts';
-const pages = ['/', '/nav-stack', '/tabs', '/pull-zone', '/toast', '/sidebar'];
+const routerModulePath = './router.client.ts';
+const pages = [
+   '/',
+   '/styleguide',
+   '/styleguide/nav-stack',
+   '/styleguide/tabs',
+   '/styleguide/pull-zone',
+   '/styleguide/toast',
+   '/styleguide/sidebar',
+];
 
 export default defineConfig({
    resolve: {
