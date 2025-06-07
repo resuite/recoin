@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { handle } from 'hono/cloudflare-pages';
 import waitingList from '@recoin/api/waiting-list/server';
 import type { RecoinApiEnv } from '@recoin/api/types';
 
@@ -9,4 +10,4 @@ app.get('/', (c) => {
 });
 app.route('/waiting-list', waitingList);
 
-export default app;
+export const onRequest = handle(app);
