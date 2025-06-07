@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import type { RecoinApiEnv } from '../../helpers/types.ts';
-import { route } from '../../helpers/route.js';
+import type { RecoinApiEnv } from '#types';
+import { route } from '#route';
 import { z } from 'zod';
 
 const app = new Hono<RecoinApiEnv>();
@@ -11,9 +11,9 @@ app.post(
       body: z.object({
          email: z.string().email(),
       }),
-      controller: async (c) => {
-         const { email } = await c.req.valid('json');
-         console.log(email);
+      controller: (c) => {
+         const { email } = c.req.valid('json');
+         console.log('Email:', email);
 
          return c.json({ success: true });
       },

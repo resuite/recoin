@@ -5,7 +5,7 @@ import type {
    MiddlewareHandler,
    Env as RawEnv,
 } from 'hono';
-import type { RecoinApiEnv } from './types.ts';
+import type { RecoinApiEnv } from '#types';
 
 export type CustomContext<Env, ParamSchema, BodySchema> = Env extends RawEnv
    ? RawContext<Env> extends infer C
@@ -18,6 +18,12 @@ export type CustomContext<Env, ParamSchema, BodySchema> = Env extends RawEnv
                  json: BodySchema extends z.ZodObject<z.ZodRawShape>
                     ? () => Promise<z.infer<BodySchema>>
                     : C['req']['json'];
+                 valid: C['req']['valid'] &
+                    ((
+                       type: 'json' | 'param',
+                    ) => BodySchema extends z.ZodObject<z.ZodRawShape>
+                       ? z.infer<BodySchema>
+                       : never);
               };
            }
          : never
@@ -57,8 +63,5 @@ export function route<
 
    handlers.push(config.controller);
 
-   return handlers as [
-      ...MiddlewareHandler[],
-      RouteController<RecoinApiEnv, Params, Body>,
-   ];
+   return handlers as [...MiddlewareHandler[]];
 }

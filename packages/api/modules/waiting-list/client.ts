@@ -1,5 +1,5 @@
-import type { ServerResponse } from '../../helpers/types.ts';
-import { getBaseUrl } from '../../helpers/config.ts';
+import type { ServerResponse } from '#types';
+import { getBaseUrl } from '#config';
 
 export async function addEmailToWaitingList(
    email: string,

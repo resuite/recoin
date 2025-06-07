@@ -10,6 +10,7 @@
       "allowJs": true,
 
       "outDir": "./dist",
+      "resolvePackageJsonImports": true,
 
       // Bundler mode
       "moduleResolution": "bundler",
@@ -28,7 +29,8 @@
       "noUnusedParameters": false,
       "noPropertyAccessFromIndexSignature": false,
       "declaration": true,
-      "emitDeclarationOnly": true
+      "emitDeclarationOnly": true,
+      "rootDir": "./"
    },
    "include": ["./"]
 }

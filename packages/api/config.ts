@@ -1,5 +1,5 @@
 import { Cell } from 'retend';
-import { Errors, RecoinError } from './error.ts';
+import { Errors, RecoinError } from '#errors';
 
 const BASE_URL = Cell.source<string | null>(null);
 

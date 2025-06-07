@@ -1,4 +1,4 @@
-import type { ErrorCode } from './error.ts';
+import type { ErrorCode } from '#errors';
 
 export interface SuccessResponse<T> {
    success: true;

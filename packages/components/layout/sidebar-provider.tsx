@@ -92,6 +92,10 @@ export function useSidebar() {
             // ensures that.
             sidebar.classList.add(styles.sidebar as string);
          });
+         // Firefox compat.
+         contentRef
+            .get()
+            ?.scrollIntoView({ behavior: 'instant', inline: 'end' });
       });
 
       observer.onConnected(providerRef, scrollTimelineFallback);
