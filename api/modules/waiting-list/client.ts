@@ -1,11 +1,13 @@
 import type { ServerResponse } from '@/api/types';
-import { getBaseUrl } from '@/api/config';
+import { BASE_URL } from '@/constants';
 
 export async function addEmailToWaitingList(
    email: string,
 ): ServerResponse<{ message: string }> {
-   const apiUrl = getBaseUrl();
-   const endpoint = `${apiUrl}/server/waiting-list`;
+   await new Promise((r) => {
+      setTimeout(r, 3000);
+   });
+   const endpoint = `${BASE_URL}/api/waiting-list`;
    const requestInit: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -8,6 +8,7 @@ import { cloudflare } from '@cloudflare/vite-plugin';
 const routerModulePath = './router.client.ts';
 const pages = [
    '/',
+   '/waiting-list',
    '/styleguide',
    '/styleguide/nav-stack',
    '/styleguide/tabs',
