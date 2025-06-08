@@ -1,8 +1,9 @@
-import { Errors, RecoinError } from '@/api/error';
+import { RecoinError } from '@/api/error';
 import { addEmailToWaitingList } from '@/api/modules/waiting-list/client';
 import { Icon } from '@/components/icons';
 import { Coins } from '@/components/illustrations/coins';
 import { useToast } from '@/components/ui';
+import { errorCodeToHumanReadable } from '@/utilities/error-messages';
 import { Cell, If } from 'retend';
 import { Input } from 'retend-utils/components';
 import { useRouter } from 'retend/router';
@@ -36,6 +37,9 @@ const WaitingList = () => {
    };
 
    resource.data.listen((data) => {
+      if (!data?.success) {
+         return;
+      }
       router.navigate('/waiting-list/success');
    });
 
@@ -43,13 +47,11 @@ const WaitingList = () => {
       if (!(error instanceof RecoinError)) {
          return;
       }
-
-      if (error.errorCode === Errors.EMAIL_ALREADY_EXISTS) {
-         showToast({
-            content: `Could not add email to waiting list: ${error.message || 'Unknown error'}`,
-            duration: 3000,
-         });
-      }
+      const humanReadableError = errorCodeToHumanReadable(error.errorCode);
+      showToast({
+         content: `Could not add email to waiting list: ${humanReadableError}`,
+         duration: 3000,
+      });
    });
 
    return (

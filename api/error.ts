@@ -15,7 +15,6 @@ import type { ErrorResponse } from './types';
  * ```
  */
 export const Errors = {
-   CONFIG_NOT_DEFINED: 100,
    EMAIL_ALREADY_EXISTS: 101,
    UNKNOWN_ERROR_OCCURRED: 102,
 } as const;
