@@ -47,19 +47,26 @@ const WaitingList = () => {
       if (!(error instanceof RecoinError)) {
          return;
       }
-      const humanReadableError = errorCodeToHumanReadable(error.errorCode);
-      showToast({
-         content: `Could not add email to waiting list: ${humanReadableError}`,
-         duration: 3000,
-      });
+      const content = errorCodeToHumanReadable(error.errorCode);
+      showToast({ content, duration: 3000 });
    });
 
    return (
-      <div class='relative grid grid-lines h-screen w-screen'>
+      <div class='relative grid grid-rows-[auto_1fr] grid-lines h-screen w-screen'>
          <ToastContainer />
-         <header class='absolute p-2'>recoin.</header>
-         <main class='px-2 grid grid-cols-[.7fr_1fr] place-content-center place-self-center gap-x-3'>
-            <h1 class='text-large [grid-area:1/1] place-self-end pb-0.5'>
+         <header class='p-2 pb-1'>recoin.</header>
+         <main
+            class={[
+               'px-2 pb-3 grid grid-cols-[.7fr_1fr] place-content-center place-self-center gap-x-3',
+               'max-md:grid-cols-1 max-md:grid-rows-1 max-md:text-center',
+            ]}
+         >
+            <h1
+               class={[
+                  'text-large [grid-area:1/1] place-self-end pb-0.25',
+                  'max-md:text-header max-md:place-self-center',
+               ]}
+            >
                managing money shouldn't be hard.
             </h1>
             <section class='[grid-area:2/1] grid gap-y-0.25'>
@@ -75,7 +82,10 @@ const WaitingList = () => {
                </p>
                <p class='pb-0.25'>Be the first to experience it.</p>
                <form
-                  class='grid gap-y-0.5 max-w-17'
+                  class={[
+                     'grid gap-y-0.5 max-w-17',
+                     'max-md:place-items-center max-md:max-w-full',
+                  ]}
                   onSubmit--prevent={handleSubmit}
                >
                   <Input
@@ -85,7 +95,10 @@ const WaitingList = () => {
                      required
                   />
                   <button
-                     class='grid max-w-fit grid-cols-[auto_auto] gap-x-0.25 font-semibold place-items-center place-content-center'
+                     class={[
+                        'grid grid-cols-[auto_auto] gap-x-0.25 place-items-center place-content-center',
+                        'max-w-fit font-semibold',
+                     ]}
                      type='submit'
                   >
                      {If(resource.pending, {
@@ -95,7 +108,12 @@ const WaitingList = () => {
                   </button>
                </form>
             </section>
-            <div class='[grid-area:1/2/3/2] grid place-items-center'>
+            <div
+               class={[
+                  '[grid-area:1/2/3/2] grid place-items-center',
+                  'max-md:hidden',
+               ]}
+            >
                <Coins class='w-full max-w-[50dvw]' />
             </div>
          </main>
