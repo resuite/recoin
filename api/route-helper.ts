@@ -36,7 +36,7 @@ export type RouteHandlers<Env, Params, Body> = Array<
 
 export type RouteController<Env, Params, Body> = (
    c: CustomContext<Env, Params, Body>,
-) => Response | Promise<Response>;
+) => Promise<Response> | Response;
 
 export type RouteConfig<Params, Body> = {
    param?: Params;

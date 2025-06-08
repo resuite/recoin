@@ -1,3 +1,6 @@
+import type { Context } from 'hono';
+import type { ErrorResponse } from './types';
+
 /**
  * Constants for error codes used throughout the application.
  * Each error code maps to a unique number.
@@ -13,9 +16,46 @@
  */
 export const Errors = {
    CONFIG_NOT_DEFINED: 100,
+   EMAIL_ALREADY_EXISTS: 101,
+   UNKNOWN_ERROR_OCCURRED: 102,
 } as const;
 
 export type ErrorCode = (typeof Errors)[keyof typeof Errors];
+
+/**
+ * Returns a success response in JSON format.
+ *
+ * @param c - The Hono Context object containing request/response data
+ * @returns A JSON response with success:true
+ *
+ * @example
+ * ```typescript
+ * return success(c); // Returns {success: true}
+ * ```
+ */
+export function success(c: { json: Context['json'] }): Response {
+   return c.json({ success: true });
+}
+
+/**
+ * Returns an error response in JSON format.
+ *
+ * @param c - The Hono Context object containing request/response data
+ * @param errorCode - The error code to include in the response
+ * @returns A JSON response with success:false and the error code
+ *
+ * @example
+ * ```typescript
+ * return errorOccurred(c, Errors.CONFIG_NOT_DEFINED); // Returns {success: false, code: 100}
+ * ```
+ */
+export function errorOccurred(
+   c: { json: Context['json'] },
+   errorCode: ErrorCode,
+   details?: unknown,
+): Response {
+   return c.json({ success: false, code: errorCode, details } as ErrorResponse);
+}
 
 /**
  * Custom error class for Recoin errors.

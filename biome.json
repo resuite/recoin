@@ -29,7 +29,15 @@
             "useBlockStatements": "error"
          },
          "suspicious": {
-            "useAwait": "error"
+            "useAwait": "error",
+            "noConsole": "error"
+         },
+         "correctness": {
+            "noUnusedVariables": "error",
+            "noUnusedFunctionParameters": "error",
+            "noUnusedImports": "error",
+            "noUndeclaredVariables": "error",
+            "noUndeclaredDependencies": "error"
          }
       }
    }

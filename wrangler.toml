@@ -4,3 +4,7 @@ main = "./router.server.ts"
 
 [assets]
 not_found_handling = "single-page-application"
+
+[[kv_namespaces]]
+binding = "RECOIN_WAITING_LIST"
+id = "17db23d443574424b365adc2144939b1"

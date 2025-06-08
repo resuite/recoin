@@ -27,8 +27,7 @@
       "noUnusedLocals": false,
       "noUnusedParameters": false,
       "noPropertyAccessFromIndexSignature": false,
-      "declaration": true,
-      "emitDeclarationOnly": true,
+      "declaration": false,
       "isolatedModules": true,
       "types": ["@cloudflare/workers-types/2023-07-01", "vite/client"],
 
