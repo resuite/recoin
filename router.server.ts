@@ -2,9 +2,9 @@ import { Hono } from 'hono';
 import waitingList from '@/api/modules/waiting-list/server';
 
 const app = new Hono()
-   .get('/', (c) => {
+   .get('/api', (c) => {
       return c.text(`The recoin server is running on ${navigator.userAgent}!`);
    })
-   .route('/waiting-list', waitingList);
+   .route('/api/waiting-list', waitingList);
 
-export default new Hono().route('/api', app);
+export default app;
