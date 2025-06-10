@@ -1,7 +1,8 @@
+import { defer } from '@/utilities/miscellaneous';
 import { Cell, For, useObserver } from 'retend';
+import { useIntersectionObserver } from 'retend-utils/hooks';
 import type { JSX } from 'retend/jsx-runtime';
 import Add from '../icons/svg/add';
-import { useIntersectionObserver } from 'retend-utils/hooks';
 import styles from './toast.module.css';
 
 export interface ToastProps {
@@ -105,18 +106,20 @@ export function useToast(): ToastDetails {
       // --- Swipe-to-Dismiss Logic ---
       // This callback is triggered by the IntersectionObserver when a dismiss marker
       // becomes fully visible (meaning the user has swiped the toast off-screen).
-      const closeToast = async () => {
+      const closeToast = () => {
          const element = toastElementRef.get();
          if (!element) {
             return;
          }
-         element.classList.add('animate-toast-leave');
-         await Promise.allSettled(
-            element.getAnimations().map((a) => a.finished),
-         );
-         toastPromiseResolvers.get(props.id)?.();
-         toastPromiseResolvers.delete(props.id);
-         activeToasts.get().splice(index.get(), 1);
+         element.classList.add(styles.toastLeaving);
+         defer(async () => {
+            await Promise.allSettled(
+               element.getAnimations().map((a) => a.finished),
+            );
+            toastPromiseResolvers.get(props.id)?.();
+            toastPromiseResolvers.delete(props.id);
+            activeToasts.get().splice(index.get(), 1);
+         });
       };
 
       const handleClick = (event: MouseEvent | KeyboardEvent) => {

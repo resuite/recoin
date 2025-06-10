@@ -1,5 +1,4 @@
 :root {
-   --animate-toast-leave: toast-leave var(--speed-slow) ease;
    --animate-toast-slide-in: toast-slide-in var(--speed-slow) ease;
 }
 
@@ -95,6 +94,12 @@
    scroll-margin: var(--spacing);
    scroll-snap-stop: always;
    grid-area: 1 / 2;
+}
+
+.toastLeaving {
+   opacity: 0;
+   transition-duration: var(--speed-slow);
+   transition-property: opacity, transform;
 }
 
 .toastCloseButton {
