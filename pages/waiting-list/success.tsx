@@ -1,6 +1,14 @@
 import Checkmark from '@/components/icons/svg/checkmark';
+import { emailEntered } from '@/pages/waiting-list/state';
+import { useRouter } from 'retend/router';
 
 const ComingSoonWaitingListSuccess = () => {
+   const router = useRouter();
+
+   if (!emailEntered.get()) {
+      return router.navigate('/waiting-list');
+   }
+
    return (
       <div class='relative grid grid-rows-1 grid-lines h-screen w-screen'>
          <header class='absolute p-2'>recoin.</header>

@@ -4,6 +4,7 @@ import Arrows from '@/components/icons/svg/arrows';
 import Loader from '@/components/icons/svg/loader';
 import { Coins } from '@/components/illustrations/coins';
 import { useToast } from '@/components/ui';
+import { emailEntered } from '@/pages/waiting-list/state';
 import { errorCodeToHumanReadable } from '@/utilities/error-messages';
 import { Cell, If } from 'retend';
 import { Input } from 'retend-utils/components';
@@ -41,6 +42,7 @@ const WaitingList = () => {
       if (!data?.success) {
          return;
       }
+      emailEntered.set(true);
       router.navigate('/waiting-list/success');
    });
 
