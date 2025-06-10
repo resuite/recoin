@@ -6,6 +6,7 @@
    "scripts": {
       "dev": "vite --port 5229",
       "lint": "biome lint --write",
+      "format": "biome format --write",
       "check": "tsgo --project ./tsconfig.json",
       "build": "vite build",
       "preview": "vite preview",
