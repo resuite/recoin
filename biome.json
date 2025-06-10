@@ -36,8 +36,7 @@
             "noUnusedVariables": "error",
             "noUnusedFunctionParameters": "error",
             "noUnusedImports": "error",
-            "noUndeclaredVariables": "error",
-            "noUndeclaredDependencies": "error"
+            "noUndeclaredVariables": "error"
          }
       }
    }

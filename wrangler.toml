@@ -1,5 +1,6 @@
 name = "recoin_worker"
 compatibility_date = "2025-04-03"
+compatibility_flags = [ "nodejs_compat" ]
 main = "./router.server.ts"
 
 [assets]

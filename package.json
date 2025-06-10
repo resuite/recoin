@@ -24,9 +24,9 @@
    "dependencies": {
       "@hono/zod-validator": "^0.7.0",
       "hono": "^4.7.11",
-      "retend": "https://pkg.pr.new/resuite/retend@904dfd3",
-      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@904dfd3",
-      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@904dfd3",
+      "retend": "https://pkg.pr.new/resuite/retend@b12fd2d",
+      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@b12fd2d",
+      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@b12fd2d",
       "zod": "^3.25.46"
    }
 }
