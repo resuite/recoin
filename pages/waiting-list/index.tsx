@@ -63,11 +63,12 @@ const WaitingList = () => {
          >
             <h1
                class={[
-                  'text-large [grid-area:1/1] place-self-end pb-0.25',
-                  'max-md:text-header max-md:place-self-center',
+                  'grid text-large [grid-area:1/1] self-end pb-0.25',
+                  'max-md:text-title max-md:self-center',
                ]}
             >
-               managing money shouldn't be hard.
+               <div class='text-nowrap'>managing money</div>
+               <div class='text-nowrap'>shouldn't be hard.</div>
             </h1>
             <section class='[grid-area:2/1] grid gap-y-0.25'>
                <p>
@@ -98,6 +99,7 @@ const WaitingList = () => {
                      class={[
                         'grid grid-cols-[auto_auto] gap-x-0.25 place-items-center place-content-center',
                         'max-w-fit font-semibold',
+                        'max-md:px-2',
                      ]}
                      type='submit'
                   >
