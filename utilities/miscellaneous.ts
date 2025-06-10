@@ -12,6 +12,7 @@ export function useDerivedAsync<T>(
       try {
          cell.set(await value.promise);
       } catch (error) {
+         // biome-ignore lint/suspicious/noConsole: utility.
          console.error(error);
       }
    });
