@@ -1,6 +1,7 @@
 import { RecoinError } from '@/api/error';
 import { addEmailToWaitingList } from '@/api/modules/waiting-list/client';
-import { Icon } from '@/components/icons';
+import Arrows from '@/components/icons/svg/arrows';
+import Loader from '@/components/icons/svg/loader';
 import { Coins } from '@/components/illustrations/coins';
 import { useToast } from '@/components/ui';
 import { errorCodeToHumanReadable } from '@/utilities/error-messages';
@@ -21,7 +22,7 @@ const WaitingList = () => {
    const ButtonLoadingStateContent = () => {
       return (
          <>
-            <Icon name='loader' class='w-0.75 h-0.75' />
+            <Loader class='w-0.75 h-0.75' />
             Joining...
          </>
       );
@@ -30,7 +31,7 @@ const WaitingList = () => {
    const ButtonIdleStateContent = () => {
       return (
          <>
-            <Icon name='arrows' class='w-0.75 h-0.75 -rotate-[135deg]' />
+            <Arrows class='w-0.75 h-0.75 -rotate-[135deg]' />
             Join the waiting list
          </>
       );

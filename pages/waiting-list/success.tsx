@@ -1,4 +1,4 @@
-import { Icon } from '@/components/icons';
+import Checkmark from '@/components/icons/svg/checkmark';
 
 const ComingSoonWaitingListSuccess = () => {
    return (
@@ -6,7 +6,7 @@ const ComingSoonWaitingListSuccess = () => {
          <header class='absolute p-2'>recoin.</header>
          <main class='grid w-full h-full text-center place-items-center place-content-center'>
             <section class='grid place-items-center gap-1.5'>
-               <Icon name='checkmark' class='w-[70px] h-[70px]' />
+               <Checkmark class='w-[70px] h-[70px]' />
                <h1 class='text-3xl font-bold'>You're on the list!</h1>
                <p class='grid grid-rows-2 gap-0.5 px-2'>
                   <span>
