@@ -1,4 +1,4 @@
-import { Errors, type ErrorCode } from '@/api/error';
+import { type ErrorCode, Errors } from '@/api/error';
 
 export function errorCodeToHumanReadable(errorCode: ErrorCode): string {
    switch (errorCode) {
@@ -9,4 +9,8 @@ export function errorCodeToHumanReadable(errorCode: ErrorCode): string {
       default:
          return 'Unknown error';
    }
+}
+
+export function defaultError() {
+   return 'An unexpected error occurred. Please try again later.';
 }

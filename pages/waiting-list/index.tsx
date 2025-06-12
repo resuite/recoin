@@ -5,7 +5,10 @@ import Loader from '@/components/icons/svg/loader';
 import { Coins } from '@/components/illustrations/coins';
 import { useToast } from '@/components/ui';
 import { emailEntered } from '@/pages/waiting-list/state';
-import { errorCodeToHumanReadable } from '@/utilities/error-messages';
+import {
+   defaultError,
+   errorCodeToHumanReadable,
+} from '@/utilities/error-messages';
 import { Cell, If } from 'retend';
 import { Input } from 'retend-utils/components';
 import { useRouter } from 'retend/router';
@@ -48,6 +51,8 @@ const WaitingList = () => {
 
    resource.error.listen((error) => {
       if (!(error instanceof RecoinError)) {
+         const content = error?.message ?? defaultError();
+         showToast({ content, duration: 3000 });
          return;
       }
       const content = errorCodeToHumanReadable(error.errorCode);
