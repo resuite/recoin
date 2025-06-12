@@ -1,15 +1,15 @@
 import { DynamicIcon } from '@/components/icons';
-import { PullToRefresh, type PullState } from '@/components/layout';
+import { type PullState, PullToRefreshView } from '@/components/views';
 import { Cell, type SourceCell } from 'retend';
 import type { JSX } from 'retend/jsx-runtime';
 
-interface PullToRefreshTestProps {
+interface PullToRefreshViewTestProps {
    contentTopMarkerRef?: SourceCell<HTMLElement | null>;
    children?: unknown;
    allowPull?: JSX.ValueOrCell<boolean>;
 }
 
-const PullToRefreshTest = (props?: PullToRefreshTestProps) => {
+const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
    const state = Cell.source<PullState>('idle');
    const pulling = Cell.derived(() => {
       return state.get() === 'pulling' || state.get() === 'thresholdreached';
@@ -58,7 +58,7 @@ const PullToRefreshTest = (props?: PullToRefreshTestProps) => {
    };
 
    return (
-      <PullToRefresh
+      <PullToRefreshView
          class='h-screen'
          feedback={FeedbackContent}
          onStateChange={handleStateChange}
@@ -72,8 +72,8 @@ const PullToRefreshTest = (props?: PullToRefreshTestProps) => {
                <div class='grid place-items-center h-full w-full'>{state}</div>
             </div>
          )}
-      </PullToRefresh>
+      </PullToRefreshView>
    );
 };
 
-export default PullToRefreshTest;
+export default PullToRefreshViewTest;

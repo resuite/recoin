@@ -24,7 +24,7 @@
    }
 }
 
-@utility animate-underlining {
+@utility animate-lining {
    transform-origin: 0 0;
 }
 
@@ -70,7 +70,7 @@
    }
 }
 
-@keyframes underlining {
+@keyframes lining {
    from {
       scale: 0 1;
    }

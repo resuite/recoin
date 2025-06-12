@@ -1,10 +1,14 @@
-import { TabSwitcher } from '@/components/layout';
+import { TabSwitcherView } from '@/components/views';
 
 const Tabs = () => {
    return (
       <div class='py-1 w-full h-screen grid grid-rows-[auto_1fr] light-scheme rounded-t-4xl'>
          <h2 class='text-title px-1'>Tabs</h2>
-         <TabSwitcher class='tab-container' header:class='px-1' tabs={tabs} />
+         <TabSwitcherView
+            class='tab-container'
+            header:class='px-1'
+            tabs={tabs}
+         />
       </div>
    );
 };

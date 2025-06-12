@@ -1,5 +1,5 @@
 import { Icon } from '@/components/icons';
-import { StackView, StackViewGroup } from '@/components/layout';
+import { StackView, StackViewGroup } from '@/components/views';
 import { Cell } from 'retend';
 
 const page2IsOpen = Cell.source(false);

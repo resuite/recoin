@@ -1,12 +1,12 @@
+import { GESTURE_ANIMATION_MS, getScrollableY } from '@/utilities/scrolling';
 import { Cell, type SourceCell, useObserver } from 'retend';
-import type { JSX } from 'retend/jsx-runtime';
-import { getScrollableY, GESTURE_ANIMATION_MS } from '@/utilities/scrolling';
 import {
+   useDerivedValue,
+   useIntersectionObserver,
    useMatchMedia,
    useWindowSize,
-   useIntersectionObserver,
-   useDerivedValue,
 } from 'retend-utils/hooks';
+import type { JSX } from 'retend/jsx-runtime';
 import styles from './pull-to-refresh.module.css';
 
 export type PullState =
@@ -16,7 +16,7 @@ export type PullState =
    | 'actiontriggered';
 
 type DivProps = JSX.IntrinsicElements['div'];
-export interface PullToRefreshProps extends DivProps {
+export interface PullToRefreshViewProps extends DivProps {
    /**
     * The content to be rendered in the feedback layer behind the scrollable content.
     */
@@ -61,7 +61,7 @@ export interface PullToRefreshProps extends DivProps {
  * "thresholdreached", and "actiontriggered", and provides callbacks for these state changes.
  * It requires touch input (pointer: coarse) to enable the pull gesture.
  *
- * @param {PullToRefreshProps} props - The properties to configure the PullToRefresh component.
+ * @param {PullToRefreshViewProps} props - The properties to configure the PullToRefreshView component.
  * @example
  * ```tsx
  * function App() {
@@ -72,7 +72,7 @@ export interface PullToRefreshProps extends DivProps {
  *   };
  *
  *   const handleStateChange = (state) => {
- *     console.log("PullToRefresh state:", state);
+ *     console.log("PullToRefreshView state:", state);
  *   };
  *
  *   const FeedbackContent = () => {
@@ -84,7 +84,7 @@ export interface PullToRefreshProps extends DivProps {
  *   };
  *
  *   return (
- *     <PullToRefresh
+ *     <PullToRefreshView
  *       onStateChange={handleStateChange}
  *       onActionTriggered={handleRefresh}
  *       feedback={FeedbackContent}
@@ -96,12 +96,12 @@ export interface PullToRefreshProps extends DivProps {
  *         <p>Pull down to refresh.</p>
  *         {Array.from({ length: 20 }, (_, i) => <p key={i}>Item {i + 1}</p>)}
  *       </div>
- *     </PullToRefresh>
+ *     </PullToRefreshView>
  *   );
  * }
  * ```
  */
-export function PullToRefresh(props: PullToRefreshProps): JSX.Template {
+export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    const {
       children,
       feedback,

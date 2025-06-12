@@ -1,7 +1,7 @@
-import { Cell, For, useObserver, type SourceCell } from 'retend';
-import type { JSX } from 'retend/jsx-runtime';
-import { useDerivedValue } from 'retend-utils/hooks';
 import { scrollTimelineFallback } from '@/utilities/scrolling';
+import { Cell, For, type SourceCell, useObserver } from 'retend';
+import { useDerivedValue } from 'retend-utils/hooks';
+import type { JSX } from 'retend/jsx-runtime';
 import styles from './tab-switcher.module.css';
 
 type SectionProps = JSX.IntrinsicElements['section'];
@@ -10,7 +10,7 @@ export interface Tab {
    body: () => JSX.Template;
 }
 
-export interface TabsProps<T extends Tab> extends SectionProps {
+export interface TabSwitcherViewProps<T extends Tab> extends SectionProps {
    /**
     * Specifies the tabs to be displayed. Can be a static array or a reactive cell.
     */
@@ -34,7 +34,7 @@ export interface TabsProps<T extends Tab> extends SectionProps {
  * A component that creates a tabbed interface with smooth scrolling and intersection observation.
  *
  * @component
- * @param {TabsProps} props - The props for the TabSwitcher component
+ * @param {TabSwitcherViewProps} props - The props for the TabSwitcherView component
  *
  * @features
  * - Smooth scrolling between tabs
@@ -51,13 +51,13 @@ export interface TabsProps<T extends Tab> extends SectionProps {
  *   { heading: () => <span>Tab 2</span>, body: () => <div>Content 2</div> }
  * ];
  *
- * <TabSwitcher
+ * <TabSwitcherView
  *   tabs={tabs}
  *   onActiveTabChange={(tab) => console.log(`Tab ${tab.heading()} is now active`)}
  *  />;
  * ```
  */
-export function TabSwitcher<T extends Tab>(props: TabsProps<T>) {
+export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
    const {
       tabs: tabsProp,
       ref: tabContainerRef = Cell.source<HTMLElement | null>(null),

@@ -1,13 +1,13 @@
+import { scrollTimelineFallback } from '@/utilities/scrolling';
+import { Cell, useObserver } from 'retend';
+import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks';
 import type { JSX } from 'retend/jsx-runtime';
 import styles from './sidebar-provider.module.css';
-import { Cell, useObserver } from 'retend';
-import { scrollTimelineFallback } from '@/utilities/scrolling';
-import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks';
 
 type DivProps = JSX.IntrinsicElements['div'];
 type ButtonProps = JSX.IntrinsicElements['button'];
 
-export interface SidebarProviderProps extends DivProps {
+export interface SidebarProviderViewProps extends DivProps {
    /**
     * Function that returns a JSX template for the sidebar content.
     * This will be rendered inside the sidebar container.
@@ -32,7 +32,7 @@ export interface SidebarToggleProps extends ButtonProps {}
  *
  * This hook provides:
  * - A Cell to track sidebar open/closed state
- * - A SidebarProvider component that renders the sidebar and content
+ * - A SidebarProviderView component that renders the sidebar and content
  * - A SidebarToggle component to toggle the sidebar state
  *
  * The sidebar can be conditionally revealed based on an external allowReveal prop.
@@ -41,7 +41,7 @@ export interface SidebarToggleProps extends ButtonProps {}
  *
  * @returns An object containing:
  *   - sidebarState: Mutable cell tracking open/closed state
- *   - SidebarProvider: Component to wrap sidebar and content
+ *   - SidebarProviderView: Component to wrap sidebar and content
  *   - SidebarToggle: Button component to toggle sidebar
  */
 export function useSidebar() {
@@ -51,7 +51,7 @@ export function useSidebar() {
       sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open');
    }
 
-   function SidebarProvider(props: SidebarProviderProps) {
+   function SidebarProviderView(props: SidebarProviderViewProps) {
       const {
          sidebar,
          children,
@@ -142,5 +142,5 @@ export function useSidebar() {
       );
    }
 
-   return { sidebarState, SidebarProvider, SidebarToggle };
+   return { sidebarState, SidebarProviderView, SidebarToggle };
 }

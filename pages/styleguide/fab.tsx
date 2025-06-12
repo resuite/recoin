@@ -1,7 +1,7 @@
-import { Cell } from 'retend';
 import { Icon } from '@/components/icons';
 import { FloatingActionButton } from '@/components/ui';
-import { ExpandingView } from '@/components/layout';
+import { ExpandingView } from '@/components/views';
+import { Cell } from 'retend';
 
 const FloatingActionButtonTest = (props?: { children?: unknown }) => {
    const isOpen = Cell.source(false);
@@ -69,7 +69,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
             isOpen={isOpen}
             content={() => (
                <>
-                  <div class='after:block after:h-0.15 after:bg-canvas-text after:animate-underlining overflow-hidden'>
+                  <div class='after:block after:h-0.15 after:bg-canvas-text after:animate-lining overflow-hidden'>
                      <div class='text-title animate-fade-in animate-delay-bit-slower'>
                         hello recoin!
                      </div>

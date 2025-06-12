@@ -89,8 +89,8 @@ body {
 
    --animate-spin: spin var(--speed-slowest) linear infinite;
    --animate-fade-in: fade-in var(--speed-fast) ease-in backwards;
-   --animate-underlining: underlining var(--speed-slow) ease-in-out
-      var(--speed-slow) backwards;
+   --animate-lining: lining var(--speed-slow) ease-in-out var(--speed-slow)
+      backwards;
 
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
    --fab-size: max(12dvh, 50px);

@@ -1,11 +1,11 @@
 import type { RouteRecords } from 'retend/router';
 import Styleguide from '.';
-import Tabs from './tabs';
-import NavStack from './nav-stack';
-import Toast from './toast';
-import PullToRefreshTest from './pull-zone';
 import FloatingActionButtonTest from './fab';
+import NavStack from './nav-stack';
+import PullToRefreshViewTest from './pull-zone';
 import SidebarTest from './sidebar';
+import Tabs from './tabs';
+import Toast from './toast';
 
 const metadata = {
    title: 'Styleguide',
@@ -45,7 +45,7 @@ export default (<RouteRecords>[
    {
       name: 'styleguide-pull-zone',
       path: '/styleguide/pull-zone',
-      component: PullToRefreshTest,
+      component: PullToRefreshViewTest,
       metadata,
    },
    {

@@ -1,8 +1,8 @@
-import { Cell, If, useObserver, type SourceCell } from 'retend';
-import { useDerivedValue } from 'retend-utils/hooks';
-import type { JSX } from 'retend/jsx-runtime';
 import { defer } from '@/utilities/miscellaneous';
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling';
+import { Cell, If, type SourceCell, useObserver } from 'retend';
+import { useDerivedValue } from 'retend-utils/hooks';
+import type { JSX } from 'retend/jsx-runtime';
 import styles from './stack-view-group.module.css';
 
 type DivProps = JSX.IntrinsicElements['div'];

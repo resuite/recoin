@@ -1,10 +1,10 @@
 import { Icon, type IconName } from '@/components/icons';
-import { useSidebar } from '@/components/layout';
+import { useSidebar } from '@/components/views';
 import { createPartitions } from '@/utilities/animations';
 import { Cell, For } from 'retend';
 import { useRouter } from 'retend/router';
 import FloatingActionButtonTest from './fab';
-import PullToRefreshTest from './pull-zone';
+import PullToRefreshViewTest from './pull-zone';
 
 interface LinkInfo {
    name: string;
@@ -141,7 +141,7 @@ const SidebarHeader = (props: SidebarHeaderProps) => {
 };
 
 const SidebarTest = () => {
-   const { SidebarProvider, SidebarToggle } = useSidebar();
+   const { SidebarProviderView, SidebarToggle } = useSidebar();
    const upperLinks: Array<LinkInfo> = [
       {
          name: 'Home',
@@ -241,8 +241,11 @@ const SidebarTest = () => {
    };
 
    return (
-      <PullToRefreshTest contentTopMarkerRef={contentTopMarkerRef}>
-         <SidebarProvider class='h-screen dark-scheme' sidebar={InnerSidebar}>
+      <PullToRefreshViewTest contentTopMarkerRef={contentTopMarkerRef}>
+         <SidebarProviderView
+            class='h-screen dark-scheme'
+            sidebar={InnerSidebar}
+         >
             <FloatingActionButtonTest>
                <div class='h-full w-full relative grid place-items-center place-content-center'>
                   <div
@@ -253,8 +256,8 @@ const SidebarTest = () => {
                   <SidebarToggle>Toggle Sidebar</SidebarToggle>
                </div>
             </FloatingActionButtonTest>
-         </SidebarProvider>
-      </PullToRefreshTest>
+         </SidebarProviderView>
+      </PullToRefreshViewTest>
    );
 };
 
