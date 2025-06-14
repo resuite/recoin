@@ -50,8 +50,11 @@ const WaitingList = () => {
    });
 
    resource.error.listen((error) => {
+      if (!error) {
+         return;
+      }
       if (!(error instanceof RecoinError)) {
-         const content = error?.message ?? defaultError();
+         const content = error.message ?? defaultError();
          showToast({ content, duration: 3000 });
          return;
       }
