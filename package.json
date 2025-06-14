@@ -8,7 +8,7 @@
       "lint": "biome lint --write",
       "format": "biome format --write",
       "check": "tsgo --project ./tsconfig.json",
-      "build": "vite build",
+      "build": "vite build && mv dist/client/_redirects dist/_redirects",
       "preview": "vite preview",
       "prepare": "husky",
       "deploy": "wrangler deploy"
@@ -28,6 +28,7 @@
    },
    "dependencies": {
       "@hono/zod-validator": "^0.7.0",
+      "bowser": "^2.11.0",
       "hono": "^4.7.11",
       "retend": "https://pkg.pr.new/resuite/retend@b12fd2d",
       "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@b12fd2d",

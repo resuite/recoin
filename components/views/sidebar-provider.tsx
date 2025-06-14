@@ -1,7 +1,16 @@
-import { scrollTimelineFallback } from '@/utilities/scrolling';
+import { Browsers, currentBrowser } from '@/utilities/browser';
+import {
+   PointerTracker,
+   type TrackedMoveEvent,
+} from '@/utilities/pointer-gesture-tracker';
+import {
+   NEGLIGIBLE_SCROLL_PX,
+   scrollTimelineFallback,
+} from '@/utilities/scrolling';
 import { Cell, useObserver } from 'retend';
 import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks';
 import type { JSX } from 'retend/jsx-runtime';
+import { PullStartEvent } from './pull-to-refresh';
 import styles from './sidebar-provider.module.css';
 
 type DivProps = JSX.IntrinsicElements['div'];
@@ -71,6 +80,22 @@ export function useSidebar() {
          return allowReveal.get() === false;
       });
 
+      const interceptPointerDown = (event: PointerEvent) => {
+         event.stopPropagation();
+         const tracker = new PointerTracker();
+         tracker.start(event);
+
+         const checkForPullStart = (event: TrackedMoveEvent) => {
+            if (event.deltaY > NEGLIGIBLE_SCROLL_PX) {
+               const provider = providerRef.get();
+               tracker.removeEventListener('move', checkForPullStart);
+               provider?.dispatchEvent(new PullStartEvent(tracker));
+            }
+         };
+
+         tracker.addEventListener('move', checkForPullStart);
+      };
+
       let isAlreadyRevealedFlag = false;
       useIntersectionObserver(
          sidebarRef,
@@ -85,20 +110,19 @@ export function useSidebar() {
       );
 
       observer.onConnected(sidebarRef, (sidebar) => {
-         requestAnimationFrame(() => {
-            // When the component loads without JS in prerender mode,
-            // The content needs to be the initial scroll-snapped view.
-            // Adding the sidebar scroll-snap only after the content is loaded
-            // ensures that.
-            sidebar.classList.add(styles.sidebar as string);
-         });
-         // Firefox compat.
-         contentRef
-            .get()
-            ?.scrollIntoView({ behavior: 'instant', inline: 'end' });
+         // When the component loads without JS in prerender mode,
+         // The content needs to be the initial scroll-snapped view.
+         // Adding the sidebar scroll-snap only after the content is loaded
+         // ensures that.
+         sidebar.classList.add(styles.sidebar as string);
+         const provider = providerRef.get();
+         if (provider) {
+            provider.scrollLeft = provider.scrollWidth;
+         }
       });
 
       observer.onConnected(providerRef, scrollTimelineFallback);
+
       observer.onConnected(providerRef, () => {
          return sidebarState.listen((state) => {
             const isOpen = state === 'open';
@@ -113,6 +137,27 @@ export function useSidebar() {
             const target = isOpen ? sidebarRef.get() : contentRef.get();
             target?.scrollIntoView({ behavior: 'smooth', inline: 'start' });
          });
+      });
+
+      observer.onConnected(providerRef, async (provider) => {
+         // Safari is a rubbish browser, and in it `touch-action: pan-x`
+         // does not properly prevent vertical pointermoves. Thus,
+         // x-axis swipe-scrolls intended for SidebarProviderView are not
+         // properly differentiated from y-axis pulls (handled by PullToRefreshView)
+         //
+         // To work around this, we intercept the `pointerdown` event, and
+         // by analyzing the initial gesture direction, we can manually distinguish
+         // between horizontal (for opening/closing the sidebar) and vertical
+         // (for triggering pull-to-refresh).
+         const browser = currentBrowser();
+         if (browser.getBrowserName() !== Browsers.Safari) {
+            return;
+         }
+         provider.addEventListener('pointerdown', interceptPointerDown);
+
+         return () => {
+            provider.removeEventListener('pointerdown', interceptPointerDown);
+         };
       });
 
       return (

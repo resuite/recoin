@@ -1,3 +1,7 @@
+import {
+   PointerTracker,
+   type TrackedMoveEvent,
+} from '@/utilities/pointer-gesture-tracker';
 import { GESTURE_ANIMATION_MS, getScrollableY } from '@/utilities/scrolling';
 import { Cell, type SourceCell, useObserver } from 'retend';
 import {
@@ -133,11 +137,11 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    let scrollable: HTMLElement | null = null;
 
    let pullState: PullState = 'idle';
-   let initialPointerY = 0;
    let feedbackLayerIsVisible = false;
    let thresholdMarkerIsVisible = false;
    let pullZoneHeight = 0;
    let pullScrollAnimation: Animation | null = null;
+   let tracker: PointerTracker | null = null;
 
    const getPullToRefreshElement = () => {
       return pullZoneRef.peek() as HTMLElement;
@@ -148,7 +152,74 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       onStateChange?.(pullState);
    };
 
-   const handlePullRelease = async () => {
+   const handleCustomPullStart = (_event: Event) => {
+      if (pullState === 'actiontriggered') {
+         return;
+      }
+      const event = _event as PullStartEvent;
+      tracker = event.pointerTracker;
+      const originalPointerEvent = tracker.startingEvent;
+      startGesture(originalPointerEvent);
+      tracker.addEventListener('move', processGesture);
+      tracker.addEventListener('end', endGesture);
+      tracker.addEventListener('cancel', endGesture);
+   };
+
+   const handlePointerDown = (event: PointerEvent) => {
+      if (pullState === 'actiontriggered') {
+         return;
+      }
+      tracker = new PointerTracker();
+      tracker.start(event);
+      startGesture(event);
+      tracker.addEventListener('move', processGesture);
+      tracker.addEventListener('end', endGesture);
+      tracker.addEventListener('cancel', endGesture);
+   };
+
+   const processGesture = (event: TrackedMoveEvent) => {
+      requestAnimationFrame(() => {
+         const delta = event.deltaY;
+         if (delta < 0) {
+            if (!scrollable || delta > -30) {
+               return;
+            }
+            scrollable.scrollTop = -delta;
+            return;
+         }
+         if (pullScrollAnimation === null) {
+            return;
+         }
+         const newTime = (delta / pullZoneHeight) * GESTURE_ANIMATION_MS;
+         pullScrollAnimation.currentTime = Math.min(
+            newTime,
+            MAX_PULL_ZONE_SCROLL_TOP,
+         );
+      });
+   };
+
+   const startGesture = (event: PointerEvent) => {
+      const pullZone = getPullToRefreshElement();
+      const pointerOriginTarget = event.target as HTMLElement;
+      scrollable = getScrollableY(pointerOriginTarget, pullZone);
+
+      pullZone.classList.add(styles.pullZoneDragging as string);
+      pullZoneHeight = pullZone.clientHeight;
+
+      pullScrollAnimation = pullZone.animate(KEYFRAMES, ANIMATION_OPTIONS);
+      pullScrollAnimation.pause();
+   };
+
+   const endGesture = () => {
+      pullScrollAnimation?.play();
+      pullScrollAnimation = null;
+      scrollable = null;
+      const pullZone = getPullToRefreshElement();
+      pullZone.classList.remove(styles.pullZoneDragging as string);
+      triggerAction();
+   };
+
+   const triggerAction = async () => {
       const pullZone = getPullToRefreshElement();
       if (thresholdMarkerIsVisible) {
          changeState('actiontriggered');
@@ -158,64 +229,6 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       }
       pullZone.classList.remove(styles.pullZoneActionTriggered as string);
       changeState('idle');
-   };
-
-   const handlePointerDown = (event: PointerEvent) => {
-      if (pullState === 'actiontriggered') {
-         return;
-      }
-      const pullZone = event.currentTarget as HTMLElement;
-      const pointerOriginTarget = event.target as HTMLElement;
-      scrollable = getScrollableY(pointerOriginTarget, pullZone);
-
-      initialPointerY = event.clientY;
-
-      pullZone.classList.add(styles.pullZoneDragging as string);
-      pullZoneHeight = pullZone.clientHeight;
-
-      pullScrollAnimation = pullZone.animate(KEYFRAMES, ANIMATION_OPTIONS);
-      pullScrollAnimation.pause();
-
-      window.addEventListener(
-         'pointermove',
-         handlePointerMove,
-         LISTENER_OPTIONS,
-      );
-      window.addEventListener('pointerup', handlePointerUp);
-      window.addEventListener('pointercancel', handlePointerUp);
-   };
-
-   const handlePointerMove = (event: PointerEvent) => {
-      requestAnimationFrame(() => {
-         const delta = event.clientY - initialPointerY;
-         if (delta < 0) {
-            if (!scrollable || delta > -30) {
-               return;
-            }
-            scrollable.scrollTop = -delta;
-            return;
-         }
-
-         if (pullScrollAnimation) {
-            const newTime = (delta / pullZoneHeight) * GESTURE_ANIMATION_MS;
-            pullScrollAnimation.currentTime = Math.min(
-               newTime,
-               MAX_PULL_ZONE_SCROLL_TOP,
-            );
-         }
-      });
-   };
-
-   const handlePointerUp = () => {
-      pullScrollAnimation?.play();
-      pullScrollAnimation = null;
-      scrollable = null;
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('pointerup', handlePointerUp);
-      window.removeEventListener('pointercancel', handlePointerUp);
-      const pullZone = getPullToRefreshElement();
-      pullZone.classList.remove(styles.pullZoneDragging as string);
-      handlePullRelease();
    };
 
    // No, scrollend didn't work.
@@ -283,10 +296,16 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
 
    canPull.listen((canPull) => {
       const pullZone = getPullToRefreshElement();
+      if (!pullZone) {
+         return;
+      }
       if (canPull) {
-         pullZone?.addEventListener('pointerdown', handlePointerDown);
+         pullZone.addEventListener('pointerdown', handlePointerDown);
+         // See explanation for this event in sidebar-provider.tsx
+         pullZone.addEventListener('_pullstart', handleCustomPullStart);
       } else {
-         pullZone?.removeEventListener('pointerdown', handlePointerDown);
+         pullZone.removeEventListener('pointerdown', handlePointerDown);
+         pullZone.removeEventListener('_pullstart', handleCustomPullStart);
       }
    });
 
@@ -343,6 +362,17 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    );
 }
 
+export class PullStartEvent extends Event {
+   pointerTracker: PointerTracker;
+   constructor(pointerTracker: PointerTracker) {
+      super('_pullstart', {
+         bubbles: true,
+         composed: true,
+      });
+      this.pointerTracker = pointerTracker;
+   }
+}
+
 const KEYFRAMES = [
    {
       '--pull-zone-scroll-top': 0,
@@ -354,4 +384,3 @@ const KEYFRAMES = [
 const MAX_PULL_ZONE_SCROLL_TOP = (3500 / 135) * 10;
 
 const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' };
-const LISTENER_OPTIONS = { passive: true };
