@@ -43,10 +43,12 @@ export function scrollTimelineFallback(element: HTMLElement) {
    scrollAnimation.pause();
 
    const scrollListener = () => {
-      const { scrollLeft, scrollWidth, clientWidth } = element;
-      const newTime =
-         (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS;
-      scrollAnimation.currentTime = newTime;
+      requestAnimationFrame(() => {
+         const { scrollLeft, scrollWidth, clientWidth } = element;
+         const newTime =
+            (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS;
+         scrollAnimation.currentTime = newTime;
+      });
    };
    element.addEventListener('scroll', scrollListener, { passive: true });
 
