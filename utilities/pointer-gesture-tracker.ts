@@ -10,10 +10,13 @@ export class PointerTracker extends EventTarget {
 
    start(event: PointerEvent) {
       this.startingEvent = event;
+      const target = event.currentTarget as HTMLElement;
+      target.setPointerCapture(event.pointerId);
 
-      window.addEventListener('pointermove', this.move, { passive: true });
-      window.addEventListener('pointerup', this.end);
-      window.addEventListener('pointercancel', this.cancel);
+      target.addEventListener('pointermove', this.move, { passive: true });
+
+      target.addEventListener('pointerup', this.end);
+      target.addEventListener('pointercancel', this.cancel);
    }
 
    addEventListener<T extends keyof GestureTrackerEventMap>(
@@ -35,6 +38,18 @@ export class PointerTracker extends EventTarget {
    }
 
    private move(event: PointerEvent) {
+      if (event.getCoalescedEvents !== undefined) {
+         const events = event.getCoalescedEvents();
+         for (const _event of events) {
+            const deltaX = _event.clientX - this.startingEvent.clientX;
+            const deltaY = _event.clientY - this.startingEvent.clientY;
+            const moveEvent = new TrackedMoveEvent(deltaX, deltaY, _event);
+            this.dispatchEvent(moveEvent);
+         }
+         if (events.length !== 0) {
+            return;
+         }
+      }
       const deltaX = event.clientX - this.startingEvent.clientX;
       const deltaY = event.clientY - this.startingEvent.clientY;
       const moveEvent = new TrackedMoveEvent(deltaX, deltaY, event);
@@ -52,9 +67,12 @@ export class PointerTracker extends EventTarget {
    }
 
    removeListeners() {
-      window.removeEventListener('pointermove', this.move);
-      window.removeEventListener('pointerup', this.end);
-      window.removeEventListener('pointercancel', this.cancel);
+      const target = this.startingEvent.currentTarget as HTMLElement;
+      target.releasePointerCapture(this.startingEvent.pointerId);
+
+      target.removeEventListener('pointermove', this.move);
+      target.removeEventListener('pointerup', this.end);
+      target.removeEventListener('pointercancel', this.cancel);
    }
 }
 
