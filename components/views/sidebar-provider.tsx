@@ -110,15 +110,22 @@ export function useSidebar() {
       );
 
       observer.onConnected(sidebarRef, (sidebar) => {
-         // When the component loads without JS in prerender mode,
-         // The content needs to be the initial scroll-snapped view.
-         // Adding the sidebar scroll-snap only after the content is loaded
-         // ensures that.
-         sidebar.classList.add(styles.sidebar as string);
-         const provider = providerRef.get();
-         if (provider) {
-            provider.scrollLeft = provider.scrollWidth;
-         }
+         requestAnimationFrame(() => {
+            // When the component loads without JS in prerender mode,
+            // The content needs to be the initial scroll-snapped view.
+            // Adding the sidebar scroll-snap only after the content is loaded
+            // ensures that.
+            sidebar.classList.add(styles.sidebar as string);
+            requestAnimationFrame(() => {
+               const provider = providerRef.get();
+               if (provider) {
+                  provider.scrollTo({
+                     left: provider.scrollWidth,
+                     behavior: 'instant',
+                  });
+               }
+            });
+         });
       });
 
       observer.onConnected(providerRef, scrollTimelineFallback);
