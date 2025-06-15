@@ -31,7 +31,8 @@ body {
    width: 100%;
    height: 100%;
    background-color: var(--canvas-background);
-   transition-timing-function: cubic-bezier(0.7, 0, 0.05, 1);
+   transition-timing-function: var(--timing);
+
    transition-property: translate, opacity;
    grid-area: 1 / 1;
    &:not(:first-child) {
@@ -62,24 +63,24 @@ body {
       &:nth-last-child(2 of [data-open]) {
          opacity: 0.75;
          transition-duration: calc(var(--stack-view-slide) * 1.5);
-         translate: -20%;
+         translate: -30%;
 
          .stackViewGroup[data-dragging] & {
-            --peek: calc(-20% * var(--stack-view-group-pull-progress));
+            --peek: calc(-33% * var(--stack-view-group-pull-progress));
             --opacity: calc(1 - var(--stack-view-group-pull-progress) + 0.5);
             opacity: var(--opacity);
             transition-duration: 0ms;
             translate: var(--peek);
             /* Mimics a brightness darken by using opacity on the before pseudo-element. */
             &::before {
-               opacity: calc(0.4 * var(--stack-view-group-pull-progress));
+               opacity: calc(0.2 * var(--stack-view-group-pull-progress));
                transition-duration: 0ms;
             }
          }
       }
 
       &::before {
-         opacity: 0.4;
+         opacity: 0.2;
       }
    }
    & > * {
@@ -104,7 +105,7 @@ body {
 
    .stackViewGroupView:nth-last-child(1 of [data-open]) > & {
       display: block;
-      width: 10%;
+      width: 8%;
       touch-action: none;
       overscroll-behavior: none;
    }

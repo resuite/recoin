@@ -1,4 +1,8 @@
 import { defer } from '@/utilities/miscellaneous';
+import {
+   PointerTracker,
+   type TrackedMoveEvent,
+} from '@/utilities/pointer-gesture-tracker';
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling';
 import { Cell, If, type SourceCell, useObserver } from 'retend';
 import { useDerivedValue } from 'retend-utils/hooks';
@@ -128,7 +132,6 @@ export function StackView(props: StackViewProps) {
    const observer = useObserver();
    const contentLoaded = Cell.source(root || isOpen.get());
 
-   let startingPositionX: number | null = null;
    let stackWidth: number | null = null;
    let animation: Animation | null = null;
 
@@ -138,24 +141,22 @@ export function StackView(props: StackViewProps) {
          return;
       }
       stack.setAttribute('data-dragging', '');
-      startingPositionX = event.clientX;
       stackWidth = stack.clientWidth;
       navigator.vibrate?.([15, 15]);
-      window.addEventListener('pointermove', drag, { passive: true });
-      window.addEventListener('pointerup', stopDragging);
-      window.addEventListener('pointerleave', stopDragging);
-      window.addEventListener('pointercancel', stopDragging);
 
       animation = stack.animate(ANIMATION_KEYFRAMES, ANIMATION_OPTIONS);
       animation.pause();
+
+      const tracker = new PointerTracker();
+      tracker.start(event);
+      tracker.addEventListener('move', drag);
+      tracker.addEventListener('end', stopDragging);
+      tracker.addEventListener('cancel', stopDragging);
    };
 
-   const drag = (event: PointerEvent) => {
+   const drag = (event: TrackedMoveEvent) => {
       requestAnimationFrame(() => {
-         if (startingPositionX === null) {
-            return;
-         }
-         const deltaX = event.clientX - startingPositionX;
+         const deltaX = event.deltaX;
          if (deltaX > 0 && animation !== null && stackWidth !== null) {
             animation.currentTime =
                (deltaX / stackWidth) * GESTURE_ANIMATION_MS;
@@ -164,7 +165,6 @@ export function StackView(props: StackViewProps) {
    };
 
    const stopDragging = () => {
-      startingPositionX = null;
       stackWidth = null;
       const stack = getStackGroupElement(containerRef.get());
       stack?.removeAttribute('data-dragging');
@@ -173,10 +173,6 @@ export function StackView(props: StackViewProps) {
       }
       animation?.play();
       animation = null;
-      window.removeEventListener('pointermove', drag);
-      window.removeEventListener('pointerleave', stopDragging);
-      window.removeEventListener('pointerup', stopDragging);
-      window.removeEventListener('pointercancel', stopDragging);
    };
 
    let intersectObserver: IntersectionObserver;

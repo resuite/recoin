@@ -78,6 +78,7 @@ body {
    --text-logo: 4.0625rem;
 
    --default-speed: 150ms;
+   --timing: cubic-bezier(0.7, 0, 0, 1);
 
    --speed-default: var(--default-speed);
    --speed-faster: calc(var(--default-speed) * 0.5);
@@ -284,4 +285,11 @@ body {
    &:where([data-expanded-ctx] &) {
       @slot;
    }
+}
+
+button,
+input,
+select,
+a {
+   touch-action: manipulation;
 }
