@@ -7,7 +7,7 @@ const page3IsOpen = Cell.source(false);
 
 const NavStack = () => {
    return (
-      <div class='w-full rounded-t-4xl light-scheme overflow-hidden'>
+      <div class='w-full rounded-t-3xl light-scheme overflow-hidden'>
          <StackViewGroup class='h-screen text-large'>
             <StackView root content={Page1} />
             <StackView

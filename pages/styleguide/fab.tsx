@@ -23,11 +23,11 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
    return (
       <div
          data-expanded-ctx={isOpen}
-         class='h-screen w-screen rounded-t-4xl overflow-hidden grid relative'
+         class='h-screen w-screen rounded-t-3xl overflow-hidden grid relative'
       >
          <div
             class={[
-               'light-scheme rounded-t-4xl text-bigger h-full w-full grid place-items-center [grid-area:1/1]',
+               'light-scheme rounded-t-3xl text-bigger h-full w-full grid place-items-center [grid-area:1/1]',
                'ease-in-out duration-bit-slower transition-[translate,scale,opacity] translate-y-0 delay-fast',
                'expanded-ctx:translate-y-[3%] expanded-ctx:scale-[.97] expanded-ctx:opacity-50 expanded-ctx:delay-0',
             ]}

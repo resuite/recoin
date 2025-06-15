@@ -67,7 +67,7 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
          allowPull={props?.allowPull}
       >
          {props?.children ?? (
-            <div class='text-big h-full light-scheme rounded-t-4xl'>
+            <div class='text-big h-full light-scheme rounded-t-3xl'>
                <div ref={topMarker} class='h-0.25 w-full' />
                <div class='grid place-items-center h-full w-full'>{state}</div>
             </div>
