@@ -41,6 +41,7 @@
 
 * {
    scrollbar-width: none;
+   overscroll-behavior: none;
 
    &::-webkit-scrollbar {
       display: none;
