@@ -1,9 +1,10 @@
 import path from 'node:path';
-import { defineConfig } from 'vite';
-import { retend } from 'retend/plugin';
-import { retendSSG } from 'retend-server/plugin';
-import tailwindcss from '@tailwindcss/vite';
 import { cloudflare } from '@cloudflare/vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
+import { retendSSG } from 'retend-server/plugin';
+import { retend } from 'retend/plugin';
+import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 const routerModulePath = './router.client.ts';
 const pages = [
@@ -32,5 +33,11 @@ export default defineConfig({
       retend(),
       retendSSG({ pages, routerModulePath }),
       cloudflare(),
+      VitePWA({
+         registerType: 'autoUpdate',
+         devOptions: {
+            enabled: true,
+         },
+      }),
    ],
 });

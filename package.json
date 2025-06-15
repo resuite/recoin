@@ -24,6 +24,7 @@
       "lint-staged": "^16.1.0",
       "tailwindcss": "^4.1.8",
       "vite": "npm:rolldown-vite@latest",
+      "vite-plugin-pwa": "^1.0.0",
       "wrangler": "^4.18.0"
    },
    "dependencies": {
