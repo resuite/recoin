@@ -319,6 +319,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
          // The initial state class makes the pull-zone "snap" to the content
          // area bu default. This is removed after the content is loaded.
          pullZone.classList.remove(styles.pullZoneInitialState as string);
+         pullZone.scrollTo({ top: pullZone.scrollHeight, behavior: 'instant' });
       });
       return () => {
          height; // Prevents GC until the pull-zone is unmounted.
