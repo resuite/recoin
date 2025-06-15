@@ -15,7 +15,6 @@
 @utility animate-scrolling {
    animation-name: scrolling;
    animation-timing-function: linear;
-   will-change: --scroll-unit;
    animation-timeline: scroll(self inline);
 
    @supports not (animation-timeline: scroll(self inline)) {
@@ -31,7 +30,6 @@
 @utility animate-scrolling-block {
    animation-name: scrolling;
    animation-timing-function: linear;
-   will-change: --scroll-unit;
    animation-timeline: scroll(self block);
 
    @supports not (animation-timeline: scroll(self block)) {

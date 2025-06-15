@@ -14,7 +14,6 @@
    scroll-snap-type: x mandatory;
 
    scrollbar-width: none;
-   will-change: --scroll-unit;
    animation-timeline: scroll(self inline);
    &::-webkit-scrollbar {
       display: none;
