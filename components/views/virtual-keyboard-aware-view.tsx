@@ -2,6 +2,17 @@ import { Cell, type SourceCell, useObserver } from 'retend';
 import type { JSX } from 'retend/jsx-runtime';
 import styles from './virtual-keyboard-aware-view.module.css';
 
+declare global {
+   interface Navigator {
+      virtualKeyboard: EventTarget & {
+         boundingRect: {
+            height: number;
+         };
+         overlaysContent: boolean;
+      };
+   }
+}
+
 type DivProps = JSX.IntrinsicElements['div'];
 export interface VirtualKeyboardAwareViewProps extends DivProps {
    onVirtualKeyboardVisibilityChange?: (
@@ -56,7 +67,6 @@ const isKeyboardInput = (target: HTMLElement) => {
  * ```
  * @returns {JSX.Template} The rendered VirtualKeyboardAwareView component.
  */
-// TODO: Throw all this out when support for navigator.virtualKeyboard is more widespread.
 export const VirtualKeyboardAwareView = (
    props: VirtualKeyboardAwareViewProps,
 ) => {
@@ -73,35 +83,41 @@ export const VirtualKeyboardAwareView = (
    let currentVisualHeight = 0;
    let oldHeight = 0;
 
+   // For browsers without `navigator.virtualKeyboard`, we use `onFocusIn` and `onFocusOut`
+   // to detect when an input is focused near the bottom of the viewport (where the keyboard
+   // might cover it). We temporarily add a CSS class (`styles.outOfViewport`) to adjust its
+   // position and prevent unwanted scrolling or layout shifts, then remove it after. This
+   // workaround helps provide a consistent experience in browsers like Safari and Firefox,
+   // which lack reliable virtual keyboard APIs.
    const handleFocusIn = (event: FocusEvent) => {
       const target = event.target as HTMLElement;
+
+      if ('virtualKeyboard' in navigator) {
+         // We don't need any hackery here since Chrome and Edge are good
+         // browsers and will handle this for us.
+         navigator.virtualKeyboard.overlaysContent = true;
+         if (typeof onFocusIn === 'function') {
+            onFocusIn.bind(event.currentTarget as HTMLInputElement)(event);
+         }
+         return;
+      }
+
       if (focusAdjustmentInProgress) {
          if (typeof onFocusIn === 'function') {
             onFocusIn.bind(event.currentTarget as HTMLInputElement)(event);
          }
          return;
       }
+
       if (isKeyboardInput(target)) {
          const target = event.target as HTMLElement;
-         const { offsetTop, offsetHeight } = target;
-         const distanceFromBottom = innerHeight - (offsetTop + offsetHeight);
-
-         if (distanceFromBottom >= innerHeight / 2) {
-            // Focus target is in the top half of the screen, so we may
-            // not need to adjust.
-            return;
-         }
-
          event.stopImmediatePropagation();
          focusAdjustmentInProgress = true;
-
          target.blur();
          target.classList.add(styles.outOfViewport);
-
          target.focus();
-         focusAdjustmentInProgress = false;
-
          target.classList.remove(styles.outOfViewport);
+         focusAdjustmentInProgress = false;
       }
    };
 
@@ -117,7 +133,7 @@ export const VirtualKeyboardAwareView = (
       }
    };
 
-   const updateVisualHeight = () => {
+   const updateHeight = () => {
       const container = containerRef.get();
       const isTriggeredByFocus =
          container &&
@@ -127,7 +143,16 @@ export const VirtualKeyboardAwareView = (
       if (!isTriggeredByFocus) {
          return;
       }
-      dispatchVisibilityChange(window.visualViewport?.height ?? innerHeight);
+
+      const newHeight =
+         'virtualKeyboard' in navigator
+            ? innerHeight - navigator.virtualKeyboard.boundingRect.height
+            : (window.visualViewport?.height ?? innerHeight);
+      dispatchVisibilityChange(newHeight);
+   };
+
+   const handleScroll = () => {
+      window.scrollTo(0, 0);
    };
 
    const dispatchVisibilityChange = (nextHeight: number) => {
@@ -144,23 +169,23 @@ export const VirtualKeyboardAwareView = (
       );
    };
 
-   const handleScroll = () => {
-      window.scrollTo(0, 0);
-   };
-
    observer.onConnected(containerRef, () => {
       currentVisualHeight = window.visualViewport?.height ?? innerHeight;
       oldHeight = currentVisualHeight;
+      updateHeight();
 
-      updateVisualHeight();
-      window.visualViewport?.addEventListener('resize', updateVisualHeight);
+      if ('virtualKeyboard' in navigator) {
+         const virtualKeyboard = navigator.virtualKeyboard;
+         virtualKeyboard.addEventListener('geometrychange', updateHeight);
+         return () => {
+            virtualKeyboard.removeEventListener('geometrychange', updateHeight);
+         };
+      }
+
+      window.visualViewport?.addEventListener('resize', updateHeight);
       window.addEventListener('scroll', handleScroll);
-
       return () => {
-         window.visualViewport?.removeEventListener(
-            'resize',
-            updateVisualHeight,
-         );
+         window.visualViewport?.removeEventListener('resize', updateHeight);
          window.removeEventListener('scroll', handleScroll);
       };
    });

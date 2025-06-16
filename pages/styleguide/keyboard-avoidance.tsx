@@ -1,42 +1,20 @@
-import { Icon } from '@/components/icons';
 import { VirtualKeyboardAwareView } from '@/components/views';
+import { Cell } from 'retend';
 
 const KeyboardAvoidanceTest = () => {
-   const handleVisibilityChange = (
-      oldHeight: number,
-      newHeight: number,
-      activeElement: Element | null,
-   ) => {
-      if (!(activeElement instanceof HTMLInputElement)) {
-         return;
-      }
-      const delta = newHeight - oldHeight;
-      if (delta < 0 && activeElement.parentElement) {
-         // Keyboard is visible.
-         const form = activeElement.parentElement;
-         form.style.translate = `0px ${delta}px`;
-         form.addEventListener(
-            'focusout',
-            () => {
-               form.style.removeProperty('translate');
-            },
-            { once: true },
-         );
-      } else if (delta > 0 && activeElement.parentElement) {
-         // Keyboard is hidden but input remains focused; reset transform.
-         const form = activeElement.parentElement;
-         form.style.removeProperty('translate');
-      }
-   };
-
-   const handleSubmit = () => {
-      alert('Submitted!');
+   const height = Cell.source('100dvh');
+   const handleVisibilityChange = (_: number, newHeight: number) => {
+      height.set(`${newHeight}px`);
    };
 
    return (
       <VirtualKeyboardAwareView
-         class='h-screen w-screen grid-lines px-1 pt-2 rounded-t-3xl overflow-hidden grid grid-rows-[auto_1fr_auto]'
+         class={[
+            'h-screen w-screen grid-lines px-1 pt-2 rounded-t-3xl grid grid-rows-[auto_1fr_auto]',
+            'duration-default transition-[height] ease-out',
+         ]}
          onVirtualKeyboardVisibilityChange={handleVisibilityChange}
+         style={{ height }}
       >
          <h1 class='text-bigger font-bold'>Keyboard Avoidance Test</h1>
          <p>
@@ -44,21 +22,10 @@ const KeyboardAvoidanceTest = () => {
             are focused.
          </p>
 
-         <form
-            onSubmit--prevent={handleSubmit}
-            class='grid grid-cols-[1fr_auto] mb-2 transition-transform duration-slow ease-out'
-         >
-            <input
-               placeholder='Write something here...'
-               class='w-full h-fit pl-0.25 focus-within:outline-0'
-            />
-            <button
-               type='submit'
-               class='button-bare min-w-0 border-0 border-b-[3px] rounded-[0px] border-light-yellow border-solid'
-            >
-               <Icon name='arrows' class='btn-icon -rotate-135' />
-            </button>
-         </form>
+         <input
+            placeholder='Write something here...'
+            class='w-full h-fit pl-0.25 mb-1'
+         />
       </VirtualKeyboardAwareView>
    );
 };
