@@ -22,6 +22,10 @@ const KeyboardAvoidanceTest = () => {
             },
             { once: true },
          );
+      } else if (delta > 0 && activeElement.parentElement) {
+         // Keyboard is hidden but input remains focused; reset transform.
+         const form = activeElement.parentElement;
+         form.style.removeProperty('translate');
       }
    };
 

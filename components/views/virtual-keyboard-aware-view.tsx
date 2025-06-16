@@ -84,7 +84,7 @@ export const VirtualKeyboardAwareView = (
       if (isKeyboardInput(target)) {
          const target = event.target as HTMLElement;
          const { offsetTop, offsetHeight } = target;
-         const distanceFromBottom = innerHeight - offsetTop + offsetHeight;
+         const distanceFromBottom = innerHeight - (offsetTop + offsetHeight);
 
          if (distanceFromBottom >= innerHeight / 2) {
             // Focus target is in the top half of the screen, so we may
@@ -153,11 +153,14 @@ export const VirtualKeyboardAwareView = (
       oldHeight = currentVisualHeight;
 
       updateVisualHeight();
-      visualViewport?.addEventListener('resize', updateVisualHeight);
+      window.visualViewport?.addEventListener('resize', updateVisualHeight);
       window.addEventListener('scroll', handleScroll);
 
       return () => {
-         visualViewport?.removeEventListener('resize', updateVisualHeight);
+         window.visualViewport?.removeEventListener(
+            'resize',
+            updateVisualHeight,
+         );
          window.removeEventListener('scroll', handleScroll);
       };
    });
