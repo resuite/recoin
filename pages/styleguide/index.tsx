@@ -1,5 +1,5 @@
-import { useRouter } from 'retend/router';
 import { AllIcons, Icon } from '@/components/icons';
+import { useRouter } from 'retend/router';
 
 const Styleguide = () => {
    const { Link } = useRouter();
@@ -106,6 +106,9 @@ const Styleguide = () => {
                <Link href='/styleguide/toast'>Go to toast page</Link>
                <Link href='/styleguide/floating-button'>Go to FAB page</Link>
                <Link href='/styleguide/sidebar'>Go to sidebar page</Link>
+               <Link href='/styleguide/keyboard-avoidance'>
+                  Go to keyboard avoidance page
+               </Link>
             </div>
          </div>
       </div>

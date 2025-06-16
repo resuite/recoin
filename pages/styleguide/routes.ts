@@ -1,6 +1,7 @@
 import type { RouteRecords } from 'retend/router';
 import Styleguide from '.';
 import FloatingActionButtonTest from './fab';
+import KeyboardAvoidanceTest from './keyboard-avoidance';
 import NavStack from './nav-stack';
 import PullToRefreshViewTest from './pull-zone';
 import SidebarTest from './sidebar';
@@ -58,6 +59,12 @@ export default (<RouteRecords>[
       name: 'styleguide-sidebar',
       path: '/styleguide/sidebar',
       component: SidebarTest,
+      metadata,
+   },
+   {
+      name: 'styleguide-keyboard-avoidance',
+      path: '/styleguide/keyboard-avoidance',
+      component: KeyboardAvoidanceTest,
       metadata,
    },
 ]);

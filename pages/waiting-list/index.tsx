@@ -119,6 +119,7 @@ const WaitingList = () => {
                         false: ButtonIdleStateContent,
                      })}
                   </button>
+                  <router.Link href='/styleguide'>Go to styleguide</router.Link>
                </form>
             </section>
             <div
