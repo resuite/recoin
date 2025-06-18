@@ -4,7 +4,7 @@
  * the end frame. This is a workaround to avoid this issue.
  */
 export const GESTURE_ANIMATION_MS = 999;
-export const NEGLIGIBLE_SCROLL_PX = 15;
+export const NEGLIGIBLE_SCROLL_PX = 25;
 
 export function scrollTimelineFallbackBlock(element: HTMLElement) {
    if ('ScrollTimeline' in window) {
