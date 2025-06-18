@@ -1,8 +1,10 @@
 import { VirtualKeyboardAwareView } from '@/components/views';
 import { Cell } from 'retend';
+import { useMatchMedia } from 'retend-utils/hooks';
 
 const KeyboardAvoidanceTest = () => {
    const height = Cell.source('100dvh');
+   const watcher = useMatchMedia('(max-height: 600px)');
    const handleVisibilityChange = (_: number, newHeight: number) => {
       height.set(`${newHeight}px`);
    };
@@ -11,7 +13,7 @@ const KeyboardAvoidanceTest = () => {
       <VirtualKeyboardAwareView
          class={[
             'h-screen w-screen grid-lines px-1 pt-2 rounded-t-3xl grid grid-rows-[auto_1fr_auto]',
-            'duration-default transition-[height] ease-out',
+            'duration-device transition-[height] default-timing',
          ]}
          onVirtualKeyboardVisibilityChange={handleVisibilityChange}
          style={{ height }}
@@ -20,6 +22,8 @@ const KeyboardAvoidanceTest = () => {
          <p>
             This page demonstrates keyboard avoidance behavior when input fields
             are focused.
+            <br />
+            Window Height less than 600px: {watcher}
          </p>
 
          <input

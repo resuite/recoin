@@ -89,13 +89,12 @@ export const VirtualKeyboardAwareView = (
    // position and prevent unwanted scrolling or layout shifts, then remove it after. This
    // workaround helps provide a consistent experience in browsers like Safari and Firefox,
    // which lack reliable virtual keyboard APIs.
-   const handleFocusIn = (event: FocusEvent) => {
+   const handlePointerDown = async (event: PointerEvent) => {
       const target = event.target as HTMLElement;
 
       if ('virtualKeyboard' in navigator) {
          // We don't need any hackery here since Chrome and Edge are good
          // browsers and will handle this for us.
-         navigator.virtualKeyboard.overlaysContent = true;
          if (typeof onFocusIn === 'function') {
             onFocusIn.bind(event.currentTarget as HTMLInputElement)(event);
          }
@@ -116,8 +115,22 @@ export const VirtualKeyboardAwareView = (
          target.blur();
          target.classList.add(styles.outOfViewport);
          target.focus();
-         target.classList.remove(styles.outOfViewport);
-         focusAdjustmentInProgress = false;
+         requestAnimationFrame(() => {
+            window.scrollTo(0, 0);
+            target.classList.remove(styles.outOfViewport);
+            focusAdjustmentInProgress = false;
+            // This is an interesting bug in iOS. On the 6th/7th time the
+            // keyboard is opened, the visual viewport change event isn't fired,
+            // but the visual viewport changes anyway. Luckily, prior values
+            // are recorded, so the event can be fired manually.
+            const newVisualHeight = window.visualViewport?.height;
+            if (
+               newVisualHeight !== undefined &&
+               newVisualHeight !== currentVisualHeight
+            ) {
+               dispatchVisibilityChange(newVisualHeight);
+            }
+         });
       }
    };
 
@@ -148,11 +161,19 @@ export const VirtualKeyboardAwareView = (
          'virtualKeyboard' in navigator
             ? innerHeight - navigator.virtualKeyboard.boundingRect.height
             : (window.visualViewport?.height ?? innerHeight);
+
+      if (currentVisualHeight === newHeight) {
+         // prevent unecessary updates.
+         return;
+      }
+
       dispatchVisibilityChange(newHeight);
    };
 
    const handleScroll = () => {
-      window.scrollTo(0, 0);
+      requestAnimationFrame(() => {
+         window.scrollTo(0, 0);
+      });
    };
 
    const dispatchVisibilityChange = (nextHeight: number) => {
@@ -175,9 +196,13 @@ export const VirtualKeyboardAwareView = (
       updateHeight();
 
       if ('virtualKeyboard' in navigator) {
+         const previousOverlaysContent =
+            navigator.virtualKeyboard.overlaysContent;
+         navigator.virtualKeyboard.overlaysContent = true;
          const virtualKeyboard = navigator.virtualKeyboard;
          virtualKeyboard.addEventListener('geometrychange', updateHeight);
          return () => {
+            navigator.virtualKeyboard.overlaysContent = previousOverlaysContent;
             virtualKeyboard.removeEventListener('geometrychange', updateHeight);
          };
       }
@@ -194,8 +219,8 @@ export const VirtualKeyboardAwareView = (
       <div
          {...rest}
          ref={containerRef}
-         onFocusIn={handleFocusIn}
          onFocusOut={handleFocusOut}
+         onPointerDown={handlePointerDown}
          class={[styles.keyboardAwareView, rest.class]}
       >
          {children}
