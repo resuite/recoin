@@ -9,13 +9,16 @@
       "enabled": true,
       "indentStyle": "space",
       "indentWidth": 3,
-      "bracketSpacing": true
+      "bracketSpacing": true,
+      "lineWidth": 80
    },
    "javascript": {
       "formatter": {
          "quoteStyle": "single",
          "jsxQuoteStyle": "single",
-         "arrowParentheses": "always"
+         "arrowParentheses": "always",
+         "trailingCommas": "none",
+         "semicolons": "asNeeded"
       }
    },
    "organizeImports": { "enabled": true },
