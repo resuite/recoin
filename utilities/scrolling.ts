@@ -3,59 +3,59 @@
  * is 1000ms. However, on iOS, the animation resets to 0 if it reaches
  * the end frame. This is a workaround to avoid this issue.
  */
-export const GESTURE_ANIMATION_MS = 999;
-export const NEGLIGIBLE_SCROLL_PX = 25;
+export const GESTURE_ANIMATION_MS = 999
+export const NEGLIGIBLE_SCROLL_PX = 25
 
 export function scrollTimelineFallbackBlock(element: HTMLElement) {
    if ('ScrollTimeline' in window) {
-      return;
+      return
    }
 
-   const scrollAnimation = element.getAnimations()[0];
+   const scrollAnimation = element.getAnimations()[0]
    if (!scrollAnimation) {
-      return;
+      return
    }
-   scrollAnimation.pause();
+   scrollAnimation.pause()
 
    const scrollListener = () => {
-      const { scrollTop, scrollHeight, clientHeight } = element;
+      const { scrollTop, scrollHeight, clientHeight } = element
       const newTime =
-         (scrollTop / (scrollHeight - clientHeight)) * GESTURE_ANIMATION_MS;
-      scrollAnimation.currentTime = newTime;
-   };
-   element.addEventListener('scroll', scrollListener, { passive: true });
+         (scrollTop / (scrollHeight - clientHeight)) * GESTURE_ANIMATION_MS
+      scrollAnimation.currentTime = newTime
+   }
+   element.addEventListener('scroll', scrollListener, { passive: true })
 
    return () => {
-      scrollAnimation.finish();
-      element.removeEventListener('scroll', scrollListener);
-   };
+      scrollAnimation.finish()
+      element.removeEventListener('scroll', scrollListener)
+   }
 }
 
 export function scrollTimelineFallback(element: HTMLElement) {
    if ('ScrollTimeline' in window) {
-      return;
+      return
    }
 
-   const scrollAnimation = element.getAnimations()[0];
+   const scrollAnimation = element.getAnimations()[0]
    if (!scrollAnimation) {
-      return;
+      return
    }
-   scrollAnimation.pause();
+   scrollAnimation.pause()
 
    const scrollListener = () => {
       requestAnimationFrame(() => {
-         const { scrollLeft, scrollWidth, clientWidth } = element;
+         const { scrollLeft, scrollWidth, clientWidth } = element
          const newTime =
-            (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS;
-         scrollAnimation.currentTime = newTime;
-      });
-   };
-   element.addEventListener('scroll', scrollListener, { passive: true });
+            (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS
+         scrollAnimation.currentTime = newTime
+      })
+   }
+   element.addEventListener('scroll', scrollListener, { passive: true })
 
    return () => {
-      scrollAnimation.finish();
-      element.removeEventListener('scroll', scrollListener);
-   };
+      scrollAnimation.finish()
+      element.removeEventListener('scroll', scrollListener)
+   }
 }
 
 /**
@@ -68,45 +68,45 @@ export function scrollTimelineFallback(element: HTMLElement) {
  */
 export function getScrollableY(
    element: HTMLElement,
-   boundary: HTMLElement,
+   boundary: HTMLElement
 ): HTMLElement | null {
    if (!element) {
-      return null;
+      return null
    }
 
    // Start checking from the provided element
-   let current = element as HTMLElement | null;
+   let current = element as HTMLElement | null
 
    // Continue until we reach the boundary or null
    while (current && current !== document.body) {
       if (current === boundary) {
          // Stop searching when we hit a boundary
-         return null;
+         return null
       }
 
       // Check if the element is vertically scrollable
-      const style = window.getComputedStyle(current);
-      const overflowY = style.getPropertyValue('overflow-y');
-      const { scrollHeight, clientHeight, scrollTop } = current;
+      const style = window.getComputedStyle(current)
+      const overflowY = style.getPropertyValue('overflow-y')
+      const { scrollHeight, clientHeight, scrollTop } = current
       const hasVerticalScroll =
-         SCROLLABLE_OVERFLOW.includes(overflowY) && scrollHeight > clientHeight;
+         SCROLLABLE_OVERFLOW.includes(overflowY) && scrollHeight > clientHeight
 
       // If the element has vertical scroll capability and room to scroll down
       if (hasVerticalScroll && scrollTop < scrollHeight - clientHeight) {
-         return current;
+         return current
       }
 
       // Move up to the parent element
-      current = current.parentElement;
+      current = current.parentElement
    }
 
-   const { scrollHeight, clientHeight, scrollTop } = document.body;
+   const { scrollHeight, clientHeight, scrollTop } = document.body
    if (scrollHeight > clientHeight && scrollTop < scrollHeight - clientHeight) {
-      return document.body;
+      return document.body
    }
 
    // No scrollable container found
-   return null;
+   return null
 }
 
-const SCROLLABLE_OVERFLOW = ['auto', 'scroll'];
+const SCROLLABLE_OVERFLOW = ['auto', 'scroll']

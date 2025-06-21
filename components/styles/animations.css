@@ -12,6 +12,14 @@
    transition-delay: --value(--speed-\*);
 }
 
+@utility default-timing {
+   transition-timing-function: var(--timing);
+}
+
+@utility bouncy {
+   transition-timing-function: var(--timing-bounce);
+}
+
 @utility animate-scrolling {
    animation-name: scrolling;
    animation-timing-function: linear;

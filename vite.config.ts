@@ -1,12 +1,12 @@
-import path from 'node:path';
-import { cloudflare } from '@cloudflare/vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
-import { retendSSG } from 'retend-server/plugin';
-import { retend } from 'retend/plugin';
-import { defineConfig } from 'vite';
-import { VitePWA } from 'vite-plugin-pwa';
+import path from 'node:path'
+import { cloudflare } from '@cloudflare/vite-plugin'
+import tailwindcss from '@tailwindcss/vite'
+import { retendSSG } from 'retend-server/plugin'
+import { retend } from 'retend/plugin'
+import { defineConfig } from 'vite'
+import { VitePWA } from 'vite-plugin-pwa'
 
-const routerModulePath = './router.client.ts';
+const routerModulePath = './router.client.ts'
 const pages = [
    '/',
    '/waiting-list',
@@ -15,18 +15,18 @@ const pages = [
    '/styleguide/tabs',
    '/styleguide/pull-zone',
    '/styleguide/toast',
-   '/styleguide/sidebar',
-];
+   '/styleguide/sidebar'
+]
 
 export default defineConfig({
    resolve: {
-      alias: { '@': path.resolve(__dirname, './') },
+      alias: { '@': path.resolve(__dirname, './') }
    },
    server: {
       allowedHosts: true,
       cors: {
-         origin: true,
-      },
+         origin: true
+      }
    },
    plugins: [
       tailwindcss(),
@@ -36,8 +36,8 @@ export default defineConfig({
       VitePWA({
          registerType: 'autoUpdate',
          devOptions: {
-            enabled: true,
-         },
-      }),
-   ],
-});
+            enabled: false
+         }
+      })
+   ]
+})

@@ -1,12 +1,13 @@
-import type { RouteRecords } from 'retend/router';
-import Styleguide from '.';
-import FloatingActionButtonTest from './fab';
-import KeyboardAvoidanceTest from './keyboard-avoidance';
-import NavStack from './nav-stack';
-import PullToRefreshViewTest from './pull-zone';
-import SidebarTest from './sidebar';
-import Tabs from './tabs';
-import Toast from './toast';
+import type { RouteRecords } from 'retend/router'
+import Styleguide from '.'
+import BottomDrawerTest from './bottom-drawer'
+import FloatingActionButtonTest from './fab'
+import KeyboardAvoidanceTest from './keyboard-avoidance'
+import NavStack from './nav-stack'
+import PullToRefreshViewTest from './pull-zone'
+import SidebarTest from './sidebar'
+import Tabs from './tabs'
+import Toast from './toast'
 
 const metadata = {
    title: 'Styleguide',
@@ -15,56 +16,62 @@ const metadata = {
    viewport:
       'width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover',
    themeColor: '#272727',
-   manifest: '/manifest.json',
-};
+   manifest: '/manifest.json'
+}
 
 export default (<RouteRecords>[
    {
       name: 'styleguide',
       path: '/styleguide',
       component: Styleguide,
-      metadata,
+      metadata
    },
    {
       name: 'styleguide-tabs',
       path: '/styleguide/tabs',
       component: Tabs,
-      metadata,
+      metadata
    },
    {
       name: 'styleguide-nav-stack',
       path: '/styleguide/nav-stack',
       component: NavStack,
-      metadata,
+      metadata
    },
    {
       name: 'styleguide-toast',
       path: '/styleguide/toast',
       component: Toast,
-      metadata,
+      metadata
    },
    {
       name: 'styleguide-pull-zone',
       path: '/styleguide/pull-zone',
       component: PullToRefreshViewTest,
-      metadata,
+      metadata
    },
    {
       name: 'styleguide-floating-button',
       path: '/styleguide/floating-button',
       component: FloatingActionButtonTest,
-      metadata,
+      metadata
    },
    {
       name: 'styleguide-sidebar',
       path: '/styleguide/sidebar',
       component: SidebarTest,
-      metadata,
+      metadata
    },
    {
       name: 'styleguide-keyboard-avoidance',
       path: '/styleguide/keyboard-avoidance',
       component: KeyboardAvoidanceTest,
-      metadata,
+      metadata
    },
-]);
+   {
+      name: 'styleguide-bottom-drawer',
+      path: '/styleguide/drawer',
+      component: BottomDrawerTest,
+      metadata
+   }
+])

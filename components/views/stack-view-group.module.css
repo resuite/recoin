@@ -4,10 +4,6 @@
    inherits: true;
 }
 
-body {
-   --stack-view-slide: calc(var(--default-speed) * 3.5);
-}
-
 /* ---NAVIGATION STACK--- */
 .stackViewGroup {
    display: grid;
@@ -40,11 +36,11 @@ body {
    }
 
    &:not([data-open]) {
-      transition-duration: var(--stack-view-slide);
+      transition-duration: var(--speed-device);
    }
 
    &:nth-last-child(1 of [data-open]) {
-      transition-duration: var(--stack-view-slide);
+      transition-duration: var(--speed-device);
       translate: 0;
 
       .stackViewGroup[data-dragging] &:not(:first-child) {
@@ -62,7 +58,7 @@ body {
       /* Select the last open view. */
       &:nth-last-child(2 of [data-open]) {
          opacity: 0.75;
-         transition-duration: calc(var(--stack-view-slide) * 1.5);
+         transition-duration: calc(var(--speed-device) * 1.5);
          translate: -30%;
 
          .stackViewGroup[data-dragging] & {
@@ -93,7 +89,7 @@ body {
       background-color: black;
       content: "";
       transition-timing-function: inherit;
-      transition-duration: var(--stack-view-slide);
+      transition-duration: var(--speed-device);
       transition-property: opacity;
       pointer-events: none;
       grid-area: 1 / 1;

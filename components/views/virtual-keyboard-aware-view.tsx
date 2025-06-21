@@ -1,32 +1,30 @@
-import { Cell, type SourceCell, useObserver } from 'retend';
-import type { JSX } from 'retend/jsx-runtime';
-import styles from './virtual-keyboard-aware-view.module.css';
+import { Cell, type SourceCell, useObserver } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import styles from './virtual-keyboard-aware-view.module.css'
 
 declare global {
    interface Navigator {
-      virtualKeyboard: EventTarget & {
-         boundingRect: {
-            height: number;
-         };
-         overlaysContent: boolean;
-      };
+      readonly virtualKeyboard: VirtualKeyboard
    }
 }
 
-type DivProps = JSX.IntrinsicElements['div'];
+interface VirtualKeyboard extends EventTarget {
+   readonly boundingRect: DOMRectReadOnly
+   overlaysContent: boolean
+   show(): undefined
+   hide(): undefined
+   ongeometrychange: ((this: VirtualKeyboard, ev: Event) => void) | null
+}
+
+type DivProps = JSX.IntrinsicElements['div']
 export interface VirtualKeyboardAwareViewProps extends DivProps {
    onVirtualKeyboardVisibilityChange?: (
       oldHeight: number,
       newHeight: number,
-      activeElement: Element | null,
-   ) => void;
-   ref?: SourceCell<HTMLElement | null>;
+      activeElement: Element | null
+   ) => void
+   ref?: SourceCell<HTMLElement | null>
 }
-
-const KEYBOARD_INPUTS = ['INPUT', 'TEXTAREA', 'SELECT'];
-const isKeyboardInput = (target: HTMLElement) => {
-   return KEYBOARD_INPUTS.includes(target.tagName) || target.isContentEditable;
-};
 
 /**
  * A view component that notifies parent components about changes in the virtual keyboard's visibility.
@@ -68,7 +66,7 @@ const isKeyboardInput = (target: HTMLElement) => {
  * @returns {JSX.Template} The rendered VirtualKeyboardAwareView component.
  */
 export const VirtualKeyboardAwareView = (
-   props: VirtualKeyboardAwareViewProps,
+   props: VirtualKeyboardAwareViewProps
 ) => {
    const {
       children,
@@ -77,11 +75,11 @@ export const VirtualKeyboardAwareView = (
       onFocusOut,
       onVirtualKeyboardVisibilityChange,
       ...rest
-   } = props;
-   const observer = useObserver();
-   let focusAdjustmentInProgress = false;
-   let currentVisualHeight = 0;
-   let oldHeight = 0;
+   } = props
+   const observer = useObserver()
+   let focusAdjustmentInProgress = false
+   let currentVisualHeight = 0
+   let oldHeight = 0
 
    // For browsers without `navigator.virtualKeyboard`, we use `onFocusIn` and `onFocusOut`
    // to detect when an input is focused near the bottom of the viewport (where the keyboard
@@ -90,130 +88,130 @@ export const VirtualKeyboardAwareView = (
    // workaround helps provide a consistent experience in browsers like Safari and Firefox,
    // which lack reliable virtual keyboard APIs.
    const handlePointerDown = async (event: PointerEvent) => {
-      const target = event.target as HTMLElement;
+      const target = event.target as HTMLElement
 
       if ('virtualKeyboard' in navigator) {
          // We don't need any hackery here since Chrome and Edge are good
          // browsers and will handle this for us.
          if (typeof onFocusIn === 'function') {
-            onFocusIn.bind(event.currentTarget as HTMLInputElement)(event);
+            onFocusIn.bind(event.currentTarget as HTMLInputElement)(event)
          }
-         return;
+         return
       }
 
       if (focusAdjustmentInProgress) {
          if (typeof onFocusIn === 'function') {
-            onFocusIn.bind(event.currentTarget as HTMLInputElement)(event);
+            onFocusIn.bind(event.currentTarget as HTMLInputElement)(event)
          }
-         return;
+         return
       }
 
       if (isKeyboardInput(target)) {
-         const target = event.target as HTMLElement;
-         event.stopImmediatePropagation();
-         focusAdjustmentInProgress = true;
-         target.blur();
-         target.classList.add(styles.outOfViewport);
-         target.focus();
+         const target = event.target as HTMLElement
+         event.stopImmediatePropagation()
+         focusAdjustmentInProgress = true
+         target.blur()
+         target.classList.add(styles.outOfViewport)
+         target.focus()
          requestAnimationFrame(() => {
-            window.scrollTo(0, 0);
-            target.classList.remove(styles.outOfViewport);
-            focusAdjustmentInProgress = false;
+            window.scrollTo(0, 0)
+            target.classList.remove(styles.outOfViewport)
+            focusAdjustmentInProgress = false
             // This is an interesting bug in iOS. On the 6th/7th time the
             // keyboard is opened, the visual viewport change event isn't fired,
             // but the visual viewport changes anyway. Luckily, prior values
             // are recorded, so the event can be fired manually.
-            const newVisualHeight = window.visualViewport?.height;
+            const newVisualHeight = window.visualViewport?.height
             if (
                newVisualHeight !== undefined &&
                newVisualHeight !== currentVisualHeight
             ) {
-               dispatchVisibilityChange(newVisualHeight);
+               dispatchVisibilityChange(newVisualHeight)
             }
-         });
+         })
       }
-   };
+   }
 
    const handleFocusOut = (e: FocusEvent) => {
       if (focusAdjustmentInProgress) {
-         return;
+         return
       }
       if (!e.relatedTarget) {
-         dispatchVisibilityChange(innerHeight);
+         dispatchVisibilityChange(innerHeight)
       }
       if (typeof onFocusOut === 'function') {
-         onFocusOut.bind(e.currentTarget as HTMLInputElement)(e);
+         onFocusOut.bind(e.currentTarget as HTMLInputElement)(e)
       }
-   };
+   }
 
    const updateHeight = () => {
-      const container = containerRef.get();
+      const container = containerRef.get()
       const isTriggeredByFocus =
          container &&
          document.activeElement &&
-         container.contains(document.activeElement);
+         container.contains(document.activeElement)
 
       if (!isTriggeredByFocus) {
-         return;
+         return
       }
 
       const newHeight =
          'virtualKeyboard' in navigator
             ? innerHeight - navigator.virtualKeyboard.boundingRect.height
-            : (window.visualViewport?.height ?? innerHeight);
+            : (window.visualViewport?.height ?? innerHeight)
 
       if (currentVisualHeight === newHeight) {
          // prevent unecessary updates.
-         return;
+         return
       }
 
-      dispatchVisibilityChange(newHeight);
-   };
+      dispatchVisibilityChange(newHeight)
+   }
 
    const handleScroll = () => {
       requestAnimationFrame(() => {
-         window.scrollTo(0, 0);
-      });
-   };
+         window.scrollTo(0, 0)
+      })
+   }
 
    const dispatchVisibilityChange = (nextHeight: number) => {
-      const container = containerRef.peek();
+      const container = containerRef.peek()
       if (!container) {
-         return;
+         return
       }
-      oldHeight = currentVisualHeight;
-      currentVisualHeight = nextHeight;
+      oldHeight = currentVisualHeight
+      currentVisualHeight = nextHeight
       onVirtualKeyboardVisibilityChange?.(
          oldHeight,
          currentVisualHeight,
-         document.activeElement,
-      );
-   };
+         document.activeElement
+      )
+   }
 
    observer.onConnected(containerRef, () => {
-      currentVisualHeight = window.visualViewport?.height ?? innerHeight;
-      oldHeight = currentVisualHeight;
-      updateHeight();
+      currentVisualHeight = window.visualViewport?.height ?? innerHeight
+      oldHeight = currentVisualHeight
+      updateHeight()
 
       if ('virtualKeyboard' in navigator) {
          const previousOverlaysContent =
-            navigator.virtualKeyboard.overlaysContent;
-         navigator.virtualKeyboard.overlaysContent = true;
-         const virtualKeyboard = navigator.virtualKeyboard;
-         virtualKeyboard.addEventListener('geometrychange', updateHeight);
+            navigator.virtualKeyboard.overlaysContent
+         navigator.virtualKeyboard.overlaysContent = true
+         const virtualKeyboard = navigator.virtualKeyboard
+         virtualKeyboard.addEventListener('geometrychange', updateHeight)
          return () => {
-            navigator.virtualKeyboard.overlaysContent = previousOverlaysContent;
-            virtualKeyboard.removeEventListener('geometrychange', updateHeight);
-         };
+            navigator.virtualKeyboard.overlaysContent = previousOverlaysContent
+            virtualKeyboard.removeEventListener('geometrychange', updateHeight)
+         }
       }
 
-      window.visualViewport?.addEventListener('resize', updateHeight);
-      window.addEventListener('scroll', handleScroll);
+      window.visualViewport?.addEventListener('resize', updateHeight)
+      window.addEventListener('scroll', handleScroll)
       return () => {
-         window.visualViewport?.removeEventListener('resize', updateHeight);
-         window.removeEventListener('scroll', handleScroll);
-      };
-   });
+         window.visualViewport?.removeEventListener('resize', updateHeight)
+         window.removeEventListener('scroll', handleScroll)
+      }
+   })
 
    return (
       <div
@@ -225,5 +223,10 @@ export const VirtualKeyboardAwareView = (
       >
          {children}
       </div>
-   );
-};
+   )
+}
+
+const KEYBOARD_INPUTS = ['INPUT', 'TEXTAREA', 'SELECT']
+const isKeyboardInput = (target: HTMLElement) => {
+   return KEYBOARD_INPUTS.includes(target.tagName) || target.isContentEditable
+}

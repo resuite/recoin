@@ -1,8 +1,8 @@
-import { AllIcons, Icon } from '@/components/icons';
-import { useRouter } from 'retend/router';
+import { AllIcons, Icon } from '@/components/icons'
+import { useRouter } from 'retend/router'
 
 const Styleguide = () => {
-   const { Link } = useRouter();
+   const { Link } = useRouter()
 
    return (
       <div class='grid-lines'>
@@ -109,10 +109,11 @@ const Styleguide = () => {
                <Link href='/styleguide/keyboard-avoidance'>
                   Go to keyboard avoidance page
                </Link>
+               <Link href='/styleguide/drawer'>Go to drawer page.</Link>
             </div>
          </div>
       </div>
-   );
-};
+   )
+}
 
-export default Styleguide;
+export default Styleguide
