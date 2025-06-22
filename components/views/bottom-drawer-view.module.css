@@ -1,0 +1,84 @@
+.dialog {
+   --drawer-content-height: 70dvh;
+   position: fixed;
+   display: grid;
+   top: 0;
+   left: 0;
+   height: 100dvh;
+   width: 100dvw;
+   background-color: transparent;
+   align-items: end;
+
+   &::before {
+      display: block;
+      content: "";
+      position: fixed;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      pointer-events: none;
+      background-color: #00000035;
+      animation-name: fade-in;
+      animation-fill-mode: backwards;
+      animation-duration: var(--speed-device);
+      animation-timing-function: var(--timing);
+   }
+
+   &.snapped {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+
+      .drawerContentContainer {
+         scroll-snap-align: end;
+         margin-top: 100dvh;
+      }
+   }
+
+   &.closing {
+      &::before {
+         animation-name: fade-out;
+         animation-fill-mode: forwards;
+      }
+
+      .drawerContentContainer {
+         animation-name: slide-down-under;
+         animation-fill-mode: forwards;
+      }
+   }
+}
+
+.drawerContentContainer {
+   position: relative;
+   pointer-events: auto;
+   height: var(--drawer-content-height);
+   border-radius: 3dvh 3dvh 0 0;
+   animation-name: slide-up-from-under;
+   animation-fill-mode: backwards;
+   animation-duration: var(--speed-device);
+   animation-timing-function: var(--timing);
+   box-shadow: 0 -2px 8px 0 #00000015;
+}
+
+@keyframes fade-in {
+   from {
+      opacity: 0;
+   }
+}
+
+@keyframes fade-out {
+   to {
+      opacity: 0;
+   }
+}
+
+@keyframes slide-up-from-under {
+   from {
+      translate: 0 var(--drawer-content-height);
+   }
+}
+
+@keyframes slide-down-under {
+   to {
+      translate: 0 var(--drawer-content-height);
+   }
+}

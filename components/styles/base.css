@@ -78,8 +78,11 @@ body {
    --text-logo: 4.0625rem;
 
    --default-speed: 150ms;
-   --timing: cubic-bezier(0.7, 0, 0, 1);
+   --timing: cubic-bezier(0.3, 0.4, 0.05, 1);
+   --timing-bounce: cubic-bezier(0.25, 0.46, 0.45, 1.7);
+   --timing-bounce-slower: cubic-bezier(0, 0, 0.6, 1.4);
 
+   --speed-device: calc(var(--default-speed) * 3.35);
    --speed-default: var(--default-speed);
    --speed-faster: calc(var(--default-speed) * 0.5);
    --speed-fast: calc(var(--default-speed) * 0.75);

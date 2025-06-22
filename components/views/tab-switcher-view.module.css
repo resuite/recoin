@@ -50,6 +50,8 @@
    display: flex;
    justify-content: start;
    min-width: calc(var(--spacing) * 3.5);
+   border-radius: 0;
+   width: 0;
    border: none;
    color: var(--canvas-text);
    background-color: transparent;

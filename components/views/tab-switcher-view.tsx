@@ -146,7 +146,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
          <header ref={headerRef} class={[styles.header, headerClasses]}>
             {For(tabs, (tab, index) => {
                const style = {
-                  marginLeft: Cell.derived(() => `calc(${index.get()}*100%)`)
+                  translate: Cell.derived(() => `calc(${index.get()}*100%)`)
                }
                const isActiveTab = Cell.derived(
                   () => index.get() === activeTab.get()
