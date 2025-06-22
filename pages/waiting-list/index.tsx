@@ -1,27 +1,27 @@
-import { RecoinError } from '@/api/error';
-import { addEmailToWaitingList } from '@/api/modules/waiting-list/client';
-import Arrows from '@/components/icons/svg/arrows';
-import Loader from '@/components/icons/svg/loader';
-import { Coins } from '@/components/illustrations/coins';
-import { useToast } from '@/components/ui';
-import { emailEntered } from '@/pages/waiting-list/state';
+import { RecoinError } from '@/api/error'
+import { addEmailToWaitingList } from '@/api/modules/waiting-list/client'
+import Arrows from '@/components/icons/svg/arrows'
+import Loader from '@/components/icons/svg/loader'
+import { Coins } from '@/components/illustrations/coins'
+import { useToast } from '@/components/ui'
+import { emailEntered } from '@/pages/waiting-list/state'
 import {
    defaultError,
-   errorCodeToHumanReadable,
-} from '@/utilities/error-messages';
-import { Cell, If } from 'retend';
-import { Input } from 'retend-utils/components';
-import { useRouter } from 'retend/router';
+   errorCodeToHumanReadable
+} from '@/utilities/error-messages'
+import { Cell, If } from 'retend'
+import { Input } from 'retend-utils/components'
+import { useRouter } from 'retend/router'
 
 const WaitingList = () => {
-   const router = useRouter();
-   const email = Cell.source('');
-   const resource = Cell.async(addEmailToWaitingList);
-   const { ToastContainer, showToast } = useToast();
+   const router = useRouter()
+   const email = Cell.source('')
+   const resource = Cell.async(addEmailToWaitingList)
+   const { ToastContainer, showToast } = useToast()
 
    const handleSubmit = () => {
-      resource.run(email.get());
-   };
+      resource.run(email.get())
+   }
 
    const ButtonLoadingStateContent = () => {
       return (
@@ -29,8 +29,8 @@ const WaitingList = () => {
             <Loader class='w-0.75 h-0.75' />
             Joining...
          </>
-      );
-   };
+      )
+   }
 
    const ButtonIdleStateContent = () => {
       return (
@@ -38,29 +38,29 @@ const WaitingList = () => {
             <Arrows class='w-0.75 h-0.75 -rotate-[135deg]' />
             Join the waiting list
          </>
-      );
-   };
+      )
+   }
 
    resource.data.listen((data) => {
       if (!data?.success) {
-         return;
+         return
       }
-      emailEntered.set(true);
-      router.navigate('/waiting-list/success');
-   });
+      emailEntered.set(true)
+      router.navigate('/waiting-list/success')
+   })
 
    resource.error.listen((error) => {
       if (!error) {
-         return;
+         return
       }
       if (!(error instanceof RecoinError)) {
-         const content = error.message ?? defaultError();
-         showToast({ content, duration: 3000 });
-         return;
+         const content = error.message ?? defaultError()
+         showToast({ content, duration: 3000 })
+         return
       }
-      const content = errorCodeToHumanReadable(error.errorCode);
-      showToast({ content, duration: 3000 });
-   });
+      const content = errorCodeToHumanReadable(error.errorCode)
+      showToast({ content, duration: 3000 })
+   })
 
    return (
       <div class='relative grid grid-rows-[auto_1fr] grid-lines h-screen w-screen'>
@@ -69,13 +69,13 @@ const WaitingList = () => {
          <main
             class={[
                'px-2 pb-3 grid grid-cols-[.7fr_1fr] place-content-center place-self-center gap-x-3',
-               'max-md:grid-cols-1 max-md:grid-rows-1 max-md:text-center',
+               'max-md:grid-cols-1 max-md:grid-rows-1 max-md:text-center'
             ]}
          >
             <h1
                class={[
                   'grid text-large [grid-area:1/1] self-end pb-0.25',
-                  'max-md:text-title max-md:self-center',
+                  'max-md:text-title max-md:self-center'
                ]}
             >
                <div class='text-nowrap'>managing money</div>
@@ -96,7 +96,7 @@ const WaitingList = () => {
                <form
                   class={[
                      'grid gap-y-0.5 max-w-17',
-                     'max-md:place-items-center max-md:max-w-full',
+                     'max-md:place-items-center max-md:max-w-full'
                   ]}
                   onSubmit--prevent={handleSubmit}
                >
@@ -110,29 +110,28 @@ const WaitingList = () => {
                      class={[
                         'grid grid-cols-[auto_auto] gap-x-0.25 place-items-center place-content-center',
                         'max-w-fit font-semibold',
-                        'max-md:px-2',
+                        'max-md:px-2'
                      ]}
                      type='submit'
                   >
                      {If(resource.pending, {
                         true: ButtonLoadingStateContent,
-                        false: ButtonIdleStateContent,
+                        false: ButtonIdleStateContent
                      })}
                   </button>
-                  <router.Link href='/styleguide'>Go to styleguide</router.Link>
                </form>
             </section>
             <div
                class={[
                   '[grid-area:1/2/3/2] grid place-items-center',
-                  'max-md:hidden',
+                  'max-md:hidden'
                ]}
             >
                <Coins class='w-full max-w-[50dvw]' />
             </div>
          </main>
       </div>
-   );
-};
+   )
+}
 
-export default WaitingList;
+export default WaitingList
