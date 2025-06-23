@@ -49,12 +49,12 @@ export interface TabSwitcherViewProps<T extends Tab> extends SectionProps {
  * const tabs = [
  *   { heading: () => <span>Tab 1</span>, body: () => <div>Content 1</div> },
  *   { heading: () => <span>Tab 2</span>, body: () => <div>Content 2</div> }
- * ];
+ * ]
  *
  * <TabSwitcherView
  *   tabs={tabs}
  *   onActiveTabChange={(tab) => console.log(`Tab ${tab.heading()} is now active`)}
- *  />;
+ *  />
  * ```
  */
 export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {

@@ -70,22 +70,22 @@ export interface PullToRefreshViewProps extends DivProps {
  * ```tsx
  * function App() {
  *   const handleRefresh = async () => {
- *     console.log("Refresh action triggered");
- *     await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate async action
- *     console.log("Refresh action complete");
- *   };
+ *     console.log("Refresh action triggered")
+ *     await new Promise(resolve => setTimeout(resolve, 2000)) // Simulate async action
+ *     console.log("Refresh action complete")
+ *   }
  *
  *   const handleStateChange = (state) => {
- *     console.log("PullToRefreshView state:", state);
- *   };
+ *     console.log("PullToRefreshView state:", state)
+ *   }
  *
  *   const FeedbackContent = () => {
  *     return (
  *       <div style={{ padding: '20px', textAlign: 'center' }}>
  *         Pulling to refresh...
  *       </div>
- *     );
- *   };
+ *     )
+ *   }
  *
  *   return (
  *     <PullToRefreshView
@@ -101,7 +101,7 @@ export interface PullToRefreshViewProps extends DivProps {
  *         {Array.from({ length: 20 }, (_, i) => <p key={i}>Item {i + 1}</p>)}
  *       </div>
  *     </PullToRefreshView>
- *   );
+ *   )
  * }
  * ```
  */

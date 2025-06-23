@@ -29,7 +29,7 @@ interface ExpandingViewProps extends DivProps {
    /**
     * The origin point for the expansion animation. This value sets the CSS
     * variable `--expand-origin` and should be compatible with the CSS `inset`
-    * property (e.g., " 20px 50px;").
+    * property (e.g., " 20px 50px").
     */
    expandOrigin?: JSX.ValueOrCell<string>
    /**
@@ -55,14 +55,14 @@ interface ExpandingViewProps extends DivProps {
  * @example
  * ```tsx
  * function MyComponent() {
- *   const isOpen = Cell.source(false);
+ *   const isOpen = Cell.source(false)
  *
  *   return (
  *     <div>
  *       <button onClick={() => isOpen.set(!isOpen.get())}>Toggle View</button>
  *       <ExpandingView isOpen={isOpen} content={() => <p>This is the expanded content.</p>} />
  *     </div>
- *   );
+ *   )
  * }
  * ```
  */
@@ -79,6 +79,11 @@ export function ExpandingView(props: ExpandingViewProps) {
    const isOpen = useDerivedValue(isOpenProp)
    const contentLoaded = Cell.source(isOpen.get())
    const clipPathRef = Cell.source<HTMLElement | null>(null)
+   const style = {
+      '--expand-origin': expandOrigin,
+      '--expand-size': expandSize,
+      '--expand-color': expandColor
+   }
 
    isOpen.listen((viewIsOpen) => {
       if (viewIsOpen) {
@@ -101,12 +106,6 @@ export function ExpandingView(props: ExpandingViewProps) {
          }
       })
    })
-
-   const style = {
-      '--expand-origin': expandOrigin,
-      '--expand-size': expandSize,
-      '--expand-color': expandColor
-   }
 
    return (
       <div class={styles.container} style={style}>

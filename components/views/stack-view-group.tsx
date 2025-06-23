@@ -91,23 +91,23 @@ export function StackViewGroup(props: StackViewGroupProps) {
  * @param props - The properties for the StackView component.
  * @example
  * ```tsx
- * const nextPageIsOpen = Cell.source(false);
+ * const nextPageIsOpen = Cell.source(false)
  *
  * const Page1 = () => {
  *   return (
  *     <div>
  *       <button onClick={() => nextPageIsOpen.set(true)}>Open Page 2</button>
  *     </div>
- *   );
- * };
+ *   )
+ * }
  *
  * const Page2 = () => {
  *   return (
  *     <div>
  *       <button onClick={() => nextPageIsOpen.set(false)}>Close Page 2</button>
  *     </div>
- *   );
- * };
+ *   )
+ * }
  *
  * <StackViewGroup>
  *   <StackView root content={Page1} />

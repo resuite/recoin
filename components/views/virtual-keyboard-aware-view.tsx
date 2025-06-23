@@ -48,8 +48,8 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
  *     newHeight: number,
  *     activeElement: Element | null,
  *   ) => {
- *     console.log('Keyboard visibility changed:', { oldHeight, newHeight, activeElement });
- *   };
+ *     console.log('Keyboard visibility changed:', { oldHeight, newHeight, activeElement })
+ *   }
  *
  *   return (
  *     <VirtualKeyboardAwareView onVirtualKeyboardVisibilityChange={handleKeyboardVisibilityChange}>
@@ -58,8 +58,8 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
  *         <textarea placeholder="Or me"></textarea>
  *       </form>
  *     </VirtualKeyboardAwareView>
- *   );
- * };
+ *   )
+ * }
  * ```
  * @returns {JSX.Template} The rendered VirtualKeyboardAwareView component.
  */

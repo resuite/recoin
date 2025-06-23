@@ -38,10 +38,10 @@ export interface ToastDetails {
     * @example
     * ```tsx
     * // Show a simple message that auto-dismisses after 2 seconds
-    * showToast({ content: "Hello!", duration: 2000 });
+    * showToast({ content: "Hello!", duration: 2000 })
     *
     * // Show a more complex toast with JSX content that persists
-    * showToast({ content: <div><strong>Important:</strong> Please review.</div> });
+    * showToast({ content: <div><strong>Important:</strong> Please review.</div> })
     * ```
     *
     * @returns A promise that resolves when the toast is dismissed.
@@ -61,15 +61,15 @@ export interface ToastDetails {
  * @example
  * ```tsx
  * function AppContent() {
- *   const { showToast, ToastContainer } = useToast();
+ *   const { showToast, ToastContainer } = useToast()
  *
  *   const handleShowSuccessToast = () => {
- *     showToast({ content: <p>Operation successful!</p>, duration: 3000 });
- *   };
+ *     showToast({ content: <p>Operation successful!</p>, duration: 3000 })
+ *   }
  *
  *   const handleShowErrorToast = () => {
- *     showToast({ content: <strong>Error: Something went wrong.</strong> });
- *   };
+ *     showToast({ content: <strong>Error: Something went wrong.</strong> })
+ *   }
  *
  *   return (
  *     <div>
@@ -77,7 +77,7 @@ export interface ToastDetails {
  *       <button onClick={handleShowSuccessToast}>Show Success</button>
  *       <button onClick={handleShowErrorToast}>Show Persistent Error</button>
  *     </div>
- *   );
+ *   )
  * }
  * ```
  */
