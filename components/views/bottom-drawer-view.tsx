@@ -34,7 +34,6 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
    const observer = useObserver()
    const isOpen = useDerivedValue(isOpenProp)
    const dialogOpen = Cell.source(isOpen.get())
-
    const containerRef = Cell.source<HTMLElement | null>(null)
 
    const startCloseSequence = async () => {
@@ -67,8 +66,9 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
          return
       }
 
-      // The 'pull' behavior is created using CSS, and the intersection
-      // observer checks that the user has pulled down a reasonable
+      // The 'pull' behavior is created using scroll snaps, and the intersection
+      // observer checks that the user has pulled down a reasonable amount
+      // before closing.
       useIntersectionObserver(
          contentRef,
          ([entry]) => {
@@ -79,6 +79,23 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
                dialog?.classList.contains(styles.snapped)
 
             if (shouldClose) {
+               const content = contentRef.get()
+               if (!content) {
+                  return
+               }
+               // @adebola-io(2025-06-22): The drawer's "pull" is CSS scroll, not translation.
+               // To avoid a visual jump before animating out, this sets the content's `translateY`
+               // to its current scrolled position, ensuring a smooth transition.
+               const contentRectBeforeClose = content.getBoundingClientRect()
+               const initialDistanceFromViewportTop =
+                  window.innerHeight - content.offsetHeight
+               const currentDistanceFromViewportTop = contentRectBeforeClose.y
+               const distanceToTranslate =
+                  currentDistanceFromViewportTop -
+                  initialDistanceFromViewportTop
+
+               content.style.translate = `0px ${distanceToTranslate}px`
+
                onClose?.()
             }
          },
@@ -93,7 +110,7 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
          handleIsOpenChange(isOpen.get())
          await animationsSettled(contentRef)
          dialog.classList.add(styles.snapped)
-         dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
+         // dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
 
          // TODO: Move this behavior into Retend. Currently,
          // after an observer callback runs, it is disposed,

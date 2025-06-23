@@ -92,6 +92,7 @@ export function animationsSettled(el: HTMLElement | Cell<HTMLElement | null>) {
    defer(async () => {
       const element = Cell.isCell(el) ? el.peek() : el
       if (!element) {
+         resolver?.()
          return
       }
       const animations = element.getAnimations()

@@ -2,6 +2,8 @@
    --drawer-content-height: 70dvh;
    position: fixed;
    display: grid;
+   grid-template-rows: 1fr;
+   grid-template-columns: 1fr;
    top: 0;
    left: 0;
    height: 100dvh;
@@ -13,36 +15,55 @@
       display: block;
       content: "";
       position: fixed;
-      bottom: 0;
-      height: 100%;
-      width: 100%;
+      top: 0;
+      left: 0;
+      height: 100dvh;
+      width: 100dvw;
       pointer-events: none;
       background-color: #00000035;
       animation-name: fade-in;
-      animation-fill-mode: backwards;
       animation-duration: var(--speed-device);
       animation-timing-function: var(--timing);
+      will-change: opacity;
    }
 
    &.snapped {
       scroll-snap-type: y mandatory;
-      overflow-y: scroll;
+      overflow-y: auto;
+
+      &::after {
+         display: block;
+         content: "";
+         height: 100dvh;
+         grid-area: 1 / 1;
+      }
 
       .drawerContentContainer {
          scroll-snap-align: end;
-         margin-top: 100dvh;
+         grid-area: 2 / 1;
       }
    }
 
    &.closing {
+      overflow-y: hidden;
+      scroll-snap-type: unset;
+
       &::before {
          animation-name: fade-out;
          animation-fill-mode: forwards;
       }
 
+      &::after {
+         height: calc(100dvh + var(--drawer-content-height));
+      }
+
       .drawerContentContainer {
+         position: fixed;
+         bottom: 0;
+         width: 100dvw;
          animation-name: slide-down-under;
          animation-fill-mode: forwards;
+         scroll-snap-align: unset;
       }
    }
 }
@@ -54,9 +75,22 @@
    border-radius: 3dvh 3dvh 0 0;
    animation-name: slide-up-from-under;
    animation-fill-mode: backwards;
-   animation-duration: var(--speed-device);
+   animation-duration: calc(var(--speed-device) * 1);
    animation-timing-function: var(--timing);
    box-shadow: 0 -2px 8px 0 #00000015;
+
+   &::before {
+      --width: 45px;
+      height: 7px;
+      width: var(--width);
+      display: block;
+      content: "";
+      position: absolute;
+      top: calc(var(--spacing) / 2.5);
+      left: calc(50% - var(--width) / 2);
+      background-color: #00000045;
+      border-radius: 3dvh;
+   }
 }
 
 @keyframes fade-in {
