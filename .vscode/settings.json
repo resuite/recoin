@@ -26,5 +26,8 @@
    "[typescript]": {
       "editor.defaultFormatter": "biomejs.biome"
    },
-   "typescript.experimental.useTsgo": true
+   "typescript.experimental.useTsgo": true,
+   "editor.codeActionsOnSave": {
+      "source.organizeImports.biome": "explicit"
+   }
 }
