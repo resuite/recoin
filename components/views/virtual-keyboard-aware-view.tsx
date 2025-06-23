@@ -42,8 +42,6 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
  * @param {SourceCell<HTMLElement | null>} [props.ref] - A `SourceCell` to get a reference to the component's root `div` element.
  * @example
  * ```tsx
- * import { VirtualKeyboardAwareView } from './virtual-keyboard-aware-view';
- *
  * const MyForm = () => {
  *   const handleKeyboardVisibilityChange = (
  *     oldHeight: number,

@@ -1,4 +1,5 @@
 import { animationsSettled } from '@/utilities/animations'
+import { defer } from '@/utilities/miscellaneous'
 import { Cell, If, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -22,6 +23,37 @@ interface QueryControlledBottomDrawerProps
    value?: JSX.ValueOrCell<string>
 }
 
+/**
+ * A bottom-aligned drawer component that can be opened and closed.
+ *
+ * The drawer supports closing by clicking outside its content area
+ * or by a "pull-down" gesture on its content.
+ *
+ * @param {BottomDrawerProps} props - The properties for the BottomDrawer component.
+ * @example
+ * ```tsx
+ * const MyComponent = () => {
+ *   const isDrawerOpen = Cell.source(false)
+ *
+ *   return (
+ *     <>
+ *       <button onClick={() => isDrawerOpen.set(true)}>Open Drawer</button>
+ *       <BottomDrawer
+ *         isOpen={isDrawerOpen}
+ *         onClose={() => isDrawerOpen.set(false)}
+ *         content={() => (
+ *           <div>
+ *             <h3>Drawer Content</h3>
+ *             <p>This is some content inside the bottom drawer.</p>
+ *             <button onClick={() => isDrawerOpen.set(false)}>Close</button>
+ *           </div>
+ *         )}
+ *       />
+ *     </>
+ *   )
+ * }
+ * ```
+ */
 export const BottomDrawer = (props: BottomDrawerProps) => {
    const {
       isOpen: isOpenProp,
@@ -88,7 +120,7 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
                // to its current scrolled position, ensuring a smooth transition.
                const contentRectBeforeClose = content.getBoundingClientRect()
                const initialDistanceFromViewportTop =
-                  window.innerHeight - content.offsetHeight
+                  window.innerHeight - contentRectBeforeClose.height
                const currentDistanceFromViewportTop = contentRectBeforeClose.y
                const distanceToTranslate =
                   currentDistanceFromViewportTop -
@@ -111,6 +143,12 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
          await animationsSettled(contentRef)
          dialog.classList.add(styles.snapped)
          dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
+         defer(() => {
+            // @adebola-io(2025-06-22): Omo idk. If either of the scrollTo() calls is
+            // removed, the drawer content either glitches or doesn't scroll to the bottom.
+            // Somnetimes in Firefox, sometimes in Chromium (gasp), sometimes in Safari.
+            dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
+         })
 
          // TODO: Move this behavior into Retend. Currently,
          // after an observer callback runs, it is disposed,
@@ -147,6 +185,57 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
    )
 }
 
+/**
+ * A bottom-aligned drawer component whose open state is controlled by a URL query parameter.
+ *
+ * This component wraps the `BottomDrawer` and manages its `isOpen` and `onClose` props
+ * based on the presence and value of a specified query parameter in the URL.
+ *
+ * When the query parameter specified by `queryKey` is present in the URL, the drawer
+ * will be open. If a `value` is provided, the drawer will only open if the query
+ * parameter's value matches the specified `value`.
+ *
+ * Closing the drawer (either via user interaction or calling `onClose`) will remove
+ * the `queryKey` from the URL's query parameters.
+ *
+ * @param {QueryControlledBottomDrawerProps} props - The properties for the QueryControlledBottomDrawer component.
+ * @example
+ * ```tsx
+ * const MyComponent = () => {
+ *   // To open this drawer, the URL would need to be something like:
+ *   // /some/path?drawer=true
+ *   return (
+ *     <QueryControlledBottomDrawer
+ *       queryKey="drawer"
+ *       value="true"
+ *       content={() => (
+ *         <div>
+ *           <h3>Query Controlled Drawer</h3>
+ *           <p>This drawer opens when 'drawer=true' is in the URL.</p>
+ *         </div>
+ *       )}
+ *     />
+ *   )
+ * }
+ *
+ * const AnotherComponent = () => {
+ *   // To open this drawer, the URL would need to be something like:
+ *   // /another/path?myDialog
+ *   // (No specific value required, just the presence of 'myDialog' key)
+ *   return (
+ *     <QueryControlledBottomDrawer
+ *       queryKey="myDialog"
+ *       content={() => (
+ *         <div>
+ *           <h3>Simple Query Controlled Drawer</h3>
+ *           <p>This drawer opens when 'myDialog' is present in the URL.</p>
+ *         </div>
+ *       )}
+ *     />
+ *   )
+ * }
+ * ```
+ */
 export const QueryControlledBottomDrawer = (
    props: QueryControlledBottomDrawerProps
 ) => {
