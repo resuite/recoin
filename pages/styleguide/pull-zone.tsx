@@ -1,23 +1,23 @@
-import { DynamicIcon } from '@/components/icons';
-import { type PullState, PullToRefreshView } from '@/components/views';
-import { Cell, type SourceCell } from 'retend';
-import type { JSX } from 'retend/jsx-runtime';
+import { DynamicIcon } from '@/components/icons'
+import { type PullState, PullToRefreshView } from '@/components/views'
+import { Cell, type SourceCell } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
 
 interface PullToRefreshViewTestProps {
-   contentTopMarkerRef?: SourceCell<HTMLElement | null>;
-   children?: unknown;
-   allowPull?: JSX.ValueOrCell<boolean>;
+   contentTopMarkerRef?: SourceCell<HTMLElement | null>
+   children?: unknown
+   allowPull?: JSX.ValueOrCell<boolean>
 }
 
 const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
-   const state = Cell.source<PullState>('idle');
+   const state = Cell.source<PullState>('idle')
    const pulling = Cell.derived(() => {
-      return state.get() === 'pulling' || state.get() === 'thresholdreached';
-   });
+      return state.get() === 'pulling' || state.get() === 'thresholdreached'
+   })
    const actionTriggered = Cell.derived(() => {
-      return state.get() === 'actiontriggered';
-   });
-   const topMarker = Cell.source<HTMLElement | null>(null);
+      return state.get() === 'actiontriggered'
+   })
+   const topMarker = Cell.source<HTMLElement | null>(null)
 
    const FeedbackContent = () => {
       return (
@@ -32,30 +32,30 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
                      'opacity-[calc((var(--pull-progress)*0.005)-0.3)]':
                         pulling,
                      'duration-0': pulling,
-                     'animate-spin!': actionTriggered,
-                  },
+                     'animate-spin!': actionTriggered
+                  }
                ]}
                style={{ animation: 'none' }}
             />
             <div
                class={[
                   'text-center opacity-0 duration-slower transition-opacity',
-                  { 'opacity-75': actionTriggered },
+                  { 'opacity-75': actionTriggered }
                ]}
             >
                Refreshing your data...
             </div>
          </div>
-      );
-   };
+      )
+   }
 
    const handleActionTriggered = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-   };
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+   }
 
    const handleStateChange = (newState: PullState) => {
-      state.set(newState);
-   };
+      state.set(newState)
+   }
 
    return (
       <PullToRefreshView
@@ -73,7 +73,7 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
             </div>
          )}
       </PullToRefreshView>
-   );
-};
+   )
+}
 
-export default PullToRefreshViewTest;
+export default PullToRefreshViewTest

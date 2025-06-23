@@ -1,11 +1,11 @@
-import type { z } from 'zod';
-import { zValidator } from '@hono/zod-validator';
+import type { RecoinApiEnv } from '@/api/types'
+import { zValidator } from '@hono/zod-validator'
 import type {
-   Context as RawContext,
    MiddlewareHandler,
-   Env as RawEnv,
-} from 'hono';
-import type { RecoinApiEnv } from '@/api/types';
+   Context as RawContext,
+   Env as RawEnv
+} from 'hono'
+import type { z } from 'zod'
 
 export type CustomContext<Env, ParamSchema, BodySchema> = Env extends RawEnv
    ? RawContext<Env> extends infer C
@@ -14,54 +14,54 @@ export type CustomContext<Env, ParamSchema, BodySchema> = Env extends RawEnv
               req: Omit<C['req'], 'json' | 'param'> & {
                  param: ParamSchema extends z.ZodObject<z.ZodRawShape>
                     ? () => z.infer<ParamSchema>
-                    : C['req']['param'];
+                    : C['req']['param']
                  json: BodySchema extends z.ZodObject<z.ZodRawShape>
                     ? () => Promise<z.infer<BodySchema>>
-                    : C['req']['json'];
+                    : C['req']['json']
                  valid: C['req']['valid'] &
                     ((
-                       type: 'json',
+                       type: 'json'
                     ) => BodySchema extends z.ZodObject<z.ZodRawShape>
                        ? z.infer<BodySchema>
-                       : never);
-              };
+                       : never)
+              }
            }
          : never
       : never
-   : never;
+   : never
 
 export type RouteHandlers<Env, Params, Body> = Array<
    MiddlewareHandler | RouteController<Env, Params, Body>
->;
+>
 
 export type RouteController<Env, Params, Body> = (
-   c: CustomContext<Env, Params, Body>,
-) => Promise<Response> | Response;
+   c: CustomContext<Env, Params, Body>
+) => Promise<Response> | Response
 
 export type RouteConfig<Params, Body> = {
-   param?: Params;
-   body?: Body;
-   controller: RouteController<RecoinApiEnv, Params, Body>;
-   middleware?: MiddlewareHandler[];
-};
+   param?: Params
+   body?: Body
+   controller: RouteController<RecoinApiEnv, Params, Body>
+   middleware?: MiddlewareHandler[]
+}
 
 export function route<
    Params extends z.ZodObject<z.ZodRawShape>,
-   Body extends z.ZodObject<z.ZodRawShape>,
+   Body extends z.ZodObject<z.ZodRawShape>
 >(config: RouteConfig<Params, Body>) {
    const handlers: RouteHandlers<RecoinApiEnv, Params, Body> = [
-      ...(config.middleware || []),
-   ];
+      ...(config.middleware || [])
+   ]
 
    if (config.param) {
-      handlers.push(zValidator('param', config.param));
+      handlers.push(zValidator('param', config.param))
    }
 
    if (config.body) {
-      handlers.push(zValidator('json', config.body));
+      handlers.push(zValidator('json', config.body))
    }
 
-   handlers.push(config.controller);
+   handlers.push(config.controller)
 
-   return handlers as [...MiddlewareHandler[]];
+   return handlers as [...MiddlewareHandler[]]
 }

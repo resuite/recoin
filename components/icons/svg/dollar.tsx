@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Dollar(props: IconProps) {
    return (
@@ -32,5 +32,5 @@ export default function Dollar(props: IconProps) {
             stroke-width='2.25'
          />
       </svg>
-   );
+   )
 }

@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Add(props: IconProps) {
    return (
@@ -17,5 +17,5 @@ export default function Add(props: IconProps) {
             stroke-linejoin='round'
          />
       </svg>
-   );
+   )
 }

@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Loader(props: IconProps) {
    return (
@@ -20,5 +20,5 @@ export default function Loader(props: IconProps) {
             stroke-width='1.33333'
          />
       </svg>
-   );
+   )
 }

@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Suitcase(props: IconProps) {
    return (
@@ -35,5 +35,5 @@ export default function Suitcase(props: IconProps) {
             stroke-linejoin='round'
          />
       </svg>
-   );
+   )
 }

@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Hamburger(props: IconProps) {
    return (
@@ -31,5 +31,5 @@ export default function Hamburger(props: IconProps) {
             stroke-linecap='round'
          />
       </svg>
-   );
+   )
 }

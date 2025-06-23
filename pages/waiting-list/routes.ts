@@ -1,10 +1,10 @@
-import { BASE_URL } from '@/constants';
-import { lazy, type RouteRecords } from 'retend/router';
+import { BASE_URL } from '@/constants'
+import { type RouteRecords, lazy } from 'retend/router'
 
-const title = 'recoin';
+const title = 'recoin'
 const description =
-   'recoin is your private, simple companion for managing finances.';
-const image = `${BASE_URL}/og-image.png`;
+   'recoin is your private, simple companion for managing finances.'
+const image = `${BASE_URL}/og-image.png`
 
 const metadata = {
    themeColor: '#272727',
@@ -24,20 +24,20 @@ const metadata = {
    // Twitter
    twitterTitle: title,
    twitterDescription: description,
-   twitterImage: image,
-};
+   twitterImage: image
+}
 
 export default (<RouteRecords>[
    {
       name: 'waiting-list',
       path: 'waiting-list',
       component: lazy(() => import('./index')),
-      metadata,
+      metadata
    },
    {
       name: 'waiting-list-success',
       path: 'waiting-list/success',
       component: lazy(() => import('./success')),
-      metadata,
-   },
-]);
+      metadata
+   }
+])

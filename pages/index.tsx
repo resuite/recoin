@@ -1,13 +1,13 @@
-import { PRE_RELEASE } from '@/constants';
-import { useRouter } from 'retend/router';
+import { PRE_RELEASE } from '@/constants'
+import { useRouter } from 'retend/router'
 
 const Index = () => {
-   const router = useRouter();
+   const router = useRouter()
    if (PRE_RELEASE === 'true') {
-      return router.navigate('/waiting-list');
+      return router.navigate('/waiting-list')
    }
 
-   return <div>Welcome to recoin!</div>;
-};
+   return <div>Welcome to recoin!</div>
+}
 
-export default Index;
+export default Index

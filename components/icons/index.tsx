@@ -80,27 +80,27 @@ export type IconName =
    | 'trophy'
    | 'user'
    | 'wallet'
-   | 'warning';
+   | 'warning'
 
-import type { JSX } from 'retend/jsx-runtime';
-import { noHydrate } from 'retend-server/client';
+import { noHydrate } from 'retend-server/client'
+import type { JSX } from 'retend/jsx-runtime'
 
-type SvgProps = JSX.IntrinsicElements['svg'];
+type SvgProps = JSX.IntrinsicElements['svg']
 
 export interface IconProps extends SvgProps {}
 
 export interface AsyncIconProps extends SvgProps {
-   name: IconName;
-   direction?: unknown;
+   name: IconName
+   direction?: unknown
 }
 
 export async function DynamicIcon(props: AsyncIconProps) {
-   const { name, ...rest } = props;
-   const iconModule = await import(`./svg/${name}.tsx`);
-   return iconModule.default(rest) as JSX.Template;
+   const { name, ...rest } = props
+   const iconModule = await import(`./svg/${name}.tsx`)
+   return iconModule.default(rest) as JSX.Template
 }
 
-export const Icon = noHydrate(DynamicIcon);
+export const Icon = noHydrate(DynamicIcon)
 
 export function AllIcons() {
    return (
@@ -185,5 +185,5 @@ export function AllIcons() {
          <Icon name='wallet' />
          <Icon name='warning' />
       </>
-   );
+   )
 }

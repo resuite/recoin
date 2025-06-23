@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function FlyingMoney(props: IconProps) {
    return (
@@ -52,5 +52,5 @@ export default function FlyingMoney(props: IconProps) {
             </clipPath>
          </defs>
       </svg>
-   );
+   )
 }

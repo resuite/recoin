@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function ChatBubble(props: IconProps) {
    return (
@@ -31,5 +31,5 @@ export default function ChatBubble(props: IconProps) {
             xmlns='http://www.w3.org/2000/svg'
          />
       </svg>
-   );
+   )
 }

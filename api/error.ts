@@ -1,5 +1,5 @@
-import type { Context } from 'hono';
-import type { ErrorResponse } from './types';
+import type { Context } from 'hono'
+import type { ErrorResponse } from './types'
 
 /**
  * Constants for error codes used throughout the application.
@@ -16,10 +16,10 @@ import type { ErrorResponse } from './types';
  */
 export const Errors = {
    EMAIL_ALREADY_EXISTS: 101,
-   UNKNOWN_ERROR_OCCURRED: 102,
-} as const;
+   UNKNOWN_ERROR_OCCURRED: 102
+} as const
 
-export type ErrorCode = (typeof Errors)[keyof typeof Errors];
+export type ErrorCode = (typeof Errors)[keyof typeof Errors]
 
 /**
  * Returns a success response in JSON format.
@@ -33,7 +33,7 @@ export type ErrorCode = (typeof Errors)[keyof typeof Errors];
  * ```
  */
 export function success(c: { json: Context['json'] }): Response {
-   return c.json({ success: true });
+   return c.json({ success: true })
 }
 
 /**
@@ -51,9 +51,9 @@ export function success(c: { json: Context['json'] }): Response {
 export function errorOccurred(
    c: { json: Context['json'] },
    errorCode: ErrorCode,
-   details?: unknown,
+   details?: unknown
 ): Response {
-   return c.json({ success: false, code: errorCode, details } as ErrorResponse);
+   return c.json({ success: false, code: errorCode, details } as ErrorResponse)
 }
 
 /**
@@ -61,9 +61,9 @@ export function errorOccurred(
  * Extends the base Error class and adds an error code.
  */
 export class RecoinError extends Error {
-   errorCode: ErrorCode;
+   errorCode: ErrorCode
    constructor(errorCode: ErrorCode) {
-      super();
-      this.errorCode = errorCode;
+      super()
+      this.errorCode = errorCode
    }
 }

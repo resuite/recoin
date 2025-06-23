@@ -1,16 +1,16 @@
-import { type ErrorCode, Errors } from '@/api/error';
+import { type ErrorCode, Errors } from '@/api/error'
 
 export function errorCodeToHumanReadable(errorCode: ErrorCode): string {
    switch (errorCode) {
       case Errors.EMAIL_ALREADY_EXISTS:
-         return 'This email is already registered.';
+         return 'This email is already registered.'
       case Errors.UNKNOWN_ERROR_OCCURRED:
-         return 'An unexpected error occurred. Please try again later.';
+         return 'An unexpected error occurred. Please try again later.'
       default:
-         return 'Unknown error';
+         return 'Unknown error'
    }
 }
 
 export function defaultError() {
-   return 'An unexpected error occurred. Please try again later.';
+   return 'An unexpected error occurred. Please try again later.'
 }

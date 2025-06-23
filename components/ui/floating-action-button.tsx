@@ -1,9 +1,9 @@
-import type { JSX } from 'retend/jsx-runtime';
-import styles from './floating-action-button.module.css';
-import { useDerivedValue } from 'retend-utils/hooks';
-import { Cell } from 'retend';
+import { Cell } from 'retend'
+import { useDerivedValue } from 'retend-utils/hooks'
+import type { JSX } from 'retend/jsx-runtime'
+import styles from './floating-action-button.module.css'
 
-type ButtonProps = JSX.IntrinsicElements['button'];
+type ButtonProps = JSX.IntrinsicElements['button']
 
 /**
  * Props for the FloatingActionButton component.
@@ -12,15 +12,15 @@ export interface FloatingActionButtonProps extends ButtonProps {
    /**
     * The vertical position of the button. Can be "top", "bottom", or "center". Defaults to "bottom".
     */
-   block?: JSX.ValueOrCell<'top' | 'bottom' | 'center'>;
+   block?: JSX.ValueOrCell<'top' | 'bottom' | 'center'>
    /**
     * The horizontal position of the button. Can be "left", "right", or "center". Defaults to "center".
     */
-   inline?: JSX.ValueOrCell<'left' | 'right' | 'center'>;
+   inline?: JSX.ValueOrCell<'left' | 'right' | 'center'>
    /**
     * Whether the button should be outlined. Defaults to false.
     */
-   outlined?: JSX.ValueOrCell<boolean>;
+   outlined?: JSX.ValueOrCell<boolean>
 }
 
 /**
@@ -44,14 +44,14 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
       inline: inlineProp = 'center',
       outlined: outlinedProp = false,
       ...rest
-   } = props;
+   } = props
 
-   const block = useDerivedValue(blockProp);
-   const inline = useDerivedValue(inlineProp);
-   const isOutlined = useDerivedValue(outlinedProp);
+   const block = useDerivedValue(blockProp)
+   const inline = useDerivedValue(inlineProp)
+   const isOutlined = useDerivedValue(outlinedProp)
 
-   const blockClass = Cell.derived(() => styles[`block-${block.get()}`]);
-   const inlineClass = Cell.derived(() => styles[`inline-${inline.get()}`]);
+   const blockClass = Cell.derived(() => styles[`block-${block.get()}`])
+   const inlineClass = Cell.derived(() => styles[`inline-${inline.get()}`])
 
    return (
       <button
@@ -61,10 +61,10 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
             styles.floatingActionButton,
             blockClass,
             inlineClass,
-            rest.class,
+            rest.class
          ]}
       >
          {props.children}
       </button>
-   );
+   )
 }

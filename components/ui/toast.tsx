@@ -1,9 +1,9 @@
-import { defer } from '@/utilities/miscellaneous';
-import { Cell, For, useObserver } from 'retend';
-import { useIntersectionObserver } from 'retend-utils/hooks';
-import type { JSX } from 'retend/jsx-runtime';
-import Add from '../icons/svg/add';
-import styles from './toast.module.css';
+import { defer } from '@/utilities/miscellaneous'
+import { Cell, For, useObserver } from 'retend'
+import { useIntersectionObserver } from 'retend-utils/hooks'
+import type { JSX } from 'retend/jsx-runtime'
+import Add from '../icons/svg/add'
+import styles from './toast.module.css'
 
 export interface ToastProps {
    /**
@@ -16,17 +16,17 @@ export interface ToastProps {
     * // JSX content
     * content: <div><strong>Important:</strong> Please review.</div>
     */
-   content: JSX.Template;
+   content: JSX.Template
    /**
     * Optional duration in milliseconds before the toast auto-dismisses.
     * If not provided, the toast will persist until manually dismissed.
     */
-   duration?: number;
+   duration?: number
    /**
     * Optional click handler for the toast.
     * @param {MouseEvent | KeyboardEvent} event - The click or keyboard event that triggered the handler.
     */
-   onClick?: (event: MouseEvent | KeyboardEvent) => void;
+   onClick?: (event: MouseEvent | KeyboardEvent) => void
 }
 
 export interface ToastDetails {
@@ -46,9 +46,9 @@ export interface ToastDetails {
     *
     * @returns A promise that resolves when the toast is dismissed.
     */
-   showToast: (props: ToastProps) => Promise<void>;
-   ToastContainer: () => JSX.Template;
-   activeToasts: Cell<Array<ToastProps & { id: string }>>;
+   showToast: (props: ToastProps) => Promise<void>
+   ToastContainer: () => JSX.Template
+   activeToasts: Cell<Array<ToastProps & { id: string }>>
 }
 
 /**
@@ -82,54 +82,54 @@ export interface ToastDetails {
  * ```
  */
 export function useToast(): ToastDetails {
-   const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([]);
-   const toastPromiseResolvers = new Map<string, () => void>();
+   const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
+   const toastPromiseResolvers = new Map<string, () => void>()
 
    function showToast(props: ToastProps) {
-      const id = crypto.randomUUID();
-      activeToasts.get().push({ ...props, id });
+      const id = crypto.randomUUID()
+      activeToasts.get().push({ ...props, id })
       const promise = new Promise<void>((resolve) => {
-         toastPromiseResolvers.set(id, resolve);
-      });
-      return promise;
+         toastPromiseResolvers.set(id, resolve)
+      })
+      return promise
    }
 
    function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
-      const { content, duration, onClick } = props;
-      const observer = useObserver();
-      let timeout: ReturnType<typeof setTimeout> | null = null;
-      const toastElementRef = Cell.source<HTMLDialogElement | null>(null);
-      const toastContainerRef = Cell.source<HTMLElement | null>(null);
-      const leftDismissMarkerRef = Cell.source<HTMLElement | null>(null);
-      const rightDismissMarkerRef = Cell.source<HTMLElement | null>(null);
+      const { content, duration, onClick } = props
+      const observer = useObserver()
+      let timeout: ReturnType<typeof setTimeout> | null = null
+      const toastElementRef = Cell.source<HTMLDialogElement | null>(null)
+      const toastContainerRef = Cell.source<HTMLElement | null>(null)
+      const leftDismissMarkerRef = Cell.source<HTMLElement | null>(null)
+      const rightDismissMarkerRef = Cell.source<HTMLElement | null>(null)
 
       // --- Swipe-to-Dismiss Logic ---
       // This callback is triggered by the IntersectionObserver when a dismiss marker
       // becomes fully visible (meaning the user has swiped the toast off-screen).
       const closeToast = () => {
-         const element = toastElementRef.get();
+         const element = toastElementRef.get()
          if (!element) {
-            return;
+            return
          }
-         element.classList.add(styles.toastLeaving);
+         element.classList.add(styles.toastLeaving)
          defer(async () => {
             await Promise.allSettled(
-               element.getAnimations().map((a) => a.finished),
-            );
-            toastPromiseResolvers.get(props.id)?.();
-            toastPromiseResolvers.delete(props.id);
-            activeToasts.get().splice(index.get(), 1);
-         });
-      };
+               element.getAnimations().map((a) => a.finished)
+            )
+            toastPromiseResolvers.get(props.id)?.()
+            toastPromiseResolvers.delete(props.id)
+            activeToasts.get().splice(index.get(), 1)
+         })
+      }
 
       const handleClick = (event: MouseEvent | KeyboardEvent) => {
          if (event instanceof KeyboardEvent && event.key !== 'Enter') {
-            return;
+            return
          }
          if (onClick) {
-            onClick(event);
+            onClick(event)
          }
-      };
+      }
 
       observer.onConnected(toastElementRef, (toastElement) => {
          // Initial setup for swipe-to-dismiss:
@@ -137,38 +137,38 @@ export function useToast(): ToastDetails {
          // The wrapper (`div.toast-container`) has a 3-column grid:
          // [left-marker, toast-content, right-marker] with large gaps,
          // making markers initially off-screen.
-         toastElement.scrollIntoView({ inline: 'center' });
+         toastElement.scrollIntoView({ inline: 'center' })
          if (duration !== undefined) {
-            timeout = setTimeout(closeToast, duration);
+            timeout = setTimeout(closeToast, duration)
          }
          return () => {
             if (timeout !== null) {
-               clearTimeout(timeout);
+               clearTimeout(timeout)
             }
-         };
-      });
+         }
+      })
 
       // Use useIntersectionObserver for swipe-to-dismiss
       const handleDismissIntersection: IntersectionObserverCallback = (
-         entries,
+         entries
       ) => {
          for (const entry of entries) {
             if (!entry?.isIntersecting) {
-               continue;
+               continue
             }
             // No point waiting for an animation, because the toast
             // itself will not be visible.
-            activeToasts.get().splice(index.get(), 1);
-            toastPromiseResolvers.get(props.id)?.();
-            toastPromiseResolvers.delete(props.id);
+            activeToasts.get().splice(index.get(), 1)
+            toastPromiseResolvers.get(props.id)?.()
+            toastPromiseResolvers.delete(props.id)
          }
-      };
+      }
 
       useIntersectionObserver(
          [leftDismissMarkerRef, rightDismissMarkerRef],
          handleDismissIntersection,
-         () => ({ root: toastContainerRef.peek(), threshold: 0.3 }),
-      );
+         () => ({ root: toastContainerRef.peek(), threshold: 0.3 })
+      )
 
       return (
          <div
@@ -198,27 +198,27 @@ export function useToast(): ToastDetails {
                class={styles.toastDismissMarker}
             />
          </div>
-      );
+      )
    }
 
    function ToastContainer() {
-      const toastsCount = Cell.derived(() => activeToasts.get().length);
+      const toastsCount = Cell.derived(() => activeToasts.get().length)
       return (
          <div
             class={styles.toastsGroup}
             style={{
                '--toasts-count': toastsCount,
-               '--toast-gap': 'calc(var(--spacing) * 0.5)',
+               '--toast-gap': 'calc(var(--spacing) * 0.5)'
             }}
          >
             {For(activeToasts, Toast)}
          </div>
-      );
+      )
    }
 
    return {
       showToast,
       ToastContainer,
-      activeToasts,
-   };
+      activeToasts
+   }
 }

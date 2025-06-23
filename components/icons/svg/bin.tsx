@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Bin(props: IconProps) {
    return (
@@ -66,5 +66,5 @@ export default function Bin(props: IconProps) {
             </clipPath>
          </defs>
       </svg>
-   );
+   )
 }

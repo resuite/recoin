@@ -1,31 +1,31 @@
-import type { IconProps } from '../index';
-import { Cell } from 'retend';
-import { useDerivedValue } from 'retend-utils/hooks';
-import type { JSX } from 'retend/jsx-runtime';
+import { Cell } from 'retend'
+import { useDerivedValue } from 'retend-utils/hooks'
+import type { JSX } from 'retend/jsx-runtime'
+import type { IconProps } from '../index'
 
 export interface CaretProps extends IconProps {
-   direction?: JSX.ValueOrCell<'right' | 'left' | 'top' | 'bottom'>;
+   direction?: JSX.ValueOrCell<'right' | 'left' | 'top' | 'bottom'>
 }
 
 export default function Caret(props: CaretProps) {
-   const { direction, ...rest } = props;
-   const dir = useDerivedValue(direction);
+   const { direction, ...rest } = props
+   const dir = useDerivedValue(direction)
 
    const rotate = Cell.derived(() => {
-      const value = dir.get();
+      const value = dir.get()
       switch (value) {
          case 'left':
-            return '90deg';
+            return '90deg'
          case 'top':
-            return '180deg';
+            return '180deg'
          case 'right':
-            return '270deg';
+            return '270deg'
       }
-   });
+   })
 
-   const style = { rotate };
+   const style = { rotate }
    if (rest.style && typeof rest.style === 'object') {
-      Object.assign(rest.style, style);
+      Object.assign(rest.style, style)
    }
 
    return (
@@ -45,5 +45,5 @@ export default function Caret(props: CaretProps) {
             stroke-linejoin='round'
          />
       </svg>
-   );
+   )
 }

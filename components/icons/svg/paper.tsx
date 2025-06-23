@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Paper(props: IconProps) {
    return (
@@ -15,5 +15,5 @@ export default function Paper(props: IconProps) {
             fill='currentColor'
          />
       </svg>
-   );
+   )
 }

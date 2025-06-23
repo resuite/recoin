@@ -1,9 +1,9 @@
-import { Icon } from '@/components/icons';
-import { StackView, StackViewGroup } from '@/components/views';
-import { Cell } from 'retend';
+import { Icon } from '@/components/icons'
+import { StackView, StackViewGroup } from '@/components/views'
+import { Cell } from 'retend'
 
-const page2IsOpen = Cell.source(false);
-const page3IsOpen = Cell.source(false);
+const page2IsOpen = Cell.source(false)
+const page3IsOpen = Cell.source(false)
 
 const NavStack = () => {
    return (
@@ -22,8 +22,8 @@ const NavStack = () => {
             />
          </StackViewGroup>
       </div>
-   );
-};
+   )
+}
 
 const Page1 = () => (
    <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
@@ -33,7 +33,7 @@ const Page1 = () => (
          <Icon name='caret' direction='right' class='btn-icon' />
       </button>
    </div>
-);
+)
 
 const Page2 = () => (
    <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
@@ -47,7 +47,7 @@ const Page2 = () => (
          <Icon name='caret' direction='right' class='btn-icon' />
       </button>
    </div>
-);
+)
 
 const Page3 = () => (
    <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
@@ -57,6 +57,6 @@ const Page3 = () => (
          Go back to page 2
       </button>
    </div>
-);
+)
 
-export default NavStack;
+export default NavStack

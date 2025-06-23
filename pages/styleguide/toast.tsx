@@ -1,15 +1,15 @@
-import { useToast } from '@/components/ui';
+import { useToast } from '@/components/ui'
 
 const Toast = () => {
-   const { showToast, ToastContainer } = useToast();
+   const { showToast, ToastContainer } = useToast()
 
    const handleShowSuccessToast = () => {
-      showToast({ content: <p>Operation successful!</p>, duration: 3000 });
-   };
+      showToast({ content: <p>Operation successful!</p>, duration: 3000 })
+   }
 
    const handleShowErrorToast = () => {
-      showToast({ content: <strong>Error: Something went wrong.</strong> });
-   };
+      showToast({ content: <strong>Error: Something went wrong.</strong> })
+   }
 
    return (
       <div class='h-screen grid place-items-center place-content-center'>
@@ -21,7 +21,7 @@ const Toast = () => {
             Show Persistent Error
          </button>
       </div>
-   );
-};
+   )
+}
 
-export default Toast;
+export default Toast

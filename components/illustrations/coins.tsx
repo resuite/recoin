@@ -1,7 +1,7 @@
-import { noHydrate } from 'retend-server/client';
-import type { JSX } from 'retend/jsx-runtime';
+import { noHydrate } from 'retend-server/client'
+import type { JSX } from 'retend/jsx-runtime'
 
-type SvgProps = JSX.IntrinsicElements['svg'];
+type SvgProps = JSX.IntrinsicElements['svg']
 
 export const Coins = noHydrate((props: SvgProps) => {
    return (
@@ -344,5 +344,5 @@ export const Coins = noHydrate((props: SvgProps) => {
             />
          </g>
       </svg>
-   );
-});
+   )
+})

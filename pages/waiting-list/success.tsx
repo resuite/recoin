@@ -1,12 +1,12 @@
-import Checkmark from '@/components/icons/svg/checkmark';
-import { emailEntered } from '@/pages/waiting-list/state';
-import { useRouter } from 'retend/router';
+import Checkmark from '@/components/icons/svg/checkmark'
+import { emailEntered } from '@/pages/waiting-list/state'
+import { useRouter } from 'retend/router'
 
 const ComingSoonWaitingListSuccess = () => {
-   const router = useRouter();
+   const router = useRouter()
 
    if (!emailEntered.get()) {
-      return router.navigate('/waiting-list');
+      return router.navigate('/waiting-list')
    }
 
    return (
@@ -29,7 +29,7 @@ const ComingSoonWaitingListSuccess = () => {
             </section>
          </main>
       </div>
-   );
-};
+   )
+}
 
-export default ComingSoonWaitingListSuccess;
+export default ComingSoonWaitingListSuccess

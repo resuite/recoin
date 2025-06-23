@@ -1,35 +1,35 @@
-import type { IconProps } from '../index';
-import { Cell } from 'retend';
-import { useDerivedValue } from 'retend-utils/hooks';
-import type { JSX } from 'retend/jsx-runtime';
+import { Cell } from 'retend'
+import { useDerivedValue } from 'retend-utils/hooks'
+import type { JSX } from 'retend/jsx-runtime'
+import type { IconProps } from '../index'
 
 export type ArrowDirection =
    | 'top-left'
    | 'top-right'
    | 'bottom-left'
-   | 'bottom-right';
+   | 'bottom-right'
 export interface ArrowProps extends IconProps {
-   direction?: JSX.ValueOrCell<ArrowDirection>;
+   direction?: JSX.ValueOrCell<ArrowDirection>
 }
 
 export default function Arrows(props: ArrowProps) {
-   const { direction: directionProp, ...rest } = props;
-   const direction = useDerivedValue(directionProp);
+   const { direction: directionProp, ...rest } = props
+   const direction = useDerivedValue(directionProp)
    const rotate = Cell.derived(() => {
-      const directionValue = direction.get();
+      const directionValue = direction.get()
       switch (directionValue) {
          case 'top-left':
-            return '90deg';
+            return '90deg'
          case 'top-right':
-            return '180deg';
+            return '180deg'
          case 'bottom-right':
-            return '270deg';
+            return '270deg'
       }
-   });
+   })
 
-   const style = { rotate };
+   const style = { rotate }
    if (rest.style && typeof rest.style === 'object') {
-      Object.assign(rest.style, style);
+      Object.assign(rest.style, style)
    }
 
    return (
@@ -57,5 +57,5 @@ export default function Arrows(props: ArrowProps) {
             stroke-linecap='round'
          />
       </svg>
-   );
+   )
 }

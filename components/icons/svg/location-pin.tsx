@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function LocationPin(props: IconProps) {
    return (
@@ -42,5 +42,5 @@ export default function LocationPin(props: IconProps) {
             </clipPath>
          </defs>
       </svg>
-   );
+   )
 }

@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Checkmark(props: IconProps) {
    return (
@@ -24,5 +24,5 @@ export default function Checkmark(props: IconProps) {
             stroke-linejoin='round'
          />
       </svg>
-   );
+   )
 }

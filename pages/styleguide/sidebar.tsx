@@ -1,52 +1,52 @@
-import { Icon, type IconName } from '@/components/icons';
-import { useSidebar } from '@/components/views';
-import { createPartitions } from '@/utilities/animations';
-import { Cell, For } from 'retend';
-import { useRouter } from 'retend/router';
-import FloatingActionButtonTest from './fab';
-import PullToRefreshViewTest from './pull-zone';
+import { Icon, type IconName } from '@/components/icons'
+import { useSidebar } from '@/components/views'
+import { createPartitions } from '@/utilities/animations'
+import { Cell, For } from 'retend'
+import { useRouter } from 'retend/router'
+import FloatingActionButtonTest from './fab'
+import PullToRefreshViewTest from './pull-zone'
 
 interface LinkInfo {
-   name: string;
-   icon: IconName;
+   name: string
+   icon: IconName
 }
 
 interface SidebarLinkProps {
-   link: LinkInfo;
-   progressValue: string;
-   height?: string;
-   isActive?: boolean;
-   href?: string;
+   link: LinkInfo
+   progressValue: string
+   height?: string
+   isActive?: boolean
+   href?: string
 }
 
 interface AnimatedLinkGroupProps {
-   links: LinkInfo[];
-   progressValues: string[];
-   linkHeight?: string;
-   activeIndex?: number;
+   links: LinkInfo[]
+   progressValues: string[]
+   linkHeight?: string
+   activeIndex?: number
 }
 
 interface SidebarDividerProps {
-   scaleValue: string;
+   scaleValue: string
 }
 
 interface SidebarHeaderProps {
-   title?: string;
-   className?: string;
-   progressValue?: string;
+   title?: string
+   className?: string
+   progressValue?: string
 }
 
 const createLinkAnimationValues = (progressValue: string) => {
    const translate = Cell.derived(() => {
-      return `calc(-15% + ${progressValue} * 15%)`;
-   });
+      return `calc(-15% + ${progressValue} * 15%)`
+   })
 
    const opacity = Cell.derived(() => {
-      return progressValue;
-   });
+      return progressValue
+   })
 
-   return { translate, opacity };
-};
+   return { translate, opacity }
+}
 
 const SidebarLink = (props: SidebarLinkProps) => {
    const {
@@ -54,17 +54,17 @@ const SidebarLink = (props: SidebarLinkProps) => {
       progressValue,
       height = '8dvh',
       isActive = false,
-      href = '#',
-   } = props;
-   const { Link } = useRouter();
-   const { translate, opacity } = createLinkAnimationValues(progressValue);
+      href = '#'
+   } = props
+   const { Link } = useRouter()
+   const { translate, opacity } = createLinkAnimationValues(progressValue)
 
    return (
       <Link
          href={href}
          class={[
             'border-none py-0.5 px-1 ease-out duration-slow transition-[translate,opacity] gap-[10px]',
-            'active:bg-gray-100/0.5',
+            'active:bg-gray-100/0.5'
          ]}
          style={{ translate, opacity, height }}
       >
@@ -75,25 +75,20 @@ const SidebarLink = (props: SidebarLinkProps) => {
             {link.name}
          </div>
       </Link>
-   );
-};
+   )
+}
 
 // Reusable component for animated link groups
 const AnimatedLinkGroup = (props: AnimatedLinkGroupProps) => {
-   const {
-      links,
-      progressValues,
-      linkHeight = '8dvh',
-      activeIndex = 0,
-   } = props;
+   const { links, progressValues, linkHeight = '8dvh', activeIndex = 0 } = props
    return (
       <div
          class='grid'
          style={{ gridTemplateRows: `repeat(${links.length}, auto) 1fr` }}
       >
          {For(links, (link, index) => {
-            const progressIndex = index.get();
-            const isActive = progressIndex === activeIndex;
+            const progressIndex = index.get()
+            const isActive = progressIndex === activeIndex
 
             return (
                <SidebarLink
@@ -103,111 +98,111 @@ const AnimatedLinkGroup = (props: AnimatedLinkGroupProps) => {
                   isActive={isActive}
                   href='#'
                />
-            );
+            )
          })}
       </div>
-   );
-};
+   )
+}
 
 // Reusable component for the sidebar divider
 const SidebarDivider = (props: SidebarDividerProps) => {
-   const { scaleValue } = props;
+   const { scaleValue } = props
    return (
       <div
          class='h-[2.5dvh] border-b-[3px] opacity-[0.5] ml-1 mx-2'
          style={{ scale: `${scaleValue} 1`, transformOrigin: '0 0' }}
       />
-   );
-};
+   )
+}
 
 // Reusable component for sidebar header
 const SidebarHeader = (props: SidebarHeaderProps) => {
-   const { title = 'recoin.', className = 'pl-1 pb-1', progressValue } = props;
+   const { title = 'recoin.', className = 'pl-1 pb-1', progressValue } = props
    const { translate, opacity } = progressValue
       ? createLinkAnimationValues(progressValue)
-      : { translate: undefined, opacity: undefined };
+      : { translate: undefined, opacity: undefined }
 
    return (
       <h2
          class={[
             className,
-            'ease-out duration-slow transition-[translate,opacity]',
+            'ease-out duration-slow transition-[translate,opacity]'
          ]}
          style={{ translate, opacity }}
       >
          {title}
       </h2>
-   );
-};
+   )
+}
 
 const SidebarTest = () => {
-   const { SidebarProviderView, SidebarToggle } = useSidebar();
+   const { SidebarProviderView, SidebarToggle } = useSidebar()
    const upperLinks: Array<LinkInfo> = [
       {
          name: 'Home',
-         icon: 'house',
+         icon: 'house'
       },
       {
          name: 'Chat',
-         icon: 'sparkle',
+         icon: 'sparkle'
       },
       {
          name: 'Reports',
-         icon: 'chart',
+         icon: 'chart'
       },
       {
          name: 'Budgets',
-         icon: 'pie-chart',
+         icon: 'pie-chart'
       },
       {
          name: 'Categories',
-         icon: 'grid',
+         icon: 'grid'
       },
       {
          name: 'Profile',
-         icon: 'profile',
-      },
-   ];
+         icon: 'profile'
+      }
+   ]
 
    const lowerLinks: Array<LinkInfo> = [
       {
          name: 'Feedback',
-         icon: 'chat-bubble',
+         icon: 'chat-bubble'
       },
       {
          name: 'Settings',
-         icon: 'settings',
-      },
-   ];
+         icon: 'settings'
+      }
+   ]
 
-   const contentTopMarkerRef = Cell.source<HTMLElement | null>(null);
+   const contentTopMarkerRef = Cell.source<HTMLElement | null>(null)
 
-   const sidebarRevealCssVar = 'var(--sidebar-reveal)';
+   const sidebarRevealCssVar = 'var(--sidebar-reveal)'
    const upperLinksSwipeProgressValuesOptions = {
       from: 0.6,
       overlap: 0.2,
-      count: upperLinks.length,
-   };
+      count: upperLinks.length
+   }
    const lowerLinksSwipeProgressValuesOptions = {
       from: 0.6,
       overlap: 0.2,
-      count: lowerLinks.length,
-   };
-   const lineScaleOptions = { from: 0.7 };
-   const headerAnimationOptions = { from: 0.7, to: 0.9 };
+      count: lowerLinks.length
+   }
+   const lineScaleOptions = { from: 0.7 }
+   const headerAnimationOptions = { from: 0.7, to: 0.9 }
    const upperLinksSwipeProgressValues = createPartitions(
       sidebarRevealCssVar,
-      upperLinksSwipeProgressValuesOptions,
-   );
+      upperLinksSwipeProgressValuesOptions
+   )
    const lowerLinksSwipeProgressValues = createPartitions(
       sidebarRevealCssVar,
-      lowerLinksSwipeProgressValuesOptions,
-   );
-   const [lineScale] = createPartitions(sidebarRevealCssVar, lineScaleOptions);
+      lowerLinksSwipeProgressValuesOptions
+   )
+   const [lineScale] = createPartitions(sidebarRevealCssVar, lineScaleOptions)
    const [headerProgressValue] = createPartitions(
       sidebarRevealCssVar,
-      headerAnimationOptions,
-   );
+      headerAnimationOptions
+   )
 
    const InnerSidebar = () => {
       return (
@@ -226,7 +221,7 @@ const SidebarTest = () => {
             <div
                class='grid pt-auto before:[grid-area:1/1]'
                style={{
-                  gridTemplateRows: `1fr repeat(${lowerLinks.length}, auto)`,
+                  gridTemplateRows: `1fr repeat(${lowerLinks.length}, auto)`
                }}
             >
                <AnimatedLinkGroup
@@ -237,8 +232,8 @@ const SidebarTest = () => {
                />
             </div>
          </div>
-      );
-   };
+      )
+   }
 
    return (
       <PullToRefreshViewTest contentTopMarkerRef={contentTopMarkerRef}>
@@ -258,7 +253,7 @@ const SidebarTest = () => {
             </FloatingActionButtonTest>
          </SidebarProviderView>
       </PullToRefreshViewTest>
-   );
-};
+   )
+}
 
-export default SidebarTest;
+export default SidebarTest

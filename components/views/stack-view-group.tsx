@@ -1,18 +1,18 @@
-import { defer } from '@/utilities/miscellaneous';
+import { defer } from '@/utilities/miscellaneous'
 import {
    PointerTracker,
-   type TrackedMoveEvent,
-} from '@/utilities/pointer-gesture-tracker';
-import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling';
-import { Cell, If, type SourceCell, useObserver } from 'retend';
-import { useDerivedValue } from 'retend-utils/hooks';
-import type { JSX } from 'retend/jsx-runtime';
-import styles from './stack-view-group.module.css';
+   type TrackedMoveEvent
+} from '@/utilities/pointer-gesture-tracker'
+import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
+import { Cell, If, type SourceCell, useObserver } from 'retend'
+import { useDerivedValue } from 'retend-utils/hooks'
+import type { JSX } from 'retend/jsx-runtime'
+import styles from './stack-view-group.module.css'
 
-type DivProps = JSX.IntrinsicElements['div'];
+type DivProps = JSX.IntrinsicElements['div']
 
 export interface StackViewGroupProps extends DivProps {
-   ref?: SourceCell<HTMLElement | null>;
+   ref?: SourceCell<HTMLElement | null>
 }
 /**
  * Props for the StackView component.
@@ -21,7 +21,7 @@ export interface StackViewProps extends DivProps {
    /**
     * Whether the view is currently open.
     */
-   isOpen?: JSX.ValueOrCell<boolean>;
+   isOpen?: JSX.ValueOrCell<boolean>
    /**
     * Whether the view is the root of the navigation stack.
     * The root view is the first view and is always open.
@@ -29,27 +29,27 @@ export interface StackViewProps extends DivProps {
     *
     * It doesn't do anything, but it's included for intuitiveness.
     */
-   root?: boolean;
+   root?: boolean
    /**
     * A function that returns the content to be rendered within the view.
     * This can be a static function or a reactive cell.
     * Navigation is lazy, which means that the content is only rendered when the view is open,
     * and will be unmounted when the view is closed.
     */
-   content: JSX.ValueOrCell<() => JSX.Template>;
+   content: JSX.ValueOrCell<() => JSX.Template>
    /**
     * A ref to the underlying HTML element of the view.
     */
-   ref?: SourceCell<HTMLElement | null>;
+   ref?: SourceCell<HTMLElement | null>
    /**
     * Whether or not the view can be swiped from the left edge.
     * It defaults to true.
     */
-   canSwipe?: JSX.ValueOrCell<boolean>;
+   canSwipe?: JSX.ValueOrCell<boolean>
    /**
     * Fired when the user tries to close the view by swiping it away.
     */
-   onCloseRequested?: () => void;
+   onCloseRequested?: () => void
 }
 
 /**
@@ -64,7 +64,7 @@ export function StackViewGroup(props: StackViewGroupProps) {
       children,
       ref = Cell.source<HTMLElement | null>(null),
       ...rest
-   } = props;
+   } = props
 
    return (
       <div
@@ -75,7 +75,7 @@ export function StackViewGroup(props: StackViewGroupProps) {
       >
          <div class={styles.stackViewGroupContent}>{children}</div>
       </div>
-   );
+   )
 }
 
 /**
@@ -124,101 +124,98 @@ export function StackView(props: StackViewProps) {
       canSwipe: canSwipeProp = true,
       root,
       ...rest
-   } = props;
+   } = props
 
-   const isOpen = useDerivedValue(isOpenProp);
-   const content = useDerivedValue(contentProp);
-   const canSwipe = useDerivedValue(canSwipeProp);
-   const observer = useObserver();
-   const contentLoaded = Cell.source(root || isOpen.get());
+   const isOpen = useDerivedValue(isOpenProp)
+   const content = useDerivedValue(contentProp)
+   const canSwipe = useDerivedValue(canSwipeProp)
+   const observer = useObserver()
+   const contentLoaded = Cell.source(root || isOpen.get())
 
-   let stackWidth: number | null = null;
-   let animation: Animation | null = null;
+   let stackWidth: number | null = null
+   let animation: Animation | null = null
 
    const startDragging = (event: PointerEvent) => {
-      const stack = getStackGroupElement(containerRef.get());
+      const stack = getStackGroupElement(containerRef.get())
       if (!stack) {
-         return;
+         return
       }
-      stack.setAttribute('data-dragging', '');
-      stackWidth = stack.clientWidth;
-      navigator.vibrate?.([15, 15]);
+      stack.setAttribute('data-dragging', '')
+      stackWidth = stack.clientWidth
+      navigator.vibrate?.([15, 15])
 
-      animation = stack.animate(ANIMATION_KEYFRAMES, ANIMATION_OPTIONS);
-      animation.pause();
+      animation = stack.animate(ANIMATION_KEYFRAMES, ANIMATION_OPTIONS)
+      animation.pause()
 
-      const tracker = new PointerTracker();
-      tracker.start(event);
-      tracker.addEventListener('move', drag);
-      tracker.addEventListener('end', stopDragging);
-      tracker.addEventListener('cancel', stopDragging);
-   };
+      const tracker = new PointerTracker()
+      tracker.start(event)
+      tracker.addEventListener('move', drag)
+      tracker.addEventListener('end', stopDragging)
+      tracker.addEventListener('cancel', stopDragging)
+   }
 
    const drag = (event: TrackedMoveEvent) => {
       requestAnimationFrame(() => {
-         const deltaX = event.deltaX;
+         const deltaX = event.deltaX
          if (deltaX > 0 && animation !== null && stackWidth !== null) {
-            animation.currentTime =
-               (deltaX / stackWidth) * GESTURE_ANIMATION_MS;
+            animation.currentTime = (deltaX / stackWidth) * GESTURE_ANIMATION_MS
          }
-      });
-   };
+      })
+   }
 
    const stopDragging = () => {
-      stackWidth = null;
-      const stack = getStackGroupElement(containerRef.get());
-      stack?.removeAttribute('data-dragging');
+      stackWidth = null
+      const stack = getStackGroupElement(containerRef.get())
+      stack?.removeAttribute('data-dragging')
       if (viewOutOfViewport) {
-         onCloseRequested?.();
+         onCloseRequested?.()
       }
-      animation?.play();
-      animation = null;
-   };
+      animation?.play()
+      animation = null
+   }
 
-   let intersectObserver: IntersectionObserver;
-   let viewOutOfViewport = false;
+   let intersectObserver: IntersectionObserver
+   let viewOutOfViewport = false
    const callback: IntersectionObserverCallback = ([entry]) => {
       if (!entry) {
-         return;
+         return
       }
-      viewOutOfViewport = !entry.isIntersecting;
-   };
+      viewOutOfViewport = !entry.isIntersecting
+   }
    observer.onConnected(containerRef, (element) => {
-      const stack = getStackGroupElement(element);
+      const stack = getStackGroupElement(element)
       if (!stack) {
-         return;
+         return
       }
 
-      const options = { root: stack, threshold: 0.6 };
-      intersectObserver = new IntersectionObserver(callback, options);
-      intersectObserver.observe(element);
-      return () => intersectObserver.disconnect();
-   });
+      const options = { root: stack, threshold: 0.6 }
+      intersectObserver = new IntersectionObserver(callback, options)
+      intersectObserver.observe(element)
+      return () => intersectObserver.disconnect()
+   })
 
    // Close and dispose hidden views.
    isOpen.listen((viewIsOpen) => {
       if (viewIsOpen) {
-         contentLoaded.set(true);
-         return;
+         contentLoaded.set(true)
+         return
       }
       // Deferred till next event loop cycle so that the
       // needed animations can be collected.
       defer(async () => {
-         const container = containerRef.get();
+         const container = containerRef.get()
          if (!container) {
-            return;
+            return
          }
-         const closingViewTransitions = container.getAnimations();
-         await Promise.allSettled(
-            closingViewTransitions.map((c) => c.finished),
-         );
+         const closingViewTransitions = container.getAnimations()
+         await Promise.allSettled(closingViewTransitions.map((c) => c.finished))
          // We need to check again, in case the transition and closing
          // was cancelled.
          if (!isOpen.get()) {
-            contentLoaded.set(false);
+            contentLoaded.set(false)
          }
-      });
-   });
+      })
+   })
 
    return (
       <div
@@ -235,23 +232,23 @@ export function StackView(props: StackViewProps) {
             />
          ))}
       </div>
-   );
+   )
 }
 
 const ANIMATION_KEYFRAMES = [
    {
-      '--stack-view-group-pull-progress': 1,
+      '--stack-view-group-pull-progress': 1
    },
    {
-      '--stack-view-group-pull-progress': 0,
-   },
-];
-const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' };
+      '--stack-view-group-pull-progress': 0
+   }
+]
+const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' }
 
 function getStackGroupElement(element: HTMLElement | null): HTMLElement | null {
-   const stack = element?.parentElement?.parentElement;
+   const stack = element?.parentElement?.parentElement
    if (!stack || !stack.classList.contains(styles.stackViewGroup as string)) {
-      return null;
+      return null
    }
-   return stack;
+   return stack
 }

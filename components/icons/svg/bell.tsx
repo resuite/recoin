@@ -1,4 +1,4 @@
-import type { IconProps } from '../index';
+import type { IconProps } from '../index'
 
 export default function Bell(props: IconProps) {
    return (
@@ -40,5 +40,5 @@ export default function Bell(props: IconProps) {
             stroke-linejoin='round'
          />
       </svg>
-   );
+   )
 }

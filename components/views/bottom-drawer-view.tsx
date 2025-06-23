@@ -146,7 +146,7 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
          defer(() => {
             // @adebola-io(2025-06-22): Omo idk. If either of the scrollTo() calls is
             // removed, the drawer content either glitches or doesn't scroll to the bottom.
-            // Somnetimes in Firefox, sometimes in Chromium (gasp), sometimes in Safari.
+            // Sometimes in Firefox, sometimes in Chromium (gasp), sometimes in Safari.
             dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
          })
 
