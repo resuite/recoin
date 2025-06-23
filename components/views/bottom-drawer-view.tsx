@@ -110,7 +110,7 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
          handleIsOpenChange(isOpen.get())
          await animationsSettled(contentRef)
          dialog.classList.add(styles.snapped)
-         // dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
+         dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
 
          // TODO: Move this behavior into Retend. Currently,
          // after an observer callback runs, it is disposed,
