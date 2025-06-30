@@ -16,6 +16,12 @@
    &:empty {
       display: none;
    }
+
+   @media (orientation: landscape) {
+      --toast-starting-translate: 0 100%;
+      padding-bottom: var(--spacing);
+      grid-template-rows: 1fr auto;
+   }
 }
 
 .toastContainer {
@@ -52,6 +58,14 @@
 
    &::-webkit-scrollbar {
       display: none;
+   }
+
+   @media (orientation: landscape) {
+      translate: 0 calc(-1 * var(--translate-y));
+      /* Selects any older toasts to shrink. */
+      &:nth-last-child(n + 3) {
+         translate: 0 calc(-1 * var(--translate-y-shrunk));
+      }
    }
 
    @media (pointer: coarse) {

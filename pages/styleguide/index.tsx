@@ -110,6 +110,7 @@ const Styleguide = () => {
                   Go to keyboard avoidance page
                </Link>
                <Link href='/styleguide/drawer'>Go to drawer page.</Link>
+               <Link href='/styleguide/popover'>Go to popover page</Link>
             </div>
          </div>
       </div>

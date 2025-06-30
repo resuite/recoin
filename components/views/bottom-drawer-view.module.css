@@ -1,40 +1,41 @@
 .dialog {
    --drawer-content-height: 70dvh;
    position: fixed;
-   display: grid;
-   grid-template-rows: 1fr;
-   grid-template-columns: 1fr;
+   z-index: var(--drawer-layer);
    top: 0;
    left: 0;
-   height: 100dvh;
-   width: 100dvw;
-   background-color: transparent;
+   display: grid;
    align-items: end;
+   width: 100dvw;
+   height: 100dvh;
+   background-color: transparent;
+   grid-template-rows: 1fr;
+   grid-template-columns: 1fr;
 
    &::before {
-      display: block;
-      content: "";
       position: fixed;
       top: 0;
       left: 0;
-      height: 100dvh;
+      display: block;
       width: 100dvw;
-      pointer-events: none;
+      height: 100dvh;
       background-color: #00000035;
+      content: "";
       animation-name: fade-in;
       animation-duration: var(--speed-device);
       animation-timing-function: var(--timing);
+      pointer-events: none;
       will-change: opacity;
    }
 
    &.snapped {
-      scroll-snap-type: y mandatory;
       overflow-y: auto;
+      scroll-snap-type: y mandatory;
 
       &::after {
          display: block;
-         content: "";
          height: 100dvh;
+         content: "";
          grid-area: 1 / 1;
       }
 
@@ -70,26 +71,26 @@
 
 .drawerContentContainer {
    position: relative;
-   pointer-events: auto;
    height: var(--drawer-content-height);
    border-radius: 3dvh 3dvh 0 0;
+   box-shadow: 0 -2px 8px 0 #00000015;
    animation-name: slide-up-from-under;
-   animation-fill-mode: backwards;
    animation-duration: calc(var(--speed-device) * 1);
    animation-timing-function: var(--timing);
-   box-shadow: 0 -2px 8px 0 #00000015;
+   pointer-events: auto;
+   animation-fill-mode: backwards;
 
    &::before {
       --width: 45px;
-      height: 7px;
-      width: var(--width);
-      display: block;
-      content: "";
       position: absolute;
       top: calc(var(--spacing) / 2.5);
       left: calc(50% - var(--width) / 2);
-      background-color: #00000045;
+      display: block;
+      width: var(--width);
+      height: 7px;
       border-radius: 3dvh;
+      background-color: #00000045;
+      content: "";
    }
 }
 

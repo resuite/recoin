@@ -4,6 +4,7 @@ import BottomDrawerTest from './bottom-drawer'
 import FloatingActionButtonTest from './fab'
 import KeyboardAvoidanceTest from './keyboard-avoidance'
 import NavStack from './nav-stack'
+import PopoverTest from './popover'
 import PullToRefreshViewTest from './pull-zone'
 import SidebarTest from './sidebar'
 import Tabs from './tabs'
@@ -72,6 +73,12 @@ export default (<RouteRecords>[
       name: 'styleguide-bottom-drawer',
       path: '/styleguide/drawer',
       component: BottomDrawerTest,
+      metadata
+   },
+   {
+      name: 'styleguide-popover',
+      path: '/styleguide/popover',
+      component: PopoverTest,
       metadata
    }
 ])

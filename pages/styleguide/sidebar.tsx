@@ -1,8 +1,13 @@
 import { Icon, type IconName } from '@/components/icons'
-import { useSidebar } from '@/components/views'
+import {
+   QueryControlledBottomDrawer,
+   StackView,
+   StackViewGroup,
+   useSidebar
+} from '@/components/views'
 import { createPartitions } from '@/utilities/animations'
 import { Cell, For } from 'retend'
-import { useRouter } from 'retend/router'
+import { useRouteQuery, useRouter } from 'retend/router'
 import FloatingActionButtonTest from './fab'
 import PullToRefreshViewTest from './pull-zone'
 
@@ -135,8 +140,77 @@ const SidebarHeader = (props: SidebarHeaderProps) => {
    )
 }
 
+const page2IsOpen = Cell.source(false)
+const page3IsOpen = Cell.source(false)
+
 const SidebarTest = () => {
-   const { SidebarProviderView, SidebarToggle } = useSidebar()
+   const query = useRouteQuery()
+   const drawerKey = 'sidebarDrawerIsOpen'
+
+   const openDrawer = () => {
+      query.set(drawerKey, 'true')
+   }
+
+   const closeDrawer = () => {
+      query.delete(drawerKey)
+   }
+
+   const DrawerContent = () => {
+      return (
+         <div class='h-full w-full grid place-items-center place-content-center px-2'>
+            <h2 class='text-header'>Bottom Drawer Content.</h2>
+            <p class='mb-1 text-center'>
+               This is the content of the bottom drawer on the sidebar page.
+            </p>
+            <button type='button' onClick={closeDrawer}>
+               Close Drawer
+            </button>
+         </div>
+      )
+   }
+
+   const Page1 = () => (
+      <div class='h-full w-full relative grid place-items-center place-content-center gap-0.5'>
+         <div
+            ref={contentTopMarkerRef}
+            class='h-0.25 fixed top-0 left-0 w-full'
+         />
+         <h1 class='text-header'>recoin.</h1>
+         <button type='button' onClick={openDrawer}>
+            Open Bottom Drawer
+         </button>
+         <button type='button' onClick={() => page2IsOpen.set(true)}>
+            Next Page
+            <Icon name='caret' direction='right' class='btn-icon' />
+         </button>
+      </div>
+   )
+
+   const Page2 = () => (
+      <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
+         <div class='mb-2'>2</div>
+         <button type='button' onClick={() => page2IsOpen.set(false)}>
+            <Icon name='caret' direction='left' class='btn-icon' />
+            Go back to page 1
+         </button>
+         <button type='button' onClick={() => page3IsOpen.set(true)}>
+            Next Page
+            <Icon name='caret' direction='right' class='btn-icon' />
+         </button>
+      </div>
+   )
+
+   const Page3 = () => (
+      <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
+         <div class='mb-2'>3</div>
+         <button type='button' onClick={() => page3IsOpen.set(false)}>
+            <Icon name='caret' direction='left' class='btn-icon' />
+            Go back to page 2
+         </button>
+      </div>
+   )
+
+   const { SidebarProviderView } = useSidebar()
    const upperLinks: Array<LinkInfo> = [
       {
          name: 'Home',
@@ -236,23 +310,35 @@ const SidebarTest = () => {
    }
 
    return (
-      <PullToRefreshViewTest contentTopMarkerRef={contentTopMarkerRef}>
-         <SidebarProviderView
-            class='h-screen dark-scheme'
-            sidebar={InnerSidebar}
-         >
-            <FloatingActionButtonTest>
-               <div class='h-full w-full relative grid place-items-center place-content-center'>
-                  <div
-                     ref={contentTopMarkerRef}
-                     class='h-0.25 fixed top-0 left-0 w-full'
-                  />
-                  <h1 class='text-header'>recoin.</h1>
-                  <SidebarToggle>Toggle Sidebar</SidebarToggle>
-               </div>
-            </FloatingActionButtonTest>
-         </SidebarProviderView>
-      </PullToRefreshViewTest>
+      <div>
+         <PullToRefreshViewTest contentTopMarkerRef={contentTopMarkerRef}>
+            <SidebarProviderView
+               class='h-screen dark-scheme'
+               sidebar={InnerSidebar}
+            >
+               <FloatingActionButtonTest>
+                  <StackViewGroup class='h-full w-full text-large'>
+                     <StackView class='bg-sky-300' root content={Page1} />
+                     <StackView
+                        isOpen={page2IsOpen}
+                        onCloseRequested={() => page2IsOpen.set(false)}
+                        content={Page2}
+                     />
+                     <StackView
+                        isOpen={page3IsOpen}
+                        onCloseRequested={() => page3IsOpen.set(false)}
+                        content={Page3}
+                     />
+                  </StackViewGroup>
+               </FloatingActionButtonTest>
+            </SidebarProviderView>
+         </PullToRefreshViewTest>
+         <QueryControlledBottomDrawer
+            class='light-scheme'
+            queryKey={drawerKey}
+            content={DrawerContent}
+         />
+      </div>
    )
 }
 

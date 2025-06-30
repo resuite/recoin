@@ -1,6 +1,6 @@
 .floatingActionButton {
    position: absolute;
-   z-index: 99;
+   z-index: var(--floating-button-layer);
    display: grid;
    width: var(--fab-size);
    min-width: unset;

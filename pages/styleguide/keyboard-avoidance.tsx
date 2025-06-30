@@ -10,8 +10,7 @@ const KeyboardAvoidanceTest = () => {
    return (
       <VirtualKeyboardAwareView
          class={[
-            'h-screen w-screen grid-lines px-1 pt-2 rounded-t-3xl grid grid-rows-[auto_1fr_auto]',
-            'duration-device transition-[height] default-timing'
+            'h-screen w-screen grid-lines px-1 pt-2 rounded-t-3xl grid grid-rows-[auto_1fr_auto]'
          ]}
          onVirtualKeyboardVisibilityChange={handleVisibilityChange}
          style={{ height }}

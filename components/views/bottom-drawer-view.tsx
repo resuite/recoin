@@ -54,7 +54,7 @@ interface QueryControlledBottomDrawerProps
  * }
  * ```
  */
-export const BottomDrawer = (props: BottomDrawerProps) => {
+export function BottomDrawer(props: BottomDrawerProps) {
    const {
       isOpen: isOpenProp,
       dialogRef = Cell.source(null),
@@ -68,17 +68,17 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
    const dialogOpen = Cell.source(isOpen.get())
    const containerRef = Cell.source<HTMLElement | null>(null)
 
-   const startCloseSequence = async () => {
+   async function startCloseSequence() {
       dialogRef.peek()?.classList.add(styles.closing)
       await animationsSettled(contentRef)
    }
 
-   const handleClickOutside = async () => {
+   async function handleClickOutside() {
       await startCloseSequence()
       onClose?.()
    }
 
-   const handleIsOpenChange = async (isOpen: boolean) => {
+   async function handleIsOpenChange(isOpen: boolean) {
       const dialogElement = dialogRef.peek()
       if (isOpen && !dialogElement?.open) {
          // opening the drawer
@@ -93,7 +93,7 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
    }
 
    let drawerAppended = false
-   const recurringAppendListener = () => {
+   function recurringAppendListener() {
       if (!containerRef.peek()?.isConnected && drawerAppended) {
          return
       }
@@ -115,7 +115,7 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
                if (!content) {
                   return
                }
-               // @adebola-io(2025-06-22): The drawer's "pull" is CSS scroll, not translation.
+               // The drawer's "pull" is CSS scroll, not translation.
                // To avoid a visual jump before animating out, this sets the content's `translateY`
                // to its current scrolled position, ensuring a smooth transition.
                const contentRectBeforeClose = content.getBoundingClientRect()
@@ -144,7 +144,7 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
          dialog.classList.add(styles.snapped)
          dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
          defer(() => {
-            // @adebola-io(2025-06-22): Omo idk. If either of the scrollTo() calls is
+            // Omo idk. If either of the scrollTo() calls is
             // removed, the drawer content either glitches or doesn't scroll to the bottom.
             // Sometimes in Firefox, sometimes in Chromium (gasp), sometimes in Safari.
             dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
@@ -236,9 +236,9 @@ export const BottomDrawer = (props: BottomDrawerProps) => {
  * }
  * ```
  */
-export const QueryControlledBottomDrawer = (
+export function QueryControlledBottomDrawer(
    props: QueryControlledBottomDrawerProps
-) => {
+) {
    const { queryKey, value: valueProp, content, ...rest } = props
    const value = useDerivedValue(valueProp)
    const query = useRouteQuery()
@@ -256,7 +256,7 @@ export const QueryControlledBottomDrawer = (
       return routeHasKey.get() && value.get() === undefined
    })
 
-   const onClose = () => {
+   function onClose() {
       query.delete(queryKey)
    }
 

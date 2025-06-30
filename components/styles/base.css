@@ -79,6 +79,8 @@ body {
 
    --default-speed: 150ms;
    --timing: cubic-bezier(0.3, 0.4, 0.05, 1);
+   --timing-keyboard: ease-out;
+   --speed-keyboard: calc(var(--default-speed) * 0.75);
    --timing-bounce: cubic-bezier(0.25, 0.46, 0.45, 1.7);
    --timing-bounce-slower: cubic-bezier(0, 0, 0.6, 1.4);
 
@@ -96,9 +98,14 @@ body {
    --animate-fade-in: fade-in var(--speed-fast) ease-in backwards;
    --animate-lining: lining var(--speed-slow) ease-in-out var(--speed-slow)
       backwards;
+   --animate-fade-y: fade-y var(--speed-default) ease-in-out backwards;
 
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
    --fab-size: max(12dvh, 50px);
+
+   --floating-button-layer: 97;
+   --popover-layer: 98;
+   --drawer-layer: 99;
 }
 
 @layer base {

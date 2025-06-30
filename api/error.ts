@@ -1,5 +1,5 @@
+import type { ErrorResponse } from '@/api/types'
 import type { Context } from 'hono'
-import type { ErrorResponse } from './types'
 
 /**
  * Constants for error codes used throughout the application.

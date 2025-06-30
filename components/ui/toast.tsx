@@ -85,7 +85,7 @@ export function useToast(): ToastDetails {
    const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
    const toastPromiseResolvers = new Map<string, () => void>()
 
-   function showToast(props: ToastProps) {
+   const showToast = (props: ToastProps) => {
       const id = crypto.randomUUID()
       activeToasts.get().push({ ...props, id })
       const promise = new Promise<void>((resolve) => {
@@ -94,7 +94,7 @@ export function useToast(): ToastDetails {
       return promise
    }
 
-   function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
+   const Toast = (props: ToastProps & { id: string }, index: Cell<number>) => {
       const { content, duration, onClick } = props
       const observer = useObserver()
       let timeout: ReturnType<typeof setTimeout> | null = null
@@ -201,7 +201,7 @@ export function useToast(): ToastDetails {
       )
    }
 
-   function ToastContainer() {
+   const ToastContainer = () => {
       const toastsCount = Cell.derived(() => activeToasts.get().length)
       return (
          <div

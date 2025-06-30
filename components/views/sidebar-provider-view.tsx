@@ -56,11 +56,11 @@ export interface SidebarToggleProps extends ButtonProps {}
 export function useSidebar() {
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
 
-   function toggleSidebar() {
+   const toggleSidebar = () => {
       sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open')
    }
 
-   function SidebarProviderView(props: SidebarProviderViewProps) {
+   const SidebarProviderView = (props: SidebarProviderViewProps) => {
       const {
          sidebar,
          children,
@@ -150,7 +150,7 @@ export function useSidebar() {
          // Safari is a rubbish browser, and in it `touch-action: pan-x`
          // does not properly prevent vertical pointermoves. Thus,
          // x-axis swipe-scrolls intended for SidebarProviderView are not
-         // properly differentiated from y-axis pulls (handled by PullToRefreshView)
+         // properly differentiated from y-axis pulls (handled by PullToRefreshView).
          //
          // To work around this, we intercept the `pointerdown` event, and
          // by analyzing the initial gesture direction, we can manually distinguish
@@ -186,7 +186,7 @@ export function useSidebar() {
       )
    }
 
-   function SidebarToggle(props: SidebarToggleProps) {
+   const SidebarToggle = (props: SidebarToggleProps) => {
       return (
          <button {...props} type='button' onClick={toggleSidebar}>
             {props.children}

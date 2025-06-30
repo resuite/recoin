@@ -36,10 +36,7 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
  * This allows consuming components to react to keyboard visibility changes and make
  * necessary layout adjustments, such as ensuring a focused input remains visible.
  *
- * @param {VirtualKeyboardAwareViewProps} props - The props for the component.
- * @param {Function} [props.onVirtualKeyboardVisibilityChange] - Callback function triggered when the virtual keyboard's visibility changes.
- *   It receives the old viewport height, new viewport height, and the currently active element.
- * @param {SourceCell<HTMLElement | null>} [props.ref] - A `SourceCell` to get a reference to the component's root `div` element.
+ * @param props - The props for the component.
  * @example
  * ```tsx
  * const MyForm = () => {
@@ -63,9 +60,7 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
  * ```
  * @returns {JSX.Template} The rendered VirtualKeyboardAwareView component.
  */
-export const VirtualKeyboardAwareView = (
-   props: VirtualKeyboardAwareViewProps
-) => {
+export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    const {
       children,
       ref: containerRef = Cell.source<HTMLElement | null>(null),
@@ -85,7 +80,7 @@ export const VirtualKeyboardAwareView = (
    // position and prevent unwanted scrolling or layout shifts, then remove it after. This
    // workaround helps provide a consistent experience in browsers like Safari and Firefox,
    // which lack reliable virtual keyboard APIs.
-   const handlePointerDown = async (event: PointerEvent) => {
+   const handlePointerDown = (event: PointerEvent) => {
       const target = event.target as HTMLElement
 
       if ('virtualKeyboard' in navigator) {
@@ -111,22 +106,20 @@ export const VirtualKeyboardAwareView = (
          target.blur()
          target.classList.add(styles.outOfViewport)
          target.focus()
-         requestAnimationFrame(() => {
-            window.scrollTo(0, 0)
-            target.classList.remove(styles.outOfViewport)
-            focusAdjustmentInProgress = false
-            // This is an interesting bug in iOS. On the 6th/7th time the
-            // keyboard is opened, the visual viewport change event isn't fired,
-            // but the visual viewport changes anyway. Luckily, prior values
-            // are recorded, so the event can be fired manually.
-            const newVisualHeight = window.visualViewport?.height
-            if (
-               newVisualHeight !== undefined &&
-               newVisualHeight !== currentVisualHeight
-            ) {
-               dispatchVisibilityChange(newVisualHeight)
-            }
-         })
+         window.scrollTo(0, 0)
+         target.classList.remove(styles.outOfViewport)
+         focusAdjustmentInProgress = false
+         // This is an interesting bug in iOS. On the 6th/7th time the
+         // keyboard is opened, the visual viewport change event isn't fired,
+         // but the visual viewport changes anyway. Luckily, prior values
+         // are recorded, so the event can be fired manually.
+         const newVisualHeight = window.visualViewport?.height
+         if (
+            newVisualHeight !== undefined &&
+            newVisualHeight !== currentVisualHeight
+         ) {
+            dispatchVisibilityChange(newVisualHeight)
+         }
       }
    }
 
