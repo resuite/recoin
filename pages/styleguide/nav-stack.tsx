@@ -5,19 +5,35 @@ import { Cell } from 'retend'
 const page2IsOpen = Cell.source(false)
 const page3IsOpen = Cell.source(false)
 
-const NavStack = () => {
+function openPage2() {
+   page2IsOpen.set(true)
+}
+
+function openPage3() {
+   page3IsOpen.set(true)
+}
+
+function closePage2() {
+   page2IsOpen.set(false)
+}
+
+function closePage3() {
+   page3IsOpen.set(false)
+}
+
+function NavStack() {
    return (
       <div class='w-full rounded-t-3xl light-scheme overflow-hidden'>
          <StackViewGroup class='h-screen text-large'>
             <StackView root content={Page1} />
             <StackView
                isOpen={page2IsOpen}
-               onCloseRequested={() => page2IsOpen.set(false)}
+               onCloseRequested={closePage2}
                content={Page2}
             />
             <StackView
                isOpen={page3IsOpen}
-               onCloseRequested={() => page3IsOpen.set(false)}
+               onCloseRequested={closePage3}
                content={Page3}
             />
          </StackViewGroup>
@@ -25,38 +41,44 @@ const NavStack = () => {
    )
 }
 
-const Page1 = () => (
-   <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
-      <div class='mb-2'>1</div>
-      <button type='button' onClick={() => page2IsOpen.set(true)}>
-         Next Page
-         <Icon name='caret' direction='right' class='btn-icon' />
-      </button>
-   </div>
-)
+function Page1() {
+   return (
+      <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
+         <div class='mb-2'>1</div>
+         <button type='button' onClick={openPage2}>
+            Next Page
+            <Icon name='caret' direction='right' class='btn-icon' />
+         </button>
+      </div>
+   )
+}
 
-const Page2 = () => (
-   <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
-      <div class='mb-2'>2</div>
-      <button type='button' onClick={() => page2IsOpen.set(false)}>
-         <Icon name='caret' direction='left' class='btn-icon' />
-         Go back to page 1
-      </button>
-      <button type='button' onClick={() => page3IsOpen.set(true)}>
-         Next Page
-         <Icon name='caret' direction='right' class='btn-icon' />
-      </button>
-   </div>
-)
+function Page2() {
+   return (
+      <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
+         <div class='mb-2'>2</div>
+         <button type='button' onClick={closePage2}>
+            <Icon name='caret' direction='left' class='btn-icon' />
+            Go back to page 1
+         </button>
+         <button type='button' onClick={openPage3}>
+            Next Page
+            <Icon name='caret' direction='right' class='btn-icon' />
+         </button>
+      </div>
+   )
+}
 
-const Page3 = () => (
-   <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
-      <div class='mb-2'>3</div>
-      <button type='button' onClick={() => page3IsOpen.set(false)}>
-         <Icon name='caret' direction='left' class='btn-icon' />
-         Go back to page 2
-      </button>
-   </div>
-)
+function Page3() {
+   return (
+      <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
+         <div class='mb-2'>3</div>
+         <button type='button' onClick={closePage3}>
+            <Icon name='caret' direction='left' class='btn-icon' />
+            Go back to page 2
+         </button>
+      </div>
+   )
+}
 
 export default NavStack

@@ -1,0 +1,15 @@
+{
+   "rules": {
+      "arrow-body-style": ["error", "always"],
+      "oxc/no-map-spread": "error",
+      "react/jsx-boolean-value": "error",
+      "max-lines-per-function": [
+         "error",
+         {
+            "max": 150,
+            "skipBlankLines": true,
+            "skipComments": true
+         }
+      ]
+   }
+}

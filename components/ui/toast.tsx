@@ -114,7 +114,9 @@ export function useToast(): ToastDetails {
          element.classList.add(styles.toastLeaving)
          defer(async () => {
             await Promise.allSettled(
-               element.getAnimations().map((a) => a.finished)
+               element.getAnimations().map((a) => {
+                  return a.finished
+               })
             )
             toastPromiseResolvers.get(props.id)?.()
             toastPromiseResolvers.delete(props.id)
@@ -167,7 +169,9 @@ export function useToast(): ToastDetails {
       useIntersectionObserver(
          [leftDismissMarkerRef, rightDismissMarkerRef],
          handleDismissIntersection,
-         () => ({ root: toastContainerRef.peek(), threshold: 0.3 })
+         () => {
+            return { root: toastContainerRef.peek(), threshold: 0.3 }
+         }
       )
 
       return (
@@ -202,7 +206,9 @@ export function useToast(): ToastDetails {
    }
 
    const ToastContainer = () => {
-      const toastsCount = Cell.derived(() => activeToasts.get().length)
+      const toastsCount = Cell.derived(() => {
+         return activeToasts.get().length
+      })
       return (
          <div
             class={styles.toastsGroup}

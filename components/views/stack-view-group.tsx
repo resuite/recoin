@@ -191,7 +191,9 @@ export function StackView(props: StackViewProps) {
       const options = { root: stack, threshold: 0.6 }
       intersectObserver = new IntersectionObserver(callback, options)
       intersectObserver.observe(element)
-      return () => intersectObserver.disconnect()
+      return () => {
+         intersectObserver.disconnect()
+      }
    })
 
    // Close and dispose hidden views.
@@ -208,7 +210,11 @@ export function StackView(props: StackViewProps) {
             return
          }
          const closingViewTransitions = container.getAnimations()
-         await Promise.allSettled(closingViewTransitions.map((c) => c.finished))
+         await Promise.allSettled(
+            closingViewTransitions.map((c) => {
+               return c.finished
+            })
+         )
          // We need to check again, in case the transition and closing
          // was cancelled.
          if (!isOpen.get()) {
@@ -224,13 +230,17 @@ export function StackView(props: StackViewProps) {
          data-open={root || isOpen}
          class={[styles.stackViewGroupView, rest.class]}
       >
-         {If(content, (content) => If(contentLoaded, content))}
-         {If(canSwipe, () => (
-            <div
-               class={styles.stackViewGroupViewPullHandle}
-               onPointerDown={startDragging}
-            />
-         ))}
+         {If(content, (content) => {
+            return If(contentLoaded, content)
+         })}
+         {If(canSwipe, () => {
+            return (
+               <div
+                  class={styles.stackViewGroupViewPullHandle}
+                  onPointerDown={startDragging}
+               />
+            )
+         })}
       </div>
    )
 }

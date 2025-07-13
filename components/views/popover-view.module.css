@@ -1,23 +1,23 @@
 @property --anchor-width {
-   syntax: "<length>";
+   syntax: "<length> | unset";
    inherits: false;
    initial-value: unset;
 }
 
 @property --anchor-height {
-   syntax: "<length>";
+   syntax: "<length> | unset";
    inherits: false;
    initial-value: unset;
 }
 
 @property --popover-anchor-width {
-   syntax: "<length>";
+   syntax: "<length> | unset";
    inherits: true;
    initial-value: unset;
 }
 
 @property --popover-anchor-height {
-   syntax: "<length>";
+   syntax: "<length> | unset";
    inherits: true;
    initial-value: unset;
 }
@@ -32,15 +32,5 @@
    @supports (width: anchor-size(width)) {
       --popover-anchor-width: anchor-size(width);
       --popover-anchor-height: anchor-size(height);
-   }
-}
-
-@layer utilities {
-   /* 
-      This is in the utilities layer to force a lower specificity than Tailwind classes,
-      like w-fit, or w-full.
-   */
-   :where(.popoverViewContainer) {
-      width: var(--popover-anchor-width);
    }
 }

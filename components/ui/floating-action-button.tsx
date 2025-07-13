@@ -39,7 +39,6 @@ export interface FloatingActionButtonProps extends ButtonProps {
  */
 export function FloatingActionButton(props: FloatingActionButtonProps) {
    const {
-      children,
       block: blockProp = 'bottom',
       inline: inlineProp = 'center',
       outlined: outlinedProp = false,
@@ -50,8 +49,12 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
    const inline = useDerivedValue(inlineProp)
    const isOutlined = useDerivedValue(outlinedProp)
 
-   const blockClass = Cell.derived(() => styles[`block-${block.get()}`])
-   const inlineClass = Cell.derived(() => styles[`inline-${inline.get()}`])
+   const blockClass = Cell.derived(() => {
+      return styles[`block-${block.get()}`]
+   })
+   const inlineClass = Cell.derived(() => {
+      return styles[`inline-${inline.get()}`]
+   })
 
    return (
       <button

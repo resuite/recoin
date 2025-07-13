@@ -67,7 +67,9 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
    } = props
    const observer = useObserver()
    const tabs = useDerivedValue(tabsProp)
-   const tabCount = Cell.derived(() => tabs.get().length)
+   const tabCount = Cell.derived(() => {
+      return tabs.get().length
+   })
    const headerRef = Cell.source<HTMLElement | null>(null)
    const activeTab = Cell.source(0)
    /**
@@ -85,10 +87,17 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
       if (!tabContainer) {
          return
       }
-
       detectActiveTabOnScroll = false
       tabContainer.scrollTo({ left: index * tabContainer.clientWidth })
       activeTab.set(index)
+   }
+
+   const observeTab = (element: HTMLElement) => {
+      intersectObserver.observe(element)
+   }
+
+   const unobserveTab = (element: HTMLElement) => {
+      intersectObserver.unobserve(element)
    }
 
    activeTab.listen((index) => {
@@ -130,7 +139,9 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
    observer.onConnected(tabContainerRef, (element) => {
       const options = { root: element, threshold: 0.45 }
       intersectObserver = new IntersectionObserver(callback, options)
-      return () => intersectObserver.disconnect()
+      return () => {
+         intersectObserver.disconnect()
+      }
    })
 
    // Polyfill animation-timeline: scroll() on unsupported browsers.
@@ -145,51 +156,100 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
       >
          <header ref={headerRef} class={[styles.header, headerClasses]}>
             {For(tabs, (tab, index) => {
-               const style = {
-                  translate: Cell.derived(() => `calc(${index.get()}*100%)`)
-               }
-               const isActiveTab = Cell.derived(
-                  () => index.get() === activeTab.get()
-               )
                return (
-                  <button
-                     type='button'
-                     style={style}
-                     data-tab-heading-index={index}
-                     data-active={isActiveTab}
-                     class={styles.tabButton}
-                     onClick={() => scrollToTab(index.get())}
-                  >
-                     <tab.heading />
-                  </button>
+                  <TabHeader
+                     tab={tab}
+                     index={index}
+                     scrollToTab={scrollToTab}
+                     activeTab={activeTab}
+                  />
                )
             })}
          </header>
          <div class={styles.tabContentContainer}>
             {For(tabs, (tab, index) => {
-               const ref = Cell.source<HTMLElement | null>(null)
-               const observer = useObserver()
-
-               const isNotActive = Cell.derived(
-                  () => index.get() !== activeTab.get()
-               )
-
-               observer.onConnected(ref, (element) => {
-                  intersectObserver.observe(element)
-                  return () => intersectObserver.unobserve(element)
-               })
                return (
-                  <div
-                     ref={ref}
-                     data-tab-index={index}
-                     ariaHidden={isNotActive}
-                     class={styles.tabContent}
-                  >
-                     <tab.body />
-                  </div>
+                  <TabBody
+                     tab={tab}
+                     index={index}
+                     scrollToTab={scrollToTab}
+                     activeTab={activeTab}
+                     observeTab={observeTab}
+                     unobserveTab={unobserveTab}
+                  />
                )
             })}
          </div>
       </section>
+   )
+}
+
+interface TabHeaderProps {
+   tab: Tab
+   activeTab: Cell<number>
+   scrollToTab: (index: number) => void
+   index: Cell<number>
+}
+
+function TabHeader(props: TabHeaderProps) {
+   const { tab, activeTab, scrollToTab, index } = props
+
+   const style = {
+      translate: Cell.derived(() => {
+         return `calc(${index.get()}*100%)`
+      })
+   }
+   const isActiveTab = Cell.derived(() => {
+      return index.get() === activeTab.get()
+   })
+   return (
+      <button
+         type='button'
+         style={style}
+         data-tab-heading-index={index}
+         data-active={isActiveTab}
+         class={styles.tabButton}
+         onClick={() => {
+            scrollToTab(index.get())
+         }}
+      >
+         <tab.heading />
+      </button>
+   )
+}
+
+interface TabBodyProps {
+   tab: Tab
+   activeTab: Cell<number>
+   scrollToTab: (index: number) => void
+   index: Cell<number>
+   observeTab: (element: HTMLElement) => void
+   unobserveTab: (element: HTMLElement) => void
+}
+
+function TabBody(props: TabBodyProps) {
+   const { activeTab, observeTab, unobserveTab, tab, index } = props
+   const ref = Cell.source<HTMLElement | null>(null)
+   const observer = useObserver()
+
+   const isNotActive = Cell.derived(() => {
+      return index.get() !== activeTab.get()
+   })
+
+   observer.onConnected(ref, (element) => {
+      observeTab(element)
+      return () => {
+         unobserveTab(element)
+      }
+   })
+   return (
+      <div
+         ref={ref}
+         data-tab-index={index}
+         ariaHidden={isNotActive}
+         class={styles.tabContent}
+      >
+         <tab.body />
+      </div>
    )
 }

@@ -68,7 +68,6 @@ interface ExpandingViewProps extends DivProps {
  */
 export function ExpandingView(props: ExpandingViewProps) {
    const {
-      children,
       isOpen: isOpenProp,
       expandOrigin,
       expandSize,
@@ -98,7 +97,11 @@ export function ExpandingView(props: ExpandingViewProps) {
             return
          }
          const closingViewTransitions = clipPath.getAnimations()
-         await Promise.allSettled(closingViewTransitions.map((c) => c.finished))
+         await Promise.allSettled(
+            closingViewTransitions.map((c) => {
+               return c.finished
+            })
+         )
          // We need to check again, in case the transition and closing
          // was cancelled.
          if (!isOpen.get()) {

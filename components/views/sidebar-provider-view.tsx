@@ -106,7 +106,9 @@ export function useSidebar() {
             isAlreadyRevealedFlag = entry.isIntersecting
             sidebarState.set(isAlreadyRevealedFlag ? 'open' : 'closed')
          },
-         () => ({ root: providerRef.peek(), threshold: 0.9 })
+         () => {
+            return { root: providerRef.peek(), threshold: 0.9 }
+         }
       )
 
       observer.onConnected(sidebarRef, (sidebar) => {

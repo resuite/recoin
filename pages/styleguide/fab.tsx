@@ -1,15 +1,18 @@
 import { Icon } from '@/components/icons'
 import { FloatingActionButton } from '@/components/ui'
 import { ExpandingView } from '@/components/views'
+import { vibrate } from '@/utilities/miscellaneous'
 import { Cell } from 'retend'
 
 const FloatingActionButtonTest = (props?: { children?: unknown }) => {
    const isOpen = Cell.source(false)
    const buttonsOpened = Cell.source(false)
-   const buttonsClosed = Cell.derived(() => !buttonsOpened.get())
+   const buttonsClosed = Cell.derived(() => {
+      return !buttonsOpened.get()
+   })
 
    const toggleOpenState = () => {
-      navigator.vibrate?.([15, 15])
+      vibrate()
       isOpen.set(!isOpen.get())
       if (!isOpen.get()) {
          buttonsOpened.set(false)
@@ -20,22 +23,24 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
       buttonsOpened.set(!buttonsOpened.get())
    }
 
-   const ExpandingViewContent = () => (
-      <>
-         <div class='after:block after:h-0.15 after:bg-canvas-text after:animate-lining overflow-hidden'>
-            <div class='text-title animate-fade-in animate-delay-bit-slower'>
-               hello recoin!
+   const ExpandingViewContent = () => {
+      return (
+         <>
+            <div class='after:block after:h-0.15 after:bg-canvas-text after:animate-lining overflow-hidden'>
+               <div class='text-title animate-fade-in animate-delay-bit-slower'>
+                  hello recoin!
+               </div>
             </div>
-         </div>
-         <button
-            type='button'
-            class='animate-fade-in animate-delay-bit-slower'
-            onClick={toggleButtonState}
-         >
-            Toggle Button state.
-         </button>
-      </>
-   )
+            <button
+               type='button'
+               class='animate-fade-in animate-delay-bit-slower'
+               onClick={toggleButtonState}
+            >
+               Toggle Button state.
+            </button>
+         </>
+      )
+   }
 
    return (
       <div

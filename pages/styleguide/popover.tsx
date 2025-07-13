@@ -1,9 +1,17 @@
-import { PopoverView } from '@/components/views'
-import { Cell } from 'retend'
+import {
+   type Alignment,
+   PopoverView,
+   type PositionArea
+} from '@/components/views'
+import { Cell, type SourceCell } from 'retend'
+import { Input } from 'retend-utils/components'
 
-const PopoverTest = () => {
-   const popoverIsOpen = Cell.source(true)
+function PopoverTest() {
+   const popoverIsOpen = Cell.source(false)
    const anchorRef = Cell.source<HTMLElement | null>(null)
+   const positionArea = Cell.source<PositionArea>('bottom center')
+   const justifySelf = Cell.source<Alignment | undefined>(undefined)
+   const alignSelf = Cell.source<Alignment | undefined>(undefined)
 
    const togglePopover = () => {
       popoverIsOpen.set(!popoverIsOpen.peek())
@@ -22,12 +30,28 @@ const PopoverTest = () => {
          <button ref={anchorRef} type='button' onClick={togglePopover}>
             Open Popover
          </button>
+         <div class='grid grid-cols-3 gap-2'>
+            <label for='positionArea'>
+               <span>Position Area:</span>
+               <Input type='text' model={positionArea as SourceCell<string>} />
+            </label>
+            <label for='justifySelf'>
+               <span>Justify Self:</span>
+               <Input type='text' model={justifySelf as SourceCell<string>} />
+            </label>
+            <label for='alignSelf'>
+               <span>Align Self:</span>
+               <Input type='text' model={alignSelf as SourceCell<string>} />
+            </label>
+         </div>
+
          <PopoverView
-            class='w-fit h-9'
+            class='w-fit h-9 duration-slow transition-[top,left,right,bottom] transition-discrete'
             isOpen={popoverIsOpen}
             anchorRef={anchorRef}
-            positionArea='bottom center'
-            justifySelf='start'
+            positionArea={positionArea}
+            justifySelf={justifySelf}
+            alignSelf={alignSelf}
             content={PopoverContent}
          />
       </div>

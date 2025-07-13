@@ -8,7 +8,7 @@
       "lint": "biome lint --write",
       "format": "biome format --write",
       "check": "tsgo --project ./tsconfig.json",
-      "build": "vite build && mv dist/client/_redirects dist/_redirects",
+      "build": "vite build",
       "preview": "vite preview",
       "prepare": "husky",
       "deploy": "wrangler deploy"
@@ -22,6 +22,7 @@
       "@typescript/native-preview": "7.0.0-dev.20250608.1",
       "husky": "^9.1.7",
       "lint-staged": "^16.1.0",
+      "oxlint": "^1.5.0",
       "postcss": "^8.5.6",
       "postcss-nesting": "^13.0.2",
       "tailwindcss": "^4.1.8",
@@ -39,6 +40,6 @@
       "zod": "^3.25.46"
    },
    "lint-staged": {
-      "*.{js,ts,jsx,tsx,json,jsonc,css}": "biome check --write"
+      "*.{js,ts,jsx,tsx,json,jsonc,css}": "biome check --write && oxlint"
    }
 }

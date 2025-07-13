@@ -258,7 +258,9 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
             changeState('pulling')
          }
       },
-      () => ({ root: pullZoneRef.peek(), threshold: 0.4 })
+      () => {
+         return { root: pullZoneRef.peek(), threshold: 0.4 }
+      }
    )
 
    useIntersectionObserver(
@@ -276,7 +278,9 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
             changeState('pulling')
          }
       },
-      () => ({ root: pullZoneRef.peek(), threshold: 0.01 })
+      () => {
+         return { root: pullZoneRef.peek(), threshold: 0.01 }
+      }
    )
 
    // Another marker to indicate when pull-to-refresh can be used,
@@ -291,7 +295,9 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
          // and start the pull-to-refresh process.
          reachedTop.set(entry.isIntersecting)
       },
-      () => ({ root: pullZoneRef.peek(), threshold: 0.9 })
+      () => {
+         return { root: pullZoneRef.peek(), threshold: 0.9 }
+      }
    )
 
    canPull.listen((canPull) => {

@@ -13,7 +13,7 @@ import { Cell, If } from 'retend'
 import { Input } from 'retend-utils/components'
 import { useRouter } from 'retend/router'
 
-const WaitingList = () => {
+function WaitingList() {
    const router = useRouter()
    const email = Cell.source('')
    const resource = Cell.async(addEmailToWaitingList)
@@ -21,24 +21,6 @@ const WaitingList = () => {
 
    const handleSubmit = () => {
       resource.run(email.get())
-   }
-
-   const ButtonLoadingStateContent = () => {
-      return (
-         <>
-            <Loader class='w-0.75 h-0.75' />
-            Joining...
-         </>
-      )
-   }
-
-   const ButtonIdleStateContent = () => {
-      return (
-         <>
-            <Arrows class='w-0.75 h-0.75 -rotate-[135deg]' />
-            Join the waiting list
-         </>
-      )
    }
 
    resource.data.listen((data) => {
@@ -72,15 +54,7 @@ const WaitingList = () => {
                'max-md:grid-cols-1 max-md:grid-rows-1 max-md:text-center'
             ]}
          >
-            <h1
-               class={[
-                  'grid text-large [grid-area:1/1] self-end pb-0.25',
-                  'max-md:text-title max-md:self-center'
-               ]}
-            >
-               <div class='text-nowrap'>managing money</div>
-               <div class='text-nowrap'>shouldn't be hard.</div>
-            </h1>
+            <HeadingText />
             <section class='[grid-area:2/1] grid gap-y-0.25'>
                <p>
                   recoin is your private, simple companion for managing
@@ -132,6 +106,38 @@ const WaitingList = () => {
             </div>
          </main>
       </div>
+   )
+}
+
+function HeadingText() {
+   return (
+      <h1
+         class={[
+            'grid text-large [grid-area:1/1] self-end pb-0.25',
+            'max-md:text-title max-md:self-center'
+         ]}
+      >
+         <div class='text-nowrap'>managing money</div>
+         <div class='text-nowrap'>shouldn't be hard.</div>
+      </h1>
+   )
+}
+
+function ButtonLoadingStateContent() {
+   return (
+      <>
+         <Loader class='w-0.75 h-0.75' />
+         Joining...
+      </>
+   )
+}
+
+function ButtonIdleStateContent() {
+   return (
+      <>
+         <Arrows class='w-0.75 h-0.75 -rotate-[135deg]' />
+         Join the waiting list
+      </>
    )
 }
 

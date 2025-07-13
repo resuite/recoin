@@ -27,7 +27,9 @@ export function useDerivedAsync<T>(
  * @param fn The function to defer execution of
  * @returns The timeout ID that can be used to cancel the deferred execution
  */
-export const defer = (fn: () => void) => setTimeout(fn, 0)
+export function defer(fn: () => void) {
+   return setTimeout(fn, 0)
+}
 
 /**
  * Constrains a value between a minimum and maximum boundary.
@@ -37,7 +39,7 @@ export const defer = (fn: () => void) => setTimeout(fn, 0)
  * @param max The upper boundary
  * @returns The value constrained between min and max
  */
-export const clamp = (value: number, min: number, max: number) => {
+export function clamp(value: number, min: number, max: number) {
    return Math.max(min, Math.min(value, max))
 }
 
@@ -59,3 +61,7 @@ export type Split<S extends string, D extends string> = string extends S
      : S extends `${infer T}${D}${infer U}`
        ? [T, ...Split<U, D>]
        : [S]
+
+export function vibrate() {
+   navigator.vibrate?.([15, 15])
+}

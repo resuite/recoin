@@ -9,7 +9,7 @@ import type { JSX } from 'retend/jsx-runtime'
 import styles from './popover-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
-type PositionArea =
+export type PositionArea =
    | 'top left'
    | 'top right'
    | 'top center'
@@ -19,7 +19,7 @@ type PositionArea =
    | 'center left'
    | 'center right'
    | 'center center'
-type Alignment = 'start' | 'end'
+export type Alignment = 'start' | 'end'
 
 /**
  * Props for the PopoverView component.
@@ -56,8 +56,8 @@ export interface PopoverProps extends DivProps {
    /**
     * Optional prop to control the horizontal alignment of the popover relative to its anchor element.
     */
-   justifySelf?: JSX.ValueOrCell<Alignment>
-   alignSelf?: JSX.ValueOrCell<Alignment>
+   justifySelf?: JSX.ValueOrCell<Alignment | undefined>
+   alignSelf?: JSX.ValueOrCell<Alignment | undefined>
 }
 
 /**
@@ -106,7 +106,6 @@ export function PopoverView(props: PopoverProps) {
       justifySelf: justifySelfProp = undefined,
       alignSelf: alignSelfProp = undefined,
       content,
-      children,
       isOpen: isOpenProp,
       ref = Cell.source<HTMLElement | null>(null),
       anchorRef,
@@ -165,16 +164,20 @@ export function PopoverView(props: PopoverProps) {
       supportsAnchorPositioning.set(anchoringSupported)
    })
 
-   return If(isOpen, () => (
-      <div
-         {...rest}
-         ref={ref}
-         style={containerStyles}
-         class={[styles.popoverViewContainer, rest.class]}
-      >
-         {If(content, (c) => c())}
-      </div>
-   ))
+   return If(isOpen, () => {
+      return (
+         <div
+            {...rest}
+            ref={ref}
+            style={containerStyles}
+            class={[styles.popoverViewContainer, rest.class]}
+         >
+            {If(content, (c) => {
+               return c()
+            })}
+         </div>
+      )
+   })
 }
 
 function generateNewAnchorName() {
@@ -276,16 +279,16 @@ function computePosition(
 
    return {
       top: Cell.derived(() => {
-         return top ? `${clamp(top.get(), 0, maxY.get())}px` : 'unset'
+         return top ? `${clamp(top.get(), 0, maxY.get())}px` : 'auto'
       }),
       left: Cell.derived(() => {
-         return left ? `${clamp(left.get(), 0, maxX.get())}px` : 'unset'
+         return left ? `${clamp(left.get(), 0, maxX.get())}px` : 'auto'
       }),
       bottom: Cell.derived(() => {
-         return bottom ? `${clamp(bottom.get(), 0, maxY.get())}px` : 'unset'
+         return bottom ? `${clamp(bottom.get(), 0, maxY.get())}px` : 'auto'
       }),
       right: Cell.derived(() => {
-         return right ? `${clamp(right.get(), 0, maxX.get())}px` : 'unset'
+         return right ? `${clamp(right.get(), 0, maxX.get())}px` : 'auto'
       }),
 
       '--anchor-width': anchorWidth,

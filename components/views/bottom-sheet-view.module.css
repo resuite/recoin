@@ -1,7 +1,7 @@
 .dialog {
-   --drawer-content-height: 70dvh;
+   --sheet-content-height: 70dvh;
    position: fixed;
-   z-index: var(--drawer-layer);
+   z-index: var(--z-index-bottom-sheet);
    top: 0;
    left: 0;
    display: grid;
@@ -39,7 +39,7 @@
          grid-area: 1 / 1;
       }
 
-      .drawerContentContainer {
+      .sheetContentContainer {
          scroll-snap-align: end;
          grid-area: 2 / 1;
       }
@@ -55,10 +55,10 @@
       }
 
       &::after {
-         height: calc(100dvh + var(--drawer-content-height));
+         height: calc(100dvh + var(--sheet-content-height));
       }
 
-      .drawerContentContainer {
+      .sheetContentContainer {
          position: fixed;
          bottom: 0;
          width: 100dvw;
@@ -69,9 +69,9 @@
    }
 }
 
-.drawerContentContainer {
+.sheetContentContainer {
    position: relative;
-   height: var(--drawer-content-height);
+   height: var(--sheet-content-height);
    border-radius: 3dvh 3dvh 0 0;
    box-shadow: 0 -2px 8px 0 #00000015;
    animation-name: slide-up-from-under;
@@ -108,12 +108,12 @@
 
 @keyframes slide-up-from-under {
    from {
-      translate: 0 var(--drawer-content-height);
+      translate: 0 var(--sheet-content-height);
    }
 }
 
 @keyframes slide-down-under {
    to {
-      translate: 0 var(--drawer-content-height);
+      translate: 0 var(--sheet-content-height);
    }
 }

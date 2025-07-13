@@ -31,13 +31,17 @@ export default (<RouteRecords>[
    {
       name: 'waiting-list',
       path: 'waiting-list',
-      component: lazy(() => import('./index')),
+      component: lazy(() => {
+         return import('./index')
+      }),
       metadata
    },
    {
       name: 'waiting-list-success',
       path: 'waiting-list/success',
-      component: lazy(() => import('./success')),
+      component: lazy(() => {
+         return import('./success')
+      }),
       metadata
    }
 ])

@@ -1,6 +1,6 @@
 import type { RouteRecords } from 'retend/router'
 import Styleguide from '.'
-import BottomDrawerTest from './bottom-drawer'
+import BottomSheetTest from './bottom-sheet'
 import FloatingActionButtonTest from './fab'
 import KeyboardAvoidanceTest from './keyboard-avoidance'
 import NavStack from './nav-stack'
@@ -70,9 +70,9 @@ export default (<RouteRecords>[
       metadata
    },
    {
-      name: 'styleguide-bottom-drawer',
-      path: '/styleguide/drawer',
-      component: BottomDrawerTest,
+      name: 'styleguide-bottom-sheet',
+      path: '/styleguide/sheet',
+      component: BottomSheetTest,
       metadata
    },
    {
