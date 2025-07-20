@@ -10,10 +10,9 @@ export const createRouter = () => {
          {
             name: 'recoin-app-index',
             path: '/',
-            component: Index
-         },
-         ...waitingListRoutes,
-         ...styleguideRoutes
+            component: Index,
+            children: [...waitingListRoutes, ...styleguideRoutes]
+         }
       ]
    })
 }

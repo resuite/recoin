@@ -17,7 +17,7 @@ function WaitingList() {
    const router = useRouter()
    const email = Cell.source('')
    const resource = Cell.async(addEmailToWaitingList)
-   const { ToastContainer, showToast } = useToast()
+   const { showToast } = useToast()
 
    const handleSubmit = () => {
       resource.run(email.get())
@@ -46,7 +46,6 @@ function WaitingList() {
 
    return (
       <div class='relative grid grid-rows-[auto_1fr] grid-lines h-screen w-screen'>
-         <ToastContainer />
          <header class='p-2 pb-1'>recoin.</header>
          <main
             class={[

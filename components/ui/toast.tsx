@@ -1,9 +1,15 @@
 import { defer } from '@/utilities/miscellaneous'
-import { Cell, For, useObserver } from 'retend'
+import { Cell, For, createScope, useObserver, useScopeContext } from 'retend'
 import { useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import Add from '../icons/svg/add'
 import styles from './toast.module.css'
+
+interface ToastScopeData {
+   activeToasts: Cell<Array<ToastProps & { id: string }>>
+   toastPromiseResolvers: Map<string, () => void>
+}
+const ToastScope = createScope<ToastScopeData>()
 
 export interface ToastProps {
    /**
@@ -47,21 +53,180 @@ export interface ToastDetails {
     * @returns A promise that resolves when the toast is dismissed.
     */
    showToast: (props: ToastProps) => Promise<void>
-   ToastContainer: () => JSX.Template
-   activeToasts: Cell<Array<ToastProps & { id: string }>>
+   /**
+    * A `Cell` containing an array of all currently active toast notifications.
+    * This can be observed to react to changes in the list of toasts (e.g., for
+    * displaying a toast count or managing toast overflow).
+    *
+    * Direct modification of this `Cell`'s value is generally not recommended;
+    * use `showToast` to add new toasts, and rely on the toast's internal
+    * dismissal mechanisms (duration, swipe-to-dismiss, close button) to remove them.
+    */
+   activeToasts: Cell<readonly (ToastProps & { id: string })[]>
+}
+
+export interface ToastContainerProps {
+   content: () => JSX.Template
+}
+
+export function ToastContainer(props: ToastContainerProps) {
+   const { content } = props
+   const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
+   const toastPromiseResolvers = new Map<string, () => void>()
+
+   const toastsCount = Cell.derived(() => {
+      return activeToasts.get().length
+   })
+
+   const value: ToastScopeData = { activeToasts, toastPromiseResolvers }
+
+   const Content = () => {
+      return (
+         <>
+            {content()}
+            <div
+               class={styles.toastsGroup}
+               style={{
+                  '--toasts-count': toastsCount,
+                  '--toast-gap': 'calc(var(--spacing) * 0.5)'
+               }}
+            >
+               {For(activeToasts, Toast)}
+            </div>
+         </>
+      )
+   }
+
+   return <ToastScope.Provider value={value} content={Content} />
+}
+
+function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
+   const { content, duration, onClick } = props
+   const { activeToasts, toastPromiseResolvers } = useScopeContext(ToastScope)
+   const observer = useObserver()
+   let timeout: ReturnType<typeof setTimeout> | null = null
+   const toastElementRef = Cell.source<HTMLDialogElement | null>(null)
+   const toastContainerRef = Cell.source<HTMLElement | null>(null)
+   const leftDismissMarkerRef = Cell.source<HTMLElement | null>(null)
+   const rightDismissMarkerRef = Cell.source<HTMLElement | null>(null)
+
+   // --- Swipe-to-Dismiss Logic ---
+   // This callback is triggered by the IntersectionObserver when a dismiss marker
+   // becomes fully visible (meaning the user has swiped the toast off-screen).
+   const closeToast = () => {
+      const element = toastElementRef.get()
+      if (!element) {
+         return
+      }
+      element.classList.add(styles.toastLeaving)
+      defer(async () => {
+         await Promise.allSettled(
+            element.getAnimations().map((a) => {
+               return a.finished
+            })
+         )
+         toastPromiseResolvers.get(props.id)?.()
+         toastPromiseResolvers.delete(props.id)
+         activeToasts.get().splice(index.get(), 1)
+      })
+   }
+
+   const handleClick = (event: MouseEvent | KeyboardEvent) => {
+      if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+         return
+      }
+      if (onClick) {
+         onClick(event)
+      }
+   }
+
+   observer.onConnected(toastElementRef, (toastElement) => {
+      // Initial setup for swipe-to-dismiss:
+      // Scroll the individual toast's wrapper to center the actual toast content.
+      // The wrapper (`div.toast-container`) has a 3-column grid:
+      // [left-marker, toast-content, right-marker] with large gaps,
+      // making markers initially off-screen.
+      toastElement.scrollIntoView({ inline: 'center' })
+      if (duration !== undefined) {
+         timeout = setTimeout(closeToast, duration)
+      }
+      return () => {
+         if (timeout !== null) {
+            clearTimeout(timeout)
+         }
+      }
+   })
+
+   // Use useIntersectionObserver for swipe-to-dismiss
+   const handleDismissIntersection: IntersectionObserverCallback = (
+      entries
+   ) => {
+      for (const entry of entries) {
+         if (!entry?.isIntersecting) {
+            continue
+         }
+         // No point waiting for an animation, because the toast
+         // itself will not be visible.
+         activeToasts.get().splice(index.get(), 1)
+         toastPromiseResolvers.get(props.id)?.()
+         toastPromiseResolvers.delete(props.id)
+      }
+   }
+
+   useIntersectionObserver(
+      [leftDismissMarkerRef, rightDismissMarkerRef],
+      handleDismissIntersection,
+      () => {
+         return { root: toastContainerRef.peek(), threshold: 0.3 }
+      }
+   )
+
+   return (
+      <div
+         class={styles.toastContainer}
+         style={{ '--toast-index': index }}
+         ref={toastContainerRef}
+      >
+         <div ref={leftDismissMarkerRef} class={styles.toastDismissMarker} />
+         <dialog
+            open
+            ref={toastElementRef}
+            class={styles.toast}
+            onClick={handleClick}
+            onKeyDown={handleClick}
+         >
+            <div>{content}</div>
+            <button
+               type='button'
+               class={styles.toastCloseButton}
+               onClick={closeToast}
+            >
+               <Add class={styles.toastCloseButtonIcon} />
+            </button>
+         </dialog>
+         <div ref={rightDismissMarkerRef} class={styles.toastDismissMarker} />
+      </div>
+   )
 }
 
 /**
  * Provides functionality for displaying and managing toast notifications.
  *
- * To use, call this hook in your component to get `showToast` and `ToastContainer`.
- * Render `<ToastContainer />` once at a high level in your application (e.g., in your root layout).
+ * Render `<ToastProvider />` once at a high level in your application (e.g., in your root layout).
  * Then, call `showToast(props)` whenever you need to display a notification.
  *
  * @example
  * ```tsx
+ * // in layout
+ * function App() {
+ *   return (
+ *     <ToastProvider content={AppContent} />
+ *   )
+ * }
+ *
+ * // use the toasts in your content
  * function AppContent() {
- *   const { showToast, ToastContainer } = useToast()
+ *   const { showToast } = useToast()
  *
  *   const handleShowSuccessToast = () => {
  *     showToast({ content: <p>Operation successful!</p>, duration: 3000 })
@@ -73,7 +238,6 @@ export interface ToastDetails {
  *
  *   return (
  *     <div>
- *       <ToastContainer />
  *       <button onClick={handleShowSuccessToast}>Show Success</button>
  *       <button onClick={handleShowErrorToast}>Show Persistent Error</button>
  *     </div>
@@ -82,8 +246,7 @@ export interface ToastDetails {
  * ```
  */
 export function useToast(): ToastDetails {
-   const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
-   const toastPromiseResolvers = new Map<string, () => void>()
+   const { activeToasts, toastPromiseResolvers } = useScopeContext(ToastScope)
 
    const showToast = (props: ToastProps) => {
       const id = crypto.randomUUID()
@@ -94,137 +257,5 @@ export function useToast(): ToastDetails {
       return promise
    }
 
-   const Toast = (props: ToastProps & { id: string }, index: Cell<number>) => {
-      const { content, duration, onClick } = props
-      const observer = useObserver()
-      let timeout: ReturnType<typeof setTimeout> | null = null
-      const toastElementRef = Cell.source<HTMLDialogElement | null>(null)
-      const toastContainerRef = Cell.source<HTMLElement | null>(null)
-      const leftDismissMarkerRef = Cell.source<HTMLElement | null>(null)
-      const rightDismissMarkerRef = Cell.source<HTMLElement | null>(null)
-
-      // --- Swipe-to-Dismiss Logic ---
-      // This callback is triggered by the IntersectionObserver when a dismiss marker
-      // becomes fully visible (meaning the user has swiped the toast off-screen).
-      const closeToast = () => {
-         const element = toastElementRef.get()
-         if (!element) {
-            return
-         }
-         element.classList.add(styles.toastLeaving)
-         defer(async () => {
-            await Promise.allSettled(
-               element.getAnimations().map((a) => {
-                  return a.finished
-               })
-            )
-            toastPromiseResolvers.get(props.id)?.()
-            toastPromiseResolvers.delete(props.id)
-            activeToasts.get().splice(index.get(), 1)
-         })
-      }
-
-      const handleClick = (event: MouseEvent | KeyboardEvent) => {
-         if (event instanceof KeyboardEvent && event.key !== 'Enter') {
-            return
-         }
-         if (onClick) {
-            onClick(event)
-         }
-      }
-
-      observer.onConnected(toastElementRef, (toastElement) => {
-         // Initial setup for swipe-to-dismiss:
-         // Scroll the individual toast's wrapper to center the actual toast content.
-         // The wrapper (`div.toast-container`) has a 3-column grid:
-         // [left-marker, toast-content, right-marker] with large gaps,
-         // making markers initially off-screen.
-         toastElement.scrollIntoView({ inline: 'center' })
-         if (duration !== undefined) {
-            timeout = setTimeout(closeToast, duration)
-         }
-         return () => {
-            if (timeout !== null) {
-               clearTimeout(timeout)
-            }
-         }
-      })
-
-      // Use useIntersectionObserver for swipe-to-dismiss
-      const handleDismissIntersection: IntersectionObserverCallback = (
-         entries
-      ) => {
-         for (const entry of entries) {
-            if (!entry?.isIntersecting) {
-               continue
-            }
-            // No point waiting for an animation, because the toast
-            // itself will not be visible.
-            activeToasts.get().splice(index.get(), 1)
-            toastPromiseResolvers.get(props.id)?.()
-            toastPromiseResolvers.delete(props.id)
-         }
-      }
-
-      useIntersectionObserver(
-         [leftDismissMarkerRef, rightDismissMarkerRef],
-         handleDismissIntersection,
-         () => {
-            return { root: toastContainerRef.peek(), threshold: 0.3 }
-         }
-      )
-
-      return (
-         <div
-            class={styles.toastContainer}
-            style={{ '--toast-index': index }}
-            ref={toastContainerRef}
-         >
-            <div ref={leftDismissMarkerRef} class={styles.toastDismissMarker} />
-            <dialog
-               open
-               ref={toastElementRef}
-               class={styles.toast}
-               onClick={handleClick}
-               onKeyDown={handleClick}
-            >
-               <div>{content}</div>
-               <button
-                  type='button'
-                  class={styles.toastCloseButton}
-                  onClick={closeToast}
-               >
-                  <Add class={styles.toastCloseButtonIcon} />
-               </button>
-            </dialog>
-            <div
-               ref={rightDismissMarkerRef}
-               class={styles.toastDismissMarker}
-            />
-         </div>
-      )
-   }
-
-   const ToastContainer = () => {
-      const toastsCount = Cell.derived(() => {
-         return activeToasts.get().length
-      })
-      return (
-         <div
-            class={styles.toastsGroup}
-            style={{
-               '--toasts-count': toastsCount,
-               '--toast-gap': 'calc(var(--spacing) * 0.5)'
-            }}
-         >
-            {For(activeToasts, Toast)}
-         </div>
-      )
-   }
-
-   return {
-      showToast,
-      ToastContainer,
-      activeToasts
-   }
+   return { showToast, activeToasts }
 }
