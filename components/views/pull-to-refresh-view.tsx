@@ -345,13 +345,8 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
          ]}
       >
          <div ref={scrollContainerRef} class={styles.pullZoneScrollContainer}>
-            <div
-               ref={thresholdMarkerRef}
-               class={styles.pullZoneThresholdMarker}
-            />
-            <div ref={feedbackLayerRef} class={styles.pullZoneFeedbackLayer}>
-               {feedback?.()}
-            </div>
+            <div ref={thresholdMarkerRef} />
+            <div ref={feedbackLayerRef}>{feedback?.()}</div>
             <div
                ref={contentRef}
                class={[styles.pullZoneContent, contentClasses]}

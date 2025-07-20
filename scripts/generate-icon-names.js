@@ -11,8 +11,13 @@ async function generateIconNames() {
    try {
       const files = await fs.readdir(iconsDir)
       const iconNames = files
-         .filter((file) => file.endsWith('.tsx') && file !== 'index.tsx') // Exclude index.tsx if present
-         .map((file) => path.basename(file, '.tsx'))
+         .filter((file) => {
+            // Exclude index.tsx if present
+            return file.endsWith('.tsx') && file !== 'index.tsx'
+         })
+         .map((file) => {
+            return path.basename(file, '.tsx')
+         })
 
       if (iconNames.length === 0) {
          // biome-ignore lint/suspicious/noConsole: script.
@@ -56,7 +61,11 @@ export const Icon = noHydrate(DynamicIcon);`
 export function AllIcons() {
   return (
     <>
-      ${iconNames.map((name) => `<Icon name='${name}' />`).join('\n      ')}
+      ${iconNames
+         .map((name) => {
+            return `<Icon name='${name}' />`
+         })
+         .join('\n      ')}
     </>
   );
 }`

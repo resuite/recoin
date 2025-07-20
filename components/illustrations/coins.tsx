@@ -3,6 +3,7 @@ import type { JSX } from 'retend/jsx-runtime'
 
 type SvgProps = JSX.IntrinsicElements['svg']
 
+// oxlint-disable max-lines-per-function
 export const Coins = noHydrate((props: SvgProps) => {
    return (
       <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 775 564'>

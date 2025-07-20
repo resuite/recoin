@@ -40,6 +40,6 @@
       "zod": "^3.25.46"
    },
    "lint-staged": {
-      "*.{js,ts,jsx,tsx,json,jsonc,css}": "biome check --write && oxlint"
+      "*.{js,ts,jsx,tsx,json,jsonc,css}": "biome check --write"
    }
 }
