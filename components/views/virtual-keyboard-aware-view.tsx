@@ -63,7 +63,7 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
 export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    const {
       children,
-      ref: containerRef = Cell.source<HTMLElement | null>(null),
+      ref: containerRef = Cell.source(null),
       onFocusIn,
       onFocusOut,
       onVirtualKeyboardVisibilityChange,
@@ -83,16 +83,9 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    const handlePointerDown = (event: PointerEvent) => {
       const target = event.target as HTMLElement
 
-      if ('virtualKeyboard' in navigator) {
+      if ('virtualKeyboard' in navigator || focusAdjustmentInProgress) {
          // We don't need any hackery here since Chrome and Edge are good
          // browsers and will handle this for us.
-         if (typeof onFocusIn === 'function') {
-            onFocusIn.bind(event.currentTarget as HTMLInputElement)(event)
-         }
-         return
-      }
-
-      if (focusAdjustmentInProgress) {
          if (typeof onFocusIn === 'function') {
             onFocusIn.bind(event.currentTarget as HTMLInputElement)(event)
          }
@@ -138,9 +131,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    const updateHeight = () => {
       const container = containerRef.get()
       const isTriggeredByFocus =
-         container &&
-         document.activeElement &&
-         container.contains(document.activeElement)
+         document.activeElement && container?.contains(document.activeElement)
 
       if (!isTriggeredByFocus) {
          return
@@ -172,10 +163,11 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       }
       oldHeight = currentVisualHeight
       currentVisualHeight = nextHeight
+      const activeElement = document.activeElement
       onVirtualKeyboardVisibilityChange?.(
          oldHeight,
          currentVisualHeight,
-         document.activeElement
+         activeElement
       )
    }
 
@@ -184,23 +176,22 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       oldHeight = currentVisualHeight
       updateHeight()
 
-      if ('virtualKeyboard' in navigator) {
-         const previousOverlaysContent =
-            navigator.virtualKeyboard.overlaysContent
-         navigator.virtualKeyboard.overlaysContent = true
-         const virtualKeyboard = navigator.virtualKeyboard
-         virtualKeyboard.addEventListener('geometrychange', updateHeight)
+      if (!('virtualKeyboard' in navigator)) {
+         window.visualViewport?.addEventListener('resize', updateHeight)
+         window.addEventListener('scroll', handleScroll)
          return () => {
-            navigator.virtualKeyboard.overlaysContent = previousOverlaysContent
-            virtualKeyboard.removeEventListener('geometrychange', updateHeight)
+            window.visualViewport?.removeEventListener('resize', updateHeight)
+            window.removeEventListener('scroll', handleScroll)
          }
       }
 
-      window.visualViewport?.addEventListener('resize', updateHeight)
-      window.addEventListener('scroll', handleScroll)
+      const previousOverlaysContent = navigator.virtualKeyboard.overlaysContent
+      navigator.virtualKeyboard.overlaysContent = true
+      const virtualKeyboard = navigator.virtualKeyboard
+      virtualKeyboard.addEventListener('geometrychange', updateHeight)
       return () => {
-         window.visualViewport?.removeEventListener('resize', updateHeight)
-         window.removeEventListener('scroll', handleScroll)
+         navigator.virtualKeyboard.overlaysContent = previousOverlaysContent
+         virtualKeyboard.removeEventListener('geometrychange', updateHeight)
       }
    })
 

@@ -1,5 +1,12 @@
 import { scrollTimelineFallback } from '@/utilities/scrolling'
-import { Cell, For, type SourceCell, useObserver } from 'retend'
+import {
+   Cell,
+   For,
+   type SourceCell,
+   createScope,
+   useObserver,
+   useScopeContext
+} from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './tab-switcher-view.module.css'
@@ -9,6 +16,14 @@ export interface Tab {
    heading: () => JSX.Template
    body: () => JSX.Template
 }
+
+interface TabScopeData {
+   activeTab: Cell<number>
+   scrollToTab: (index: number) => void
+   observeTab: (element: HTMLElement) => void
+   unobserveTab: (element: HTMLElement) => void
+}
+const TabScope = createScope<TabScopeData>()
 
 export interface TabSwitcherViewProps<T extends Tab> extends SectionProps {
    /**
@@ -100,6 +115,13 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
       intersectObserver.unobserve(element)
    }
 
+   const tabSwitcherData: TabScopeData = {
+      activeTab,
+      scrollToTab,
+      observeTab,
+      unobserveTab
+   }
+
    activeTab.listen((index) => {
       const header = headerRef.peek()
       if (!header) {
@@ -107,9 +129,9 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
       }
 
       const paddingLeft = getComputedStyle(header).paddingLeft.slice(0, -2)
-      header.scrollTo({
-         left: index * ((header.scrollWidth + -paddingLeft) / tabCount.get())
-      })
+      const left =
+         index * ((header.scrollWidth + -paddingLeft) / tabCount.get())
+      header.scrollTo({ left })
       const newTab = tabs.get()[index]
       if (!newTab) {
          return
@@ -147,61 +169,42 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
    // Polyfill animation-timeline: scroll() on unsupported browsers.
    observer.onConnected(tabContainerRef, scrollTimelineFallback)
 
-   return (
-      <section
-         {...rest}
-         ref={tabContainerRef}
-         style={{ '--tabs': tabCount }}
-         class={[styles.tabSwitcherContainer, rest.class]}
-      >
-         <header ref={headerRef} class={[styles.header, headerClasses]}>
-            {For(tabs, (tab, index) => {
-               return (
-                  <TabHeader
-                     tab={tab}
-                     index={index}
-                     scrollToTab={scrollToTab}
-                     activeTab={activeTab}
-                  />
-               )
-            })}
-         </header>
-         <div class={styles.tabContentContainer}>
-            {For(tabs, (tab, index) => {
-               return (
-                  <TabBody
-                     tab={tab}
-                     index={index}
-                     scrollToTab={scrollToTab}
-                     activeTab={activeTab}
-                     observeTab={observeTab}
-                     unobserveTab={unobserveTab}
-                  />
-               )
-            })}
-         </div>
-      </section>
-   )
+   const Content = () => {
+      return (
+         <section
+            {...rest}
+            ref={tabContainerRef}
+            style={{ '--tabs': tabCount }}
+            class={[styles.tabSwitcherContainer, rest.class]}
+         >
+            <header ref={headerRef} class={[styles.header, headerClasses]}>
+               {For(tabs, TabHeader)}
+            </header>
+            <div class={styles.tabContentContainer}>{For(tabs, TabBody)}</div>
+         </section>
+      )
+   }
+
+   return <TabScope.Provider value={tabSwitcherData} content={Content} />
 }
 
-interface TabHeaderProps {
-   tab: Tab
-   activeTab: Cell<number>
-   scrollToTab: (index: number) => void
-   index: Cell<number>
-}
-
-function TabHeader(props: TabHeaderProps) {
-   const { tab, activeTab, scrollToTab, index } = props
+function TabHeader(tab: Tab, index: Cell<number>) {
+   const { scrollToTab, activeTab } = useScopeContext(TabScope)
 
    const style = {
       translate: Cell.derived(() => {
          return `calc(${index.get()}*100%)`
       })
    }
+
    const isActiveTab = Cell.derived(() => {
       return index.get() === activeTab.get()
    })
+
+   const handleClick = () => {
+      scrollToTab(index.get())
+   }
+
    return (
       <button
          type='button'
@@ -209,26 +212,15 @@ function TabHeader(props: TabHeaderProps) {
          data-tab-heading-index={index}
          data-active={isActiveTab}
          class={styles.tabButton}
-         onClick={() => {
-            scrollToTab(index.get())
-         }}
+         onClick={handleClick}
       >
          <tab.heading />
       </button>
    )
 }
 
-interface TabBodyProps {
-   tab: Tab
-   activeTab: Cell<number>
-   scrollToTab: (index: number) => void
-   index: Cell<number>
-   observeTab: (element: HTMLElement) => void
-   unobserveTab: (element: HTMLElement) => void
-}
-
-function TabBody(props: TabBodyProps) {
-   const { activeTab, observeTab, unobserveTab, tab, index } = props
+function TabBody(tab: Tab, index: Cell<number>) {
+   const { activeTab, observeTab, unobserveTab } = useScopeContext(TabScope)
    const ref = Cell.source<HTMLElement | null>(null)
    const observer = useObserver()
 
