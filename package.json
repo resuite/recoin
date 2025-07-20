@@ -34,9 +34,9 @@
       "@hono/zod-validator": "^0.7.0",
       "bowser": "^2.11.0",
       "hono": "^4.7.11",
-      "retend": "https://pkg.pr.new/resuite/retend@6a9a0da",
-      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@6a9a0da",
-      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@6a9a0da",
+      "retend": "https://pkg.pr.new/resuite/retend@db40e38",
+      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@db40e38",
+      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@db40e38",
       "zod": "^3.25.46"
    },
    "lint-staged": {
