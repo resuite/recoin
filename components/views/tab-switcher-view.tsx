@@ -169,23 +169,25 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
    // Polyfill animation-timeline: scroll() on unsupported browsers.
    observer.onConnected(tabContainerRef, scrollTimelineFallback)
 
-   const Content = () => {
-      return (
-         <section
-            {...rest}
-            ref={tabContainerRef}
-            style={{ '--tabs': tabCount }}
-            class={[styles.tabSwitcherContainer, rest.class]}
-         >
-            <header ref={headerRef} class={[styles.header, headerClasses]}>
-               {For(tabs, TabHeader)}
-            </header>
-            <div class={styles.tabContentContainer}>{For(tabs, TabBody)}</div>
-         </section>
-      )
-   }
-
-   return <TabScope.Provider value={tabSwitcherData} content={Content} />
+   return (
+      <TabScope.Provider value={tabSwitcherData}>
+         {() => (
+            <section
+               {...rest}
+               ref={tabContainerRef}
+               style={{ '--tabs': tabCount }}
+               class={[styles.tabSwitcherContainer, rest.class]}
+            >
+               <header ref={headerRef} class={[styles.header, headerClasses]}>
+                  {For(tabs, TabHeader)}
+               </header>
+               <div class={styles.tabContentContainer}>
+                  {For(tabs, TabBody)}
+               </div>
+            </section>
+         )}
+      </TabScope.Provider>
+   )
 }
 
 function TabHeader(tab: Tab, index: Cell<number>) {

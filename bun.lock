@@ -7,9 +7,9 @@
         "@hono/zod-validator": "^0.7.0",
         "bowser": "^2.11.0",
         "hono": "^4.7.11",
-        "retend": "https://pkg.pr.new/resuite/retend@db40e38",
-        "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@db40e38",
-        "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@db40e38",
+        "retend": "https://pkg.pr.new/resuite/retend@f1a9e4c",
+        "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@f1a9e4c",
+        "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@f1a9e4c",
         "zod": "^3.25.46",
       },
       "devDependencies": {
@@ -988,11 +988,11 @@
 
     "restore-cursor": ["restore-cursor@5.1.0", "", { "dependencies": { "onetime": "^7.0.0", "signal-exit": "^4.1.0" } }, "sha512-oMA2dcrw6u0YfxJQXm342bFKX/E4sG9rbTzO9ptUcR/e8A33cHuvStiYOwH7fszkZlZ1z/ta9AAoPk2F4qIOHA=="],
 
-    "retend": ["retend@https://pkg.pr.new/resuite/retend@db40e38", { "dependencies": { "@adbl/cells": "^0.0.14", "csstype": "^3.1.3" } }],
+    "retend": ["retend@https://pkg.pr.new/resuite/retend@f1a9e4c", { "dependencies": { "@adbl/cells": "^0.0.14", "csstype": "^3.1.3" } }],
 
-    "retend-server": ["retend-server@https://pkg.pr.new/resuite/retend/retend-server@db40e38", { "dependencies": { "acorn": "^8.14.1", "domhandler": "^5.0.3", "estree-walker": "^3.0.3", "htmlparser2": "^10.0.0", "magic-string": "^0.30.17", "oxc-walker": "^0.2.5" }, "peerDependencies": { "retend": "*" } }],
+    "retend-server": ["retend-server@https://pkg.pr.new/resuite/retend/retend-server@f1a9e4c", { "dependencies": { "acorn": "^8.14.1", "domhandler": "^5.0.3", "estree-walker": "^3.0.3", "htmlparser2": "^10.0.0", "magic-string": "^0.30.17", "oxc-walker": "^0.2.5" }, "peerDependencies": { "retend": "*" } }],
 
-    "retend-utils": ["retend-utils@https://pkg.pr.new/resuite/retend/retend-utils@db40e38", { "peerDependencies": { "retend": "*" } }],
+    "retend-utils": ["retend-utils@https://pkg.pr.new/resuite/retend/retend-utils@f1a9e4c", { "peerDependencies": { "retend": "*" } }],
 
     "rfdc": ["rfdc@1.4.1", "", {}, "sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA=="],
 

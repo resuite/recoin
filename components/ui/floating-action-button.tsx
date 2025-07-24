@@ -50,10 +50,10 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
    const isOutlined = useDerivedValue(outlinedProp)
 
    const blockClass = Cell.derived(() => {
-      return styles[`block-${block.get()}`]
+      return [styles.block, styles[block.get()]].join(' ')
    })
    const inlineClass = Cell.derived(() => {
-      return styles[`inline-${inline.get()}`]
+      return [styles.inline, styles[inline.get()]].join(' ')
    })
 
    return (

@@ -36,7 +36,7 @@ export interface StackViewProps extends DivProps {
     * Navigation is lazy, which means that the content is only rendered when the view is open,
     * and will be unmounted when the view is closed.
     */
-   content: JSX.ValueOrCell<() => JSX.Template>
+   children: JSX.ValueOrCell<() => JSX.Template>
    /**
     * A ref to the underlying HTML element of the view.
     */
@@ -93,41 +93,41 @@ export function StackViewGroup(props: StackViewGroupProps) {
  * ```tsx
  * const nextPageIsOpen = Cell.source(false)
  *
- * const Page1 = () => {
- *   return (
- *     <div>
- *       <button onClick={() => nextPageIsOpen.set(true)}>Open Page 2</button>
- *     </div>
- *   )
- * }
- *
- * const Page2 = () => {
- *   return (
- *     <div>
- *       <button onClick={() => nextPageIsOpen.set(false)}>Close Page 2</button>
- *     </div>
- *   )
+ * const toggleNextPageOpenState = () => {
+ *   nextPageIsOpen.set(!nextPageIsOpen.get())
  * }
  *
  * <StackViewGroup>
- *   <StackView root content={Page1} />
- *   <StackView isOpen={nextPageIsOpen} content={Page2} />
+ *   <StackView root>
+ *     {() => (
+ *       <div>
+ *         <button onClick={toggleNextPageOpenState}>Open Page 2</button>
+ *       </div>
+ *     )}
+ *   </StackView>
+ *   <StackView isOpen={nextPageIsOpen}>
+ *     {() => (
+ *       <div>
+ *         <button onClick={toggleNextPageOpenState}>Close Page 2</button>
+ *       </div>
+ *     )}
+ *   </StackView>
  * </StackViewGroup>
  * ```
  */
 export function StackView(props: StackViewProps) {
    const {
-      content: contentProp,
       isOpen: isOpenProp,
       ref: containerRef = Cell.source<HTMLElement | null>(null),
       onCloseRequested,
       canSwipe: canSwipeProp = true,
+      children: childrenProp,
       root,
       ...rest
    } = props
 
    const isOpen = useDerivedValue(isOpenProp)
-   const content = useDerivedValue(contentProp)
+   const children = useDerivedValue(childrenProp)
    const canSwipe = useDerivedValue(canSwipeProp)
    const observer = useObserver()
    const contentLoaded = Cell.source(root || isOpen.get())
@@ -230,7 +230,7 @@ export function StackView(props: StackViewProps) {
          data-open={root || isOpen}
          class={[styles.stackViewGroupView, rest.class]}
       >
-         {If(content, (content) => {
+         {If(children, (content) => {
             return If(contentLoaded, content)
          })}
          {If(canSwipe, () => {

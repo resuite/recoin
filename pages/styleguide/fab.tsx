@@ -23,25 +23,6 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
       buttonsOpened.set(!buttonsOpened.get())
    }
 
-   const ExpandingViewContent = () => {
-      return (
-         <>
-            <div class='after:block after:h-0.15 after:bg-canvas-text after:animate-lining overflow-hidden'>
-               <div class='text-title animate-fade-in animate-delay-bit-slower'>
-                  hello recoin!
-               </div>
-            </div>
-            <button
-               type='button'
-               class='animate-fade-in animate-delay-bit-slower'
-               onClick={toggleButtonState}
-            >
-               Toggle Button state.
-            </button>
-         </>
-      )
-   }
-
    return (
       <div
          data-expanded-ctx={isOpen}
@@ -89,8 +70,24 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
             expandOrigin='auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)'
             class='dark-scheme h-full w-full grid place-items-center place-content-center gap-1 [grid-area:1/1]'
             isOpen={isOpen}
-            content={ExpandingViewContent}
-         />
+         >
+            {() => (
+               <>
+                  <div class='after:block after:h-0.15 after:bg-canvas-text after:animate-lining overflow-hidden'>
+                     <div class='text-title animate-fade-in animate-delay-bit-slower'>
+                        hello recoin!
+                     </div>
+                  </div>
+                  <button
+                     type='button'
+                     class='animate-fade-in animate-delay-bit-slower'
+                     onClick={toggleButtonState}
+                  >
+                     Toggle Button state.
+                  </button>
+               </>
+            )}
+         </ExpandingView>
       </div>
    )
 }

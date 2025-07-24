@@ -19,7 +19,7 @@ interface ExpandingViewProps extends DivProps {
     * A function that returns the JSX template for the content to be displayed
     * when the view is open.
     */
-   content: () => JSX.Template
+   children: () => JSX.Template
    /**
     * Initial size of the expanding view when opened.
     * This value sets the CSS variable controlling the expanded dimension
@@ -60,7 +60,9 @@ interface ExpandingViewProps extends DivProps {
  *   return (
  *     <div>
  *       <button onClick={() => isOpen.set(!isOpen.get())}>Toggle View</button>
- *       <ExpandingView isOpen={isOpen} content={() => <p>This is the expanded content.</p>} />
+ *       <ExpandingView isOpen={isOpen} >
+ *          {() => <p>This is the expanded content.</p>}
+ *       </ExpandingView>
  *     </div>
  *   )
  * }
@@ -72,7 +74,7 @@ export function ExpandingView(props: ExpandingViewProps) {
       expandOrigin,
       expandSize,
       expandColor,
-      content,
+      children,
       ...rest
    } = props
    const isOpen = useDerivedValue(isOpenProp)
@@ -113,7 +115,7 @@ export function ExpandingView(props: ExpandingViewProps) {
    return (
       <div class={styles.container} style={style}>
          <div {...rest} class={[styles.content, rest.class]} data-open={isOpen}>
-            {If(contentLoaded, content)}
+            {If(contentLoaded, children)}
          </div>
          <div ref={clipPathRef} class={styles.clipPath} />
       </div>

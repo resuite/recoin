@@ -3,7 +3,7 @@ import { useRouter } from 'retend/router'
 
 const Index = () => {
    const router = useRouter()
-   return <ToastContainer content={router.Outlet} />
+   return <ToastContainer>{router.Outlet}</ToastContainer>
 }
 
 export default Index

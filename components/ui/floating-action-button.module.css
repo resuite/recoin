@@ -17,32 +17,32 @@
       visibility: unset;
    }
 
-   &.block-top {
+   &.block.top {
       top: calc(var(--spacing) * 3);
       bottom: unset;
    }
 
-   &.block-bottom {
+   &.block.bottom {
       top: unset;
       bottom: calc(var(--spacing) * 3);
    }
 
-   &.block-center {
+   &.block.center:not(.top, .bottom) {
       top: calc(50% - calc(var(--fab-size) / 2));
       bottom: unset;
    }
 
-   &.inline-right {
+   &.inline.right {
       right: calc(var(--spacing) * 2);
       left: unset;
    }
 
-   &.inline-left {
+   &.inline.left {
       right: unset;
       left: calc(var(--spacing) * 2);
    }
 
-   &.inline-center {
+   &.inline.center:not(.left, .right) {
       right: calc(50% - calc(var(--fab-size) / 2));
       left: unset;
    }

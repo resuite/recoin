@@ -58,7 +58,7 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
  *   )
  * }
  * ```
- * @returns {JSX.Template} The rendered VirtualKeyboardAwareView component.
+ * @returns The rendered VirtualKeyboardAwareView component.
  */
 export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    const {

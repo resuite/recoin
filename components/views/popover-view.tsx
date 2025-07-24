@@ -29,7 +29,7 @@ export interface PopoverProps extends DivProps {
     * A function that returns the JSX template for the content to be displayed
     * inside the popover.
     */
-   content: JSX.ValueOrCell<() => JSX.Template>
+   children: JSX.ValueOrCell<() => JSX.Template>
    /**
     * A reactive boolean that controls the visibility of the popover.
     * When `true`, the popover is rendered; when `false`, it is not.
@@ -75,13 +75,6 @@ export interface PopoverProps extends DivProps {
  *     popoverIsOpen.set(!popoverIsOpen.peek());
  *   };
  *
- *   const PopoverContent = () => (
- *     <div class="p-2">
- *       <p>This is the popover content.</p>
- *       <button type="button" onClick={togglePopover}>Close</button>
- *     </div>
- *   );
- *
  *   return (
  *     <div>
  *       <button ref={anchorRef} onClick={togglePopover}>
@@ -92,9 +85,15 @@ export interface PopoverProps extends DivProps {
  *         anchorRef={anchorRef}
  *         positionArea="bottom center"
  *         justifySelf="end"
- *         content={PopoverContent}
  *         class="bg-white shadow-lg rounded-md"
- *       />
+ *       >
+ *         {() => (
+ *           <div class="p-2">
+ *             <p>This is the popover content.</p>
+ *             <button type="button" onClick={togglePopover}>Close</button>
+ *           </div>
+ *         )}
+ *       </PopoverView>
  *     </div>
  *   );
  * }
@@ -105,7 +104,7 @@ export function PopoverView(props: PopoverProps) {
       positionArea: positionAreaProp = 'top center',
       justifySelf: justifySelfProp = undefined,
       alignSelf: alignSelfProp = undefined,
-      content,
+      children,
       isOpen: isOpenProp,
       ref = Cell.source<HTMLElement | null>(null),
       anchorRef,
@@ -172,7 +171,7 @@ export function PopoverView(props: PopoverProps) {
             style={containerStyles}
             class={[styles.popoverViewContainer, rest.class]}
          >
-            {If(content, (c) => {
+            {If(children, (c) => {
                return c()
             })}
          </div>

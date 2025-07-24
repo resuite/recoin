@@ -12,7 +12,7 @@ type DivProps = JSX.IntrinsicElements['div']
 interface BottomSheetProps extends DivProps {
    isOpen: JSX.ValueOrCell<boolean>
    onClose?: () => void
-   content: () => JSX.Template
+   children: () => JSX.Template
    dialogRef?: SourceCell<HTMLDialogElement | null>
    ref?: SourceCell<HTMLElement | null>
 }
@@ -35,20 +35,25 @@ interface QueryControlledBottomSheetProps
  * const MyComponent = () => {
  *   const isSheetOpen = Cell.source(false)
  *
+ *   const toggleSheet = () => {
+ *     isSheetOpen.set(!isSheetOpen.get())
+ *   }
+ *
  *   return (
  *     <>
  *       <button onClick={() => isSheetOpen.set(true)}>Open Sheet</button>
  *       <BottomSheet
  *         isOpen={isSheetOpen}
- *         onClose={() => isSheetOpen.set(false)}
- *         content={() => (
+ *         onClose={toggleSheet}
+ *       >
+ *         {() => (
  *           <div>
  *             <h3>Sheet Content</h3>
  *             <p>This is some content inside the bottom sheet.</p>
- *             <button onClick={() => isSheetOpen.set(false)}>Close</button>
+ *             <button onClick={toggleSheet}>Close</button>
  *           </div>
  *         )}
- *       />
+ *       </BottomSheet>
  *     </>
  *   )
  * }
@@ -59,7 +64,7 @@ export function BottomSheet(props: BottomSheetProps) {
       isOpen: isOpenProp,
       dialogRef = Cell.source(null),
       ref: contentRef = Cell.source<HTMLElement | null>(null),
-      content,
+      children,
       onClose,
       ...rest
    } = props
@@ -178,7 +183,7 @@ export function BottomSheet(props: BottomSheetProps) {
                      ref={contentRef}
                      class={[styles.sheetContentContainer, rest.class]}
                   >
-                     {content()}
+                     {children()}
                   </div>
                </dialog>
             )
@@ -207,16 +212,14 @@ export function BottomSheet(props: BottomSheetProps) {
  *   // To open this sheet, the URL would need to be something like:
  *   // /some/path?sheet=true
  *   return (
- *     <QueryControlledBottomSheet
- *       queryKey="sheet"
- *       value="true"
- *       content={() => (
+ *     <QueryControlledBottomSheet queryKey="sheet" value="true">
+ *       {() => (
  *         <div>
  *           <h3>Query Controlled Sheet</h3>
  *           <p>This sheet opens when 'sheet=true' is in the URL.</p>
  *         </div>
  *       )}
- *     />
+ *     </QueryControlledBottomSheet>
  *   )
  * }
  *
@@ -225,15 +228,14 @@ export function BottomSheet(props: BottomSheetProps) {
  *   // /another/path?myDialog
  *   // (No specific value required, just the presence of 'myDialog' key)
  *   return (
- *     <QueryControlledBottomSheet
- *       queryKey="myDialog"
- *       content={() => (
+ *     <QueryControlledBottomSheet queryKey="myDialog">
+ *       {() => (
  *         <div>
  *           <h3>Simple Query Controlled Sheet</h3>
  *           <p>This sheet opens when 'myDialog' is present in the URL.</p>
  *         </div>
  *       )}
- *     />
+ *     </QueryControlledBottomSheet>
  *   )
  * }
  * ```
@@ -241,7 +243,7 @@ export function BottomSheet(props: BottomSheetProps) {
 export function QueryControlledBottomSheet(
    props: QueryControlledBottomSheetProps
 ) {
-   const { queryKey, value: valueProp, content, ...rest } = props
+   const { queryKey, value: valueProp, children, ...rest } = props
    const value = useDerivedValue(valueProp)
    const query = useRouteQuery()
 
@@ -263,11 +265,8 @@ export function QueryControlledBottomSheet(
    }
 
    return (
-      <BottomSheet
-         isOpen={isOpen}
-         onClose={onClose}
-         content={content}
-         {...rest}
-      />
+      <BottomSheet isOpen={isOpen} onClose={onClose} {...rest}>
+         {children}
+      </BottomSheet>
    )
 }

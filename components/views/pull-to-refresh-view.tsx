@@ -95,11 +95,15 @@ export interface PullToRefreshViewProps extends DivProps {
  *       style={{ height: '300px', border: '1px solid #ccc' }}
  *       content:class="my-custom-content-styles"
  *     >
- *       <div style={{ height: '200px', backgroundColor: '#ccc' }}>
- *         <p>Scrollable content goes here.</p>
- *         <p>Pull down to refresh.</p>
- *         {Array.from({ length: 20 }, (_, i) => <p key={i}>Item {i + 1}</p>)}
- *       </div>
+ *       {() => (
+ *         <div style={{ height: '200px', backgroundColor: '#ccc' }}>
+ *           <p>Scrollable content goes here.</p>
+ *           <p>Pull down to refresh.</p>
+ *           {Array.from({ length: 20 }, (_, i) => (
+ *             <p key={i}>Item {i + 1}</p>
+ *           ))}
+ *         </div>
+ *       )}
  *     </PullToRefreshView>
  *   )
  * }

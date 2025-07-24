@@ -66,11 +66,11 @@ export interface ToastDetails {
 }
 
 export interface ToastContainerProps {
-   content: () => JSX.Template
+   children: () => JSX.Template
 }
 
 export function ToastContainer(props: ToastContainerProps) {
-   const { content } = props
+   const { children } = props
    const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
    const toastPromiseResolvers = new Map<string, () => void>()
 
@@ -80,24 +80,24 @@ export function ToastContainer(props: ToastContainerProps) {
 
    const value: ToastScopeData = { activeToasts, toastPromiseResolvers }
 
-   const Content = () => {
-      return (
-         <>
-            {content()}
-            <div
-               class={styles.toastsGroup}
-               style={{
-                  '--toasts-count': toastsCount,
-                  '--toast-gap': 'calc(var(--spacing) * 0.5)'
-               }}
-            >
-               {For(activeToasts, Toast)}
-            </div>
-         </>
-      )
-   }
-
-   return <ToastScope.Provider value={value} content={Content} />
+   return (
+      <ToastScope.Provider value={value}>
+         {() => (
+            <>
+               {children()}
+               <div
+                  class={styles.toastsGroup}
+                  style={{
+                     '--toasts-count': toastsCount,
+                     '--toast-gap': 'calc(var(--spacing) * 0.5)'
+                  }}
+               >
+                  {For(activeToasts, Toast)}
+               </div>
+            </>
+         )}
+      </ToastScope.Provider>
+   )
 }
 
 function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
@@ -220,7 +220,9 @@ function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
  * // in layout
  * function App() {
  *   return (
- *     <ToastProvider content={AppContent} />
+ *     <ToastProvider>
+ *       {() => <AppContent />}
+ *     </ToastProvider>
  *   )
  * }
  *
