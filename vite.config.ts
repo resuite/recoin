@@ -15,7 +15,9 @@ const pages = [
    '/styleguide/tabs',
    '/styleguide/pull-zone',
    '/styleguide/toast',
-   '/styleguide/sidebar'
+   '/styleguide/sidebar',
+   '/styleguide/context-menu',
+   '/styleguide/popover'
 ]
 
 export default defineConfig({

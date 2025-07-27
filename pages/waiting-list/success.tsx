@@ -1,12 +1,15 @@
 import Checkmark from '@/components/icons/svg/checkmark'
-import { emailEntered } from '@/pages/waiting-list/state'
+import { WaitingListStateScope } from '@/scopes'
+import { useScopeContext } from 'retend'
 import { useRouter } from 'retend/router'
 
-const ComingSoonWaitingListSuccess = () => {
+const WaitingListSuccess = () => {
+   const { emailEntered } = useScopeContext(WaitingListStateScope)
    const router = useRouter()
 
    if (!emailEntered.get()) {
-      return router.navigate('/waiting-list')
+      router.navigate('/waiting-list')
+      return
    }
 
    return (
@@ -18,12 +21,11 @@ const ComingSoonWaitingListSuccess = () => {
                <h1 class='text-3xl font-bold'>You're on the list!</h1>
                <p class='grid grid-rows-2 gap-0.5 px-2'>
                   <span>
-                     We'll send updates and your early access invitation to your
-                     email.
+                     We'll send updates and your early access invitation to your email.
                   </span>
                   <span>
-                     Keep an eye out, we'll be in touch the moment recoin is
-                     ready to launch.
+                     Keep an eye out, we'll be in touch the moment recoin is ready to
+                     launch.
                   </span>
                </p>
             </section>
@@ -32,4 +34,4 @@ const ComingSoonWaitingListSuccess = () => {
    )
 }
 
-export default ComingSoonWaitingListSuccess
+export default WaitingListSuccess

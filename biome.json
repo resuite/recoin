@@ -10,7 +10,7 @@
       "indentStyle": "space",
       "indentWidth": 3,
       "bracketSpacing": true,
-      "lineWidth": 80
+      "lineWidth": 90
    },
    "javascript": {
       "formatter": {

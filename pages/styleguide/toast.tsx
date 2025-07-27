@@ -1,8 +1,8 @@
-import { ToastContainer, useToast } from '@/components/ui'
+import { ToastProvider, useToast } from '@/components/ui/toast'
 
 const Toast = () => {
    return (
-      <ToastContainer>
+      <ToastProvider>
          {() => {
             const { showToast } = useToast()
 
@@ -30,7 +30,7 @@ const Toast = () => {
                </div>
             )
          }}
-      </ToastContainer>
+      </ToastProvider>
    )
 }
 

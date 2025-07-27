@@ -3,17 +3,12 @@ import {
    QueryControlledBottomSheet,
    SidebarProviderView,
    StackView,
-   StackViewGroup
+   StackViewGroup,
+   useSidebar
 } from '@/components/views'
 import { createPartitions } from '@/utilities/animations'
 import { useRouteQueryControl } from '@/utilities/composables'
-import {
-   Cell,
-   For,
-   type SourceCell,
-   createScope,
-   useScopeContext
-} from 'retend'
+import { Cell, For, type SourceCell, createScope, useScopeContext } from 'retend'
 import { useRouter } from 'retend/router'
 import FloatingActionButtonTest from './fab'
 import PullToRefreshViewTest from './pull-zone'
@@ -157,9 +152,11 @@ function SidebarTest() {
                      class='h-screen dark-scheme'
                      sidebar={InnerSidebar}
                   >
-                     <FloatingActionButtonTest>
-                        <StackTest />
-                     </FloatingActionButtonTest>
+                     {() => (
+                        <FloatingActionButtonTest>
+                           <StackTest />
+                        </FloatingActionButtonTest>
+                     )}
                   </SidebarProviderView>
                </PullToRefreshViewTest>
                <Sheet />
@@ -170,13 +167,7 @@ function SidebarTest() {
 }
 
 function SidebarLink(props: SidebarLinkProps) {
-   const {
-      link,
-      progressValue,
-      height = '8dvh',
-      isActive = false,
-      href = '#'
-   } = props
+   const { link, progressValue, height = '8dvh', isActive = false, href = '#' } = props
    const { Link } = useRouter()
    const { translate, opacity } = createLinkAnimationValues(progressValue)
 
@@ -189,9 +180,7 @@ function SidebarLink(props: SidebarLinkProps) {
          ]}
          style={{ translate, opacity, height }}
       >
-         <div
-            class={['flex items-center gap-0.5', { 'opacity-70': !isActive }]}
-         >
+         <div class={['flex items-center gap-0.5', { 'opacity-70': !isActive }]}>
             <Icon name={link.icon} class='link-icon' />
             {link.name}
          </div>
@@ -202,10 +191,7 @@ function SidebarLink(props: SidebarLinkProps) {
 function AnimatedLinkGroup(props: AnimatedLinkGroupProps) {
    const { links, progressValues, linkHeight = '8dvh', activeIndex = 0 } = props
    return (
-      <div
-         class='grid'
-         style={{ gridTemplateRows: `repeat(${links.length}, auto) 1fr` }}
-      >
+      <div class='grid' style={{ gridTemplateRows: `repeat(${links.length}, auto) 1fr` }}>
          {For(links, (link, index) => {
             const progressIndex = index.get()
             const isActive = progressIndex === activeIndex
@@ -242,10 +228,7 @@ function SidebarHeader(props: SidebarHeaderProps) {
 
    return (
       <h2
-         class={[
-            className,
-            'ease-out duration-slow transition-[translate,opacity]'
-         ]}
+         class={[className, 'ease-out duration-slow transition-[translate,opacity]']}
          style={{ translate, opacity }}
       >
          {title}
@@ -274,13 +257,9 @@ function Sheet() {
 }
 
 function StackTest() {
-   const {
-      openSheet,
-      contentTopMarkerRef,
-      page2IsOpen,
-      page3IsOpen,
-      page4IsOpen
-   } = useScopeContext(Scope)
+   const { openSheet, contentTopMarkerRef, page2IsOpen, page3IsOpen, page4IsOpen } =
+      useScopeContext(Scope)
+   const { toggleSidebar } = useSidebar()
 
    const toggleSecondPage = () => {
       page2IsOpen.set(!page2IsOpen.get())
@@ -304,6 +283,9 @@ function StackTest() {
                      class='h-0.25 fixed top-0 left-0 w-full'
                   />
                   <h1 class='text-header'>recoin.</h1>
+                  <button type='button' onClick={toggleSidebar}>
+                     Toggle Sidebar
+                  </button>
                   <button type='button' onClick={openSheet}>
                      Open Bottom Sheet
                   </button>

@@ -8,12 +8,11 @@ const Styleguide = () => {
             <h1 class='text-large px-1'>recoin Styleguide.</h1>
             <div class='pb-2 px-1'>
                <p class='py-0.5'>
-                  This document serves as a comprehensive style guide and
-                  component showcase for recoin, ensuring consistency,
-                  usability, and a strong brand identity across all
-                  touch-points. It outlines the core design principles, visual
-                  elements, and UI components that constitute the application's
-                  interface.
+                  This document serves as a comprehensive style guide and component
+                  showcase for recoin, ensuring consistency, usability, and a strong brand
+                  identity across all touch-points. It outlines the core design
+                  principles, visual elements, and UI components that constitute the
+                  application's interface.
                </p>
             </div>
             <Typography />
@@ -38,24 +37,12 @@ function Typography() {
          <p>
             These are the variations of preferred typographies to be used.
             <ul>
-               <li class='text-logo'>
-                  The quick brown fox jumps over the lazy dog.
-               </li>
-               <li class='text-large'>
-                  The quick brown fox jumps over the lazy dog.
-               </li>
-               <li class='text-title'>
-                  The quick brown fox jumps over the lazy dog.
-               </li>
-               <li class='text-bigger'>
-                  The quick brown fox jumps over the lazy dog.
-               </li>
-               <li class='text-header'>
-                  The quick brown fox jumps over the lazy dog.
-               </li>
-               <li class='text-big'>
-                  The quick brown fox jumps over the lazy dog.
-               </li>
+               <li class='text-logo'>The quick brown fox jumps over the lazy dog.</li>
+               <li class='text-large'>The quick brown fox jumps over the lazy dog.</li>
+               <li class='text-title'>The quick brown fox jumps over the lazy dog.</li>
+               <li class='text-bigger'>The quick brown fox jumps over the lazy dog.</li>
+               <li class='text-header'>The quick brown fox jumps over the lazy dog.</li>
+               <li class='text-big'>The quick brown fox jumps over the lazy dog.</li>
             </ul>
          </p>
       </div>
@@ -133,11 +120,10 @@ function OtherPages() {
          <Link href='/styleguide/toast'>Go to toast page</Link>
          <Link href='/styleguide/floating-button'>Go to FAB page</Link>
          <Link href='/styleguide/sidebar'>Go to sidebar page</Link>
-         <Link href='/styleguide/keyboard-avoidance'>
-            Go to keyboard avoidance page
-         </Link>
+         <Link href='/styleguide/keyboard-avoidance'>Go to keyboard avoidance page</Link>
          <Link href='/styleguide/sheet'>Go to sheet page.</Link>
          <Link href='/styleguide/popover'>Go to popover page</Link>
+         <Link href='/styleguide/context-menu'>Go to context menu </Link>
       </div>
    )
 }

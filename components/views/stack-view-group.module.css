@@ -55,6 +55,7 @@
       opacity: 0;
       transition-duration: 0ms;
       pointer-events: none;
+
       /* Select the last open view. */
       &:nth-last-child(2 of [data-open]) {
          opacity: 0.75;

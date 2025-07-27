@@ -1,9 +1,12 @@
 import { BASE_URL } from '@/constants'
-import { type RouteRecords, lazy } from 'retend/router'
+import { defineRoute } from 'retend/router'
+
+import WaitingList from '@/pages/waiting-list'
+import WaitingListHome from '@/pages/waiting-list/home'
+import WaitingListSuccess from '@/pages/waiting-list/success'
 
 const title = 'recoin'
-const description =
-   'recoin is your private, simple companion for managing finances.'
+const description = 'recoin is your private, simple companion for managing finances.'
 const image = `${BASE_URL}/og-image.png`
 
 const metadata = {
@@ -27,21 +30,19 @@ const metadata = {
    twitterImage: image
 }
 
-export default (<RouteRecords>[
-   {
-      name: 'waiting-list',
-      path: 'waiting-list',
-      component: lazy(() => {
-         return import('./index')
-      }),
-      metadata
-   },
-   {
-      name: 'waiting-list-success',
-      path: 'waiting-list/success',
-      component: lazy(() => {
-         return import('./success')
-      }),
-      metadata
-   }
-])
+export default defineRoute({
+   name: 'waiting-list',
+   path: 'waiting-list',
+   component: WaitingList,
+   metadata,
+   children: [
+      {
+         path: '',
+         component: WaitingListHome
+      },
+      {
+         path: 'success',
+         component: WaitingListSuccess
+      }
+   ]
+})

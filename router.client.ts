@@ -1,17 +1,24 @@
 import Index from '@/pages'
-import styleguideRoutes from '@/pages/styleguide/routes'
-import waitingListRoutes from '@/pages/waiting-list/routes'
-import { createWebRouter } from 'retend/router'
+import { createWebRouter, lazy } from 'retend/router'
 
 export const createRouter = () => {
    return createWebRouter({
       stackMode: true,
       routes: [
          {
-            name: 'recoin-app-index',
             path: '/',
             component: Index,
-            children: [...waitingListRoutes, ...styleguideRoutes]
+            redirect: '/styleguide',
+            children: [
+               {
+                  path: 'styleguide',
+                  subtree: lazy(() => import('@/pages/styleguide/routes'))
+               },
+               {
+                  path: 'waiting-list',
+                  subtree: lazy(() => import('@/pages/waiting-list/routes'))
+               }
+            ]
          }
       ]
    })

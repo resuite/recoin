@@ -1,10 +1,6 @@
 import { type Split, clamp } from '@/utilities/miscellaneous'
 import { Cell, If, type SourceCell, useObserver } from 'retend'
-import {
-   useDerivedValue,
-   useElementBounding,
-   useWindowSize
-} from 'retend-utils/hooks'
+import { useDerivedValue, useElementBounding, useWindowSize } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './popover-view.module.css'
 
@@ -21,10 +17,11 @@ export type PositionArea =
    | 'center center'
 export type Alignment = 'start' | 'end'
 
-/**
- * Props for the PopoverView component.
- */
-export interface PopoverProps extends DivProps {
+export interface BasePopoverProps extends DivProps {
+   /**
+    * An optional `SourceCell` to capture a reference to the popover's root HTML element.
+    */
+   ref?: SourceCell<HTMLElement | null>
    /**
     * A function that returns the JSX template for the content to be displayed
     * inside the popover.
@@ -35,10 +32,17 @@ export interface PopoverProps extends DivProps {
     * When `true`, the popover is rendered; when `false`, it is not.
     */
    isOpen: JSX.ValueOrCell<boolean>
-   /**
-    * An optional `SourceCell` to capture a reference to the popover's root HTML element.
-    */
-   ref?: SourceCell<HTMLElement | null>
+}
+
+export interface UnanchoredPopoverProps extends BasePopoverProps {
+   x: JSX.ValueOrCell<number>
+   y: JSX.ValueOrCell<number>
+}
+
+/**
+ * Props for the PopoverView component.
+ */
+export interface AnchoredPopoverProps extends BasePopoverProps {
    /**
     * A `SourceCell` that holds a reference to the anchor element. The popover's
     * position will be calculated relative to this element.
@@ -60,6 +64,8 @@ export interface PopoverProps extends DivProps {
    alignSelf?: JSX.ValueOrCell<Alignment | undefined>
 }
 
+export type PopoverProps = AnchoredPopoverProps | UnanchoredPopoverProps
+
 /**
  * A flexible UI component for displaying content in a floating popover,
  * positioned relative to an anchor element.
@@ -72,7 +78,7 @@ export interface PopoverProps extends DivProps {
  *   const anchorRef = Cell.source<HTMLButtonElement | null>(null);
  *
  *   const togglePopover = () => {
- *     popoverIsOpen.set(!popoverIsOpen.peek());
+ *     popoverIsOpen.set(!popoverIsOpen.get());
  *   };
  *
  *   return (
@@ -104,25 +110,34 @@ export function PopoverView(props: PopoverProps) {
       positionArea: positionAreaProp = 'top center',
       justifySelf: justifySelfProp = undefined,
       alignSelf: alignSelfProp = undefined,
+      anchorRef,
       children,
+      x: xProp,
+      y: yProp,
       isOpen: isOpenProp,
       ref = Cell.source<HTMLElement | null>(null),
-      anchorRef,
       ...rest
-   } = props
+   } = props as AnchoredPopoverProps & UnanchoredPopoverProps
+
    // TODO: retend-utils/hooks should have a `useCssSupports()` hook.
-   const supportsAnchorPositioning = Cell.source<boolean | null>(null)
+   const usingAnchorPositioning = Cell.source<boolean | null>(null)
    const isOpen = useDerivedValue(isOpenProp)
    const positionArea = useDerivedValue(positionAreaProp)
    const justifySelf = useDerivedValue(justifySelfProp)
    const alignSelf = useDerivedValue(alignSelfProp)
    const observer = useObserver()
    const anchorName = Cell.source('none')
+   const x = useDerivedValue(xProp)
+   const y = useDerivedValue(yProp)
 
    const containerStyles: Cell<JSX.StyleValue> = Cell.derived(() => {
-      const anchoringSupported = supportsAnchorPositioning.get()
+      const anchoringSupported = usingAnchorPositioning.get()
       if (anchoringSupported === null) {
          return {}
+      }
+
+      if (x.get() !== undefined && y.get() !== undefined) {
+         return { top: `${y.get()}px`, left: `${x.get()}px` }
       }
 
       if (anchoringSupported) {
@@ -143,7 +158,9 @@ export function PopoverView(props: PopoverProps) {
       const jSelf = justifySelf.get()
       const aSelf = alignSelf.get()
 
-      return { ...computePosition(pArea, anchorRef, ref, jSelf, aSelf) }
+      if (anchorRef) {
+         return { ...computePosition(pArea, anchorRef, ref, jSelf, aSelf) }
+      }
    })
 
    const assignAnchorName = (anchor: HTMLElement) => {
@@ -153,15 +170,19 @@ export function PopoverView(props: PopoverProps) {
       anchorName.set(newAnchorName)
    }
 
-   observer.onConnected(anchorRef, (anchor) => {
-      const anchoringSupported =
-         CSS.supports?.('position-area: top left') &&
-         CSS.supports('anchor-name: --name')
-      if (anchoringSupported) {
-         assignAnchorName(anchor)
-      }
-      supportsAnchorPositioning.set(anchoringSupported)
-   })
+   if (anchorRef) {
+      observer.onConnected(anchorRef, (anchor) => {
+         const anchoringSupported =
+            CSS.supports?.('position-area: top left') &&
+            CSS.supports('anchor-name: --name')
+         if (anchoringSupported) {
+            assignAnchorName(anchor)
+         }
+         usingAnchorPositioning.set(anchoringSupported)
+      })
+   } else {
+      usingAnchorPositioning.set(false)
+   }
 
    return If(isOpen, () => {
       return (

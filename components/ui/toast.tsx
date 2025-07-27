@@ -69,7 +69,7 @@ export interface ToastContainerProps {
    children: () => JSX.Template
 }
 
-export function ToastContainer(props: ToastContainerProps) {
+export function ToastProvider(props: ToastContainerProps) {
    const { children } = props
    const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
    const toastPromiseResolvers = new Map<string, () => void>()
@@ -158,9 +158,7 @@ function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
    })
 
    // Use useIntersectionObserver for swipe-to-dismiss
-   const handleDismissIntersection: IntersectionObserverCallback = (
-      entries
-   ) => {
+   const handleDismissIntersection: IntersectionObserverCallback = (entries) => {
       for (const entry of entries) {
          if (!entry?.isIntersecting) {
             continue
@@ -196,11 +194,7 @@ function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
             onKeyDown={handleClick}
          >
             <div>{content}</div>
-            <button
-               type='button'
-               class={styles.toastCloseButton}
-               onClick={closeToast}
-            >
+            <button type='button' class={styles.toastCloseButton} onClick={closeToast}>
                <Add class={styles.toastCloseButtonIcon} />
             </button>
          </dialog>

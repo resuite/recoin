@@ -1,8 +1,4 @@
-import {
-   type Alignment,
-   PopoverView,
-   type PositionArea
-} from '@/components/views'
+import { type Alignment, PopoverView, type PositionArea } from '@/components/views'
 import { Cell, type SourceCell } from 'retend'
 import { Input } from 'retend-utils/components'
 
@@ -14,7 +10,7 @@ function PopoverTest() {
    const alignSelf = Cell.source<Alignment | undefined>(undefined)
 
    const togglePopover = () => {
-      popoverIsOpen.set(!popoverIsOpen.peek())
+      popoverIsOpen.set(!popoverIsOpen.get())
    }
 
    return (

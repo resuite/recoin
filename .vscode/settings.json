@@ -5,12 +5,7 @@
    "[typescriptreact]": {
       "editor.defaultFormatter": "biomejs.biome"
    },
-   "cSpell.words": [
-      "actiontriggered",
-      "geometrychange",
-      "retend",
-      "thresholdreached"
-   ],
+   "cSpell.words": ["actiontriggered", "geometrychange", "retend", "thresholdreached"],
    "[css]": {
       "editor.defaultFormatter": "biomejs.biome"
    },
@@ -26,7 +21,7 @@
    "[typescript]": {
       "editor.defaultFormatter": "biomejs.biome"
    },
-   "typescript.experimental.useTsgo": true,
+   "typescript.experimental.useTsgo": false,
    "editor.codeActionsOnSave": {
       "source.organizeImports.biome": "explicit"
    }

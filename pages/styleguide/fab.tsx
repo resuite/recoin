@@ -1,5 +1,5 @@
 import { Icon } from '@/components/icons'
-import { FloatingActionButton } from '@/components/ui'
+import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { ExpandingView } from '@/components/views'
 import { vibrate } from '@/utilities/miscellaneous'
 import { Cell } from 'retend'

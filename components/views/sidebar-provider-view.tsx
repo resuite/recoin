@@ -3,10 +3,7 @@ import {
    PointerTracker,
    type TrackedMoveEvent
 } from '@/utilities/pointer-gesture-tracker'
-import {
-   NEGLIGIBLE_SCROLL_PX,
-   scrollTimelineFallback
-} from '@/utilities/scrolling'
+import { NEGLIGIBLE_SCROLL_PX, scrollTimelineFallback } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -41,7 +38,7 @@ export interface SidebarProviderViewProps extends DivProps {
     * Function that returns a JSX template for the main content.
     * This will be rendered inside the main content container.
     */
-   children?: JSX.Template
+   children?: () => JSX.Template
 }
 
 /**
@@ -58,16 +55,12 @@ export interface SidebarProviderViewProps extends DivProps {
  *          sidebar={() => <div><h2>Sidebar Content</h2></div>}
  *          onSidebarStateChange={(state) => console.log('Sidebar is now:', state)}
  *       >
- *          <div>
- *             <h1>Main Page Content</h1>
- *             <p>This is the primary content area.</p>
- *             <button onClick={() => {
- *                const sidebarCtx = useSidebar();
- *                sidebarCtx.toggleSidebar();
- *             }}>
- *                Toggle Sidebar
- *             </button>
- *          </div>
+ *          {() => (
+ *             <div>
+ *                <h1>Main Page Content</h1>
+ *                <p>This is the primary content area.</p>
+ *             </div>
+ *          )}
  *       </SidebarProviderView>
  *    );
  * }
@@ -141,15 +134,13 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
          // Adding the sidebar scroll-snap only after the content is loaded
          // ensures that.
          sidebar.classList.add(styles.sidebar as string)
-         requestAnimationFrame(() => {
-            const provider = providerRef.get()
-            if (provider) {
-               provider.scrollTo({
-                  left: provider.scrollWidth,
-                  behavior: 'instant'
-               })
-            }
-         })
+         const provider = providerRef.get()
+         if (provider) {
+            provider.scrollTo({
+               left: provider.scrollWidth,
+               behavior: 'instant'
+            })
+         }
       })
    })
 
@@ -208,7 +199,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                      data-opened={sidebarOpened}
                      class={styles.content}
                   >
-                     {children}
+                     {children?.()}
                   </div>
                </div>
             )

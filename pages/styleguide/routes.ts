@@ -1,14 +1,16 @@
-import type { RouteRecords } from 'retend/router'
-import Styleguide from '.'
-import BottomSheetTest from './bottom-sheet'
-import FloatingActionButtonTest from './fab'
-import KeyboardAvoidanceTest from './keyboard-avoidance'
-import NavStack from './nav-stack'
-import PopoverTest from './popover'
-import PullToRefreshViewTest from './pull-zone'
-import SidebarTest from './sidebar'
-import Tabs from './tabs'
-import Toast from './toast'
+import { defineRoute } from 'retend/router'
+
+import Styleguide from '@/pages/styleguide'
+import BottomSheetTest from '@/pages/styleguide/bottom-sheet'
+import ContextMenu from '@/pages/styleguide/context-menu'
+import FloatingActionButtonTest from '@/pages/styleguide/fab'
+import KeyboardAvoidanceTest from '@/pages/styleguide/keyboard-avoidance'
+import NavStack from '@/pages/styleguide/nav-stack'
+import PopoverTest from '@/pages/styleguide/popover'
+import PullToRefreshViewTest from '@/pages/styleguide/pull-zone'
+import SidebarTest from '@/pages/styleguide/sidebar'
+import Tabs from '@/pages/styleguide/tabs'
+import Toast from '@/pages/styleguide/toast'
 
 const metadata = {
    title: 'Styleguide',
@@ -20,65 +22,54 @@ const metadata = {
    manifest: '/manifest.json'
 }
 
-export default (<RouteRecords>[
-   {
-      name: 'styleguide',
-      path: '/styleguide',
-      component: Styleguide,
-      metadata
-   },
-   {
-      name: 'styleguide-tabs',
-      path: '/styleguide/tabs',
-      component: Tabs,
-      metadata
-   },
-   {
-      name: 'styleguide-nav-stack',
-      path: '/styleguide/nav-stack',
-      component: NavStack,
-      metadata
-   },
-   {
-      name: 'styleguide-toast',
-      path: '/styleguide/toast',
-      component: Toast,
-      metadata
-   },
-   {
-      name: 'styleguide-pull-zone',
-      path: '/styleguide/pull-zone',
-      component: PullToRefreshViewTest,
-      metadata
-   },
-   {
-      name: 'styleguide-floating-button',
-      path: '/styleguide/floating-button',
-      component: FloatingActionButtonTest,
-      metadata
-   },
-   {
-      name: 'styleguide-sidebar',
-      path: '/styleguide/sidebar',
-      component: SidebarTest,
-      metadata
-   },
-   {
-      name: 'styleguide-keyboard-avoidance',
-      path: '/styleguide/keyboard-avoidance',
-      component: KeyboardAvoidanceTest,
-      metadata
-   },
-   {
-      name: 'styleguide-bottom-sheet',
-      path: '/styleguide/sheet',
-      component: BottomSheetTest,
-      metadata
-   },
-   {
-      name: 'styleguide-popover',
-      path: '/styleguide/popover',
-      component: PopoverTest,
-      metadata
-   }
-])
+export default defineRoute({
+   name: 'styleguide',
+   path: 'styleguide',
+   metadata,
+   children: [
+      {
+         path: '',
+         component: Styleguide
+      },
+      {
+         path: 'tabs',
+         component: Tabs
+      },
+      {
+         path: 'nav-stack',
+         component: NavStack
+      },
+      {
+         path: 'toast',
+         component: Toast
+      },
+      {
+         path: 'pull-zone',
+         component: PullToRefreshViewTest
+      },
+      {
+         path: 'floating-button',
+         component: FloatingActionButtonTest
+      },
+      {
+         path: 'sidebar',
+         component: SidebarTest
+      },
+      {
+         path: 'keyboard-avoidance',
+         component: KeyboardAvoidanceTest
+      },
+      {
+         path: 'sheet',
+         component: BottomSheetTest
+      },
+      {
+         path: 'popover',
+         component: PopoverTest
+      },
+      {
+         path: 'context-menu',
+         component: ContextMenu
+      }
+   ]
+})
