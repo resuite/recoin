@@ -36,7 +36,7 @@ function PopoverTest() {
          <PopoverView
             class='w-fit h-9 duration-slow transition-[top,left,right,bottom] transition-discrete'
             isOpen={popoverIsOpen}
-            anchorRef={anchorRef}
+            anchor={anchorRef}
             positionArea={positionArea}
             justifySelf={justifySelf}
             alignSelf={alignSelf}

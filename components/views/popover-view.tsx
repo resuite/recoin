@@ -1,5 +1,12 @@
 import { type Split, clamp } from '@/utilities/miscellaneous'
-import { Cell, If, type SourceCell, useObserver } from 'retend'
+import {
+   Cell,
+   If,
+   type SourceCell,
+   createScope,
+   useObserver,
+   useScopeContext
+} from 'retend'
 import { useDerivedValue, useElementBounding, useWindowSize } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './popover-view.module.css'
@@ -47,7 +54,7 @@ export interface AnchoredPopoverProps extends BasePopoverProps {
     * A `SourceCell` that holds a reference to the anchor element. The popover's
     * position will be calculated relative to this element.
     */
-   anchorRef: SourceCell<HTMLElement | null>
+   anchor: SourceCell<HTMLElement | null>
    /**
     * Defines where the popover should appear relative to the anchor element, in a
     * 3x3 grid, where the anchor is in the center.
@@ -66,6 +73,15 @@ export interface AnchoredPopoverProps extends BasePopoverProps {
 
 export type PopoverProps = AnchoredPopoverProps | UnanchoredPopoverProps
 
+interface PopoverContext {
+   initialPositionArea: JSX.ValueOrCell<PositionArea>
+}
+const PopoverScope = createScope<PopoverContext>()
+
+export function usePopoverContext() {
+   return useScopeContext(PopoverScope)
+}
+
 /**
  * A flexible UI component for displaying content in a floating popover,
  * positioned relative to an anchor element.
@@ -75,7 +91,7 @@ export type PopoverProps = AnchoredPopoverProps | UnanchoredPopoverProps
  * ```tsx
  * const MyComponent = () => {
  *   const popoverIsOpen = Cell.source(false);
- *   const anchorRef = Cell.source<HTMLButtonElement | null>(null);
+ *   const anchor = Cell.source<HTMLButtonElement | null>(null);
  *
  *   const togglePopover = () => {
  *     popoverIsOpen.set(!popoverIsOpen.get());
@@ -83,12 +99,12 @@ export type PopoverProps = AnchoredPopoverProps | UnanchoredPopoverProps
  *
  *   return (
  *     <div>
- *       <button ref={anchorRef} onClick={togglePopover}>
+ *       <button ref={anchor} onClick={togglePopover}>
  *         Open Popover
  *       </button>
  *       <PopoverView
  *         isOpen={popoverIsOpen}
- *         anchorRef={anchorRef}
+ *         anchor={anchor}
  *         positionArea="bottom center"
  *         justifySelf="end"
  *         class="bg-white shadow-lg rounded-md"
@@ -110,7 +126,7 @@ export function PopoverView(props: PopoverProps) {
       positionArea: positionAreaProp = 'top center',
       justifySelf: justifySelfProp = undefined,
       alignSelf: alignSelfProp = undefined,
-      anchorRef,
+      anchor: anchorRef,
       children,
       x: xProp,
       y: yProp,
@@ -143,6 +159,7 @@ export function PopoverView(props: PopoverProps) {
       if (anchoringSupported) {
          const positionAnchor = anchorName.get()
          return {
+            positionTryFallbacks: 'flip-inline flip-block',
             positionAnchor,
             positionArea,
             justifySelf: Cell.derived(() => {
@@ -184,23 +201,29 @@ export function PopoverView(props: PopoverProps) {
       usingAnchorPositioning.set(false)
    }
 
-   return If(isOpen, () => {
-      return (
-         <div
-            {...rest}
-            ref={ref}
-            style={containerStyles}
-            class={[styles.popoverViewContainer, rest.class]}
-         >
-            {If(children, (c) => {
-               return c()
-            })}
-         </div>
-      )
-   })
+   const popoverContext: PopoverContext = {
+      initialPositionArea: positionArea
+   }
+
+   return (
+      <PopoverScope.Provider value={popoverContext}>
+         {() =>
+            If(isOpen, () => (
+               <div
+                  {...rest}
+                  ref={ref}
+                  style={containerStyles}
+                  class={[styles.popoverViewContainer, rest.class]}
+               >
+                  {If(children, (c) => c())}
+               </div>
+            ))
+         }
+      </PopoverScope.Provider>
+   )
 }
 
-function generateNewAnchorName() {
+export function generateNewAnchorName() {
    const randomId = crypto.randomUUID().replace(/-/g, '').slice(0, 8)
    return `--anchor-${randomId}`
 }

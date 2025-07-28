@@ -49,8 +49,7 @@
 }
 
 body {
-   font-family: "Instrument Sans Italic O", "Instrument Sans Regular",
-      sans-serif;
+   font-family: "Instrument Sans Italic O", "Instrument Sans Regular", sans-serif;
    @apply dark-scheme;
 }
 
@@ -65,6 +64,7 @@ body {
    --color-canvas: var(--canvas);
    --color-canvas-background: var(--canvas-background);
    --color-canvas-text: var(--canvas-text);
+   --color-canvas-shadow: var(--canvas-shadow);
 
    --text-smallest: 0.5rem;
    --text-smaller: 0.625rem;
@@ -96,8 +96,7 @@ body {
 
    --animate-spin: spin var(--speed-slowest) linear infinite;
    --animate-fade-in: fade-in var(--speed-fast) ease-in backwards;
-   --animate-lining: lining var(--speed-slow) ease-in-out var(--speed-slow)
-      backwards;
+   --animate-lining: lining var(--speed-slow) ease-in-out var(--speed-slow) backwards;
    --animate-fade-y: fade-y var(--speed-default) ease-in-out backwards;
 
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
@@ -179,6 +178,7 @@ body {
    --canvas-text: var(--color-base);
    --canvas: var(--color-light-yellow);
    --canvas-background: white;
+   --canvas-shadow: var(--color-gray-200);
    /*
       Note: The three variables below should ideally inherit
       the color of the canvas as already defined in @theme,
@@ -187,6 +187,7 @@ body {
    --color-canvas: var(--canvas);
    --color-canvas-background: var(--canvas-background);
    --color-canvas-text: var(--canvas-text);
+   --color-canvas-shadow: var(--canvas-shadow);
 
    color: var(--color-base);
    background-color: white;
@@ -206,10 +207,12 @@ body {
    --canvas-text: var(--color-light-yellow);
    --canvas: var(--color-base);
    --canvas-background: var(--color-base);
+   --canvas-shadow: var(--color-black);
    /* Note: see .light-theme */
    --color-canvas: var(--canvas);
    --color-canvas-background: var(--canvas-background);
    --color-canvas-text: var(--canvas-text);
+   --color-canvas-shadow: var(--canvas-shadow);
 
    color: var(--color-light-yellow);
    background-color: var(--color-base);

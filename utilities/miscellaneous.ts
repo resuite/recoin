@@ -1,9 +1,7 @@
 import { Cell } from 'retend'
+import { createGlobalStateHook } from 'retend-utils/hooks'
 
-export function useDerivedAsync<T>(
-   initialValue: T,
-   factory: () => Promise<T>
-): Cell<T> {
+export function useDerivedAsync<T>(initialValue: T, factory: () => Promise<T>): Cell<T> {
    const cell = Cell.source<T>(initialValue)
    const promise = Cell.derived(() => {
       return { id: crypto.randomUUID(), promise: factory() }
@@ -65,3 +63,26 @@ export type Split<S extends string, D extends string> = string extends S
 export function vibrate() {
    navigator.vibrate?.([15, 15])
 }
+
+export interface PointerDownCoordinates {
+   x: Cell<number>
+   y: Cell<number>
+}
+
+export const usePointerDownCoordinates = createGlobalStateHook({
+   cacheKey: Symbol('usePointerDownCoordinates'),
+   createSource: () => ({ x: Cell.source(0), y: Cell.source(0) }),
+   setupListeners: (window, cells) => {
+      const updatePosition = (event: PointerEvent) => {
+         Cell.batch(() => {
+            cells.x.set(event.clientX)
+            cells.y.set(event.clientY)
+         })
+      }
+      window.addEventListener('pointerdown', updatePosition, { passive: true })
+   },
+   createReturnValue: (cells): PointerDownCoordinates => ({
+      x: Cell.derived(() => cells.x.get()),
+      y: Cell.derived(() => cells.y.get())
+   })
+})

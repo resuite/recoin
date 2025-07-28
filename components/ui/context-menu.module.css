@@ -1,0 +1,158 @@
+body:has(.contextMenu) {
+   overflow: hidden;
+}
+
+.contextMenu {
+   padding: 8px;
+   border-radius: 8px;
+   min-width: 205px;
+   box-shadow: 0 1px 10px 0 var(--color-canvas-shadow);
+   transition-property: scale, opacity, translate;
+   transition-duration: var(--speed-default);
+
+   &:has(> .item > .checkItem > .checkItemInput:checked) {
+      /* styles other items to have space for the checkmark if any item is checked. */
+      .item:not(:has(> .checkItem > .checkItemInput:checked), :has(.separator)) {
+         padding-left: calc((var(--spacing) * 0.25) + 0.75rem + 0.25rem); /* initial left space + space for icon + .itemContent gap */
+      }
+   }
+
+   @starting-style {
+      opacity: 0;
+      scale: 0.875;
+   }
+}
+
+.anchor {
+   position: fixed;
+   width: 2px;
+   height: 2px;
+   transition-property: translate;
+   transition-duration: var(--speed-slow);
+}
+
+.item {
+   position: relative;
+   display: grid;
+   place-items: center;
+   min-height: 1.5rem;
+   padding-inline: calc(var(--spacing) * 0.25);
+   padding-block: calc(var(--spacing) * 0.15);
+   font-size: var(--text-sm);
+
+   &:has(> .contextMenuActionBtn:disabled) {
+      pointer-events: none;
+   }
+
+   &:hover,
+   &:has(:focus-visible) {
+      &::before {
+         display: block;
+         content: "";
+         position: absolute;
+         opacity: 0.1;
+         background-color: var(--color-canvas-text);
+         width: 100%;
+         height: 100%;
+         pointer-events: none;
+         border-radius: 5px;
+      }
+   }
+}
+
+.itemContent {
+   display: grid;
+   gap: 0.25rem;
+   min-width: 100%;
+   place-items: start;
+   justify-content: start;
+   align-items: center;
+   border-radius: 0px;
+
+   &:has(.icon) {
+      grid-template-columns: auto 1fr;
+   }
+
+   &:focus-visible,
+   & :focus-visible {
+      outline: none;
+   }
+}
+
+.contextMenuActionBtn {
+   background-color: unset;
+   color: inherit;
+   padding: 0;
+   border: 0;
+
+   &:disabled {
+      visibility: visible;
+      opacity: 0.3;
+   }
+}
+
+.iconContainer {
+   display: grid;
+   place-content: center;
+   height: 1.3rem;
+   width: 1.3rem;
+}
+
+.icon {
+   height: 1.25rem;
+   width: 1.25rem;
+}
+
+.checkItem {
+   min-height: unset;
+
+   &:has(.checkItemInput:checked) {
+      grid-template-columns: auto 1fr;
+
+      &:has(.icon) {
+         grid-template-columns: auto auto 1fr;
+      }
+   }
+
+   &::before,
+   &::after {
+      display: none;
+   }
+}
+
+.checkItemInput {
+   all: revert;
+   appearance: none;
+   position: absolute;
+}
+
+.check {
+   align-self: center;
+   justify-self: center;
+   height: 0.75rem;
+   width: 0.75rem;
+   scale: 1.4;
+
+   path {
+      stroke-width: 3px;
+   }
+}
+
+.separator {
+   display: block;
+   content: "";
+   height: 1px;
+   width: 100%;
+   background-color: var(--color-canvas-text);
+   opacity: 0.3;
+   margin-block: 7.5px;
+
+   .item:has(&) {
+      padding: 0;
+      min-height: fit-content;
+
+      &:is(:hover, :has(:focus-visible))::before {
+         display: none;
+      }
+   }
+}
