@@ -69,7 +69,7 @@ body:has(.contextMenu) {
    align-items: center;
    border-radius: 0px;
 
-   &:has(.icon) {
+   &:has(.iconContainer) {
       grid-template-columns: auto 1fr;
    }
 
