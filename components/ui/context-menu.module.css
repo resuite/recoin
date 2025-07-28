@@ -109,7 +109,7 @@ body:has(.contextMenu) {
    &:has(.checkItemInput:checked) {
       grid-template-columns: auto 1fr;
 
-      &:has(.icon) {
+      &:has(.iconContainer) {
          grid-template-columns: auto auto 1fr;
       }
    }
