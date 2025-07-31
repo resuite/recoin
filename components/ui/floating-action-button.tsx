@@ -60,12 +60,7 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
       <button
          {...rest}
          data-outlined={isOutlined}
-         class={[
-            styles.floatingActionButton,
-            blockClass,
-            inlineClass,
-            rest.class
-         ]}
+         class={[styles.floatingActionButton, blockClass, inlineClass, rest.class]}
       >
          {props.children}
       </button>

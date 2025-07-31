@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Fingerprint(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 25'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Fingerprint</title>
          <path
             d='M18.393 5.20833C16.7829 3.90542 14.7326 3.125 12.5 3.125C7.32233 3.125 3.125 7.32233 3.125 12.5C3.125 15.4451 3.79903 18.0729 4.38031 19.7917'

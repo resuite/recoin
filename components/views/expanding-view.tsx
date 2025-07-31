@@ -69,14 +69,7 @@ interface ExpandingViewProps extends DivProps {
  * ```
  */
 export function ExpandingView(props: ExpandingViewProps) {
-   const {
-      isOpen: isOpenProp,
-      expandOrigin,
-      expandSize,
-      expandColor,
-      children,
-      ...rest
-   } = props
+   const { isOpen: isOpenProp, expandOrigin, expandSize, expandColor, children, ...rest } = props
    const isOpen = useDerivedValue(isOpenProp)
    const contentLoaded = Cell.source(isOpen.get())
    const clipPathRef = Cell.source<HTMLElement | null>(null)

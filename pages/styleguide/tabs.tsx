@@ -4,11 +4,7 @@ const Tabs = () => {
    return (
       <div class='py-1 w-full h-screen grid grid-rows-[auto_1fr] light-scheme rounded-t-3xl'>
          <h2 class='text-title px-1'>Tabs</h2>
-         <TabSwitcherView
-            class='tab-container'
-            header:class='px-1'
-            tabs={tabs}
-         />
+         <TabSwitcherView class='tab-container' header:class='px-1' tabs={tabs} />
       </div>
    )
 }
@@ -19,11 +15,7 @@ const tabs = [
          return 'Tab 1'
       },
       body: () => {
-         return (
-            <div class='flex items-center justify-center w-full h-full'>
-               Tab 1
-            </div>
-         )
+         return <div class='flex items-center justify-center w-full h-full'>Tab 1</div>
       }
    },
    {
@@ -31,11 +23,7 @@ const tabs = [
          return 'Tab 2'
       },
       body: () => {
-         return (
-            <div class='flex h-full items-center justify-center w-full'>
-               Tab 2
-            </div>
-         )
+         return <div class='flex h-full items-center justify-center w-full'>Tab 2</div>
       }
    },
    {
@@ -43,11 +31,7 @@ const tabs = [
          return 'Tab 3'
       },
       body: () => {
-         return (
-            <div class='flex h-full items-center justify-center w-full'>
-               Tab 3
-            </div>
-         )
+         return <div class='flex h-full items-center justify-center w-full'>Tab 3</div>
       }
    },
    {
@@ -55,11 +39,7 @@ const tabs = [
          return 'Tab 4'
       },
       body: () => {
-         return (
-            <div class='flex items-center justify-center w-full h-full'>
-               Tab 4
-            </div>
-         )
+         return <div class='flex items-center justify-center w-full h-full'>Tab 4</div>
       }
    },
    {
@@ -67,11 +47,7 @@ const tabs = [
          return 'Tab 5'
       },
       body: () => {
-         return (
-            <div class='flex items-center justify-center w-full h-full'>
-               Tab 5
-            </div>
-         )
+         return <div class='flex items-center justify-center w-full h-full'>Tab 5</div>
       }
    },
    {
@@ -79,11 +55,7 @@ const tabs = [
          return 'Tab 6'
       },
       body: () => {
-         return (
-            <div class='flex items-center justify-center w-full h-full'>
-               Tab 6
-            </div>
-         )
+         return <div class='flex items-center justify-center w-full h-full'>Tab 6</div>
       }
    },
    {
@@ -91,11 +63,7 @@ const tabs = [
          return 'Tab 7'
       },
       body: () => {
-         return (
-            <div class='flex items-center justify-center w-full h-full'>
-               Tab 7
-            </div>
-         )
+         return <div class='flex items-center justify-center w-full h-full'>Tab 7</div>
       }
    },
    {
@@ -103,11 +71,7 @@ const tabs = [
          return 'Tab 8'
       },
       body: () => {
-         return (
-            <div class='flex items-center justify-center w-full h-full'>
-               Tab 8
-            </div>
-         )
+         return <div class='flex items-center justify-center w-full h-full'>Tab 8</div>
       }
    },
    {
@@ -115,11 +79,7 @@ const tabs = [
          return 'Tab 9'
       },
       body: () => {
-         return (
-            <div class='flex items-center justify-center w-full h-full'>
-               Tab 9
-            </div>
-         )
+         return <div class='flex items-center justify-center w-full h-full'>Tab 9</div>
       }
    }
 ]

@@ -12,9 +12,7 @@ export interface ErrorResponse {
    details?: unknown
 }
 
-export type ServerResponse<T = never> = Promise<
-   SuccessResponse<T> | ErrorResponse
->
+export type ServerResponse<T = never> = Promise<SuccessResponse<T> | ErrorResponse>
 
 export interface RecoinApiEnv {
    Bindings: {

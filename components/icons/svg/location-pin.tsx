@@ -2,17 +2,9 @@ import type { IconProps } from '../index'
 
 export default function LocationPin(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 12 12'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Location Pin</title>
-         <g
-            clip-path='url(#clip0_1580_9943)'
-            xmlns='http://www.w3.org/2000/svg'
-         >
+         <g clip-path='url(#clip0_1580_9943)' xmlns='http://www.w3.org/2000/svg'>
             <path
                d='M10 5.4165C10 8.33319 6.25002 10.8332 6.25002 10.8332C6.25002 10.8332 2.5 8.33319 2.5 5.4165C2.5 4.42194 2.89509 3.46812 3.59835 2.76485C4.30161 2.06159 5.25544 1.6665 6.25002 1.6665C7.24456 1.6665 8.19839 2.06159 8.90166 2.76485C9.60493 3.46812 10 4.42194 10 5.4165Z'
                stroke='currentColor'

@@ -20,12 +20,9 @@ const WaitingListSuccess = () => {
                <Checkmark class='w-[70px] h-[70px]' />
                <h1 class='text-3xl font-bold'>You're on the list!</h1>
                <p class='grid grid-rows-2 gap-0.5 px-2'>
+                  <span>We'll send updates and your early access invitation to your email.</span>
                   <span>
-                     We'll send updates and your early access invitation to your email.
-                  </span>
-                  <span>
-                     Keep an eye out, we'll be in touch the moment recoin is ready to
-                     launch.
+                     Keep an eye out, we'll be in touch the moment recoin is ready to launch.
                   </span>
                </p>
             </section>

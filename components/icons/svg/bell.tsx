@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Bell(props: IconProps) {
    return (
-      <svg
-         {...props}
-         viewBox='0 0 52 53'
-         fill='none'
-         xmlns='http://www.w3.org/2000/svg'
-      >
+      <svg {...props} viewBox='0 0 52 53' fill='none' xmlns='http://www.w3.org/2000/svg'>
          <title xmlns='http://www.w3.org/2000/svg'>Bell</title>
          <path
             xmlns='http://www.w3.org/2000/svg'

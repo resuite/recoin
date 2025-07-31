@@ -3,18 +3,34 @@ body:has(.contextMenu) {
 }
 
 .contextMenu {
+   position: relative;
    padding: 8px;
    border-radius: 8px;
    min-width: 205px;
-   box-shadow: 0 1px 10px 0 var(--color-canvas-shadow);
+   backdrop-filter: blur(8px);
+   border: 0.25px solid var(--color-zinc-500);
+   box-shadow: 0 1px 8px 0 var(--color-canvas-shadow);
    transition-property: scale, opacity, translate;
-   transition-duration: var(--speed-default);
+   transition-duration: var(--speed-faster), var(--speed-default), var(--speed-default);
+   overflow: hidden;
 
    &:has(> .item > .checkItem > .checkItemInput:checked) {
       /* styles other items to have space for the checkmark if any item is checked. */
-      .item:not(:has(> .checkItem > .checkItemInput:checked), :has(.separator)) {
+      .item:not(:has(> .checkItem > .checkItemInput:checked), :has(> .separator)) {
          padding-left: calc((var(--spacing) * 0.25) + 0.75rem + 0.25rem); /* initial left space + space for icon + .itemContent gap */
       }
+   }
+
+   &::before {
+      position: absolute;
+      display: block;
+      opacity: 0.25;
+      content: "";
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-canvas-background);
    }
 
    @starting-style {
@@ -25,6 +41,7 @@ body:has(.contextMenu) {
 
 .anchor {
    position: fixed;
+   display: block;
    width: 2px;
    height: 2px;
    transition-property: translate;
@@ -44,19 +61,16 @@ body:has(.contextMenu) {
       pointer-events: none;
    }
 
-   &:hover,
-   &:has(:focus-visible) {
-      &::before {
-         display: block;
-         content: "";
-         position: absolute;
-         opacity: 0.1;
-         background-color: var(--color-canvas-text);
-         width: 100%;
-         height: 100%;
-         pointer-events: none;
-         border-radius: 5px;
-      }
+   &[data-selected]::before {
+      display: block;
+      content: "";
+      position: absolute;
+      opacity: 0.1;
+      background-color: var(--color-canvas-text);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      border-radius: 5px;
    }
 }
 
@@ -69,8 +83,16 @@ body:has(.contextMenu) {
    align-items: center;
    border-radius: 0px;
 
+   &:has(.caretContainer) {
+      grid-template-columns: 1fr auto;
+   }
+
    &:has(.iconContainer) {
       grid-template-columns: auto 1fr;
+
+      &:has(.caretContainer) {
+         grid-template-columns: auto 1fr auto;
+      }
    }
 
    &:focus-visible,
@@ -147,12 +169,27 @@ body:has(.contextMenu) {
    opacity: 0.3;
    margin-block: 7.5px;
 
-   .item:has(&) {
+   .item:has(> &) {
       padding: 0;
       min-height: fit-content;
 
-      &:is(:hover, :has(:focus-visible))::before {
+      &[data-selected]::before {
          display: none;
       }
    }
+}
+
+.caret {
+   width: 0.85rem;
+   height: 0.85rem;
+   align-self: center;
+   rotate: -90deg;
+
+   path {
+      stroke-width: 3px;
+   }
+}
+
+.submenu {
+   margin-left: -5px;
 }

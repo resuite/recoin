@@ -2,17 +2,9 @@ import type { IconProps } from '../index'
 
 export default function GoogleIcon(props: IconProps) {
    return (
-      <svg
-         {...props}
-         viewBox='0 0 21 20'
-         fill='none'
-         xmlns='http://www.w3.org/2000/svg'
-      >
+      <svg {...props} viewBox='0 0 21 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
          <title xmlns='http://www.w3.org/2000/svg'>Google Icon</title>
-         <g
-            xmlns='http://www.w3.org/2000/svg'
-            clip-path='url(#clip0_1565_8054)'
-         >
+         <g xmlns='http://www.w3.org/2000/svg' clip-path='url(#clip0_1565_8054)'>
             <path
                xmlns='http://www.w3.org/2000/svg'
                d='M20.6367 10.1871C20.6367 9.36767 20.5702 8.76973 20.4263 8.14966H11.0697V11.848H16.5618C16.4512 12.7671 15.8532 14.1512 14.5244 15.0813L14.5058 15.2051L17.4642 17.4969L17.6692 17.5174C19.5515 15.7789 20.6367 13.221 20.6367 10.1871Z'

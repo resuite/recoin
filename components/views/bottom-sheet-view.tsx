@@ -17,8 +17,7 @@ interface BottomSheetProps extends DivProps {
    ref?: SourceCell<HTMLElement | null>
 }
 
-interface QueryControlledBottomSheetProps
-   extends Omit<BottomSheetProps, 'isOpen'> {
+interface QueryControlledBottomSheetProps extends Omit<BottomSheetProps, 'isOpen'> {
    queryKey: string
    value?: JSX.ValueOrCell<string>
 }
@@ -128,8 +127,7 @@ export function BottomSheet(props: BottomSheetProps) {
                   window.innerHeight - contentRectBeforeClose.height
                const currentDistanceFromViewportTop = contentRectBeforeClose.y
                const distanceToTranslate =
-                  currentDistanceFromViewportTop -
-                  initialDistanceFromViewportTop
+                  currentDistanceFromViewportTop - initialDistanceFromViewportTop
 
                content.style.translate = `0px ${distanceToTranslate}px`
 
@@ -240,9 +238,7 @@ export function BottomSheet(props: BottomSheetProps) {
  * }
  * ```
  */
-export function QueryControlledBottomSheet(
-   props: QueryControlledBottomSheetProps
-) {
+export function QueryControlledBottomSheet(props: QueryControlledBottomSheetProps) {
    const { queryKey, value: valueProp, children, ...rest } = props
    const value = useDerivedValue(valueProp)
    const query = useRouteQuery()

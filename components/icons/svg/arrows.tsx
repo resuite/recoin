@@ -3,11 +3,7 @@ import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import type { IconProps } from '../index'
 
-export type ArrowDirection =
-   | 'top-left'
-   | 'top-right'
-   | 'bottom-left'
-   | 'bottom-right'
+export type ArrowDirection = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 export interface ArrowProps extends IconProps {
    direction?: JSX.ValueOrCell<ArrowDirection>
 }

@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function GitFork(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 26'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 26' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Git Fork</title>
          <path
             d='M6.25 3.875C7.97589 3.875 9.375 5.27411 9.375 7C9.375 8.72589 7.97589 10.125 6.25 10.125C4.52411 10.125 3.125 8.72589 3.125 7C3.125 5.27411 4.52411 3.875 6.25 3.875Z'

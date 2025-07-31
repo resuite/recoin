@@ -2,17 +2,9 @@ import type { IconProps } from '../index'
 
 export default function TextSize(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 26'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 26' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Text Size</title>
-         <g
-            clip-path='url(#clip0_1291_10742)'
-            xmlns='http://www.w3.org/2000/svg'
-         >
+         <g clip-path='url(#clip0_1291_10742)' xmlns='http://www.w3.org/2000/svg'>
             {' '}
             <path
                d='M17.1875 8.0625L19.0625 6.1875L20.9375 8.0625H17.1875ZM17.1875 17.4375L19.0625 19.3125L20.9375 17.4375H17.1875Z'

@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Profile(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 26'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 26' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>profile</title>
          <rect
             x='2.5'

@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Password(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 25'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Password</title>
          <path
             d='M11.4792 20.3125H7.81258C7.16675 20.3125 6.59383 20.2917 6.08341 20.2187C3.34383 19.9167 2.60425 18.625 2.60425 15.1042V9.89583C2.60425 6.375 3.34383 5.08333 6.08341 4.78125C6.59383 4.70833 7.16675 4.6875 7.81258 4.6875H11.4167'

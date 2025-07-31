@@ -107,10 +107,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
          // but the visual viewport changes anyway. Luckily, prior values
          // are recorded, so the event can be fired manually.
          const newVisualHeight = window.visualViewport?.height
-         if (
-            newVisualHeight !== undefined &&
-            newVisualHeight !== currentVisualHeight
-         ) {
+         if (newVisualHeight !== undefined && newVisualHeight !== currentVisualHeight) {
             dispatchVisibilityChange(newVisualHeight)
          }
       }
@@ -164,11 +161,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       oldHeight = currentVisualHeight
       currentVisualHeight = nextHeight
       const activeElement = document.activeElement
-      onVirtualKeyboardVisibilityChange?.(
-         oldHeight,
-         currentVisualHeight,
-         activeElement
-      )
+      onVirtualKeyboardVisibilityChange?.(oldHeight, currentVisualHeight, activeElement)
    }
 
    observer.onConnected(containerRef, () => {

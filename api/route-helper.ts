@@ -1,10 +1,6 @@
 import type { RecoinApiEnv } from '@/api/types'
 import { zValidator } from '@hono/zod-validator'
-import type {
-   MiddlewareHandler,
-   Context as RawContext,
-   Env as RawEnv
-} from 'hono'
+import type { MiddlewareHandler, Context as RawContext, Env as RawEnv } from 'hono'
 import type { z } from 'zod'
 
 export type CustomContext<Env, ParamSchema, BodySchema> = Env extends RawEnv
@@ -49,9 +45,7 @@ export function route<
    Params extends z.ZodObject<z.ZodRawShape>,
    Body extends z.ZodObject<z.ZodRawShape>
 >(config: RouteConfig<Params, Body>) {
-   const handlers: RouteHandlers<RecoinApiEnv, Params, Body> = [
-      ...(config.middleware || [])
-   ]
+   const handlers: RouteHandlers<RecoinApiEnv, Params, Body> = [...(config.middleware || [])]
 
    if (config.param) {
       handlers.push(zValidator('param', config.param))

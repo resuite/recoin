@@ -1,7 +1,4 @@
-import {
-   PointerTracker,
-   type TrackedMoveEvent
-} from '@/utilities/pointer-gesture-tracker'
+import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS, getScrollableY } from '@/utilities/scrolling'
 import { Cell, type SourceCell, useObserver } from 'retend'
 import {
@@ -13,11 +10,7 @@ import {
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './pull-to-refresh-view.module.css'
 
-export type PullState =
-   | 'thresholdreached'
-   | 'pulling'
-   | 'idle'
-   | 'actiontriggered'
+export type PullState = 'thresholdreached' | 'pulling' | 'idle' | 'actiontriggered'
 
 type DivProps = JSX.IntrinsicElements['div']
 export interface PullToRefreshViewProps extends DivProps {
@@ -125,8 +118,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    const scrollContainerRef = Cell.source<HTMLElement | null>(null)
    const thresholdMarkerRef = Cell.source<HTMLElement | null>(null)
    const feedbackLayerRef = Cell.source<HTMLElement | null>(null)
-   const contentTopMarkerRef =
-      contentTopMarkerProp ?? Cell.source<HTMLElement | null>(null)
+   const contentTopMarkerRef = contentTopMarkerProp ?? Cell.source<HTMLElement | null>(null)
    const observer = useObserver()
    const supportsTouch = useMatchMedia('(pointer: coarse)')
    const { height } = useWindowSize()
@@ -195,10 +187,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
             return
          }
          const newTime = (delta / pullZoneHeight) * GESTURE_ANIMATION_MS
-         pullScrollAnimation.currentTime = Math.min(
-            newTime,
-            MAX_PULL_ZONE_SCROLL_TOP
-         )
+         pullScrollAnimation.currentTime = Math.min(newTime, MAX_PULL_ZONE_SCROLL_TOP)
       })
    }
 
@@ -351,15 +340,9 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
          <div ref={scrollContainerRef} class={styles.pullZoneScrollContainer}>
             <div ref={thresholdMarkerRef} />
             <div ref={feedbackLayerRef}>{feedback?.()}</div>
-            <div
-               ref={contentRef}
-               class={[styles.pullZoneContent, contentClasses]}
-            >
+            <div ref={contentRef} class={[styles.pullZoneContent, contentClasses]}>
                {!contentTopMarkerProp ? (
-                  <div
-                     ref={contentTopMarkerRef}
-                     class={styles.pullZoneContentTopMarker}
-                  />
+                  <div ref={contentTopMarkerRef} class={styles.pullZoneContentTopMarker} />
                ) : null}
                {children}
             </div>

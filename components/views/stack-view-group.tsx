@@ -1,8 +1,5 @@
 import { defer } from '@/utilities/miscellaneous'
-import {
-   PointerTracker,
-   type TrackedMoveEvent
-} from '@/utilities/pointer-gesture-tracker'
+import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import { Cell, If, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
@@ -60,19 +57,10 @@ export interface StackViewProps extends DivProps {
  * @returns A JSX element representing the navigation stack container.
  */
 export function StackViewGroup(props: StackViewGroupProps) {
-   const {
-      children,
-      ref = Cell.source<HTMLElement | null>(null),
-      ...rest
-   } = props
+   const { children, ref = Cell.source<HTMLElement | null>(null), ...rest } = props
 
    return (
-      <div
-         {...rest}
-         ref={ref}
-         draggable='false'
-         class={[styles.stackViewGroup, rest.class]}
-      >
+      <div {...rest} ref={ref} draggable='false' class={[styles.stackViewGroup, rest.class]}>
          <div class={styles.stackViewGroupContent}>{children}</div>
       </div>
    )
@@ -234,12 +222,7 @@ export function StackView(props: StackViewProps) {
             return If(contentLoaded, content)
          })}
          {If(canSwipe, () => {
-            return (
-               <div
-                  class={styles.stackViewGroupViewPullHandle}
-                  onPointerDown={startDragging}
-               />
-            )
+            return <div class={styles.stackViewGroupViewPullHandle} onPointerDown={startDragging} />
          })}
       </div>
    )

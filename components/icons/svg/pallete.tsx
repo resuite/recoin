@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Pallete(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 26'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 26' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Pallete</title>
          <path
             d='M3.125 7.79167C3.125 5.82748 3.125 4.84539 3.7352 4.2352C4.34539 3.625 5.32748 3.625 7.29167 3.625C9.25585 3.625 10.2379 3.625 10.8481 4.2352C11.4583 4.84539 11.4583 5.82748 11.4583 7.79167V13V18.2083C11.4583 20.1725 11.4583 21.1546 10.8481 21.7648C10.2379 22.375 9.25585 22.375 7.29167 22.375C5.32748 22.375 4.34539 22.375 3.7352 21.7648C3.125 21.1546 3.125 20.1725 3.125 18.2083V13V7.79167Z'

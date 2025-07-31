@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function More(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 25'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>More</title>
          <path
             d='M8.33331 12.5H8.34373'

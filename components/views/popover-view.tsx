@@ -1,12 +1,5 @@
 import { type Split, clamp } from '@/utilities/miscellaneous'
-import {
-   Cell,
-   If,
-   type SourceCell,
-   createScope,
-   useObserver,
-   useScopeContext
-} from 'retend'
+import { Cell, If, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
 import { useDerivedValue, useElementBounding, useWindowSize } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './popover-view.module.css'
@@ -68,6 +61,9 @@ export interface AnchoredPopoverProps extends BasePopoverProps {
     * Optional prop to control the horizontal alignment of the popover relative to its anchor element.
     */
    justifySelf?: JSX.ValueOrCell<Alignment | undefined>
+   /**
+    * Optional prop to control the vertical alignment of the popover relative to its anchor element.
+    */
    alignSelf?: JSX.ValueOrCell<Alignment | undefined>
 }
 
@@ -159,7 +155,7 @@ export function PopoverView(props: PopoverProps) {
       if (anchoringSupported) {
          const positionAnchor = anchorName.get()
          return {
-            positionTryFallbacks: 'flip-inline flip-block',
+            positionTryFallbacks: 'flip-inline, flip-block, flip-block flip-inline',
             positionAnchor,
             positionArea,
             justifySelf: Cell.derived(() => {
@@ -190,8 +186,7 @@ export function PopoverView(props: PopoverProps) {
    if (anchorRef) {
       observer.onConnected(anchorRef, (anchor) => {
          const anchoringSupported =
-            CSS.supports?.('position-area: top left') &&
-            CSS.supports('anchor-name: --name')
+            CSS.supports?.('position-area: top left') && CSS.supports('anchor-name: --name')
          if (anchoringSupported) {
             assignAnchorName(anchor)
          }
@@ -275,8 +270,7 @@ function computePosition(
             const anchorHeight = rect.height.get()
             const popoverHeight = popoverRect.height.get()
             const offset = Math.abs(anchorHeight - popoverHeight) / 2
-            const anchorTallerThanPopover =
-               Math.max(anchorHeight, popoverHeight) === anchorHeight
+            const anchorTallerThanPopover = Math.max(anchorHeight, popoverHeight) === anchorHeight
             return rect.top.get() + (anchorTallerThanPopover ? offset : -offset)
          })
       }
@@ -305,8 +299,7 @@ function computePosition(
             const anchorWidth = rect.width.get()
             const popoverWidth = popoverRect.width.get()
             const offset = Math.abs(anchorWidth - popoverWidth) / 2
-            const anchorWiderThanPopover =
-               Math.max(anchorWidth, popoverWidth) === anchorWidth
+            const anchorWiderThanPopover = Math.max(anchorWidth, popoverWidth) === anchorWidth
             return rect.left.get() + (anchorWiderThanPopover ? offset : -offset)
          })
       }

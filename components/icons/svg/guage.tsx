@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Guage(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 26'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 26' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Guage</title>
          <path
             d='M21.875 12.75C21.875 17.9277 17.6777 22.125 12.5 22.125C7.32233 22.125 3.125 17.9277 3.125 12.75C3.125 7.57233 7.32233 3.375 12.5 3.375C17.6777 3.375 21.875 7.57233 21.875 12.75Z'

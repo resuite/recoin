@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Padlock(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 25'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Padlock</title>
          <path
             d='M12.5003 13.833C13.4897 13.8332 14.2913 14.6356 14.2913 15.625C14.2911 16.6143 13.4896 17.4158 12.5003 17.416C11.5109 17.416 10.7085 16.6144 10.7083 15.625C10.7083 14.6355 11.5108 13.833 12.5003 13.833Z'

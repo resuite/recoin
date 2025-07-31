@@ -1,8 +1,5 @@
 import { Browsers, currentBrowser } from '@/utilities/browser'
-import {
-   PointerTracker,
-   type TrackedMoveEvent
-} from '@/utilities/pointer-gesture-tracker'
+import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { NEGLIGIBLE_SCROLL_PX, scrollTimelineFallback } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
@@ -194,11 +191,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                   class={[styles.provider, rest.class]}
                >
                   <div ref={sidebarRef}>{sidebar()}</div>
-                  <div
-                     ref={contentRef}
-                     data-opened={sidebarOpened}
-                     class={styles.content}
-                  >
+                  <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
                      {children?.()}
                   </div>
                </div>

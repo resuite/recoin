@@ -48,8 +48,7 @@
    .container:has(> .content[data-open]) > & {
       opacity: 0;
       /* Opacity should just be 0ms, but if it is, compositing fails. */
-      transition: scale var(--speed-bit-slower) ease-in-out, opacity 0.05ms
-         var(--speed-bit-slower);
+      transition: scale var(--speed-bit-slower) ease-in-out, opacity 0.05ms var(--speed-bit-slower);
       scale: 20;
    }
 

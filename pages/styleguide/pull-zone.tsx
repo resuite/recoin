@@ -29,8 +29,7 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
                   {
                      'rotate-[calc(var(--pull-progress)*0.61deg)]': pulling,
                      'scale-[calc(var(--pull-progress)*0.01)]': pulling,
-                     'opacity-[calc((var(--pull-progress)*0.005)-0.3)]':
-                        pulling,
+                     'opacity-[calc((var(--pull-progress)*0.005)-0.3)]': pulling,
                      'duration-0': pulling,
                      'animate-spin!': actionTriggered
                   }

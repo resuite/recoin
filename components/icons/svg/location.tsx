@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Location(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 20 21'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 21' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Location</title>
          <path
             d='M15.8333 10.6785C15.8333 13.9002 13.2216 16.5119 9.99996 16.5119C6.7783 16.5119 4.16663 13.9002 4.16663 10.6785C4.16663 7.45689 6.7783 4.84521 9.99996 4.84521C13.2216 4.84521 15.8333 7.45689 15.8333 10.6785Z'

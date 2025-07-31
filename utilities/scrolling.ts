@@ -19,8 +19,7 @@ export function scrollTimelineFallbackBlock(element: HTMLElement) {
 
    const scrollListener = () => {
       const { scrollTop, scrollHeight, clientHeight } = element
-      const newTime =
-         (scrollTop / (scrollHeight - clientHeight)) * GESTURE_ANIMATION_MS
+      const newTime = (scrollTop / (scrollHeight - clientHeight)) * GESTURE_ANIMATION_MS
       scrollAnimation.currentTime = newTime
    }
    element.addEventListener('scroll', scrollListener, { passive: true })
@@ -45,8 +44,7 @@ export function scrollTimelineFallback(element: HTMLElement) {
    const scrollListener = () => {
       requestAnimationFrame(() => {
          const { scrollLeft, scrollWidth, clientWidth } = element
-         const newTime =
-            (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS
+         const newTime = (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS
          scrollAnimation.currentTime = newTime
       })
    }
@@ -66,10 +64,7 @@ export function scrollTimelineFallback(element: HTMLElement) {
  * @param {HTMLElement} boundary - The element to stop the search at.
  * @returns {HTMLElement|null} - The nearest scrollable container or null if none found
  */
-export function getScrollableY(
-   element: HTMLElement,
-   boundary: HTMLElement
-): HTMLElement | null {
+export function getScrollableY(element: HTMLElement, boundary: HTMLElement): HTMLElement | null {
    if (!element) {
       return null
    }

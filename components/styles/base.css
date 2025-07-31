@@ -253,8 +253,7 @@ body {
          var(--grid-lines-color) var(--grid-lines-stroke),
          transparent var(--grid-lines-stroke)
       );
-   background-position: calc(-1 * var(--grid-lines-stroke))
-      calc(-1 * var(--grid-lines-stroke));
+   background-position: calc(-1 * var(--grid-lines-stroke)) calc(-1 * var(--grid-lines-stroke));
    background-size: 50px 50px; /* Adjust grid size */
 }
 

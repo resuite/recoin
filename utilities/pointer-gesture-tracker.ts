@@ -84,10 +84,7 @@ interface GestureTrackerEventMap {
    cancel: Event
 }
 
-type EventHandler<T extends Event> =
-   | null
-   | ((event: T) => void)
-   | EventListenerObject<T>
+type EventHandler<T extends Event> = null | ((event: T) => void) | EventListenerObject<T>
 
 export class TrackedMoveEvent extends Event {
    deltaX: number

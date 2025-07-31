@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Cake(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 38 38'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38' fill='none'>
          <title>Cake</title>
          <path
             d='M4.9375 25.1325C4.9375 21.3691 5.74411 20.5625 9.5075 20.5625H28.4925C32.2559 20.5625 33.0625 21.3691 33.0625 25.1325V28.4925C33.0625 32.2559 32.2559 33.0625 28.4925 33.0625H9.5075C5.74411 33.0625 4.9375 32.2559 4.9375 28.4925V25.1325Z'

@@ -86,3 +86,17 @@ export const usePointerDownCoordinates = createGlobalStateHook({
       y: Cell.derived(() => cells.y.get())
    })
 })
+
+export const useDocumentVisibility = createGlobalStateHook({
+   cacheKey: Symbol('useDocumentVisibility'),
+   createSource: () => Cell.source(true),
+   setupListeners: (window, isVisible) => {
+      const { document } = window
+      const handleVisibilityChange = () => {
+         isVisible.set(document.visibilityState === 'visible')
+      }
+      document.addEventListener('visibilitychange', handleVisibilityChange)
+      return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+   },
+   createReturnValue: (isVisible): Cell<boolean> => Cell.derived(() => isVisible.get())
+})

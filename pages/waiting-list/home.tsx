@@ -55,29 +55,20 @@ function WaitingListHome() {
             <HeadingText />
             <section class='[grid-area:2/1] grid gap-y-0.25'>
                <p>
-                  recoin is your private, simple companion for managing finances. It aims
-                  to make things perfectly clear, so you can easily see where your money
-                  comes from and where it's headed.
+                  recoin is your private, simple companion for managing finances. It aims to make
+                  things perfectly clear, so you can easily see where your money comes from and
+                  where it's headed.
                </p>
                <p>
-                  recoin offers a clear view of your cash flow, helping you understand
-                  spending habits and make informed financial decisions to achieve savings
-                  goals.
+                  recoin offers a clear view of your cash flow, helping you understand spending
+                  habits and make informed financial decisions to achieve savings goals.
                </p>
                <p class='pb-0.25'>Be the first to experience it.</p>
                <form
-                  class={[
-                     'grid gap-y-0.5 max-w-17',
-                     'max-md:place-items-center max-md:max-w-full'
-                  ]}
+                  class={['grid gap-y-0.5 max-w-17', 'max-md:place-items-center max-md:max-w-full']}
                   onSubmit--prevent={handleSubmit}
                >
-                  <Input
-                     model={email}
-                     type='email'
-                     placeholder='Enter your email'
-                     required
-                  />
+                  <Input model={email} type='email' placeholder='Enter your email' required />
                   <button
                      class={[
                         'grid grid-cols-[auto_auto] gap-x-0.25 place-items-center place-content-center',

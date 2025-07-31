@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Share(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 26'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 26' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Share</title>
          <path
             d='M21.875 7C21.875 8.72589 20.4759 10.125 18.75 10.125C17.0241 10.125 15.625 8.72589 15.625 7C15.625 5.27411 17.0241 3.875 18.75 3.875C20.4759 3.875 21.875 5.27411 21.875 7Z'

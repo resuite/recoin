@@ -49,10 +49,7 @@
 
    /* Selects any older toasts to shrink. */
    &:nth-last-child(n + 3) {
-      --translate-y-shrunk: calc(
-         var(--translate-y) +
-         min((var(--inverse) * 2px), 20px)
-      );
+      --translate-y-shrunk: calc(var(--translate-y) + min((var(--inverse) * 2px), 20px));
       translate: 0 var(--translate-y-shrunk);
    }
 

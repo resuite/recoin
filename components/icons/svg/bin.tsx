@@ -2,17 +2,9 @@ import type { IconProps } from '../index'
 
 export default function Bin(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 16 16'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Bin</title>
-         <g
-            clip-path='url(#clip0_1580_1822)'
-            xmlns='http://www.w3.org/2000/svg'
-         >
+         <g clip-path='url(#clip0_1580_1822)' xmlns='http://www.w3.org/2000/svg'>
             <path
                d='M2.61255 4.1001H13.0125L11.9855 13.3437C11.9124 14.002 11.3558 14.5001 10.6934 14.5001H4.93166C4.26924 14.5001 3.71276 14.002 3.63961 13.3437L2.61255 4.1001Z'
                stroke='currentColor'

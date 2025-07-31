@@ -180,11 +180,7 @@ function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
    )
 
    return (
-      <div
-         class={styles.toastContainer}
-         style={{ '--toast-index': index }}
-         ref={toastContainerRef}
-      >
+      <div class={styles.toastContainer} style={{ '--toast-index': index }} ref={toastContainerRef}>
          <div ref={leftDismissMarkerRef} class={styles.toastDismissMarker} />
          <dialog
             open

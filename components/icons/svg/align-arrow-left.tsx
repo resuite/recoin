@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function AlignArrowLeft(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 17 16'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 16' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Align Arrow Left</title>
          <path
             d='M14.25 14.0723V2.44727'

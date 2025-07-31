@@ -1,12 +1,5 @@
 import { scrollTimelineFallback } from '@/utilities/scrolling'
-import {
-   Cell,
-   For,
-   type SourceCell,
-   createScope,
-   useObserver,
-   useScopeContext
-} from 'retend'
+import { Cell, For, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './tab-switcher-view.module.css'
@@ -129,8 +122,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
       }
 
       const paddingLeft = getComputedStyle(header).paddingLeft.slice(0, -2)
-      const left =
-         index * ((header.scrollWidth + -paddingLeft) / tabCount.get())
+      const left = index * ((header.scrollWidth + -paddingLeft) / tabCount.get())
       header.scrollTo({ left })
       const newTab = tabs.get()[index]
       if (!newTab) {
@@ -181,9 +173,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
                <header ref={headerRef} class={[styles.header, headerClasses]}>
                   {For(tabs, TabHeader)}
                </header>
-               <div class={styles.tabContentContainer}>
-                  {For(tabs, TabBody)}
-               </div>
+               <div class={styles.tabContentContainer}>{For(tabs, TabBody)}</div>
             </section>
          )}
       </TabScope.Provider>
@@ -237,12 +227,7 @@ function TabBody(tab: Tab, index: Cell<number>) {
       }
    })
    return (
-      <div
-         ref={ref}
-         data-tab-index={index}
-         ariaHidden={isNotActive}
-         class={styles.tabContent}
-      >
+      <div ref={ref} data-tab-index={index} ariaHidden={isNotActive} class={styles.tabContent}>
          <tab.body />
       </div>
    )

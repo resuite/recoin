@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Toggles(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 25 25'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Toggles</title>
          <path
             d='M5.20831 3.125V15.625'

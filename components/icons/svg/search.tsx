@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Search(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 20 21'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 21' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Search</title>
          <path
             d='M14.1666 14.9165L17.5 18.2498'

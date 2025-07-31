@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function Bitcoin(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 38 38'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38' fill='none'>
          <title>Bitcoin</title>
          <path
             d='M12.5 13.2812H21.0938C25 13.2812 25 18.75 21.0938 18.75H16.4062'

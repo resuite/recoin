@@ -2,12 +2,7 @@ import type { IconProps } from '../index'
 
 export default function CreditCard(props: IconProps) {
    return (
-      <svg
-         {...props}
-         xmlns='http://www.w3.org/2000/svg'
-         viewBox='0 0 38 39'
-         fill='none'
-      >
+      <svg {...props} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 39' fill='none'>
          <title xmlns='http://www.w3.org/2000/svg'>Credit Card</title>
          <path
             d='M5.46875 16.375H32.0312'

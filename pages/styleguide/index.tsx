@@ -8,11 +8,10 @@ const Styleguide = () => {
             <h1 class='text-large px-1'>recoin Styleguide.</h1>
             <div class='pb-2 px-1'>
                <p class='py-0.5'>
-                  This document serves as a comprehensive style guide and component
-                  showcase for recoin, ensuring consistency, usability, and a strong brand
-                  identity across all touch-points. It outlines the core design
-                  principles, visual elements, and UI components that constitute the
-                  application's interface.
+                  This document serves as a comprehensive style guide and component showcase for
+                  recoin, ensuring consistency, usability, and a strong brand identity across all
+                  touch-points. It outlines the core design principles, visual elements, and UI
+                  components that constitute the application's interface.
                </p>
             </div>
             <Typography />

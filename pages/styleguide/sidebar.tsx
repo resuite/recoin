@@ -101,10 +101,7 @@ function SidebarTest() {
       lowerLinksSwipeProgressValuesOptions
    )
    const [lineScale] = createPartitions(sidebarRevealCssVar, lineScaleOptions)
-   const [headerProgressValue] = createPartitions(
-      sidebarRevealCssVar,
-      headerAnimationOptions
-   )
+   const [headerProgressValue] = createPartitions(sidebarRevealCssVar, headerAnimationOptions)
    const scopeData: ScopeData = {
       page2IsOpen,
       page3IsOpen,
@@ -148,10 +145,7 @@ function SidebarTest() {
          {() => (
             <>
                <PullToRefreshViewTest contentTopMarkerRef={contentTopMarkerRef}>
-                  <SidebarProviderView
-                     class='h-screen dark-scheme'
-                     sidebar={InnerSidebar}
-                  >
+                  <SidebarProviderView class='h-screen dark-scheme' sidebar={InnerSidebar}>
                      {() => (
                         <FloatingActionButtonTest>
                            <StackTest />
@@ -278,10 +272,7 @@ function StackTest() {
          <StackView class='bg-sky-300' root>
             {() => (
                <div class='h-full w-full relative grid place-items-center place-content-center gap-0.5'>
-                  <div
-                     ref={contentTopMarkerRef}
-                     class='h-0.25 fixed top-0 left-0 w-full'
-                  />
+                  <div ref={contentTopMarkerRef} class='h-0.25 fixed top-0 left-0 w-full' />
                   <h1 class='text-header'>recoin.</h1>
                   <button type='button' onClick={toggleSidebar}>
                      Toggle Sidebar
