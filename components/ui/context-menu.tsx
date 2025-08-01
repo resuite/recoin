@@ -156,7 +156,10 @@ interface ContextMenuContext {
    isOpen: Cell<boolean>
    close: () => void
    trigger: SourceCell<HTMLElement | null>
+   selected: SourceCell<number>
    subMenuIsOpen: SourceCell<boolean>
+   selectItem?: (event: Event) => void
+   unselectItem?: () => void
 }
 const ContextMenuScope = createScope<ContextMenuContext>()
 
@@ -401,12 +404,22 @@ export function ContextMenu(props: ContextMenuProps) {
          close()
       },
       mouseleave(event) {
-         const _event = event as MouseEvent
-         const nextElement = _event.relatedTarget as Node
-         const menu = ref.get()
-         if (menu?.contains(nextElement)) {
+         // Here we switch between 'we are hovering over the trigger'
+         // and 'we are hovering inside the menu'. The mouseleave events
+         // has a mutually exclusive relationship.
+         const currentTarget = event.currentTarget
+         const nextElement = (event as MouseEvent).relatedTarget as Node
+         const menu = ref.peek()
+         const triggerEl = trigger.peek()
+         const compliment = currentTarget === menu ? triggerEl : menu
+         const handler = triggerReleaseHandlers.mouseleave
+         currentTarget?.removeEventListener('mouseleave', handler)
+
+         if (compliment?.contains(nextElement)) {
+            compliment.addEventListener('mouseleave', handler, { once: true })
             return
          }
+
          close()
       },
       pointerup: close
@@ -431,6 +444,7 @@ export function ContextMenu(props: ContextMenuProps) {
 
    const triggerHandler = triggerHandlers[strategy]
    const triggerReleaseHandler = triggerReleaseHandlers[releaseEvent]
+   const ctx = { isOpen, close, trigger, subMenuIsOpen, selected, selectItem }
 
    observer.onConnected(trigger, (trigger) => {
       trigger.addEventListener(strategy, triggerHandler)
@@ -476,7 +490,7 @@ export function ContextMenu(props: ContextMenuProps) {
    })
 
    return If(isOpen, () => (
-      <ContextMenuScope.Provider value={{ isOpen, close, trigger, subMenuIsOpen }}>
+      <ContextMenuScope.Provider value={ctx}>
          {() => (
             // This needs to be a teleport in case of recursive submenus.
             // the anchor needs to be position:fixed to anchor with the current cursor position,
@@ -502,17 +516,7 @@ export function ContextMenu(props: ContextMenuProps) {
                         class={[styles.contextMenu, className]}
                         onPointerOut--self={unselectItem}
                      >
-                        {For(items, (item, idx) => (
-                           <li
-                              class={styles.item}
-                              data-index={idx}
-                              data-selected={Cell.derived(() => idx.get() === selected.get())}
-                              onPointerEnter--self={selectItem}
-                              onFocusIn={selectItem}
-                           >
-                              <ContextMenuItem {...item} />
-                           </li>
-                        ))}
+                        {For(items, ContextMenuListItem)}
                      </menu>
                   )}
                </PopoverView>
@@ -520,6 +524,22 @@ export function ContextMenu(props: ContextMenuProps) {
          )}
       </ContextMenuScope.Provider>
    ))
+}
+
+function ContextMenuListItem(item: ContextMenuItemProps, idx: Cell<number>) {
+   const { selected, selectItem } = useContextMenuContext()
+
+   return (
+      <li
+         class={styles.item}
+         data-index={idx}
+         data-selected={Cell.derived(() => idx.get() === selected.get())}
+         onPointerEnter--self={selectItem}
+         onFocusIn={selectItem}
+      >
+         <ContextMenuItem {...item} />
+      </li>
+   )
 }
 
 function ContextMenuItem(props: ContextMenuItemProps) {
