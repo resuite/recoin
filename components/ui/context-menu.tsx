@@ -4,7 +4,11 @@ import {
    type PositionArea,
    generateNewAnchorName
 } from '@/components/views/popover-view'
-import { clamp, defer, useDocumentVisibility } from '@/utilities/miscellaneous'
+import {
+   polyfillTouchContextMenuEvent,
+   removeTouchContextMenuEventPolyfill
+} from '@/utilities/contextmenu-event-ios-polyfill'
+import { clamp, defer, useDocumentVisibility, usePointerPosition } from '@/utilities/miscellaneous'
 import {
    Cell,
    For,
@@ -15,7 +19,7 @@ import {
    useObserver,
    useScopeContext
 } from 'retend'
-import { useCursorPosition, useDerivedValue } from 'retend-utils/hooks'
+import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { Teleport } from 'retend/teleport'
 import { DynamicIcon, type IconName } from '../icons'
@@ -30,11 +34,13 @@ export const ItemTypes = {
 } as const
 
 export const StrategyRelease = {
-   mouseover: 'mouseleave',
-   click: 'click',
-   pointerdown: 'pointerup',
-   contextmenu: 'click'
+   pointerover: 'pointerleave',
+   click: 'pointerdown',
+   contextmenu: 'pointerdown'
 } as const satisfies Record<ContextMenuStrategy, string>
+
+const CONTEXT_SUBMENU_DELAY = 200
+const FOCUSED_OR_IS_SEPARATOR_SELECTOR = `:has(>.${styles.separator}, :focus)`
 
 interface ContextMenuItemBase {
    label: string | (() => JSX.Template)
@@ -70,7 +76,7 @@ export type ContextMenuItemProps =
    | ContextMenuSeparatorProps
    | ContextMenuSubMenuProps
 
-export type ContextMenuStrategy = 'contextmenu' | 'mouseover' | 'pointerdown' | 'click'
+export type ContextMenuStrategy = 'contextmenu' | 'pointerover' | 'click'
 
 export type ContextMenuTriggerHandlers = Record<
    keyof typeof StrategyRelease,
@@ -150,6 +156,12 @@ interface ContextMenuProps extends MenuProps {
     * @param newState The new state of the context menu, either 'open' or 'closed'.
     */
    onStateChange?: (newState: ContextMenuState) => void
+
+   /**
+    * A reactive cell to capture the HTMLElement of the context menu itself.
+    * This can be used to directly interact with the menu's DOM element if needed.
+    */
+   ref?: SourceCell<HTMLElement | null>
 }
 
 interface ContextMenuContext {
@@ -157,9 +169,10 @@ interface ContextMenuContext {
    close: () => void
    trigger: SourceCell<HTMLElement | null>
    selected: SourceCell<number>
-   subMenuIsOpen: SourceCell<boolean>
+   subMenus: Set<Cell<HTMLElement | null>>
    selectItem?: (event: Event) => void
-   unselectItem?: () => void
+   style?: JSX.ValueOrCell<JSX.StyleValue>
+   class: unknown
 }
 const ContextMenuScope = createScope<ContextMenuContext>()
 
@@ -238,10 +251,7 @@ export function tryUseContextMenuContext() {
  *   return (
  *     <div>
  *       <div ref={trigger}>Right-click me!</div>
- *       <ContextMenu
- *         trigger={trigger}
- *         items={menuItems}
- *       />
+ *       <ContextMenu trigger={trigger} items={menuItems} />
  *     </div>
  *   )
  * }
@@ -252,38 +262,33 @@ export function ContextMenu(props: ContextMenuProps) {
       trigger,
       items: itemsProp,
       strategy = 'contextmenu',
-      class: className,
-      onStateChange,
-      useTriggerAsAnchor,
       positionArea: positionAreaProp = 'bottom right',
       alignSelf: alignSelfProp,
       justifySelf: justifySelfProp,
+      ref = Cell.source<HTMLElement | null>(null),
+      onStateChange,
+      useTriggerAsAnchor,
       ...rest
    } = props
    const observer = useObserver()
-   const cursorCoordinates = useCursorPosition()
+   const cursorCoordinates = usePointerPosition()
    const documentIsVisible = useDocumentVisibility()
    const items = useDerivedValue(itemsProp)
    const positionArea = useDerivedValue(positionAreaProp)
    const alignSelf = useDerivedValue(alignSelfProp)
    const justifySelf = useDerivedValue(justifySelfProp)
-   const ref = Cell.source<HTMLElement | null>(null)
    const anchor = Cell.source<HTMLElement | null>(null)
    const selected = Cell.source(-1)
-   const subMenuIsOpen = Cell.source(false)
    const menuShouldBeOpen = Cell.source(false)
    const anchorCoordinates = { x: Cell.source(0), y: Cell.source(0) }
    const releaseEvent = StrategyRelease[strategy]
    const anchorName = generateNewAnchorName()
    const mode = Cell.source<InteractionMode>('pointer')
-   const _parentContextMenuCtx = tryUseContextMenuContext()
+   const subMenus = new Set<Cell<HTMLElement | null>>()
+   let waitingToShowSubmenuDelayId: ReturnType<typeof setTimeout> | null = null
 
    const isOpen = Cell.derived(() => {
       return menuShouldBeOpen.get() && documentIsVisible.get()
-   })
-
-   const itemCount = Cell.derived(() => {
-      return items.get().length
    })
 
    const anchorStyle = Cell.derived(() => {
@@ -295,135 +300,31 @@ export function ContextMenu(props: ContextMenuProps) {
    })
 
    const close = () => {
+      if (waitingToShowSubmenuDelayId) {
+         clearTimeout(waitingToShowSubmenuDelayId)
+         waitingToShowSubmenuDelayId = null
+      }
       menuShouldBeOpen.set(false)
    }
 
-   const handleKeybindings = (event: KeyboardEvent) => {
-      mode.set('keyboard')
-      const { code } = event
-      if (code === 'Tab') {
+   const openContextMenu = (event?: Event) => {
+      if (event instanceof OpenSubmenuEvent) {
+         // delay opening submenus for better ux
+         waitingToShowSubmenuDelayId = setTimeout(openContextMenu, CONTEXT_SUBMENU_DELAY)
          return
       }
-      if (code === 'Escape') {
-         close()
-         return
-      }
-      const menu = ref.peek()
-      if (!menu) {
-         return
-      }
-
-      const focusedElement = document.activeElement
-      if (subMenuIsOpen.get()) {
-         // Submenus should handle keyboard focus when open.
-         // Direct DOM traversal for nested menus (`ctxMenu.querySelector(.ctxMenu)`) is not viable
-         // due to `Teleport` flattening the DOM to address `position:fixed` nesting.
-         return
-      }
-
-      const currentSelectedIndex = selected.get()
-      const maximumItemIndex = itemCount.get() - 1
-      if (currentSelectedIndex === -1 && (!focusedElement || !menu.contains(focusedElement))) {
-         selected.set(code === 'ArrowUp' ? maximumItemIndex : 0)
-         return
-      }
-
-      let nextSelection: number | undefined
-      const itemList = items.get()
-
-      switch (code) {
-         case 'ArrowDown':
-            nextSelection = currentSelectedIndex + 1
-            while (isNotFocusableItem(itemList[nextSelection])) {
-               nextSelection = nextSelection + 1
-            }
-            break
-         case 'ArrowUp':
-            nextSelection = currentSelectedIndex - 1
-            while (isNotFocusableItem(itemList[nextSelection])) {
-               nextSelection = nextSelection - 1
-            }
-      }
-
-      if (nextSelection !== undefined) {
-         selected.set(clamp(nextSelection, 0, maximumItemIndex))
-      }
-   }
-
-   const openContextMenu = () => {
-      const menu = ref.get()
-      const isAlreadyOpen = isOpen.get()
-
       const x1 = cursorCoordinates.x.get()
       const y1 = cursorCoordinates.y.get()
-
-      if (!isAlreadyOpen) {
-         setAnchorCoordinates(x1, y1)
-         menuShouldBeOpen.set(true)
-         return
-      }
-      if (!menu) {
-         return
-      }
-
-      // If the menu is already open, we can just smoothly animate it
-      // to its new position. (using translations, because compositing.)
-
-      const { width, height } = menu.getBoundingClientRect()
-      const _x1 = Math.min(innerWidth - width, x1)
-      const _y1 = Math.min(innerHeight - height, y1)
-      const x0 = anchorCoordinates.x.get()
-      const y0 = anchorCoordinates.y.get()
-
-      const dx = _x1 - x0
-      const dy = _y1 - y0
-      menu.style.translate = `${dx}px ${dy}px`
+      setAnchorCoordinates(x1, y1)
+      menuShouldBeOpen.set(true)
    }
 
-   const triggerHandlers: ContextMenuTriggerHandlers = {
-      contextmenu(event) {
-         event.preventDefault()
-         openContextMenu()
-      },
-      click: openContextMenu,
-      mouseover() {
-         if (!isOpen.get()) {
-            openContextMenu()
-         }
-      },
-      pointerdown: openContextMenu
-   }
+   const handleKeybindings = createKeybindingHandler(mode, ref, subMenus, selected, items, close)
+   const handlers = createHandlers(ref, isOpen, openContextMenu, close)
+   const { triggerHandlers, releaseHandlers } = handlers
 
-   const triggerReleaseHandlers: ContextMenuTriggerReleaseHandlers = {
-      click(event) {
-         const target = event.target as Node
-         const menu = ref.get()
-         if (menu?.contains(target)) {
-            return
-         }
-         close()
-      },
-      mouseleave(event) {
-         // Here we switch between 'we are hovering over the trigger'
-         // and 'we are hovering inside the menu'. The mouseleave events
-         // has a mutually exclusive relationship.
-         const currentTarget = event.currentTarget
-         const nextElement = (event as MouseEvent).relatedTarget as Node
-         const menu = ref.peek()
-         const triggerEl = trigger.peek()
-         const compliment = currentTarget === menu ? triggerEl : menu
-         const handler = triggerReleaseHandlers.mouseleave
-         currentTarget?.removeEventListener('mouseleave', handler)
-
-         if (compliment?.contains(nextElement)) {
-            compliment.addEventListener('mouseleave', handler, { once: true })
-            return
-         }
-
-         close()
-      },
-      pointerup: close
-   }
+   const triggerHandler = triggerHandlers[strategy]
+   const releaseHandler = releaseHandlers[releaseEvent]
 
    const selectItem = (event: Event) => {
       mode.set('pointer')
@@ -441,42 +342,72 @@ export function ContextMenu(props: ContextMenuProps) {
          anchorCoordinates.y.set(y)
       })
    }
-
-   const triggerHandler = triggerHandlers[strategy]
-   const triggerReleaseHandler = triggerReleaseHandlers[releaseEvent]
-   const ctx = { isOpen, close, trigger, subMenuIsOpen, selected, selectItem }
+   const ctx = {
+      isOpen,
+      close,
+      trigger,
+      subMenus,
+      selected,
+      selectItem,
+      class: rest.class,
+      style: rest.style
+   }
 
    observer.onConnected(trigger, (trigger) => {
       trigger.addEventListener(strategy, triggerHandler)
+      trigger.addEventListener(OpenSubmenuEvent.eventName, openContextMenu)
+      trigger.addEventListener(CloseSubmenuEvent.eventName, close)
+
+      const isIOS = 'GestureEvent' in window
+      if (isIOS && strategy === 'contextmenu') {
+         polyfillTouchContextMenuEvent(trigger)
+      }
+
       return () => {
          trigger.removeEventListener(strategy, triggerHandler)
+         trigger.removeEventListener(OpenSubmenuEvent.eventName, openContextMenu)
+         trigger.removeEventListener(CloseSubmenuEvent.eventName, close)
+         removeTouchContextMenuEventPolyfill(trigger)
       }
    })
 
    selected.listen((idx) => {
-      if (idx === -1) {
-         return
-      }
-      const menu = ref.get()
+      const menu = ref.peek()
+      const itemList = items.peek()
       if (!menu) {
          return
       }
-      const selectedElement = menu.children[idx] as HTMLElement
-      if (selectedElement.matches(`:has(>.${styles.separator}, :focus)`)) {
-         return
-      }
-      if (mode.get() === 'keyboard') {
-         getFocusableElementInItem(selectedElement)?.focus()
+
+      for (let i = 0; menu.children[i]; i++) {
+         const currentItem = itemList[i]
+         const isSelected = i === idx
+         const listElement = menu.children[i] as HTMLElement
+
+         // Handle submenu visibility:
+         // If the current item is a submenu, dispatch an 'open' event if it's the newly
+         // selected one, or a 'close' event for any other submenu.
+         if (currentItem.type === ItemTypes.SubMenu) {
+            const submenuEvent = isSelected ? new OpenSubmenuEvent() : new CloseSubmenuEvent()
+            listElement.dispatchEvent(submenuEvent)
+         }
+
+         if (
+            isSelected &&
+            mode.get() === 'keyboard' &&
+            !listElement.matches(FOCUSED_OR_IS_SEPARATOR_SELECTOR)
+         ) {
+            getFocusableElementInItem(listElement)?.focus()
+         }
       }
    })
 
    isOpen.listen((contextMenuIsOpen) => {
       onStateChange?.(contextMenuIsOpen ? 'open' : 'closed')
-      const eventListenerTarget = strategy === 'mouseover' ? trigger.peek() : window
+      const eventListenerTarget = strategy === 'pointerover' ? trigger.peek() : window
 
       if (contextMenuIsOpen) {
          defer(() => {
-            eventListenerTarget?.addEventListener(releaseEvent, triggerReleaseHandler)
+            eventListenerTarget?.addEventListener(releaseEvent, releaseHandler)
             window.addEventListener('keydown', handleKeybindings)
             window.addEventListener('resize', close)
          })
@@ -484,7 +415,7 @@ export function ContextMenu(props: ContextMenuProps) {
       }
 
       selected.set(-1)
-      eventListenerTarget?.removeEventListener(releaseEvent, triggerReleaseHandler)
+      eventListenerTarget?.removeEventListener(releaseEvent, releaseHandler)
       window.removeEventListener('keydown', handleKeybindings)
       window.removeEventListener('resize', close)
    })
@@ -494,7 +425,7 @@ export function ContextMenu(props: ContextMenuProps) {
          {() => (
             // This needs to be a teleport in case of recursive submenus.
             // the anchor needs to be position:fixed to anchor with the current cursor position,
-            // but the behaviour of fixed elements in fixed elements is questionable.
+            // and the behaviour of nested fixed elements in browsers is...questionable.
             <Teleport
                to='body'
                class={styles.anchor}
@@ -513,7 +444,7 @@ export function ContextMenu(props: ContextMenuProps) {
                      <menu
                         {...rest}
                         ref={ref}
-                        class={[styles.contextMenu, className]}
+                        class={[styles.contextMenu, rest.class]}
                         onPointerOut--self={unselectItem}
                      >
                         {For(items, ContextMenuListItem)}
@@ -622,10 +553,21 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
    const observer = useObserver()
    const trigger = Cell.source<HTMLElement | null>(null)
    const { items, label, disabled, type: _type, icon } = props
+   const contextMenu = Cell.source<HTMLElement | null>(null)
    const button = Cell.source<HTMLButtonElement | null>(null)
+   const { subMenus, style, class: className } = useContextMenuContext()
 
    observer.onConnected(button, (button) => {
       trigger.set(button.parentElement as HTMLLIElement)
+   })
+
+   contextMenu.listen(() => {
+      observer.onConnected(contextMenu, () => {
+         subMenus.add(contextMenu)
+         return () => {
+            subMenus.delete(contextMenu)
+         }
+      })
    })
 
    return (
@@ -643,13 +585,14 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
             </div>
          </button>
          <ContextMenu
-            class={styles.submenu}
+            ref={contextMenu}
+            class={[className, styles.submenu]}
+            style={style}
             trigger={trigger}
             items={items}
             useTriggerAsAnchor
             positionArea='center right'
             alignSelf='start'
-            strategy='mouseover'
          />
       </>
    )
@@ -661,4 +604,135 @@ function getFocusableElementInItem(parent: HTMLElement) {
 
 function isNotFocusableItem(item: ContextMenuItemProps) {
    return item && (item.type === ItemTypes.Separator || item.disabled)
+}
+
+function createHandlers(
+   ref: SourceCell<HTMLElement | null>,
+   isOpen: Cell<boolean>,
+   openContextMenu: () => void,
+   close: () => void
+) {
+   const triggerHandlers: ContextMenuTriggerHandlers = {
+      contextmenu(event) {
+         event.preventDefault()
+         openContextMenu()
+      },
+      click: openContextMenu,
+      pointerover() {
+         if (isOpen.get()) {
+            return
+         }
+         openContextMenu()
+      }
+   }
+
+   const releaseHandlers: ContextMenuTriggerReleaseHandlers = {
+      pointerdown(event) {
+         const target = event.target as Node
+         const menu = ref.get()
+         if (menu?.contains(target)) {
+            return
+         }
+         close()
+      },
+      pointerleave(event) {
+         const nextElement = (event as PointerEvent).relatedTarget as Node
+         const menu = ref.peek()
+         if (menu?.contains(nextElement)) {
+            return
+         }
+         close()
+      }
+   }
+
+   return { triggerHandlers, releaseHandlers }
+}
+
+function createKeybindingHandler(
+   mode: SourceCell<InteractionMode>,
+   ref: SourceCell<HTMLElement | null>,
+   subMenus: Set<Cell<HTMLElement | null>>,
+   selected: SourceCell<number>,
+   items: Cell<ContextMenuItemProps[]>,
+   close: () => void
+) {
+   const itemCount = Cell.derived(() => {
+      return items.get().length
+   })
+
+   return (event: KeyboardEvent) => {
+      if (event.defaultPrevented) {
+         return
+      }
+      mode.set('keyboard')
+      const { code } = event
+      if (code === 'Tab') {
+         return
+      }
+      if (code === 'Escape') {
+         close()
+         return
+      }
+      const menu = ref.peek()
+      if (!menu) {
+         return
+      }
+
+      const focusedElement = document.activeElement
+      if (subMenus.size > 0 && !menu.contains(focusedElement)) {
+         return
+      }
+      let nextSelection: number | undefined
+      const itemList = items.peek()
+      const currentSelectedIndex = selected.get()
+      const maximumItemIndex = itemCount.get() - 1
+
+      if (currentSelectedIndex === -1 && (!focusedElement || !menu.contains(focusedElement))) {
+         selected.set(code === 'ArrowUp' ? maximumItemIndex : 0)
+         return
+      }
+
+      switch (code) {
+         case 'ArrowDown':
+            nextSelection = currentSelectedIndex + 1
+            while (isNotFocusableItem(itemList[nextSelection])) {
+               nextSelection = nextSelection + 1
+            }
+            break
+         case 'ArrowUp':
+            nextSelection = currentSelectedIndex - 1
+            while (isNotFocusableItem(itemList[nextSelection])) {
+               nextSelection = nextSelection - 1
+            }
+            break
+         case 'ArrowLeft':
+            close()
+      }
+
+      if (nextSelection !== undefined) {
+         selected.set(clamp(nextSelection, 0, maximumItemIndex))
+      }
+   }
+}
+
+export class OpenSubmenuEvent extends Event {
+   static eventName = '__open-sub-menu'
+   constructor() {
+      super(OpenSubmenuEvent.eventName, {
+         bubbles: false,
+         composed: false,
+         cancelable: false
+      })
+   }
+}
+
+export class CloseSubmenuEvent extends Event {
+   static eventName = '_close-sub-menu'
+   constructor() {
+      super(CloseSubmenuEvent.eventName, {
+         bubbles: false,
+         composed: false,
+         cancelable: false
+      })
+   }
 }

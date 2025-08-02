@@ -100,3 +100,20 @@ export const useDocumentVisibility = createGlobalStateHook({
    },
    createReturnValue: (isVisible): Cell<boolean> => Cell.derived(() => isVisible.get())
 })
+
+export const usePointerPosition = createGlobalStateHook({
+   cacheKey: Symbol('useCursorPosition'),
+   createSource: () => ({ x: Cell.source(0), y: Cell.source(0) }),
+   setupListeners: (window, cells) => {
+      const updatePosition = (event: PointerEvent) => {
+         cells.x.set(event.clientX)
+         cells.y.set(event.clientY)
+      }
+      window.addEventListener('pointermove', updatePosition, { passive: true })
+      window.addEventListener('pointerdown', updatePosition, { passive: true })
+   },
+   createReturnValue: (cells) => ({
+      x: Cell.derived(() => cells.x.get()),
+      y: Cell.derived(() => cells.y.get())
+   })
+})

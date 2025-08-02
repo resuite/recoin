@@ -130,12 +130,12 @@ const ContextMenuTest = () => {
    ]
 
    return (
-      <div class='h-screen w-screen grid place-content-center place-items-center'>
+      <div class='h-screen w-screen grid place-content-center place-items-center select-none'>
          <div ref={trigger} class='px-4 py-2 border border-dashed rounded-xl cursor-pointer'>
-            Right click to open context menu with submenus!
+            Right click to open context menu with submenus! Is it supported?
          </div>
 
-         <ContextMenu trigger={trigger} items={items} />
+         <ContextMenu class='select-none' trigger={trigger} items={items} />
       </div>
    )
 }

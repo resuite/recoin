@@ -4,7 +4,6 @@ import { Cell, If, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
-import { Teleport } from 'retend/teleport'
 import styles from './bottom-sheet-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -13,7 +12,6 @@ interface BottomSheetProps extends DivProps {
    isOpen: JSX.ValueOrCell<boolean>
    onClose?: () => void
    children: () => JSX.Template
-   dialogRef?: SourceCell<HTMLDialogElement | null>
    ref?: SourceCell<HTMLElement | null>
 }
 
@@ -61,7 +59,6 @@ interface QueryControlledBottomSheetProps extends Omit<BottomSheetProps, 'isOpen
 export function BottomSheet(props: BottomSheetProps) {
    const {
       isOpen: isOpenProp,
-      dialogRef = Cell.source(null),
       ref: contentRef = Cell.source<HTMLElement | null>(null),
       children,
       onClose,
@@ -70,7 +67,7 @@ export function BottomSheet(props: BottomSheetProps) {
    const observer = useObserver()
    const isOpen = useDerivedValue(isOpenProp)
    const dialogOpen = Cell.source(isOpen.get())
-   const containerRef = Cell.source<HTMLElement | null>(null)
+   const dialogRef = Cell.source<HTMLDialogElement | null>(null)
 
    async function startCloseSequence() {
       dialogRef.peek()?.classList.add(styles.closing)
@@ -96,12 +93,7 @@ export function BottomSheet(props: BottomSheetProps) {
       }
    }
 
-   let sheetAppended = false
-   function recurringAppendListener() {
-      if (!containerRef.peek()?.isConnected && sheetAppended) {
-         return
-      }
-
+   dialogRef.listen(() => {
       // The 'pull' behavior is created using scroll snaps, and the intersection
       // observer checks that the user has pulled down a reasonable amount
       // before closing.
@@ -143,7 +135,6 @@ export function BottomSheet(props: BottomSheetProps) {
       )
 
       observer.onConnected(dialogRef, async (dialog) => {
-         sheetAppended = true
          handleIsOpenChange(isOpen.get())
          await animationsSettled(contentRef)
          dialog.classList.add(styles.snapped)
@@ -154,40 +145,25 @@ export function BottomSheet(props: BottomSheetProps) {
             // Sometimes in Firefox, sometimes in Chromium (gasp), sometimes in Safari.
             dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
          })
-
-         // TODO: Move this behavior into Retend. Currently,
-         // after an observer callback runs, it is disposed,
-         // and doesn't get re-run when the same element
-         // is removed and connected again.
-         return recurringAppendListener
       })
-   }
+   })
 
-   recurringAppendListener()
    isOpen.listen(handleIsOpenChange)
 
-   return (
-      <Teleport to='body' ref={containerRef}>
-         {If(dialogOpen, () => {
-            return (
-               <dialog
-                  ref={dialogRef}
-                  data-content-open={isOpen}
-                  class={styles.dialog}
-                  onClick--self={handleClickOutside}
-               >
-                  <div
-                     {...rest}
-                     ref={contentRef}
-                     class={[styles.sheetContentContainer, rest.class]}
-                  >
-                     {children()}
-                  </div>
-               </dialog>
-            )
-         })}
-      </Teleport>
-   )
+   return If(dialogOpen, () => {
+      return (
+         <dialog
+            ref={dialogRef}
+            data-content-open={isOpen}
+            class={styles.dialog}
+            onClick--self={handleClickOutside}
+         >
+            <div {...rest} ref={contentRef} class={[styles.sheetContentContainer, rest.class]}>
+               {children()}
+            </div>
+         </dialog>
+      )
+   })
 }
 
 /**

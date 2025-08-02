@@ -301,10 +301,10 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       if (canPull) {
          pullZone.addEventListener('pointerdown', handlePointerDown)
          // See explanation for this event in sidebar-provider.tsx
-         pullZone.addEventListener('_pullstart', handleCustomPullStart)
+         pullZone.addEventListener(PullStartEvent.eventName, handleCustomPullStart)
       } else {
          pullZone.removeEventListener('pointerdown', handlePointerDown)
-         pullZone.removeEventListener('_pullstart', handleCustomPullStart)
+         pullZone.removeEventListener(PullStartEvent.eventName, handleCustomPullStart)
       }
    })
 
@@ -352,9 +352,10 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
 }
 
 export class PullStartEvent extends Event {
+   static eventName = '_pullStart'
    pointerTracker: PointerTracker
    constructor(pointerTracker: PointerTracker) {
-      super('_pullstart', {
+      super(PullStartEvent.eventName, {
          bubbles: true,
          composed: true
       })

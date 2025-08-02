@@ -7,12 +7,16 @@ body:has(.contextMenu) {
    padding: 8px;
    border-radius: 8px;
    min-width: 205px;
+   @media only screen and (pointer: coarse) and (max-width: 768px) {
+      min-width: min(80dvw, 225px);
+      border-radius: 13px;
+   }
+   -webkit-backdrop-filter: blur(8px);
    backdrop-filter: blur(8px);
    border: 0.25px solid var(--color-zinc-500);
    box-shadow: 0 1px 8px 0 var(--color-canvas-shadow);
-   transition-property: scale, opacity, translate;
-   transition-duration: var(--speed-faster), var(--speed-default), var(--speed-default);
    overflow: hidden;
+   animation: open-context-menu var(--speed-default);
 
    &:has(> .item > .checkItem > .checkItemInput:checked) {
       /* styles other items to have space for the checkmark if any item is checked. */
@@ -32,8 +36,10 @@ body:has(.contextMenu) {
       height: 100%;
       background-color: var(--color-canvas-background);
    }
+}
 
-   @starting-style {
+@keyframes open-context-menu {
+   from {
       opacity: 0;
       scale: 0.875;
    }
@@ -44,8 +50,6 @@ body:has(.contextMenu) {
    display: block;
    width: 2px;
    height: 2px;
-   transition-property: translate;
-   transition-duration: var(--speed-slow);
 }
 
 .item {
@@ -53,6 +57,9 @@ body:has(.contextMenu) {
    display: grid;
    place-items: center;
    min-height: 1.5rem;
+   @media (pointer: coarse) {
+      min-height: 2.25rem;
+   }
    padding-inline: calc(var(--spacing) * 0.25);
    padding-block: calc(var(--spacing) * 0.15);
    font-size: var(--text-sm);
