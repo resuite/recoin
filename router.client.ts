@@ -8,7 +8,7 @@ export const createRouter = () => {
          {
             path: '/',
             component: Index,
-            redirect: '/styleguide',
+            redirect: '/waiting-list',
             children: [
                {
                   path: 'styleguide',

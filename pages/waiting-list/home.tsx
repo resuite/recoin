@@ -82,7 +82,6 @@ function WaitingListHome() {
                         false: ButtonIdleStateContent
                      })}
                   </button>
-                  <router.Link href='/styleguide'>styles</router.Link>
                </form>
             </section>
             <div class={['[grid-area:1/2/3/2] grid place-items-center', 'max-md:hidden']}>

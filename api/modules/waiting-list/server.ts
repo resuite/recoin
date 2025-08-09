@@ -4,12 +4,15 @@ import type { RecoinApiEnv } from '@/api/types'
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-export default new Hono<RecoinApiEnv>().post(
+const waitingListRoute = new Hono<RecoinApiEnv>()
+
+waitingListRoute.post(
    '/',
    ...route({
       body: z.object({
          email: z.string().email()
       }),
+
       controller: async (c) => {
          const { email } = c.req.valid('json')
          const waitingList = c.env.RECOIN_WAITING_LIST
@@ -33,3 +36,5 @@ export default new Hono<RecoinApiEnv>().post(
       }
    })
 )
+
+export default waitingListRoute
