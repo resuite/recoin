@@ -109,6 +109,12 @@ interface ContextMenuProps extends MenuProps {
     */
    trigger: SourceCell<HTMLElement | null>
 
+   /**
+    * If true, the context menu will use the trigger element as the anchor for positioning,
+    * rather than the cursor position. This is useful for submenus or when you want the menu
+    * to appear relative to the trigger element instead of where the user clicked.
+    * @default false
+    */
    useTriggerAsAnchor?: boolean
 
    /**
@@ -121,8 +127,7 @@ interface ContextMenuProps extends MenuProps {
    /**
     * Determines how the context menu is opened and closed.
     * - 'contextmenu': Opens on right-click, closes on click elsewhere
-    * - 'mouseover': Opens on mouse enter, closes on mouse leave
-    * - 'pointerdown': Opens on pointer down, closes on pointer up
+    * - 'pointerover': Opens on mouse enter, closes on mouse leave
     * - 'click': Opens on click, closes on click elsewhere
     * @default 'contextmenu'
     */
@@ -135,6 +140,7 @@ interface ContextMenuProps extends MenuProps {
     * @default 'bottom right'
     */
    positionArea?: JSX.ValueOrCell<PositionArea>
+
    /**
     * Controls the alignment of the context menu along the main axis determined by `positionArea`.
     * For instance, if `positionArea` is 'bottom right', `alignSelf` manages the vertical alignment
@@ -143,6 +149,7 @@ interface ContextMenuProps extends MenuProps {
     * @default 'end'
     */
    alignSelf?: JSX.ValueOrCell<Alignment>
+
    /**
     * Controls the alignment of the context menu along the cross axis determined by `positionArea`.
     * For instance, if `positionArea` is 'bottom right', `justifySelf` manages the horizontal alignment
@@ -175,44 +182,6 @@ interface ContextMenuContext {
    class: unknown
 }
 const ContextMenuScope = createScope<ContextMenuContext>()
-
-/**
- * Hook to access the context menu's internal state and controls.
- *
- * Provides access to the context menu's open state, close function,
- * and trigger element reference. It can only be used within components that are
- * rendered inside a ContextMenu component.
- *
- * @throws {Error} If called outside of a ContextMenu component
- * @example
- * ```tsx
- * function CustomMenuItem() {
- *   const { isOpen, close, trigger } = useContextMenuContext()
- *
- *   const handleCustomAction = () => {
- *     console.log('Custom action performed')
- *     close()
- *   }
- *
- *   return (
- *     <button onClick={handleCustomAction}>
- *       Custom Action
- *     </button>
- *   )
- * }
- * ```
- */
-export function useContextMenuContext() {
-   return useScopeContext(ContextMenuScope)
-}
-
-export function tryUseContextMenuContext() {
-   try {
-      return useContextMenuContext()
-   } catch {
-      return null
-   }
-}
 
 /**
  * A flexible context menu component that can be triggered by various user interactions.
@@ -713,6 +682,10 @@ function createKeybindingHandler(
          selected.set(clamp(nextSelection, 0, maximumItemIndex))
       }
    }
+}
+
+function useContextMenuContext() {
+   return useScopeContext(ContextMenuScope)
 }
 
 export class OpenSubmenuEvent extends Event {
