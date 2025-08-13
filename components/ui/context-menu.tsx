@@ -35,7 +35,7 @@ export const ItemTypes = {
 
 export const StrategyRelease = {
    pointerover: 'pointerleave',
-   click: 'pointerdown',
+   click: 'click',
    contextmenu: 'pointerdown'
 } as const satisfies Record<ContextMenuStrategy, string>
 
@@ -88,7 +88,7 @@ type ContextMenuTriggerReleaseHandlers = Record<
    (event: Event) => void
 >
 
-type ContextMenuState = 'open' | 'closed'
+export type ContextMenuState = 'open' | 'closed'
 
 type InteractionMode = 'pointer' | 'keyboard'
 
@@ -102,12 +102,12 @@ type MenuProps = JSX.IntrinsicElements['menu']
  * Configuration options for the ContextMenu component.
  * Extends standard HTML menu element properties.
  */
-interface ContextMenuProps extends MenuProps {
+interface ContextMenuProps<T extends HTMLElement> extends MenuProps {
    /**
     * A reactive cell containing the element that triggers the context menu.
     * The context menu will attach event listeners to this element based on the strategy.
     */
-   trigger: SourceCell<HTMLElement | null>
+   trigger: SourceCell<T | null>
 
    /**
     * If true, the context menu will use the trigger element as the anchor for positioning,
@@ -168,7 +168,13 @@ interface ContextMenuProps extends MenuProps {
     * A reactive cell to capture the HTMLElement of the context menu itself.
     * This can be used to directly interact with the menu's DOM element if needed.
     */
-   ref?: SourceCell<HTMLElement | null>
+   ref?: SourceCell<HTMLMenuElement | null>
+
+   /**
+    * Additional CSS class(es) to apply to the popover container element.
+    * This allows for custom styling of the popover that displays the context menu.
+    */
+   'popover:class'?: unknown
 }
 
 interface ContextMenuContext {
@@ -176,7 +182,7 @@ interface ContextMenuContext {
    close: () => void
    trigger: SourceCell<HTMLElement | null>
    selected: SourceCell<number>
-   subMenus: Set<Cell<HTMLElement | null>>
+   subMenus: Set<Cell<HTMLMenuElement | null>>
    selectItem?: (event: Event) => void
    style?: JSX.ValueOrCell<JSX.StyleValue>
    class: unknown
@@ -226,7 +232,7 @@ const ContextMenuScope = createScope<ContextMenuContext>()
  * }
  * ```
  */
-export function ContextMenu(props: ContextMenuProps) {
+export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
    const {
       trigger,
       items: itemsProp,
@@ -234,9 +240,10 @@ export function ContextMenu(props: ContextMenuProps) {
       positionArea: positionAreaProp = 'bottom right',
       alignSelf: alignSelfProp,
       justifySelf: justifySelfProp,
-      ref = Cell.source<HTMLElement | null>(null),
+      ref = Cell.source<HTMLMenuElement | null>(null),
       onStateChange,
       useTriggerAsAnchor,
+      'popover:class': popoverClass,
       ...rest
    } = props
    const observer = useObserver()
@@ -253,7 +260,7 @@ export function ContextMenu(props: ContextMenuProps) {
    const releaseEvent = StrategyRelease[strategy]
    const anchorName = generateNewAnchorName()
    const mode = Cell.source<InteractionMode>('pointer')
-   const subMenus = new Set<Cell<HTMLElement | null>>()
+   const subMenus = new Set<Cell<HTMLMenuElement | null>>()
    let waitingToShowSubmenuDelayId: ReturnType<typeof setTimeout> | null = null
 
    const isOpen = Cell.derived(() => {
@@ -311,10 +318,10 @@ export function ContextMenu(props: ContextMenuProps) {
          anchorCoordinates.y.set(y)
       })
    }
-   const ctx = {
+   const ctx: ContextMenuContext = {
       isOpen,
       close,
-      trigger,
+      trigger: trigger as SourceCell<HTMLElement | null>,
       subMenus,
       selected,
       selectItem,
@@ -327,6 +334,10 @@ export function ContextMenu(props: ContextMenuProps) {
       trigger.addEventListener(OpenSubmenuEvent.eventName, openContextMenu)
       trigger.addEventListener(CloseSubmenuEvent.eventName, close)
 
+      // Safari again. The contextmenu event never fires on iOS, even though:
+      // - it is supported on mac versions
+      // - it is defined in Element.oncontextmenu
+      // Some old bug they just never got around to, surely.
       const isIOS = 'GestureEvent' in window
       if (isIOS && strategy === 'contextmenu') {
          polyfillTouchContextMenuEvent(trigger)
@@ -372,21 +383,21 @@ export function ContextMenu(props: ContextMenuProps) {
 
    isOpen.listen((contextMenuIsOpen) => {
       onStateChange?.(contextMenuIsOpen ? 'open' : 'closed')
-      const eventListenerTarget = strategy === 'pointerover' ? trigger.peek() : window
+      const eventListenerTarget = strategy === 'pointerover' ? trigger.peek() : document
 
       if (contextMenuIsOpen) {
          defer(() => {
             eventListenerTarget?.addEventListener(releaseEvent, releaseHandler)
-            window.addEventListener('keydown', handleKeybindings)
-            window.addEventListener('resize', close)
+            document.addEventListener('keydown', handleKeybindings)
+            document.addEventListener('resize', close)
          })
          return
       }
 
       selected.set(-1)
       eventListenerTarget?.removeEventListener(releaseEvent, releaseHandler)
-      window.removeEventListener('keydown', handleKeybindings)
-      window.removeEventListener('resize', close)
+      document.removeEventListener('keydown', handleKeybindings)
+      document.removeEventListener('resize', close)
    })
 
    return If(isOpen, () => (
@@ -403,8 +414,9 @@ export function ContextMenu(props: ContextMenuProps) {
                style={anchorStyle}
             >
                <PopoverView
+                  class={popoverClass}
                   isOpen
-                  anchor={useTriggerAsAnchor ? trigger : anchor}
+                  anchor={(useTriggerAsAnchor ? trigger : anchor) as SourceCell<HTMLElement | null>}
                   positionArea={positionArea}
                   alignSelf={alignSelf}
                   justifySelf={justifySelf}
@@ -522,7 +534,7 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
    const observer = useObserver()
    const trigger = Cell.source<HTMLElement | null>(null)
    const { items, label, disabled, type: _type, icon } = props
-   const contextMenu = Cell.source<HTMLElement | null>(null)
+   const contextMenu = Cell.source<HTMLMenuElement | null>(null)
    const button = Cell.source<HTMLButtonElement | null>(null)
    const { subMenus, style, class: className } = useContextMenuContext()
 
@@ -576,7 +588,7 @@ function isNotFocusableItem(item: ContextMenuItemProps) {
 }
 
 function createHandlers(
-   ref: SourceCell<HTMLElement | null>,
+   ref: SourceCell<HTMLMenuElement | null>,
    isOpen: Cell<boolean>,
    openContextMenu: () => void,
    close: () => void
@@ -599,18 +611,23 @@ function createHandlers(
       pointerdown(event) {
          const target = event.target as Node
          const menu = ref.get()
-         if (menu?.contains(target)) {
-            return
+         if (!menu?.contains(target)) {
+            close()
          }
-         close()
+      },
+      click(event) {
+         const target = event.target as Node
+         const menu = ref.get()
+         if (!menu?.contains(target)) {
+            close()
+         }
       },
       pointerleave(event) {
          const nextElement = (event as PointerEvent).relatedTarget as Node
          const menu = ref.peek()
-         if (menu?.contains(nextElement)) {
-            return
+         if (!menu?.contains(nextElement)) {
+            close()
          }
-         close()
       }
    }
 
@@ -619,8 +636,8 @@ function createHandlers(
 
 function createKeybindingHandler(
    mode: SourceCell<InteractionMode>,
-   ref: SourceCell<HTMLElement | null>,
-   subMenus: Set<Cell<HTMLElement | null>>,
+   ref: SourceCell<HTMLMenuElement | null>,
+   subMenus: Set<Cell<HTMLMenuElement | null>>,
    selected: SourceCell<number>,
    items: Cell<ContextMenuItemProps[]>,
    close: () => void

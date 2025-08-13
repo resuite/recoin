@@ -123,6 +123,7 @@ function OtherPages() {
          <Link href='/styleguide/sheet'>Go to sheet page.</Link>
          <Link href='/styleguide/popover'>Go to popover page</Link>
          <Link href='/styleguide/context-menu'>Go to context menu </Link>
+         <Link href='/styleguide/dropdown'>Go to dropdown </Link>
       </div>
    )
 }

@@ -1,0 +1,53 @@
+.container {
+   display: grid;
+}
+
+/** {
+   outline: 2px solid red;
+}*/
+
+.select {
+   all: unset;
+   min-width: min(60dvw, 450px);
+   padding-block: calc(var(--spacing) * 0.5);
+   appearance: none;
+   grid-area: 1 / 1;
+   border-bottom: 2px solid;
+}
+
+.caret {
+   grid-area: 1 / 1;
+   margin-right: 3%;
+   width: 20px;
+   height: 20px;
+   justify-self: end;
+   align-self: center;
+   transition: rotate ease-in var(--speed-default);
+}
+
+.caretOpen {
+   rotate: 180%;
+}
+
+.popover {
+   width: 100%;
+}
+
+.option {
+   padding-block: calc(var(--spacing) * 0.35);
+   padding-inline: calc(var(--spacing) * 0.45);
+}
+
+.options {
+   width: 100%;
+   animation: open-dropdown ease-in var(--speed-default);
+   margin-block: 10px;
+   transform-origin: top center;
+}
+
+@keyframes open-dropdown {
+   0% {
+      translate: 0 -30px;
+      opacity: 0.5;
+   }
+}

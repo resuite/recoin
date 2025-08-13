@@ -119,7 +119,7 @@ body {
       }
 
       @apply text-canvas bg-canvas-text border-3 border-canvas;
-      @apply rounded-(--half-spacing) whitespace-nowrap px-0.75 py-0.75 text-normal min-w-[min(calc(var(--spacing)*10),30dvw)];
+      @apply rounded-(--half-spacing) whitespace-nowrap px-0.75 py-[calc(var(--spacing)*0.65)] text-normal min-w-[min(calc(var(--spacing)*10),30dvw)];
       @apply active:scale-[95%] duration-default transition-[scale] active:ease-out not-[active]:ease-in;
       @apply has-[.btn-icon]:flex has-[.btn-icon]:items-center has-[.btn-icon]:justify-center has-[.btn-icon]:gap-0.125;
    }
@@ -179,6 +179,7 @@ body {
    --canvas: var(--color-light-yellow);
    --canvas-background: white;
    --canvas-shadow: var(--color-gray-200);
+   --canvas-deep: white;
    /*
       Note: The three variables below should ideally inherit
       the color of the canvas as already defined in @theme,
@@ -188,6 +189,7 @@ body {
    --color-canvas-background: var(--canvas-background);
    --color-canvas-text: var(--canvas-text);
    --color-canvas-shadow: var(--canvas-shadow);
+   --color-canvas-deep: #ffffff75;
 
    color: var(--color-base);
    background-color: white;
@@ -207,12 +209,15 @@ body {
    --canvas-text: var(--color-light-yellow);
    --canvas: var(--color-base);
    --canvas-background: var(--color-base);
-   --canvas-shadow: var(--color-black);
+   --canvas-shadow: #151515;
+   --canvas-deep: #232323;
+
    /* Note: see .light-theme */
    --color-canvas: var(--canvas);
    --color-canvas-background: var(--canvas-background);
    --color-canvas-text: var(--canvas-text);
    --color-canvas-shadow: var(--canvas-shadow);
+   --color-canvas-deep: var(--canvas-deep);
 
    color: var(--color-light-yellow);
    background-color: var(--color-base);
@@ -284,6 +289,25 @@ body {
 
 @utility text-logo {
    letter-spacing: -3px;
+}
+
+@utility bg-glass {
+   -webkit-backdrop-filter: blur(8px);
+   backdrop-filter: blur(8px);
+
+   &::before {
+      position: absolute;
+      display: block;
+      opacity: 0.25;
+      content: "";
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      background-color: var(--color-canvas-background);
+      border: 0.5px solid var(--color-canvas-text);
+   }
 }
 
 @utility no-scrollbar {

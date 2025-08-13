@@ -41,6 +41,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
             outlined={true}
             disabled={buttonsClosed}
             class={[
+               'grid place-items-center',
                'dark-scheme transition-transform ease-in-out scale-[0.85] absolute',
                {
                   'opacity-0 [transition:translate_var(--default-speed),opacity_0.5ms_var(--default-speed)]':
@@ -54,6 +55,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
          <FloatingActionButton
             onClick={toggleOpenState}
             class={[
+               'grid place-items-center',
                'dark-scheme border-b-2 border-light-yellow',
                'expanded-ctx:light-scheme expanded-ctx:scale-[0.85] expanded-ctx:bg-canvas expanded-ctx:rotate-[225deg] expanded-ctx:border-none',
                '[transition:rotate_var(--speed-slower)_var(--timing-bounce-slower)_var(--rotate-delay,0ms),scale_var(--default-speed),translate_var(--default-speed)] ease-in-out',

@@ -11,6 +11,8 @@ import type { JSX } from 'retend/jsx-runtime'
 import styles from './pull-to-refresh-view.module.css'
 
 export type PullState = 'thresholdreached' | 'pulling' | 'idle' | 'actiontriggered'
+/** Decreases sensitivity. */
+const PULL_TO_REFRESH_OFFSET = 20
 
 type DivProps = JSX.IntrinsicElements['div']
 export interface PullToRefreshViewProps extends DivProps {
@@ -186,7 +188,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
          if (pullScrollAnimation === null) {
             return
          }
-         const newTime = (delta / pullZoneHeight) * GESTURE_ANIMATION_MS
+         const newTime = ((delta - PULL_TO_REFRESH_OFFSET) / pullZoneHeight) * GESTURE_ANIMATION_MS
          pullScrollAnimation.currentTime = Math.min(newTime, MAX_PULL_ZONE_SCROLL_TOP)
       })
    }
@@ -224,7 +226,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       changeState('idle')
    }
 
-   // No, scrollend didn't work.
+   // No, scrollend didn't work (Apple, why)
    //
    // CSS Scroll snaps have become untenable, so we have to
    // implement something a bit more manual. There are two
@@ -315,14 +317,10 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
 
    observer.onConnected(pullZoneRef, (pullZone) => {
       requestAnimationFrame(() => {
-         // The initial state class makes the pull-zone "snap" to the content
-         // area bu default. This is removed after the content is loaded.
-         pullZone.classList.remove(styles.pullZoneInitialState as string)
          pullZone.scrollTo({ top: pullZone.scrollHeight, behavior: 'instant' })
       })
       return () => {
          height // Prevents GC until the pull-zone is unmounted.
-         pullZone.classList.add(styles.pullZoneInitialState as string)
       }
    })
 
@@ -330,12 +328,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       <div
          {...rest}
          ref={pullZoneRef}
-         class={[
-            styles.pullZone,
-            styles.pullZoneInitialState,
-            { [styles.pullZoneCanPull as string]: canPull },
-            rest.class
-         ]}
+         class={[styles.pullZone, { [styles.pullZoneCanPull as string]: canPull }, rest.class]}
       >
          <div ref={scrollContainerRef} class={styles.pullZoneScrollContainer}>
             <div ref={thresholdMarkerRef} />

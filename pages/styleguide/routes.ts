@@ -3,6 +3,7 @@ import { defineRoute } from 'retend/router'
 import Styleguide from '@/pages/styleguide'
 import BottomSheetTest from '@/pages/styleguide/bottom-sheet'
 import ContextMenu from '@/pages/styleguide/context-menu'
+import DropdownTest from '@/pages/styleguide/dropdown'
 import FloatingActionButtonTest from '@/pages/styleguide/fab'
 import KeyboardAvoidanceTest from '@/pages/styleguide/keyboard-avoidance'
 import NavStack from '@/pages/styleguide/nav-stack'
@@ -69,6 +70,10 @@ export default defineRoute({
       {
          path: 'context-menu',
          component: ContextMenu
+      },
+      {
+         path: 'dropdown',
+         component: DropdownTest
       }
    ]
 })
