@@ -34,6 +34,7 @@
       "@hono/zod-validator": "^0.7.0",
       "bowser": "^2.11.0",
       "hono": "^4.7.11",
+      "hotkeys-js": "^3.13.15",
       "retend": "https://pkg.pr.new/resuite/retend@7feb8c5",
       "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@7feb8c5",
       "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@7feb8c5",

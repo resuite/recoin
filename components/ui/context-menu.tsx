@@ -8,7 +8,13 @@ import {
    polyfillTouchContextMenuEvent,
    removeTouchContextMenuEventPolyfill
 } from '@/utilities/contextmenu-event-ios-polyfill'
-import { clamp, defer, useDocumentVisibility, usePointerPosition } from '@/utilities/miscellaneous'
+import {
+   clamp,
+   defer,
+   getFocusableElementInItem,
+   useDocumentVisibility,
+   usePointerPosition
+} from '@/utilities/miscellaneous'
 import {
    Cell,
    For,
@@ -582,10 +588,6 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
          />
       </>
    )
-}
-
-function getFocusableElementInItem(parent: HTMLElement) {
-   return parent.querySelector(':is(input, button):not(:disabled)') as HTMLElement | null
 }
 
 function isNotFocusableItem(item: ContextMenuItemProps) {

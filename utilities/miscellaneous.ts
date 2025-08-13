@@ -117,3 +117,14 @@ export const usePointerPosition = createGlobalStateHook({
       y: Cell.derived(() => cells.y.get())
    })
 })
+
+/**
+ * Finds the first focusable element within a given parent HTML element.
+ * A focusable element is considered an input or button that is not disabled.
+ *
+ * @param parent The HTMLElement to search within.
+ * @returns The first focusable HTMLElement found, or null if none is found.
+ */
+export function getFocusableElementInItem(parent: HTMLElement) {
+   return parent.querySelector(':is(input, button):not(:disabled)') as HTMLElement | null
+}

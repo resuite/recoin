@@ -1,4 +1,5 @@
-import { Cell, For, If, type SourceCell } from 'retend'
+import { getFocusableElementInItem } from '@/utilities/miscellaneous'
+import { Cell, For, If, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import Caret from '../icons/svg/caret'
@@ -10,6 +11,8 @@ import {
    ItemTypes
 } from './context-menu'
 import styles from './dropdown.module.css'
+
+const SEARCH_BUFFER_TIMEOUT_MS = 400
 
 type DivProps = JSX.IntrinsicElements['div']
 
@@ -32,11 +35,14 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
       ...rest
    } = props
 
+   const observer = useObserver()
    const options = useDerivedValue(optionsProp)
    const dropdownIsOpen = Cell.source(false)
-   const caretDirection = Cell.derived(() => (dropdownIsOpen.get() ? 'top' : 'bottom'))
    const select = Cell.source<HTMLSelectElement | null>(null)
-   const popover = Cell.source<HTMLMenuElement | null>(null)
+   const contextMenu = Cell.source<HTMLMenuElement | null>(null)
+   const caretDirection = Cell.derived(() => {
+      return dropdownIsOpen.get() ? 'top' : 'bottom'
+   })
    const selectedOption = Cell.source(
       outerSelectedOption ? outerSelectedOption.get() : options.get().at(0)
    )
@@ -45,30 +51,70 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
       dropdownIsOpen.set(state === 'open')
    }
 
-   const items = Cell.derived<ContextMenuItemProps[]>(() => {
-      return options.get().map((option) => {
-         return {
-            type: ItemTypes.Action,
-            label: () => {
-               const isSelected = Cell.derived(() => {
-                  const selected = selectedOption.get()
-                  return selected && option.value === selected.value
-               })
-               return (
-                  <div class={styles.option}>
-                     {If(isSelected, () => {
-                        return <Checkmark class={styles.checkmark} />
-                     })}
-                     <span class={styles.label}>{option.label}</span>
-                  </div>
-               )
-            },
-            onClick() {
-               selectedOption.set(option)
-            }
+   const DropdownItem = (option: DropdownOption<T>) => {
+      const containerRef = Cell.source<HTMLElement | null>(null)
+      const isSelected = Cell.derived(() => {
+         const selected = selectedOption.get()
+         return selected && option.value === selected.value
+      })
+
+      observer.onConnected(containerRef, (container) => {
+         if (isSelected.get()) {
+            container.scrollIntoView({ behavior: 'instant' })
          }
       })
+
+      return {
+         type: ItemTypes.Action,
+         label: () => {
+            return (
+               <div ref={containerRef} class={styles.option}>
+                  {If(isSelected, () => {
+                     return <Checkmark class={styles.checkmark} />
+                  })}
+                  <span class={styles.label}>{option.label}</span>
+               </div>
+            )
+         },
+         onClick() {
+            selectedOption.set(option)
+         }
+      }
+   }
+
+   const items = Cell.derived<ContextMenuItemProps[]>(() => {
+      return options.get().map(DropdownItem)
    })
+
+   let buffer = ''
+   let bufferTimeout: NodeJS.Timeout | null = null
+
+   const resetBufferTimeout = () => {
+      if (bufferTimeout) {
+         clearTimeout(bufferTimeout)
+      }
+      bufferTimeout = setTimeout(() => {
+         buffer = ''
+      }, SEARCH_BUFFER_TIMEOUT_MS)
+   }
+
+   const handleKeydown = (event: KeyboardEvent) => {
+      if (event.altKey || event.ctrlKey || event.metaKey) {
+         return
+      }
+      resetBufferTimeout()
+      const searchQuery = event.key.toLowerCase()
+      buffer += searchQuery
+      const contextMenuElement = contextMenu.get()
+      const matchingOptionIdx = options.get().findIndex((option) => {
+         return option.label.toLowerCase().startsWith(buffer)
+      })
+      if (matchingOptionIdx === -1 || contextMenuElement === null) {
+         return
+      }
+      const matchingOptionElement = contextMenuElement.children[matchingOptionIdx] as HTMLLIElement
+      getFocusableElementInItem(matchingOptionElement)?.focus()
+   }
 
    selectedOption.listen((option) => {
       if (!option) {
@@ -82,6 +128,20 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
       selectElement.value = String(option.value)
    })
 
+   dropdownIsOpen.listen((isOpen) => {
+      if (isOpen) {
+         document.addEventListener('keydown', handleKeydown)
+      } else {
+         document.removeEventListener('keydown', handleKeydown)
+      }
+   })
+
+   observer.onConnected(select, () => {
+      return () => {
+         document.removeEventListener('keydown', handleKeydown)
+      }
+   })
+
    return (
       <div {...rest} class={[styles.container, rest.class]}>
          <select ref={select} class={styles.select} onMouseDown--prevent={() => {}}>
@@ -93,7 +153,7 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
 
          <ContextMenu
             useTriggerAsAnchor
-            ref={popover}
+            ref={contextMenu}
             popover:class={styles.popover}
             class={[styles.options, listClass]}
             trigger={select as SourceCell<HTMLElement | null>}
