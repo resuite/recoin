@@ -262,6 +262,9 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
    const mode = Cell.source<InteractionMode>('pointer')
    const subMenus = new Set<Cell<HTMLMenuElement | null>>()
    let waitingToShowSubmenuDelayId: ReturnType<typeof setTimeout> | null = null
+   const count = Cell.derived(() => {
+      return items.get().length
+   })
 
    const isOpen = Cell.derived(() => {
       return menuShouldBeOpen.get() && documentIsVisible.get()
@@ -427,6 +430,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
                         ref={ref}
                         class={[styles.contextMenu, rest.class]}
                         onPointerOut--self={unselectItem}
+                        style={{ '--context-menu-item-count': count }}
                      >
                         {For(items, ContextMenuListItem)}
                      </menu>
@@ -444,9 +448,10 @@ function ContextMenuListItem(item: ContextMenuItemProps, idx: Cell<number>) {
    return (
       <li
          class={styles.item}
+         style={{ '--context-menu-item-index': idx }}
          data-index={idx}
          data-selected={Cell.derived(() => idx.get() === selected.get())}
-         onPointerEnter--self={selectItem}
+         onMouseEnter--self={selectItem}
          onFocusIn={selectItem}
       >
          <ContextMenuItem {...item} />

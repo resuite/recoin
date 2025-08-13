@@ -1,7 +1,8 @@
-import { Cell, For, type SourceCell } from 'retend'
+import { Cell, For, If, type SourceCell } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import Caret from '../icons/svg/caret'
+import Checkmark from '../icons/svg/checkmark'
 import {
    ContextMenu,
    type ContextMenuItemProps,
@@ -48,7 +49,20 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
       return options.get().map((option) => {
          return {
             type: ItemTypes.Action,
-            label: option.label,
+            label: () => {
+               const isSelected = Cell.derived(() => {
+                  const selected = selectedOption.get()
+                  return selected && option.value === selected.value
+               })
+               return (
+                  <div class={styles.option}>
+                     {If(isSelected, () => {
+                        return <Checkmark class={styles.checkmark} />
+                     })}
+                     <span class={styles.label}>{option.label}</span>
+                  </div>
+               )
+            },
             onClick() {
                selectedOption.set(option)
             }

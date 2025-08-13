@@ -3,8 +3,9 @@ body:has(.contextMenu) {
 }
 
 .contextMenu {
+   display: grid;
+   grid-template-rows: repeat(var(--context-menu-item-count), auto);
    position: relative;
-   padding: 8px;
    border-radius: 8px;
    min-width: 205px;
    @media only screen and (pointer: coarse) and (max-width: 768px) {
@@ -31,14 +32,15 @@ body:has(.contextMenu) {
    }
 
    &::before {
-      position: absolute;
+      top: 0;
+      left: 0;
       display: block;
       opacity: 0.5;
       content: "";
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
+      top: 0;
+      grid-area: 1 / 1 / calc(var(--context-menu-item-count) + 1) / 1;
       border-radius: 8px;
       background-color: var(--color-canvas-deep);
    }
@@ -67,11 +69,21 @@ body:has(.contextMenu) {
    display: grid;
    place-items: center;
    min-height: 2rem;
+   margin-inline: 8px;
+   grid-area: calc(var(--context-menu-item-index) + 1) / 1;
    @media (pointer: coarse) {
       font-size: var(--text-base);
       min-height: 2.6rem;
    }
    font-size: var(--text-sm);
+
+   &:first-child {
+      margin-top: 8px;
+   }
+
+   &:last-child {
+      margin-bottom: 8px;
+   }
 
    &:has(> .contextMenuActionBtn:disabled) {
       pointer-events: none;

@@ -185,7 +185,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
             scrollable.scrollTop = -delta
             return
          }
-         if (pullScrollAnimation === null) {
+         if (pullScrollAnimation === null || PULL_TO_REFRESH_OFFSET > delta) {
             return
          }
          const newTime = ((delta - PULL_TO_REFRESH_OFFSET) / pullZoneHeight) * GESTURE_ANIMATION_MS

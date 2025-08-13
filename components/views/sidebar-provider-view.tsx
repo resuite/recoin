@@ -124,27 +124,11 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       }
    )
 
-   observer.onConnected(sidebarRef, (sidebar) => {
-      requestAnimationFrame(() => {
-         // When the component loads without JS in prerender mode,
-         // The content needs to be the initial scroll-snapped view.
-         // Adding the sidebar scroll-snap only after the content is loaded
-         // ensures that.
-         sidebar.classList.add(styles.sidebar as string)
-         const provider = providerRef.get()
-         if (provider) {
-            provider.scrollTo({
-               left: provider.scrollWidth,
-               behavior: 'instant'
-            })
-         }
-      })
-   })
-
    observer.onConnected(providerRef, scrollTimelineFallback)
 
-   observer.onConnected(providerRef, () => {
-      return sidebarState.listen((state) => {
+   observer.onConnected(providerRef, (provider) => {
+      provider.scrollTo({ left: provider.scrollWidth, behavior: 'instant' })
+      sidebarState.listen((state) => {
          const isOpen = state === 'open'
          const isClosed = state === 'closed'
          if (isOpen && isAlreadyRevealedFlag) {
@@ -190,7 +174,9 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                   data-not-revealable={sidebarNotRevealable}
                   class={[styles.provider, rest.class]}
                >
-                  <div ref={sidebarRef}>{sidebar()}</div>
+                  <div class={styles.sidebar} ref={sidebarRef}>
+                     {sidebar()}
+                  </div>
                   <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
                      {children?.()}
                   </div>

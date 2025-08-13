@@ -84,7 +84,7 @@ body {
    --timing-bounce: cubic-bezier(0.25, 0.46, 0.45, 1.7);
    --timing-bounce-slower: cubic-bezier(0, 0, 0.6, 1.4);
 
-   --speed-device: calc(var(--default-speed) * 3.35);
+   --speed-device: calc(var(--default-speed) * 3.05);
    --speed-default: var(--default-speed);
    --speed-faster: calc(var(--default-speed) * 0.5);
    --speed-fast: calc(var(--default-speed) * 0.75);
