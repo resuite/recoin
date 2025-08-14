@@ -24,11 +24,11 @@ const DropdownTest = () => {
    const selectedLabel = Cell.derived(() => selected.get().label)
 
    return (
-      <div class='grid gap-0.5 place-items-center place-content-center h-screen w-screen'>
-         <Dropdown selectedOption={selected} options={options} />
+      <div class='grid gap-0.5 place-items-center place-content-center h-screen light-scheme w-screen'>
+         <Dropdown list:class='light-scheme' selectedOption={selected} options={options} />
          <span>This is a dropdown test.</span>
          <span>
-            The selected is <b>{selectedLabel} </b>
+            The selected item is <b>{selectedLabel} </b>
          </span>
       </div>
    )

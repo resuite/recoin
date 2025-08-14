@@ -48,14 +48,14 @@
    max-height: min(400px, 45dvh);
    overflow-y: auto;
    animation: open-dropdown var(--speed-default);
-   margin-block: 10px;
+   margin-block: 15px;
    transform-origin: top center;
    overscroll-behavior: initial;
 }
 
 @keyframes open-dropdown {
    0% {
-      translate: 0 -10px;
+      translate: 0 -15px;
       opacity: 0.5;
    }
 }
