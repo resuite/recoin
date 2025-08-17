@@ -14,6 +14,9 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
    const pulling = Cell.derived(() => {
       return state.get() === 'pulling' || state.get() === 'thresholdreached'
    })
+   const idle = Cell.derived(() => {
+      return state.get() === 'idle'
+   })
    const actionTriggered = Cell.derived(() => {
       return state.get() === 'actiontriggered'
    })
@@ -25,13 +28,14 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
             <DynamicIcon
                name='loader'
                class={[
-                  'w-1.5 h-1.5 duration-slow transition-[translate,scale,opacity]',
+                  'w-1.5 h-1.5 transition-[translate,scale,opacity]',
                   {
-                     'rotate-[calc(var(--pull-progress)*0.61deg)]': pulling,
+                     'opacity-0 duration-slower': idle,
+                     'rotate-[calc(var(--pull-progress)*0.5deg)]': pulling,
                      'scale-[calc(var(--pull-progress)*0.01)]': pulling,
-                     'opacity-[calc((var(--pull-progress)*0.005)-0.3)]': pulling,
+                     'opacity-[calc((var(--pull-progress)*0.005)-0.4)]': pulling,
                      'duration-0': pulling,
-                     'animate-spin!': actionTriggered
+                     'animate-spin! duration-slower': actionTriggered
                   }
                ]}
                style={{ animation: 'none' }}
@@ -49,7 +53,7 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
    }
 
    const handleActionTriggered = async () => {
-      const WAIT_TIME = 2000
+      const WAIT_TIME = 3500
       await new Promise((resolve) => {
          setTimeout(resolve, WAIT_TIME)
       })

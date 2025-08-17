@@ -172,7 +172,6 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       startGesture(event)
       tracker.addEventListener('move', processGesture)
       tracker.addEventListener('end', endGesture)
-      tracker.addEventListener('cancel', endGesture)
    }
 
    const processGesture = (event: TrackedMoveEvent) => {

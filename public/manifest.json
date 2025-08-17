@@ -1,7 +1,7 @@
 {
    "short_name": "recoin",
    "name": "recoin",
-   "start_url": "/",
+   "start_url": "/app",
    "display": "standalone",
    "theme_color": "#272727",
    "background_color": "#272727",

@@ -6,7 +6,6 @@ export class PointerTracker extends EventTarget {
       super()
       this.move = this.move.bind(this)
       this.end = this.end.bind(this)
-      this.cancel = this.cancel.bind(this)
    }
 
    start(event: PointerEvent) {
@@ -14,12 +13,9 @@ export class PointerTracker extends EventTarget {
       this.initialTarget = event.currentTarget as HTMLElement
       this.initialTarget.setPointerCapture(event.pointerId)
 
-      this.initialTarget.addEventListener('pointermove', this.move, {
-         passive: true
-      })
-
-      this.initialTarget.addEventListener('pointerup', this.end)
-      this.initialTarget.addEventListener('pointercancel', this.cancel)
+      document.addEventListener('pointermove', this.move, { passive: true })
+      document.addEventListener('pointerup', this.end)
+      document.addEventListener('pointercancel', this.end)
    }
 
    addEventListener<T extends keyof GestureTrackerEventMap>(
@@ -64,17 +60,12 @@ export class PointerTracker extends EventTarget {
       this.removeListeners()
    }
 
-   cancel() {
-      this.dispatchEvent(new Event('cancel'))
-      this.removeListeners()
-   }
-
    removeListeners() {
       this.initialTarget.releasePointerCapture(this.startingEvent.pointerId)
 
-      this.initialTarget.removeEventListener('pointermove', this.move)
-      this.initialTarget.removeEventListener('pointerup', this.end)
-      this.initialTarget.removeEventListener('pointercancel', this.cancel)
+      document.removeEventListener('pointermove', this.move)
+      document.removeEventListener('pointerup', this.end)
+      document.removeEventListener('pointercancel', this.end)
    }
 }
 

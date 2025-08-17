@@ -16,10 +16,7 @@ import Toast from '@/pages/styleguide/toast'
 const metadata = {
    title: 'Styleguide',
    description: 'A styleguide for recoin.',
-   charset: 'utf-8',
-   viewport: 'width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover',
-   themeColor: '#272727',
-   manifest: '/manifest.json'
+   charset: 'utf-8'
 }
 
 export default defineRoute({

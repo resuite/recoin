@@ -122,24 +122,23 @@ export function StackView(props: StackViewProps) {
 
    let stackWidth: number | null = null
    let animation: Animation | null = null
+   let stackGroupElement: HTMLElement | null = null
 
    const startDragging = (event: PointerEvent) => {
-      const stack = getStackGroupElement(containerRef.get())
-      if (!stack) {
+      if (!stackGroupElement) {
          return
       }
-      stack.setAttribute('data-dragging', '')
-      stackWidth = stack.clientWidth
+      stackGroupElement.setAttribute('data-dragging', '')
+      stackWidth = stackGroupElement.clientWidth
       navigator.vibrate?.([15, 15])
 
-      animation = stack.animate(ANIMATION_KEYFRAMES, ANIMATION_OPTIONS)
+      animation = stackGroupElement.animate(ANIMATION_KEYFRAMES, ANIMATION_OPTIONS)
       animation.pause()
 
       const tracker = new PointerTracker()
       tracker.start(event)
       tracker.addEventListener('move', drag)
       tracker.addEventListener('end', stopDragging)
-      tracker.addEventListener('cancel', stopDragging)
    }
 
    const drag = (event: TrackedMoveEvent) => {
@@ -153,8 +152,7 @@ export function StackView(props: StackViewProps) {
 
    const stopDragging = () => {
       stackWidth = null
-      const stack = getStackGroupElement(containerRef.get())
-      stack?.removeAttribute('data-dragging')
+      stackGroupElement?.removeAttribute('data-dragging')
       if (viewOutOfViewport) {
          onCloseRequested?.()
       }
@@ -171,12 +169,12 @@ export function StackView(props: StackViewProps) {
       viewOutOfViewport = !entry.isIntersecting
    }
    observer.onConnected(containerRef, (element) => {
-      const stack = getStackGroupElement(element)
-      if (!stack) {
+      stackGroupElement = getStackGroupElement(element)
+      if (!stackGroupElement) {
          return
       }
 
-      const options = { root: stack, threshold: 0.6 }
+      const options = { root: stackGroupElement, threshold: 0.6 }
       intersectObserver = new IntersectionObserver(callback, options)
       intersectObserver.observe(element)
       return () => {

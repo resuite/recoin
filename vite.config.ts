@@ -9,6 +9,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 const routerModulePath = './router.client.ts'
 const pages = [
    '/',
+   '/app',
    '/waiting-list',
    '/styleguide',
    '/styleguide/nav-stack',
@@ -17,7 +18,8 @@ const pages = [
    '/styleguide/toast',
    '/styleguide/sidebar',
    '/styleguide/context-menu',
-   '/styleguide/popover'
+   '/styleguide/popover',
+   '/styleguide/dropdown'
 ]
 
 export default defineConfig({
@@ -36,6 +38,7 @@ export default defineConfig({
       retendSSG({ pages, routerModulePath }),
       cloudflare(),
       VitePWA({
+         scope: '/app',
          registerType: 'autoUpdate',
          devOptions: {
             enabled: false
