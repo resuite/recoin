@@ -75,8 +75,8 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       oldHeight = currentVisualHeight.get()
       currentVisualHeight.set(nextHeight)
       const activeElement = document.activeElement
-      const visible = container.contains(activeElement)
-      const approximateHeight = visible ? Math.max(innerHeight, oldHeight) - nextHeight : 0
+      const approximateHeight = Math.max(innerHeight, oldHeight) - nextHeight
+      const visible = !container.contains(activeElement) || approximateHeight <= 0
       const event = new KeyboardVisibilityEvent(visible, approximateHeight, activeElement)
       container.dispatchEvent(event)
    }
