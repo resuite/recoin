@@ -2,7 +2,7 @@ import { Browsers, currentBrowser } from '@/utilities/browser'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { NEGLIGIBLE_SCROLL_PX, scrollTimelineFallback } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
-import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
+import { useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { PullStartEvent } from './pull-to-refresh-view'
 import styles from './sidebar-provider-view.module.css'
@@ -12,6 +12,7 @@ type DivProps = JSX.IntrinsicElements['div']
 interface SidebarCtx {
    sidebarState: Cell<'open' | 'closed'>
    toggleSidebar: () => void
+   toggleSidebarEnabled: (value?: boolean) => void
 }
 const SidebarScope = createScope<SidebarCtx>()
 
@@ -22,11 +23,6 @@ export interface SidebarProviderViewProps extends DivProps {
     */
    sidebar: () => JSX.Template
    ref?: Cell<HTMLElement | null>
-   /**
-    * An external Cell to hold whether it should be
-    * possible to reveal the sidebar.
-    */
-   allowReveal?: JSX.ValueOrCell<boolean>
    /**
     * Callback function that is invoked when the sidebar state changes.
     */
@@ -67,12 +63,11 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       sidebar,
       children,
       ref: providerRef = Cell.source<HTMLElement | null>(null),
-      allowReveal: allowRevealProp = Cell.source(true),
       onSidebarStateChange,
       ...rest
    } = props
    const observer = useObserver()
-   const allowReveal = useDerivedValue(allowRevealProp)
+   const allowReveal = Cell.source(true)
    const contentRef = Cell.source<HTMLElement | null>(null)
    const sidebarRef = Cell.source<HTMLElement | null>(null)
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
@@ -86,6 +81,10 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
 
    const toggleSidebar = () => {
       sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open')
+   }
+
+   const toggleSidebarEnabled = (value?: boolean) => {
+      allowReveal.set(value ?? !allowReveal.get())
    }
 
    const interceptPointerDown = (event: PointerEvent) => {
@@ -106,7 +105,8 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
 
    const sidebarScopeData: SidebarCtx = {
       sidebarState,
-      toggleSidebar
+      toggleSidebar,
+      toggleSidebarEnabled
    }
 
    let isAlreadyRevealedFlag = false
@@ -187,6 +187,6 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    )
 }
 
-export function useSidebar() {
+export function useSidebarContext() {
    return useScopeContext(SidebarScope)
 }

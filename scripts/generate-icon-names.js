@@ -3,9 +3,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-const iconsDir = path.resolve('./packages/components/icons/svg')
+const iconsDir = path.resolve('./components/icons/svg')
 // Change output file extension to .tsx
-const outputFile = path.resolve('./packages/components/icons/index.tsx')
+const outputFile = path.resolve('./components/icons/index.tsx')
 
 async function generateIconNames() {
    try {

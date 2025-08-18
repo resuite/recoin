@@ -1,4 +1,4 @@
-import { Cell, type SourceCell, useObserver } from 'retend'
+import { Cell, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './virtual-keyboard-aware-view.module.css'
 
@@ -16,107 +16,27 @@ interface VirtualKeyboard extends EventTarget {
    ongeometrychange: ((this: VirtualKeyboard, ev: Event) => void) | null
 }
 
-type DivProps = JSX.IntrinsicElements['div']
-export interface VirtualKeyboardAwareViewProps extends DivProps {
-   onVirtualKeyboardVisibilityChange?: (
-      oldHeight: number,
-      newHeight: number,
-      activeElement: Element | null
-   ) => void
-   ref?: SourceCell<HTMLElement | null>
+interface KeyboardAwarenessCtx {
+   dispatchVisibilityChange: (newHeight: number) => void
+   currentVisualHeight: Cell<number>
 }
 
-/**
- * A view component that notifies parent components about changes in the virtual keyboard's visibility.
- *
- * It primarily serves to trigger the `onVirtualKeyboardVisibilityChange` callback when
- * the `visualViewport.height` changes (usually due to the keyboard appearing or
- * disappearing) while an input element within this component is focused.
- *
- * This allows consuming components to react to keyboard visibility changes and make
- * necessary layout adjustments, such as ensuring a focused input remains visible.
- *
- * @param props - The props for the component.
- * @example
- * ```tsx
- * const MyForm = () => {
- *   const handleKeyboardVisibilityChange = (
- *     oldHeight: number,
- *     newHeight: number,
- *     activeElement: Element | null,
- *   ) => {
- *     console.log('Keyboard visibility changed:', { oldHeight, newHeight, activeElement })
- *   }
- *
- *   return (
- *     <VirtualKeyboardAwareView onVirtualKeyboardVisibilityChange={handleKeyboardVisibilityChange}>
- *       <form>
- *         <input type="text" placeholder="Focus me" />
- *         <textarea placeholder="Or me"></textarea>
- *       </form>
- *     </VirtualKeyboardAwareView>
- *   )
- * }
- * ```
- * @returns The rendered VirtualKeyboardAwareView component.
- */
+const KeyboardAwarenessScope = createScope<KeyboardAwarenessCtx>('KeyboardAwareness')
+
+type DivProps = JSX.IntrinsicElements['div']
+export interface VirtualKeyboardAwareViewProps extends DivProps {
+   onKeyboardVisibilityChange?: JSX.ValueOrCell<(event: KeyboardVisibilityEvent) => void>
+   ref?: SourceCell<HTMLElement | null>
+   children: () => JSX.Template
+}
+
 export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
-   const {
-      children,
-      ref: containerRef = Cell.source(null),
-      onFocusIn,
-      onFocusOut,
-      onVirtualKeyboardVisibilityChange,
-      ...rest
-   } = props
+   const { children, ref: containerRef = Cell.source(null), onFocusOut, ...rest } = props
    const observer = useObserver()
-   let focusAdjustmentInProgress = false
-   let currentVisualHeight = 0
+   const currentVisualHeight = Cell.source(0)
    let oldHeight = 0
 
-   // For browsers without `navigator.virtualKeyboard`, we use `onFocusIn` and `onFocusOut`
-   // to detect when an input is focused near the bottom of the viewport (where the keyboard
-   // might cover it). We temporarily add a CSS class (`styles.outOfViewport`) to adjust its
-   // position and prevent unwanted scrolling or layout shifts, then remove it after. This
-   // workaround helps provide a consistent experience in browsers like Safari and Firefox,
-   // which lack reliable virtual keyboard APIs.
-   const handlePointerDown = (event: PointerEvent) => {
-      const target = event.target as HTMLElement
-
-      if ('virtualKeyboard' in navigator || focusAdjustmentInProgress) {
-         // We don't need any hackery here since Chrome and Edge are good
-         // browsers and will handle this for us.
-         if (typeof onFocusIn === 'function') {
-            onFocusIn.bind(event.currentTarget as HTMLInputElement)(event)
-         }
-         return
-      }
-
-      if (isKeyboardInput(target)) {
-         const target = event.target as HTMLElement
-         event.stopImmediatePropagation()
-         focusAdjustmentInProgress = true
-         target.blur()
-         target.classList.add(styles.outOfViewport)
-         target.focus()
-         window.scrollTo(0, 0)
-         target.classList.remove(styles.outOfViewport)
-         focusAdjustmentInProgress = false
-         // This is an interesting bug in iOS. On the 6th/7th time the
-         // keyboard is opened, the visual viewport change event isn't fired,
-         // but the visual viewport changes anyway. Luckily, prior values
-         // are recorded, so the event can be fired manually.
-         const newVisualHeight = window.visualViewport?.height
-         if (newVisualHeight !== undefined && newVisualHeight !== currentVisualHeight) {
-            dispatchVisibilityChange(newVisualHeight)
-         }
-      }
-   }
-
    const handleFocusOut = (e: FocusEvent) => {
-      if (focusAdjustmentInProgress) {
-         return
-      }
       if (!e.relatedTarget) {
          dispatchVisibilityChange(innerHeight)
       }
@@ -139,7 +59,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
             ? innerHeight - navigator.virtualKeyboard.boundingRect.height
             : (window.visualViewport?.height ?? innerHeight)
 
-      if (currentVisualHeight === newHeight) {
+      if (currentVisualHeight.get() === newHeight) {
          // prevent unecessary updates.
          return
       }
@@ -147,34 +67,30 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       dispatchVisibilityChange(newHeight)
    }
 
-   const handleScroll = () => {
-      requestAnimationFrame(() => {
-         window.scrollTo(0, 0)
-      })
-   }
-
    const dispatchVisibilityChange = (nextHeight: number) => {
       const container = containerRef.peek()
       if (!container) {
          return
       }
-      oldHeight = currentVisualHeight
-      currentVisualHeight = nextHeight
+      oldHeight = currentVisualHeight.get()
+      currentVisualHeight.set(nextHeight)
       const activeElement = document.activeElement
-      onVirtualKeyboardVisibilityChange?.(oldHeight, currentVisualHeight, activeElement)
+      const visible = container.contains(activeElement)
+      const approximateHeight = visible ? Math.max(innerHeight, oldHeight) - nextHeight : 0
+      const event = new KeyboardVisibilityEvent(visible, approximateHeight, activeElement)
+      container.dispatchEvent(event)
    }
 
    observer.onConnected(containerRef, () => {
-      currentVisualHeight = window.visualViewport?.height ?? innerHeight
-      oldHeight = currentVisualHeight
+      currentVisualHeight.set(window.visualViewport?.height ?? innerHeight)
+      oldHeight = currentVisualHeight.get()
       updateHeight()
 
       if (!('virtualKeyboard' in navigator)) {
          window.visualViewport?.addEventListener('resize', updateHeight)
-         window.addEventListener('scroll', handleScroll)
+
          return () => {
             window.visualViewport?.removeEventListener('resize', updateHeight)
-            window.removeEventListener('scroll', handleScroll)
          }
       }
 
@@ -188,20 +104,91 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       }
    })
 
+   const scopeCtx: KeyboardAwarenessCtx = { dispatchVisibilityChange, currentVisualHeight }
+
    return (
-      <div
-         {...rest}
-         ref={containerRef}
-         onFocusOut={handleFocusOut}
-         onPointerDown={handlePointerDown}
-         class={[styles.keyboardAwareView, rest.class]}
-      >
-         {children}
-      </div>
+      <KeyboardAwarenessScope.Provider value={scopeCtx}>
+         {() => (
+            <div
+               {...rest}
+               ref={containerRef}
+               onFocusOut={handleFocusOut}
+               class={[styles.keyboardAwareView, rest.class]}
+            >
+               {children?.()}
+            </div>
+         )}
+      </KeyboardAwarenessScope.Provider>
    )
 }
 
-const KEYBOARD_INPUTS = ['INPUT', 'TEXTAREA', 'SELECT']
-const isKeyboardInput = (target: HTMLElement) => {
-   return KEYBOARD_INPUTS.includes(target.tagName) || target.isContentEditable
+export interface VirtualKeyboardTriggerProps extends DivProps {
+   ref?: SourceCell<HTMLDivElement | null>
+}
+
+export function VirtualKeyboardTrigger(props: VirtualKeyboardTriggerProps) {
+   const observer = useObserver()
+   const { ref = Cell.source(null), ...rest } = props
+   const { dispatchVisibilityChange, currentVisualHeight } = useScopeContext(KeyboardAwarenessScope)
+
+   let focusing = false
+
+   const handleFocus = (event: Event) => {
+      if (focusing) {
+         return
+      }
+
+      if ('virtualKeyboard' in navigator) {
+         // We don't need any hackery here since Chrome and Edge are good
+         // browsers and will handle this for us.
+         return
+      }
+
+      const target = event.target as HTMLElement
+      // The whole point is basically 'deceiving' the browser engine (read: Safari)
+      // into thinking the element is not focused, so it doesn't force the
+      // scrolling behavior.
+      target.blur()
+      focusing = true
+      target.focus({ preventScroll: true })
+      focusing = false
+
+      // This is an interesting bug in iOS. On the 6th/7th time the
+      // keyboard is opened, the visual viewport change event isn't fired,
+      // but the visual viewport changes anyway. Luckily, prior values
+      // are recorded, so the event can be fired manually.
+      const newVisualHeight = window.visualViewport?.height
+      if (newVisualHeight !== undefined && newVisualHeight !== currentVisualHeight.get()) {
+         dispatchVisibilityChange(newVisualHeight)
+      }
+   }
+
+   observer.onConnected(ref, (trigger) => {
+      const child = trigger.children[0]
+      if (!(child instanceof HTMLElement)) {
+         throw new Error('<VirtualKeyboardTrigger/> child must be an HTMLElement.')
+      }
+      child.addEventListener('focus', handleFocus)
+
+      return () => {
+         child.removeEventListener('focus', handleFocus)
+      }
+   })
+
+   return <div {...rest} ref={ref} />
+}
+
+export class KeyboardVisibilityEvent extends Event {
+   static readonly type = 'keyboardvisibilitychange'
+   constructor(
+      public isVisible: boolean,
+      public approximateHeight: number,
+      public relatedTarget: EventTarget | null
+   ) {
+      super(KeyboardVisibilityEvent.type, {
+         bubbles: false,
+         cancelable: false,
+         composed: false
+      })
+   }
 }

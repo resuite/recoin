@@ -1,24 +1,41 @@
-import { VirtualKeyboardAwareView } from '@/components/views'
+import {
+   type KeyboardVisibilityEvent,
+   VirtualKeyboardAwareView,
+   VirtualKeyboardTrigger
+} from '@/components/views'
 import { Cell } from 'retend'
 
 const KeyboardAvoidanceTest = () => {
-   const height = Cell.source('100dvh')
-   const handleVisibilityChange = (_: number, newHeight: number) => {
-      height.set(`${newHeight}px`)
+   const keyboardHeight = Cell.source(0)
+   const handleVisibilityChange = (event: KeyboardVisibilityEvent) => {
+      keyboardHeight.set(event.approximateHeight)
    }
+
+   const translate = Cell.derived(() => {
+      return `0px -${keyboardHeight.get()}px`
+   })
 
    return (
       <VirtualKeyboardAwareView
-         class={[
-            'h-screen w-screen grid-lines px-1 pt-2 rounded-t-3xl grid grid-rows-[auto_1fr_auto]'
-         ]}
-         onVirtualKeyboardVisibilityChange={handleVisibilityChange}
-         style={{ height }}
+         class='h-screen w-screen grid-lines px-1 pt-2 rounded-t-3xl grid grid-rows-[auto_1fr_auto]'
+         onKeyboardVisibilityChange={handleVisibilityChange}
       >
-         <h1 class='text-bigger font-bold'>Keyboard Avoidance Test</h1>
-         <p>This page demonstrates keyboard avoidance behavior when input fields are focused.</p>
-
-         <input placeholder='Write something here...' class='w-full h-fit pl-0.25 mb-1' />
+         {() => (
+            <>
+               <h1 class='text-bigger font-bold'>Keyboard Avoidance Tests</h1>
+               <p>
+                  This page demonstrates keyboard avoidance behavior when input fields are focused.
+                  Keyboard Height: {keyboardHeight}
+               </p>
+               <VirtualKeyboardTrigger>
+                  <input
+                     placeholder='Write something here...'
+                     class='w-full h-fit pl-0.25 mb-1 duration-slow will-change-transform'
+                     style={{ translate }}
+                  />
+               </VirtualKeyboardTrigger>
+            </>
+         )}
       </VirtualKeyboardAwareView>
    )
 }

@@ -105,5 +105,6 @@
       width: 8%;
       touch-action: none;
       overscroll-behavior: none;
+      user-select: none;
    }
 }

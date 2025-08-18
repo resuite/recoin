@@ -1,12 +1,7 @@
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS, getScrollableY } from '@/utilities/scrolling'
-import { Cell, type SourceCell, useObserver } from 'retend'
-import {
-   useDerivedValue,
-   useIntersectionObserver,
-   useMatchMedia,
-   useWindowSize
-} from 'retend-utils/hooks'
+import { Cell, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
+import { useIntersectionObserver, useMatchMedia, useWindowSize } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './pull-to-refresh-view.module.css'
 
@@ -44,10 +39,20 @@ export interface PullToRefreshViewProps extends DivProps {
     */
    contentTopMarker?: SourceCell<HTMLElement | null>
    /**
-    * An external Cell to hold whether the pull-to-refresh
-    * should be allowed to trigger.
+    * The content to be rendered inside the scrollable area.
+    * This should be a function that returns `JSX.Template`.
     */
-   allowPull?: JSX.ValueOrCell<boolean>
+   children: () => JSX.Template
+}
+
+interface PullToRefreshContext {
+   togglePullToRefreshEnabled: (value?: boolean) => void
+}
+
+const PullToRefreshScope = createScope<PullToRefreshContext>()
+
+export function usePullToRefreshContext() {
+   return useScopeContext(PullToRefreshScope)
 }
 
 /**
@@ -113,7 +118,6 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       ref: pullZoneRef = Cell.source(null),
       'content:class': contentClasses,
       contentTopMarker: contentTopMarkerProp,
-      allowPull: allowPullProp = Cell.source(true),
       ...rest
    } = props
    const contentRef = Cell.source<HTMLElement | null>(null)
@@ -125,7 +129,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    const supportsTouch = useMatchMedia('(pointer: coarse)')
    const { height } = useWindowSize()
    const reachedTop = Cell.source(false)
-   const allowPull = useDerivedValue(allowPullProp)
+   const allowPull = Cell.source(true)
    const canPull = Cell.derived(() => {
       return (
          // allowPull can be undefined.
@@ -223,6 +227,12 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       }
       pullZone.classList.remove(styles.pullZoneActionTriggered as string)
       changeState('idle')
+   }
+
+   const scopeData: PullToRefreshContext = {
+      togglePullToRefreshEnabled(value) {
+         allowPull.set(value ?? !allowPull.get())
+      }
    }
 
    // No, scrollend didn't work (Apple, why)
@@ -324,22 +334,30 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    })
 
    return (
-      <div
-         {...rest}
-         ref={pullZoneRef}
-         class={[styles.pullZone, { [styles.pullZoneCanPull as string]: canPull }, rest.class]}
-      >
-         <div ref={scrollContainerRef} class={styles.pullZoneScrollContainer}>
-            <div ref={thresholdMarkerRef} />
-            <div ref={feedbackLayerRef}>{feedback?.()}</div>
-            <div ref={contentRef} class={[styles.pullZoneContent, contentClasses]}>
-               {!contentTopMarkerProp ? (
-                  <div ref={contentTopMarkerRef} class={styles.pullZoneContentTopMarker} />
-               ) : null}
-               {children}
+      <PullToRefreshScope.Provider value={scopeData}>
+         {() => (
+            <div
+               {...rest}
+               ref={pullZoneRef}
+               class={[
+                  styles.pullZone,
+                  { [styles.pullZoneCanPull as string]: canPull },
+                  rest.class
+               ]}
+            >
+               <div ref={scrollContainerRef} class={styles.pullZoneScrollContainer}>
+                  <div ref={thresholdMarkerRef} />
+                  <div ref={feedbackLayerRef}>{feedback?.()}</div>
+                  <div ref={contentRef} class={[styles.pullZoneContent, contentClasses]}>
+                     {!contentTopMarkerProp ? (
+                        <div ref={contentTopMarkerRef} class={styles.pullZoneContentTopMarker} />
+                     ) : null}
+                     {children?.()}
+                  </div>
+               </div>
             </div>
-         </div>
-      </div>
+         )}
+      </PullToRefreshScope.Provider>
    )
 }
 

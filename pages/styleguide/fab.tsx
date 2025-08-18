@@ -1,11 +1,19 @@
 import { Icon } from '@/components/icons'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
-import { ExpandingView } from '@/components/views'
+import { ExpandingView, usePullToRefreshContext, useSidebarContext } from '@/components/views'
 import { vibrate } from '@/utilities/miscellaneous'
 import { Cell } from 'retend'
 
-const FloatingActionButtonTest = (props?: { children?: unknown }) => {
+const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }) => {
    const isOpen = Cell.source(false)
+   try {
+      const sidebarCtx = useSidebarContext()
+      const pullToRefreshCtx = usePullToRefreshContext()
+      isOpen.listen((viewIsOpen) => {
+         sidebarCtx.toggleSidebarEnabled(!viewIsOpen)
+         pullToRefreshCtx.togglePullToRefreshEnabled(!viewIsOpen)
+      })
+   } catch {}
    const buttonsOpened = Cell.source(false)
    const buttonsClosed = Cell.derived(() => {
       return !buttonsOpened.get()
@@ -24,25 +32,22 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
    }
 
    return (
-      <div
-         data-expanded-ctx={isOpen}
-         class='h-screen w-screen rounded-t-3xl overflow-hidden grid relative'
-      >
+      <div data-expanded-ctx={isOpen} class='h-screen w-screen overflow-hidden grid relative'>
          <div
             class={[
-               'light-scheme rounded-t-3xl text-bigger h-full w-full grid place-items-center [grid-area:1/1]',
+               'rounded-t-3xl text-bigger h-full w-full grid place-items-center [grid-area:1/1]',
                'ease-in-out duration-bit-slower transition-[translate,scale,opacity] translate-y-0 delay-fast',
-               'expanded-ctx:translate-y-[5%] expanded-ctx:scale-[.97] expanded-ctx:opacity-50 expanded-ctx:delay-0'
+               'expanded-ctx:translate-y-[5%] expanded-ctx:scale-[.97] expanded-ctx:opacity-50 expanded-ctx:delay-0',
+               props?.class
             ]}
          >
             {props?.children}
          </div>
          <FloatingActionButton
-            outlined={true}
             disabled={buttonsClosed}
             class={[
                'grid place-items-center',
-               'dark-scheme transition-transform ease-in-out scale-[0.85] absolute',
+               'transition-transform ease-in-out scale-[0.85] absolute',
                {
                   'opacity-0 [transition:translate_var(--default-speed),opacity_0.5ms_var(--default-speed)]':
                      buttonsClosed,
@@ -56,8 +61,8 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
             onClick={toggleOpenState}
             class={[
                'grid place-items-center',
-               'dark-scheme border-b-2 border-light-yellow',
-               'expanded-ctx:light-scheme expanded-ctx:scale-[0.85] expanded-ctx:bg-canvas expanded-ctx:rotate-[225deg] expanded-ctx:border-none',
+               'border-b-2 border-light-yellow',
+               'expanded-ctx:dark-scheme expanded-ctx:scale-[0.85] expanded-ctx:bg-canvas expanded-ctx:rotate-[225deg] expanded-ctx:border-none',
                '[transition:rotate_var(--speed-slower)_var(--timing-bounce-slower)_var(--rotate-delay,0ms),scale_var(--default-speed),translate_var(--default-speed)] ease-in-out',
                '[--rotate-delay:var(--speed-default)]',
                {
@@ -69,8 +74,9 @@ const FloatingActionButtonTest = (props?: { children?: unknown }) => {
             <Icon name='add' />
          </FloatingActionButton>
          <ExpandingView
+            expandColor='var(--color-base)'
             expandOrigin='auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)'
-            class='dark-scheme h-full w-full grid place-items-center place-content-center gap-1 [grid-area:1/1]'
+            class='dark-scheme h-screen w-screen grid place-items-center place-content-center gap-1 [grid-area:1/1]'
             isOpen={isOpen}
          >
             {() => (

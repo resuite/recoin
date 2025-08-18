@@ -64,6 +64,7 @@ export type IconName =
    | 'pie-chart'
    | 'profile'
    | 'purse'
+   | 'recoin'
    | 'recurring'
    | 'retry'
    | 'safe'
@@ -167,6 +168,7 @@ export function AllIcons() {
          <Icon name='pie-chart' />
          <Icon name='profile' />
          <Icon name='purse' />
+         <Icon name='recoin' />
          <Icon name='recurring' />
          <Icon name='retry' />
          <Icon name='safe' />

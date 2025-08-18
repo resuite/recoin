@@ -1,13 +1,13 @@
 .container {
    --expand-origin: calc(50% - 10px) calc(50% - 10px);
-   --expand-color: var(--canvas-background);
+   --expand-color: var(--color-canvas-text);
    --expand-size: var(--fab-size);
    display: contents;
 }
 
 .content {
-   width: 100%;
-   height: 100%;
+   width: 100dvw;
+   height: 100dvh;
 
    /* This should just be 0ms, but if it is, compositing fails. */
    transition-duration: 0.05ms;
@@ -28,7 +28,7 @@
    }
 }
 
-/* 
+/*
    We couldn't use the clip-path property, because it isn't hardware accelerated
    (yet?) and animations with it are buggy in Firefox.
 

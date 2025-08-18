@@ -287,8 +287,16 @@ body {
    @apply w-1 h-1;
 }
 
+@utility link-bare {
+   @apply border-none p-0;
+}
+
 @utility text-logo {
    letter-spacing: -3px;
+}
+
+@utility grid-center {
+   @apply grid place-items-center;
 }
 
 @utility bg-glass {

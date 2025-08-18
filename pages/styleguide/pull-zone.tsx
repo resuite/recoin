@@ -5,8 +5,7 @@ import type { JSX } from 'retend/jsx-runtime'
 
 interface PullToRefreshViewTestProps {
    contentTopMarkerRef?: SourceCell<HTMLElement | null>
-   children?: unknown
-   allowPull?: JSX.ValueOrCell<boolean>
+   children?: () => JSX.Template
 }
 
 const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
@@ -70,14 +69,14 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
          onStateChange={handleStateChange}
          onActionTriggered={handleActionTriggered}
          contentTopMarker={props?.contentTopMarkerRef ?? topMarker}
-         allowPull={props?.allowPull}
       >
-         {props?.children ?? (
-            <div class='text-big h-full light-scheme rounded-t-3xl'>
-               <div ref={topMarker} class='h-0.25 w-full' />
-               <div class='grid place-items-center h-full w-full'>{state}</div>
-            </div>
-         )}
+         {props?.children ??
+            (() => (
+               <div class='text-big h-full light-scheme rounded-t-3xl'>
+                  <div ref={topMarker} class='h-0.25 w-full' />
+                  <div class='grid place-items-center h-full w-full'>{state}</div>
+               </div>
+            ))}
       </PullToRefreshView>
    )
 }

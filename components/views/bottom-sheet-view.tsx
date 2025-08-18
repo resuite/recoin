@@ -4,6 +4,7 @@ import { Cell, If, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
+import { Teleport } from 'retend/teleport'
 import styles from './bottom-sheet-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -152,16 +153,18 @@ export function BottomSheet(props: BottomSheetProps) {
 
    return If(dialogOpen, () => {
       return (
-         <dialog
-            ref={dialogRef}
-            data-content-open={isOpen}
-            class={styles.dialog}
-            onClick--self={handleClickOutside}
-         >
-            <div {...rest} ref={contentRef} class={[styles.sheetContentContainer, rest.class]}>
-               {children()}
-            </div>
-         </dialog>
+         <Teleport to='body'>
+            <dialog
+               ref={dialogRef}
+               data-content-open={isOpen}
+               class={styles.dialog}
+               onClick--self={handleClickOutside}
+            >
+               <div {...rest} ref={contentRef} class={[styles.sheetContentContainer, rest.class]}>
+                  {children()}
+               </div>
+            </dialog>
+         </Teleport>
       )
    })
 }
