@@ -1,17 +1,4 @@
-import { defineRoute } from 'retend/router'
-
-import Styleguide from '@/pages/styleguide'
-import BottomSheetTest from '@/pages/styleguide/bottom-sheet'
-import ContextMenu from '@/pages/styleguide/context-menu'
-import DropdownTest from '@/pages/styleguide/dropdown'
-import FloatingActionButtonTest from '@/pages/styleguide/fab'
-import KeyboardAvoidanceTest from '@/pages/styleguide/keyboard-avoidance'
-import NavStack from '@/pages/styleguide/nav-stack'
-import PopoverTest from '@/pages/styleguide/popover'
-import PullToRefreshViewTest from '@/pages/styleguide/pull-zone'
-import SidebarTest from '@/pages/styleguide/sidebar'
-import Tabs from '@/pages/styleguide/tabs'
-import Toast from '@/pages/styleguide/toast'
+import { defineRoute, lazy } from 'retend/router'
 
 const metadata = {
    title: 'Styleguide',
@@ -26,51 +13,51 @@ export default defineRoute({
    children: [
       {
          path: '',
-         component: Styleguide
+         component: lazy(() => import('@/pages/styleguide'))
       },
       {
          path: 'tabs',
-         component: Tabs
+         component: lazy(() => import('@/pages/styleguide/tabs'))
       },
       {
          path: 'nav-stack',
-         component: NavStack
+         component: lazy(() => import('@/pages/styleguide/nav-stack'))
       },
       {
          path: 'toast',
-         component: Toast
+         component: lazy(() => import('@/pages/styleguide/toast'))
       },
       {
          path: 'pull-zone',
-         component: PullToRefreshViewTest
+         component: lazy(() => import('@/pages/styleguide/pull-zone'))
       },
       {
          path: 'floating-button',
-         component: FloatingActionButtonTest
+         component: lazy(() => import('@/pages/styleguide/fab'))
       },
       {
          path: 'sidebar',
-         component: SidebarTest
+         component: lazy(() => import('@/pages/styleguide/sidebar'))
       },
       {
          path: 'keyboard-avoidance',
-         component: KeyboardAvoidanceTest
+         component: lazy(() => import('@/pages/styleguide/keyboard-avoidance'))
       },
       {
          path: 'sheet',
-         component: BottomSheetTest
+         component: lazy(() => import('@/pages/styleguide/bottom-sheet'))
       },
       {
          path: 'popover',
-         component: PopoverTest
+         component: lazy(() => import('@/pages/styleguide/popover'))
       },
       {
          path: 'context-menu',
-         component: ContextMenu
+         component: lazy(() => import('@/pages/styleguide/context-menu'))
       },
       {
          path: 'dropdown',
-         component: DropdownTest
+         component: lazy(() => import('@/pages/styleguide/dropdown'))
       }
    ]
 })

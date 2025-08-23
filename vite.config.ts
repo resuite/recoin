@@ -4,23 +4,11 @@ import tailwindcss from '@tailwindcss/vite'
 import { retendSSG } from 'retend-server/plugin'
 import { retend } from 'retend/plugin'
 import { defineConfig } from 'vite'
+import { patchCssModules } from 'vite-css-modules'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const routerModulePath = './router.client.ts'
-const pages = [
-   '/',
-   '/app',
-   '/waiting-list',
-   '/styleguide',
-   '/styleguide/nav-stack',
-   '/styleguide/tabs',
-   '/styleguide/pull-zone',
-   '/styleguide/toast',
-   '/styleguide/sidebar',
-   '/styleguide/context-menu',
-   '/styleguide/popover',
-   '/styleguide/dropdown'
-]
+const pages = ['/', '/app', '/waiting-list', '/styleguide']
 
 export default defineConfig({
    resolve: {
@@ -34,6 +22,7 @@ export default defineConfig({
    },
    plugins: [
       tailwindcss(),
+      patchCssModules(),
       retend(),
       retendSSG({ pages, routerModulePath }),
       cloudflare(),

@@ -2,7 +2,8 @@ import Index from '@/pages'
 import { createWebRouter, lazy } from 'retend/router'
 
 const metadata = {
-   viewport: 'width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover',
+   viewport:
+      'width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-visual',
    themeColor: '#272727',
    manifest: '/manifest.json'
 }

@@ -1,10 +1,9 @@
 import { DynamicIcon } from '@/components/icons'
 import { type PullState, PullToRefreshView } from '@/components/views'
-import { Cell, type SourceCell } from 'retend'
+import { Cell } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 
 interface PullToRefreshViewTestProps {
-   contentTopMarkerRef?: SourceCell<HTMLElement | null>
    children?: () => JSX.Template
 }
 
@@ -19,7 +18,6 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
    const actionTriggered = Cell.derived(() => {
       return state.get() === 'actiontriggered'
    })
-   const topMarker = Cell.source<HTMLElement | null>(null)
 
    const FeedbackContent = () => {
       return (
@@ -68,12 +66,10 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
          feedback={FeedbackContent}
          onStateChange={handleStateChange}
          onActionTriggered={handleActionTriggered}
-         contentTopMarker={props?.contentTopMarkerRef ?? topMarker}
       >
          {props?.children ??
             (() => (
                <div class='text-big h-full light-scheme rounded-t-3xl'>
-                  <div ref={topMarker} class='h-0.25 w-full' />
                   <div class='grid place-items-center h-full w-full'>{state}</div>
                </div>
             ))}

@@ -19,6 +19,7 @@ interface VirtualKeyboard extends EventTarget {
 interface KeyboardAwarenessCtx {
    dispatchVisibilityChange: (newHeight: number) => void
    currentVisualHeight: Cell<number>
+   redirectingFocus: SourceCell<boolean>
 }
 
 const KeyboardAwarenessScope = createScope<KeyboardAwarenessCtx>('KeyboardAwareness')
@@ -34,9 +35,14 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    const { children, ref: containerRef = Cell.source(null), onFocusOut, ...rest } = props
    const observer = useObserver()
    const currentVisualHeight = Cell.source(0)
+   const redirectingFocus = Cell.source(false)
    let oldHeight = 0
 
    const handleFocusOut = (e: FocusEvent) => {
+      if (redirectingFocus.get()) {
+         return
+      }
+
       if (!e.relatedTarget) {
          dispatchVisibilityChange(innerHeight)
       }
@@ -75,10 +81,18 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       oldHeight = currentVisualHeight.get()
       currentVisualHeight.set(nextHeight)
       const activeElement = document.activeElement
-      const approximateHeight = Math.max(innerHeight, oldHeight) - nextHeight
+      let approximateHeight = Math.max(innerHeight, oldHeight) - nextHeight
       const visible = container.contains(activeElement) && approximateHeight > 0
+      if (!visible) {
+         approximateHeight = 0
+      }
       const event = new KeyboardVisibilityEvent(visible, approximateHeight, activeElement)
       container.dispatchEvent(event)
+   }
+
+   // When all else fails, force reset scroll position
+   const resetScroll = () => {
+      window.scrollTo(0, 0)
    }
 
    observer.onConnected(containerRef, () => {
@@ -88,9 +102,10 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
 
       if (!('virtualKeyboard' in navigator)) {
          window.visualViewport?.addEventListener('resize', updateHeight)
-
+         window.addEventListener('scroll', resetScroll, { passive: true })
          return () => {
             window.visualViewport?.removeEventListener('resize', updateHeight)
+            window.removeEventListener('scroll', resetScroll)
          }
       }
 
@@ -104,7 +119,11 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       }
    })
 
-   const scopeCtx: KeyboardAwarenessCtx = { dispatchVisibilityChange, currentVisualHeight }
+   const scopeCtx: KeyboardAwarenessCtx = {
+      dispatchVisibilityChange,
+      currentVisualHeight,
+      redirectingFocus
+   }
 
    return (
       <KeyboardAwarenessScope.Provider value={scopeCtx}>
@@ -129,12 +148,11 @@ export interface VirtualKeyboardTriggerProps extends DivProps {
 export function VirtualKeyboardTrigger(props: VirtualKeyboardTriggerProps) {
    const observer = useObserver()
    const { ref = Cell.source(null), ...rest } = props
-   const { dispatchVisibilityChange, currentVisualHeight } = useScopeContext(KeyboardAwarenessScope)
-
-   let focusing = false
+   const { dispatchVisibilityChange, currentVisualHeight, redirectingFocus } =
+      useScopeContext(KeyboardAwarenessScope)
 
    const handleFocus = (event: Event) => {
-      if (focusing) {
+      if (redirectingFocus.get()) {
          return
       }
 
@@ -148,10 +166,10 @@ export function VirtualKeyboardTrigger(props: VirtualKeyboardTriggerProps) {
       // The whole point is basically 'deceiving' the browser engine (read: Safari)
       // into thinking the element is not focused, so it doesn't force the
       // scrolling behavior.
+      redirectingFocus.set(true)
       target.blur()
-      focusing = true
       target.focus({ preventScroll: true })
-      focusing = false
+      redirectingFocus.set(false)
 
       // This is an interesting bug in iOS. On the 6th/7th time the
       // keyboard is opened, the visual viewport change event isn't fired,
