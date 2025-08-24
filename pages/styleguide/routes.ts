@@ -58,6 +58,10 @@ export default defineRoute({
       {
          path: 'dropdown',
          component: lazy(() => import('@/pages/styleguide/dropdown'))
+      },
+      {
+         path: 'keypad',
+         component: lazy(() => import('@/pages/styleguide/keypad'))
       }
    ]
 })

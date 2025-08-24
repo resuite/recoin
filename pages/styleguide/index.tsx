@@ -124,6 +124,7 @@ function OtherPages() {
          <Link href='/styleguide/popover'>Go to popover page</Link>
          <Link href='/styleguide/context-menu'>Go to context menu </Link>
          <Link href='/styleguide/dropdown'>Go to dropdown </Link>
+         <Link href='/styleguide/keypad'>Go to keypad </Link>
       </div>
    )
 }

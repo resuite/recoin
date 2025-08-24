@@ -1,0 +1,47 @@
+.keypad {
+   --keypad-button-size: min(10vw, 3rem);
+   width: clamp(max(350px, 10dvw), 90dvw, min(90dvw, 600px));
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   column-gap: calc(var(--spacing) * 0.25);
+   row-gap: min(3dvw, 0.5rem);
+   justify-content: space-around;
+}
+
+.button {
+   min-width: 0px;
+   position: relative;
+   display: grid;
+   place-items: center;
+   font-size: var(--keypad-button-size);
+   background-color: transparent;
+   border: none;
+   color: var(--color-canvas-text);
+   user-select: none;
+   touch-action: manipulation;
+   transition: opacity var(--speed-slow);
+
+   &:disabled {
+      visibility: visible;
+      opacity: 0.35;
+      cursor: not-allowed;
+   }
+
+   &:active::before {
+      display: block;
+      content: "";
+      position: absolute;
+      width: auto;
+      height: 100%;
+      aspect-ratio: 1;
+      opacity: 0.15;
+      background-color: var(--color-canvas-text);
+      border-radius: 50%;
+   }
+}
+
+.backspaceIcon {
+   width: var(--keypad-button-size);
+   height: var(--keypad-button-size);
+   rotate: 45deg;
+}
