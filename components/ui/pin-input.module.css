@@ -16,6 +16,10 @@
 
    &.error {
       animation: shake var(--speed-slower);
+
+      .character {
+         color: var(--color-red-200);
+      }
    }
 }
 

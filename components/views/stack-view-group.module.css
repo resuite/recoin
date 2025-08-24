@@ -30,6 +30,7 @@
    transition-timing-function: var(--timing);
 
    transition-property: translate, opacity;
+   will-change: translate, opacity;
    grid-area: 1 / 1;
    &:not(:first-child) {
       translate: 100%;
