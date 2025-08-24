@@ -1,6 +1,6 @@
 .keypad {
-   --keypad-button-size: min(10vw, 3rem);
-   width: clamp(max(350px, 10dvw), 90dvw, min(90dvw, 600px));
+   --keypad-button-size: min(10vw, 2rem);
+   width: clamp(max(350px, 10dvw), 70dvw, min(90dvw, 600px));
    display: grid;
    grid-template-columns: repeat(3, 1fr);
    column-gap: calc(var(--spacing) * 0.25);
