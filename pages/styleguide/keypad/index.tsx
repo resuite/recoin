@@ -15,8 +15,11 @@ const KeypadTest = () => {
    const correctPin = 1234
    const isAuthenticated = Cell.source(false)
    const handlePinFill = async (value: number) => {
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      return value === correctPin
+      if (value === correctPin) {
+         return true
+      }
+      await new Promise((resolve) => setTimeout(resolve, 700))
+      return false
    }
 
    const handleSuccess = () => {

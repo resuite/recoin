@@ -1,7 +1,8 @@
-import { Cell, For, type SourceCell } from 'retend'
+import Arrows from '@/components/icons/svg/arrows'
+import { defer, getFocusableElementInItem } from '@/utilities/miscellaneous'
+import { Cell, For, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
-import Arrows from '../icons/svg/arrows'
 import styles from './numeric-keypad.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -9,10 +10,12 @@ type DivProps = JSX.IntrinsicElements['div']
 interface NumericKeypadProps extends DivProps {
    model?: SourceCell<number | null>
    disabled?: JSX.ValueOrCell<boolean>
+   ref?: SourceCell<HTMLDivElement | null>
 }
 
 export function NumericKeypad(props: NumericKeypadProps) {
-   const { model, disabled: disabledProp, ...rest } = props
+   const { model, disabled: disabledProp, ref = Cell.source(null), ...rest } = props
+   const observer = useObserver()
    const disabled = useDerivedValue(disabledProp)
    const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', '0']
 
@@ -35,24 +38,58 @@ export function NumericKeypad(props: NumericKeypadProps) {
    const enableBackspace = Cell.derived(() => {
       return model?.get() !== null
    })
+
    const backspaceDisabled = Cell.derived(() => {
       return !enableBackspace.get() || disabled.get()
    })
 
+   const handleKeydown = (event: KeyboardEvent) => {
+      const number = Number(event.key)
+      if (!Number.isNaN(number)) {
+         navigator.vibrate?.([5, 5])
+         const newValue = model?.get() ?? ''
+         model?.set(Number(newValue + number.toString()))
+      } else if (event.key === 'Backspace') {
+         handleBackspace()
+      }
+   }
+
+   observer.onConnected(ref, (div) => {
+      getFocusableElementInItem(div)?.focus()
+   })
+
    return (
-      <div {...rest} class={[styles.keypad, rest.class]}>
+      <div {...rest} ref={ref} class={[styles.keypad, rest.class]} onKeyDown={handleKeydown}>
          {For(keys, (row) => {
-            const handleClick = () => {
+            const selectChar = (event: Event) => {
+               const target = event.currentTarget as HTMLButtonElement
+               if (event.type === 'pointerdown') {
+                  // Prevents click from firing, given that pointerdown has already handled
+                  // adding the character.
+                  function preventDblClick(event: Event) {
+                     event.preventDefault()
+                  }
+                  target.addEventListener('click', preventDblClick, { capture: true, once: true })
+                  defer(() => {
+                     target.removeEventListener('click', preventDblClick)
+                  })
+               }
+
+               if (event.defaultPrevented) {
+                  return
+               }
                navigator.vibrate?.([5, 5])
                const newValue = model?.get() ?? ''
                model?.set(Number(newValue + row.toString()))
             }
+
             return (
                <button
                   class={styles.button}
                   type='button'
                   disabled={disabled}
-                  onClick={handleClick}
+                  onPointerDown={selectChar}
+                  onClick={selectChar}
                >
                   {row}
                </button>
