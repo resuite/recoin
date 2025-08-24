@@ -95,9 +95,9 @@ export function usePopoverContext() {
  *
  *   return (
  *     <div>
- *       <button ref={anchor} onClick={togglePopover}>
+ *       <Button ref={anchor} onClick={togglePopover}>
  *         Open Popover
- *       </button>
+ *       </Button >
  *       <PopoverView
  *         isOpen={popoverIsOpen}
  *         anchor={anchor}
@@ -108,7 +108,7 @@ export function usePopoverContext() {
  *         {() => (
  *           <div class="p-2">
  *             <p>This is the popover content.</p>
- *             <button type="button" onClick={togglePopover}>Close</button>
+ *             <Button type="button" onClick={togglePopover}>Close</Button >
  *           </div>
  *         )}
  *       </PopoverView>

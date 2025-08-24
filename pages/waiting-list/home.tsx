@@ -3,6 +3,7 @@ import { addEmailToWaitingList } from '@/api/modules/waiting-list/client'
 import Arrows from '@/components/icons/svg/arrows'
 import Loader from '@/components/icons/svg/loader'
 import { Coins } from '@/components/illustrations/coins'
+import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/toast'
 import { WaitingListStateScope } from '@/scopes'
 import { defaultError, errorCodeToHumanReadable } from '@/utilities/error-messages'
@@ -69,7 +70,7 @@ function WaitingListHome() {
                   onSubmit--prevent={handleSubmit}
                >
                   <Input model={email} type='email' placeholder='Enter your email' required />
-                  <button
+                  <Button
                      class={[
                         'grid grid-cols-[auto_auto] gap-x-0.25 place-items-center place-content-center',
                         'max-w-fit font-semibold',
@@ -81,7 +82,7 @@ function WaitingListHome() {
                         true: ButtonLoadingStateContent,
                         false: ButtonIdleStateContent
                      })}
-                  </button>
+                  </Button>
                </form>
             </section>
             <div class={['[grid-area:1/2/3/2] grid place-items-center', 'max-md:hidden']}>

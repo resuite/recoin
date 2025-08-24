@@ -1,4 +1,5 @@
 import Arrows from '@/components/icons/svg/arrows'
+import { Button } from '@/components/ui/button'
 import { defer, getFocusableElementInItem } from '@/utilities/miscellaneous'
 import { Cell, For, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
@@ -84,7 +85,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
             }
 
             return (
-               <button
+               <Button
                   class={styles.button}
                   type='button'
                   disabled={disabled}
@@ -92,10 +93,10 @@ export function NumericKeypad(props: NumericKeypadProps) {
                   onClick={selectChar}
                >
                   {row}
-               </button>
+               </Button>
             )
          })}
-         <button
+         <Button
             class={styles.button}
             type='button'
             title='Backspace'
@@ -103,7 +104,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
             disabled={backspaceDisabled}
          >
             <Arrows class={styles.backspaceIcon} />
-         </button>
+         </Button>
       </div>
    )
 }

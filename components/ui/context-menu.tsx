@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import {
    type Alignment,
    PopoverView,
@@ -486,7 +487,7 @@ function ContextMenuAction(props: ContextMenuActionItemProps) {
    }
 
    return (
-      <button
+      <Button
          class={[styles.itemContent, styles.contextMenuActionBtn]}
          type='button'
          disabled={disabled}
@@ -494,7 +495,7 @@ function ContextMenuAction(props: ContextMenuActionItemProps) {
       >
          <ContextMenuOptionalIcon icon={icon} />
          {typeof label === 'string' ? label : label()}
-      </button>
+      </Button>
    )
 }
 
@@ -564,7 +565,7 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
 
    return (
       <>
-         <button
+         <Button
             ref={button}
             class={[styles.itemContent, styles.contextMenuActionBtn]}
             type='button'
@@ -575,7 +576,7 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
             <div class={styles.caretContainer}>
                <DynamicIcon name='caret' class={styles.caret} />
             </div>
-         </button>
+         </Button>
          <ContextMenu
             ref={contextMenu}
             class={[className, styles.submenu]}

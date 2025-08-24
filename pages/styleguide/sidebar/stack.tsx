@@ -1,4 +1,5 @@
 import { Icon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
    type KeyboardVisibilityEvent,
    StackView,
@@ -24,16 +25,16 @@ function FirstPage() {
          {() => (
             <FloatingActionButtonTest class='h-full w-full relative grid place-items-center place-content-center gap-0.5'>
                <h1 class='text-header'>recoin.</h1>
-               <button type='button' onClick={toggleSidebar}>
+               <Button type='button' onClick={toggleSidebar}>
                   Toggle Sidebar
-               </button>
-               <button type='button' onClick={openSheet}>
+               </Button>
+               <Button type='button' onClick={openSheet}>
                   Open Bottom Sheet
-               </button>
-               <button type='button' onClick={toggleSecondPage}>
+               </Button>
+               <Button type='button' onClick={toggleSecondPage}>
                   Next Page
                   <Icon name='caret' direction='right' class='btn-icon' />
-               </button>
+               </Button>
             </FloatingActionButtonTest>
          )}
       </StackView>
@@ -82,14 +83,14 @@ function SecondPage() {
                         <h2 class='text-large'>2</h2>
                         <p>Second page.</p>
                         <br />
-                        <button type='button' onClick={toggleSecondPage}>
+                        <Button type='button' onClick={toggleSecondPage}>
                            <Icon name='caret' direction='left' class='btn-icon' />
                            Go back to page 1
-                        </button>
-                        <button type='button' onClick={toggleThirdPage}>
+                        </Button>
+                        <Button type='button' onClick={toggleThirdPage}>
                            Next Page
                            <Icon name='caret' direction='right' class='btn-icon' />
-                        </button>
+                        </Button>
                      </div>
                      <VirtualKeyboardTrigger class='w-full text-big place-self-end'>
                         <input
@@ -123,14 +124,14 @@ function ThirdPage() {
          {() => (
             <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                <div class='mb-2 text-large'>3</div>
-               <button type='button' onClick={toggleThirdPage}>
+               <Button type='button' onClick={toggleThirdPage}>
                   <Icon name='caret' direction='left' class='btn-icon' />
                   Go back to page 2
-               </button>
-               <button type='button' onClick={toggleFourthPage}>
+               </Button>
+               <Button type='button' onClick={toggleFourthPage}>
                   Next Page
                   <Icon name='caret' direction='right' class='btn-icon' />
-               </button>
+               </Button>
             </div>
          )}
       </StackView>
@@ -149,10 +150,10 @@ function FourthPage() {
          {() => (
             <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                <div class='mb-2 text-large'>4</div>
-               <button type='button' onClick={toggleFourthPage}>
+               <Button type='button' onClick={toggleFourthPage}>
                   <Icon name='caret' direction='left' class='btn-icon' />
                   Go back to page 3
-               </button>
+               </Button>
             </div>
          )}
       </StackView>

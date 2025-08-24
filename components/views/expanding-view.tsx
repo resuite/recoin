@@ -59,7 +59,7 @@ interface ExpandingViewProps extends DivProps {
  *
  *   return (
  *     <div>
- *       <button onClick={() => isOpen.set(!isOpen.get())}>Toggle View</button>
+ *       <Button onClick={() => isOpen.set(!isOpen.get())}>Toggle View</Button >
  *       <ExpandingView isOpen={isOpen} >
  *          {() => <p>This is the expanded content.</p>}
  *       </ExpandingView>

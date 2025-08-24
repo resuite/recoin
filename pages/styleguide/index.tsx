@@ -1,4 +1,5 @@
 import { AllIcons, Icon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import { useRouter } from 'retend/router'
 
 const Styleguide = () => {
@@ -53,20 +54,20 @@ function Buttons() {
       <>
          <h3 class='text-header px-1'>Buttons</h3>
          <div class='grid grid-cols-2 gap-0.5 py-1 px-1'>
-            <button type='button'>Click Me!</button>
-            <button type='button' class='btn-danger'>
+            <Button type='button'>Click Me!</Button>
+            <Button type='button' class='btn-danger'>
                Don't click me!
-            </button>
-            <button type='button' class='btn-outline'>
+            </Button>
+            <Button type='button' class='btn-outline'>
                Click Me
-            </button>
-            <button type='button' class='btn-danger-outline'>
+            </Button>
+            <Button type='button' class='btn-danger-outline'>
                Don't click me either!
-            </button>
-            <button type='button'>
+            </Button>
+            <Button type='button'>
                <Icon name='suitcase' class='btn-icon' />
                Button with icon
-            </button>
+            </Button>
          </div>
       </>
    )

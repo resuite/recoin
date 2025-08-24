@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { QueryControlledBottomSheet } from '@/components/views'
 import { useScopeContext } from 'retend'
 import { Scope } from './scope'
@@ -13,9 +14,9 @@ export function Sheet() {
                <p class='mb-1 text-center'>
                   This is the content of the bottom sheet on the sidebar page.
                </p>
-               <button type='button' onClick={closeSheet}>
+               <Button type='button' onClick={closeSheet}>
                   Close Sheet
-               </button>
+               </Button>
             </div>
          )}
       </QueryControlledBottomSheet>

@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { Cell } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -78,13 +79,13 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
 
    if (!rest.asLink) {
       return (
-         <button
+         <Button
             {...rest}
             data-outlined={isOutlined}
             class={[styles.floatingActionButton, blockClass, inlineClass, rest.class]}
          >
             {props.children}
-         </button>
+         </Button>
       )
    }
 

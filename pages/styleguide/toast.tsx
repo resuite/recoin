@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { ToastProvider, useToast } from '@/components/ui/toast'
 
 const Toast = () => {
@@ -21,12 +22,12 @@ const Toast = () => {
 
             return (
                <div class='h-screen grid place-items-center place-content-center'>
-                  <button type='button' onClick={handleShowSuccessToast}>
+                  <Button type='button' onClick={handleShowSuccessToast}>
                      Show Success
-                  </button>
-                  <button type='button' onClick={handleShowErrorToast}>
+                  </Button>
+                  <Button type='button' onClick={handleShowErrorToast}>
                      Show Persistent Error
-                  </button>
+                  </Button>
                </div>
             )
          }}

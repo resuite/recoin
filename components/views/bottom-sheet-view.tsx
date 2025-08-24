@@ -39,7 +39,7 @@ interface QueryControlledBottomSheetProps extends Omit<BottomSheetProps, 'isOpen
  *
  *   return (
  *     <>
- *       <button onClick={() => isSheetOpen.set(true)}>Open Sheet</button>
+ *       <Button onClick={() => isSheetOpen.set(true)}>Open Sheet</Button >
  *       <BottomSheet
  *         isOpen={isSheetOpen}
  *         onClose={toggleSheet}
@@ -48,7 +48,7 @@ interface QueryControlledBottomSheetProps extends Omit<BottomSheetProps, 'isOpen
  *           <div>
  *             <h3>Sheet Content</h3>
  *             <p>This is some content inside the bottom sheet.</p>
- *             <button onClick={toggleSheet}>Close</button>
+ *             <Button onClick={toggleSheet}>Close</Button >
  *           </div>
  *         )}
  *       </BottomSheet>

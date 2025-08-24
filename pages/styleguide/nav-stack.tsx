@@ -1,4 +1,5 @@
 import { Icon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import { StackView, StackViewGroup } from '@/components/views'
 import { Cell } from 'retend'
 
@@ -29,10 +30,10 @@ function NavStack() {
                {() => (
                   <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                      <div class='mb-2'>1</div>
-                     <button type='button' onClick={openPage2}>
+                     <Button type='button' onClick={openPage2}>
                         Next Page
                         <Icon name='caret' direction='right' class='btn-icon' />
-                     </button>
+                     </Button>
                   </div>
                )}
             </StackView>
@@ -40,14 +41,14 @@ function NavStack() {
                {() => (
                   <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                      <div class='mb-2'>2</div>
-                     <button type='button' onClick={closePage2}>
+                     <Button type='button' onClick={closePage2}>
                         <Icon name='caret' direction='left' class='btn-icon' />
                         Go back to page 1
-                     </button>
-                     <button type='button' onClick={openPage3}>
+                     </Button>
+                     <Button type='button' onClick={openPage3}>
                         Next Page
                         <Icon name='caret' direction='right' class='btn-icon' />
-                     </button>
+                     </Button>
                   </div>
                )}
             </StackView>
@@ -55,10 +56,10 @@ function NavStack() {
                {() => (
                   <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                      <div class='mb-2'>3</div>
-                     <button type='button' onClick={closePage3}>
+                     <Button type='button' onClick={closePage3}>
                         <Icon name='caret' direction='left' class='btn-icon' />
                         Go back to page 2
-                     </button>
+                     </Button>
                   </div>
                )}
             </StackView>

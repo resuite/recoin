@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { type Alignment, PopoverView, type PositionArea } from '@/components/views'
 import { Cell, type SourceCell } from 'retend'
 import { Input } from 'retend-utils/components'
@@ -15,9 +16,9 @@ function PopoverTest() {
 
    return (
       <div class='grid grid-cols-1 place-items-center h-screen'>
-         <button ref={anchorRef} type='button' onClick={togglePopover}>
+         <Button ref={anchorRef} type='button' onClick={togglePopover}>
             Open Popover
-         </button>
+         </Button>
          <div class='grid grid-cols-3 gap-2'>
             <label for='positionArea'>
                <span>Position Area:</span>

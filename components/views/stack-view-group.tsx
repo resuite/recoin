@@ -89,14 +89,14 @@ export function StackViewGroup(props: StackViewGroupProps) {
  *   <StackView root>
  *     {() => (
  *       <div>
- *         <button onClick={toggleNextPageOpenState}>Open Page 2</button>
+ *         <Button onClick={toggleNextPageOpenState}>Open Page 2</Button >
  *       </div>
  *     )}
  *   </StackView>
  *   <StackView isOpen={nextPageIsOpen}>
  *     {() => (
  *       <div>
- *         <button onClick={toggleNextPageOpenState}>Close Page 2</button>
+ *         <Button onClick={toggleNextPageOpenState}>Close Page 2</Button >
  *       </div>
  *     )}
  *   </StackView>

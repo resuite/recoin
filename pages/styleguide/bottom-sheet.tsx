@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { QueryControlledBottomSheet } from '@/components/views'
 import { useRouteQuery } from 'retend/router'
 
@@ -15,17 +16,17 @@ const BottomSheetTest = () => {
 
    return (
       <div class='h-screen grid place-items-center light-scheme rounded-t-3xl'>
-         <button type='button' onClick={openSheet}>
+         <Button type='button' onClick={openSheet}>
             Open Bottom Sheet
-         </button>
+         </Button>
          <QueryControlledBottomSheet class='light-scheme' queryKey={sheetKey}>
             {() => (
                <div class='h-full w-full grid place-items-center place-content-center'>
                   <h2 class='text-header'>Bottom Sheet Content.</h2>
                   <p class='mb-1'>This is the content of the bottom sheet.</p>
-                  <button type='button' onClick={closeSheet}>
+                  <Button type='button' onClick={closeSheet}>
                      Close Sheet
-                  </button>
+                  </Button>
                </div>
             )}
          </QueryControlledBottomSheet>

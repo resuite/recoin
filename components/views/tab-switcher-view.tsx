@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { scrollTimelineFallback } from '@/utilities/scrolling'
 import { Cell, For, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
@@ -198,7 +199,7 @@ function TabHeader(tab: Tab, index: Cell<number>) {
    }
 
    return (
-      <button
+      <Button
          type='button'
          style={style}
          data-tab-heading-index={index}
@@ -207,7 +208,7 @@ function TabHeader(tab: Tab, index: Cell<number>) {
          onClick={handleClick}
       >
          <tab.heading />
-      </button>
+      </Button>
    )
 }
 

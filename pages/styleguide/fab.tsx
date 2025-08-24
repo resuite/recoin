@@ -1,4 +1,5 @@
 import { Icon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { ExpandingView, usePullToRefreshContext, useSidebarContext } from '@/components/views'
 import { vibrate } from '@/utilities/miscellaneous'
@@ -86,13 +87,13 @@ const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }
                         hello recoin!
                      </div>
                   </div>
-                  <button
+                  <Button
                      type='button'
                      class='animate-fade-in animate-delay-bit-slower'
                      onClick={toggleButtonState}
                   >
                      Toggle Button state.
-                  </button>
+                  </Button>
                </>
             )}
          </ExpandingView>

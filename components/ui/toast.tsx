@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { defer } from '@/utilities/miscellaneous'
 import { Cell, For, createScope, useObserver, useScopeContext } from 'retend'
 import { useIntersectionObserver } from 'retend-utils/hooks'
@@ -190,9 +191,9 @@ function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
             onKeyDown={handleClick}
          >
             <div>{content}</div>
-            <button type='button' class={styles.toastCloseButton} onClick={closeToast}>
+            <Button type='button' class={styles.toastCloseButton} onClick={closeToast}>
                <Add class={styles.toastCloseButtonIcon} />
-            </button>
+            </Button>
          </dialog>
          <div ref={rightDismissMarkerRef} class={styles.toastDismissMarker} />
       </div>
@@ -230,8 +231,8 @@ function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
  *
  *   return (
  *     <div>
- *       <button onClick={handleShowSuccessToast}>Show Success</button>
- *       <button onClick={handleShowErrorToast}>Show Persistent Error</button>
+ *       <Button onClick={handleShowSuccessToast}>Show Success</Button >
+ *       <Button onClick={handleShowErrorToast}>Show Persistent Error</Button >
  *     </div>
  *   )
  * }
