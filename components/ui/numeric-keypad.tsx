@@ -1,6 +1,6 @@
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
-import { defer, getFocusableElementInItem } from '@/utilities/miscellaneous'
+import { defer } from '@/utilities/miscellaneous'
 import { Cell, For, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -9,7 +9,7 @@ import styles from './numeric-keypad.module.css'
 type DivProps = JSX.IntrinsicElements['div']
 
 interface NumericKeypadProps extends DivProps {
-   model?: SourceCell<number | null>
+   model?: SourceCell<string | null>
    disabled?: JSX.ValueOrCell<boolean>
    ref?: SourceCell<HTMLDivElement | null>
 }
@@ -32,7 +32,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
       if (newValue.length === 1) {
          model?.set(null)
       } else {
-         model?.set(Number(newValue.slice(0, -1)))
+         model?.set(newValue.slice(0, -1))
       }
    }
 
@@ -49,25 +49,36 @@ export function NumericKeypad(props: NumericKeypadProps) {
       if (!Number.isNaN(number)) {
          navigator.vibrate?.([5, 5])
          const newValue = model?.get() ?? ''
-         model?.set(Number(newValue + number.toString()))
+         model?.set(newValue + number.toString())
       } else if (event.key === 'Backspace') {
          handleBackspace()
       }
    }
 
-   observer.onConnected(ref, (div) => {
-      getFocusableElementInItem(div)?.focus()
+   observer.onConnected(ref, () => {
+      window.addEventListener('keydown', handleKeydown)
+      return () => {
+         window.removeEventListener('keydown', handleKeydown)
+      }
+   })
+
+   disabled.listen((disabled) => {
+      if (disabled) {
+         window.removeEventListener('keydown', handleKeydown)
+      } else {
+         window.addEventListener('keydown', handleKeydown)
+      }
    })
 
    return (
-      <div {...rest} ref={ref} class={[styles.keypad, rest.class]} onKeyDown={handleKeydown}>
+      <div {...rest} ref={ref} class={[styles.keypad, rest.class]}>
          {For(keys, (row) => {
             const selectChar = (event: Event) => {
                const target = event.currentTarget as HTMLButtonElement
                if (event.type === 'pointerdown') {
                   // Prevents click from firing, given that pointerdown has already handled
                   // adding the character.
-                  function preventDblClick(event: Event) {
+                  const preventDblClick = (event: Event) => {
                      event.preventDefault()
                   }
                   target.addEventListener('click', preventDblClick, { capture: true, once: true })
@@ -81,7 +92,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
                }
                navigator.vibrate?.([5, 5])
                const newValue = model?.get() ?? ''
-               model?.set(Number(newValue + row.toString()))
+               model?.set(newValue + row.toString())
             }
 
             return (
