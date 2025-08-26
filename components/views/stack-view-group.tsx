@@ -1,16 +1,31 @@
-import { defer } from '@/utilities/miscellaneous'
+import { animationsSettled } from '@/utilities/animations'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
-import { Cell, If, type SourceCell, useObserver } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
+import { Cell, If, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
+import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './stack-view-group.module.css'
+
+// --- Constants ---
+
+const ANIMATION_KEYFRAMES = [
+   {
+      '--stack-view-group-pull-progress': 1
+   },
+   {
+      '--stack-view-group-pull-progress': 0
+   }
+]
+const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' }
+
+// --- Types & Interfaces ---
 
 type DivProps = JSX.IntrinsicElements['div']
 
 export interface StackViewGroupProps extends DivProps {
    ref?: SourceCell<HTMLElement | null>
 }
+
 /**
  * Props for the StackView component.
  */
@@ -48,6 +63,42 @@ export interface StackViewProps extends DivProps {
     */
    onCloseRequested?: () => void
 }
+
+interface StackViewContext {
+   useFocusEffect: (ref: Cell<Node | null>, effect: () => () => void) => void
+}
+
+// --- Custom Events ---
+
+export class StackViewToggleEvent extends Event {
+   static eventName = '__stackviewtoggle'
+
+   constructor() {
+      super(StackViewToggleEvent.eventName, { bubbles: false })
+   }
+}
+
+export class StackViewFocusEvent extends Event {
+   static eventName = '__stackviewfocus'
+
+   constructor() {
+      super(StackViewFocusEvent.eventName, { bubbles: false, composed: false })
+   }
+}
+
+export class StackViewBlurEvent extends Event {
+   static eventName = '__stackviewblur'
+
+   constructor() {
+      super(StackViewBlurEvent.eventName, { bubbles: false, composed: false })
+   }
+}
+
+// --- Context & Scope ---
+
+const StackViewScope = createScope<StackViewContext>()
+
+// --- Components ---
 
 /**
  * Provides a container for `StackView` components, establishing the layout for a stack-based navigation.
@@ -119,10 +170,11 @@ export function StackView(props: StackViewProps) {
    const canSwipe = useDerivedValue(canSwipeProp)
    const observer = useObserver()
    const contentLoaded = Cell.source(root || isOpen.get())
+   let stackGroupElement: HTMLElement | null = null
 
    let stackWidth: number | null = null
    let animation: Animation | null = null
-   let stackGroupElement: HTMLElement | null = null
+   let viewOutOfViewport = false
 
    const startDragging = (event: PointerEvent) => {
       if (!stackGroupElement) {
@@ -160,81 +212,144 @@ export function StackView(props: StackViewProps) {
       animation = null
    }
 
-   let intersectObserver: IntersectionObserver
-   let viewOutOfViewport = false
-   const callback: IntersectionObserverCallback = ([entry]) => {
-      if (!entry) {
-         return
+   const handleToggle = () => {
+      const container = containerRef.peek()
+      const isFocusedView = container?.matches(':nth-last-child(1 of [data-open])')
+      const isBlurredView = container?.matches(':nth-last-child(2 of [data-open])')
+
+      if (isFocusedView) {
+         container?.dispatchEvent(new StackViewFocusEvent())
+      } else if (isBlurredView) {
+         container?.dispatchEvent(new StackViewBlurEvent())
       }
-      viewOutOfViewport = !entry.isIntersecting
    }
+
+   const context: StackViewContext = {
+      useFocusEffect: (ref, effect) => {
+         observer.onConnected(ref, () => {
+            const container = containerRef.peek()
+            const runEffect = () => {
+               const cleanup = effect()
+               if (cleanup) {
+                  container?.addEventListener(StackViewBlurEvent.eventName, cleanup, { once: true })
+               }
+            }
+            if (container?.isConnected) {
+               runEffect()
+            }
+            container?.addEventListener(StackViewFocusEvent.eventName, runEffect)
+            return () => {
+               container?.removeEventListener(StackViewFocusEvent.eventName, runEffect)
+            }
+         })
+      }
+   }
+
+   useIntersectionObserver(
+      containerRef,
+      ([entry]) => {
+         viewOutOfViewport = !entry.isIntersecting
+      },
+      () => ({ root: stackGroupElement, threshold: 0.6 })
+   )
+
    observer.onConnected(containerRef, (element) => {
       stackGroupElement = getStackGroupElement(element)
       if (!stackGroupElement) {
          return
       }
 
-      const options = { root: stackGroupElement, threshold: 0.6 }
-      intersectObserver = new IntersectionObserver(callback, options)
-      intersectObserver.observe(element)
+      stackGroupElement.addEventListener(StackViewToggleEvent.eventName, handleToggle)
+
+      if (element.matches(':nth-last-child(1 of [data-open])')) {
+         stackGroupElement.dispatchEvent(new StackViewToggleEvent())
+      }
+
       return () => {
-         intersectObserver.disconnect()
+         stackGroupElement?.removeEventListener(StackViewToggleEvent.eventName, handleToggle)
       }
    })
 
    // Close and dispose hidden views.
-   isOpen.listen((viewIsOpen) => {
-      if (viewIsOpen) {
-         contentLoaded.set(true)
-         return
-      }
-      // Deferred till next event loop cycle so that the
-      // needed animations can be collected.
-      defer(async () => {
+   isOpen.listen(
+      async (viewIsOpen) => {
+         stackGroupElement?.dispatchEvent(new StackViewToggleEvent())
+
+         if (viewIsOpen) {
+            contentLoaded.set(true)
+            return
+         }
+
          const container = containerRef.get()
          if (!container) {
             return
          }
-         const closingViewTransitions = container.getAnimations()
-         await Promise.allSettled(
-            closingViewTransitions.map((c) => {
-               return c.finished
-            })
-         )
-         // We need to check again, in case the transition and closing
-         // was cancelled.
+
+         await animationsSettled(container)
          if (!isOpen.get()) {
             contentLoaded.set(false)
          }
-      })
-   })
+      },
+      { priority: -1 } // set so it runs after editing the DOM.
+   )
 
    return (
-      <div
-         {...rest}
-         ref={containerRef}
-         data-open={root || isOpen}
-         class={[styles.stackViewGroupView, rest.class]}
-      >
-         {If(children, (content) => {
-            return If(contentLoaded, content)
-         })}
-         {If(canSwipe, () => {
-            return <div class={styles.stackViewGroupViewPullHandle} onPointerDown={startDragging} />
-         })}
-      </div>
+      <StackViewScope.Provider value={context}>
+         {() => (
+            <div
+               {...rest}
+               ref={containerRef}
+               data-open={root || isOpen}
+               class={[styles.stackViewGroupView, rest.class]}
+            >
+               {If(children, (content) => {
+                  return If(contentLoaded, content)
+               })}
+               {If(canSwipe, () => {
+                  return (
+                     <div
+                        class={styles.stackViewGroupViewPullHandle}
+                        onPointerDown={startDragging}
+                     />
+                  )
+               })}
+            </div>
+         )}
+      </StackViewScope.Provider>
    )
 }
 
-const ANIMATION_KEYFRAMES = [
-   {
-      '--stack-view-group-pull-progress': 1
-   },
-   {
-      '--stack-view-group-pull-progress': 0
-   }
-]
-const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' }
+// --- Hooks ---
+
+/**
+ * Runs an effect when the parent `StackView` becomes the focused (topmost) view.
+ * The effect can return a cleanup function that runs when the view loses focus.
+ *
+ * @param ref - A `Cell` pointing to a DOM node to which the effect's lifecycle is tied.
+ * @param effect - The function to run on focus. Can return a cleanup function to run on blur.
+ * @example
+ * ```tsx
+ * function MyComponentInAStackView() {
+ *   const ref = Cell.source<HTMLDivElement | null>(null)
+ *
+ *   useStackViewFocusEffect(ref, () => {
+ *     console.log('View is focused');
+ *
+ *     return () => {
+ *       console.log('View is blurred');
+ *     };
+ *   });
+ *
+ *   return <div ref={ref}>My Component</div>;
+ * }
+ * ```
+ */
+export const useStackViewFocusEffect = (ref: Cell<Node | null>, effect: () => () => void) => {
+   const { useFocusEffect } = useScopeContext(StackViewScope)
+   useFocusEffect(ref, effect)
+}
+
+// --- Helper Functions ---
 
 function getStackGroupElement(element: HTMLElement | null): HTMLElement | null {
    const stack = element?.parentElement?.parentElement
