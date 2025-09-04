@@ -8,11 +8,10 @@ import { AuthenticationScope } from './scope'
 export function LockScreenContent() {
    const { add: goToAuthPage } = useRouteQueryControl('authenticated')
    const { logIn } = useScopeContext(AuthenticationScope)
-   const ref = Cell.source<HTMLElement | null>(null)
-   const keypadEnabled = Cell.source(true)
+   const keypadEnabled = Cell.source(false)
    const keypadDisabled = Cell.derived(() => !keypadEnabled.get())
 
-   useStackViewFocusEffect(ref, () => {
+   useStackViewFocusEffect(() => {
       keypadEnabled.set(true)
       return () => {
          keypadEnabled.set(false)
@@ -20,7 +19,7 @@ export function LockScreenContent() {
    })
 
    return (
-      <div ref={ref} class='h-screen grid place-content-center place-items-center gap-3'>
+      <div class='h-screen grid place-content-center place-items-center gap-3'>
          <div class='grid place-items-center'>
             <RecoinBaseIcon class='w-2.5' />
             <h2 class='text-header'>Enter Pin to continue</h2>

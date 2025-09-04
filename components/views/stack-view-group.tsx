@@ -1,7 +1,16 @@
 import { animationsSettled } from '@/utilities/animations'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
-import { Cell, If, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
+import {
+   Cell,
+   If,
+   type SetupFn,
+   type SourceCell,
+   createScope,
+   useObserver,
+   useScopeContext,
+   useSetupEffect
+} from 'retend'
 import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './stack-view-group.module.css'
@@ -17,6 +26,7 @@ const ANIMATION_KEYFRAMES = [
    }
 ]
 const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' }
+const FOCUSED = ':nth-last-child(1 of [data-open])'
 
 // --- Types & Interfaces ---
 
@@ -65,7 +75,7 @@ export interface StackViewProps extends DivProps {
 }
 
 interface StackViewContext {
-   useFocusEffect: (ref: Cell<Node | null>, effect: () => () => void) => void
+   useFocusEffect: (effect: SetupFn) => void
 }
 
 // --- Custom Events ---
@@ -108,7 +118,29 @@ const StackViewScope = createScope<StackViewContext>()
  * @returns A JSX element representing the navigation stack container.
  */
 export function StackViewGroup(props: StackViewGroupProps) {
+   const observer = useObserver()
    const { children, ref = Cell.source<HTMLElement | null>(null), ...rest } = props
+
+   const handleToggleEvent = (event: Event) => {
+      const target = event.currentTarget as HTMLElement
+      for (const child of target.firstElementChild?.children ?? []) {
+         const isFocusedView = child.matches(FOCUSED)
+         const isBlurredView = child.matches(':nth-last-child(2 of [data-open])')
+
+         if (isFocusedView) {
+            child.dispatchEvent(new StackViewFocusEvent())
+         } else if (isBlurredView) {
+            child.dispatchEvent(new StackViewBlurEvent())
+         }
+      }
+   }
+
+   observer.onConnected(ref, (div) => {
+      div.addEventListener(StackViewToggleEvent.eventName, handleToggleEvent)
+      return () => {
+         div.removeEventListener(StackViewToggleEvent.eventName, handleToggleEvent)
+      }
+   })
 
    return (
       <div {...rest} ref={ref} draggable='false' class={[styles.stackViewGroup, rest.class]}>
@@ -170,6 +202,8 @@ export function StackView(props: StackViewProps) {
    const canSwipe = useDerivedValue(canSwipeProp)
    const observer = useObserver()
    const contentLoaded = Cell.source(root || isOpen.get())
+   const focusEffects = new Set<SetupFn>()
+   const blurCallbacks = new Map<SetupFn, () => void>()
    let stackGroupElement: HTMLElement | null = null
 
    let stackWidth: number | null = null
@@ -212,34 +246,38 @@ export function StackView(props: StackViewProps) {
       animation = null
    }
 
-   const handleToggle = () => {
-      const container = containerRef.peek()
-      const isFocusedView = container?.matches(':nth-last-child(1 of [data-open])')
-      const isBlurredView = container?.matches(':nth-last-child(2 of [data-open])')
-
-      if (isFocusedView) {
-         container?.dispatchEvent(new StackViewFocusEvent())
-      } else if (isBlurredView) {
-         container?.dispatchEvent(new StackViewBlurEvent())
+   const triggerFocusEffect = (effect: SetupFn) => {
+      const cleanup = effect()
+      if (cleanup) {
+         blurCallbacks.set(effect, cleanup)
       }
    }
 
+   const handleFocusEvent = () => {
+      for (const effect of focusEffects) {
+         triggerFocusEffect(effect)
+      }
+   }
+
+   const handleBlurEvent = () => {
+      for (const cleanup of blurCallbacks.values()) {
+         cleanup()
+      }
+      blurCallbacks.clear()
+   }
+
    const context: StackViewContext = {
-      useFocusEffect: (ref, effect) => {
-         observer.onConnected(ref, () => {
-            const container = containerRef.peek()
-            const runEffect = () => {
-               const cleanup = effect()
-               if (cleanup) {
-                  container?.addEventListener(StackViewBlurEvent.eventName, cleanup, { once: true })
-               }
+      useFocusEffect: (effect) => {
+         useSetupEffect(() => {
+            const container = containerRef.get()
+            if (container?.matches(FOCUSED)) {
+               triggerFocusEffect(effect)
             }
-            if (container?.isConnected) {
-               runEffect()
-            }
-            container?.addEventListener(StackViewFocusEvent.eventName, runEffect)
+            focusEffects.add(effect)
+
             return () => {
-               container?.removeEventListener(StackViewFocusEvent.eventName, runEffect)
+               focusEffects.delete(effect)
+               blurCallbacks.delete(effect)
             }
          })
       }
@@ -258,15 +296,11 @@ export function StackView(props: StackViewProps) {
       if (!stackGroupElement) {
          return
       }
+      element.addEventListener(StackViewFocusEvent.eventName, handleFocusEvent)
+      element.addEventListener(StackViewBlurEvent.eventName, handleBlurEvent)
 
-      stackGroupElement.addEventListener(StackViewToggleEvent.eventName, handleToggle)
-
-      if (element.matches(':nth-last-child(1 of [data-open])')) {
-         stackGroupElement.dispatchEvent(new StackViewToggleEvent())
-      }
-
-      return () => {
-         stackGroupElement?.removeEventListener(StackViewToggleEvent.eventName, handleToggle)
+      if (isOpen.get() && element.matches(FOCUSED)) {
+         element.dispatchEvent(new StackViewFocusEvent())
       }
    })
 
@@ -325,14 +359,11 @@ export function StackView(props: StackViewProps) {
  * Runs an effect when the parent `StackView` becomes the focused (topmost) view.
  * The effect can return a cleanup function that runs when the view loses focus.
  *
- * @param ref - A `Cell` pointing to a DOM node to which the effect's lifecycle is tied.
  * @param effect - The function to run on focus. Can return a cleanup function to run on blur.
  * @example
  * ```tsx
  * function MyComponentInAStackView() {
- *   const ref = Cell.source<HTMLDivElement | null>(null)
- *
- *   useStackViewFocusEffect(ref, () => {
+ *   useStackViewFocusEffect(() => {
  *     console.log('View is focused');
  *
  *     return () => {
@@ -340,13 +371,13 @@ export function StackView(props: StackViewProps) {
  *     };
  *   });
  *
- *   return <div ref={ref}>My Component</div>;
+ *   return <div>My Component</div>;
  * }
  * ```
  */
-export const useStackViewFocusEffect = (ref: Cell<Node | null>, effect: () => () => void) => {
+export const useStackViewFocusEffect = (effect: () => () => void) => {
    const { useFocusEffect } = useScopeContext(StackViewScope)
-   useFocusEffect(ref, effect)
+   useFocusEffect(effect)
 }
 
 // --- Helper Functions ---

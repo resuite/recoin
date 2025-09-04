@@ -6,6 +6,7 @@
 
 .pullZone {
    --pull-progress: calc(var(--pull-zone-scroll-top) * (13 / 2));
+   position: relative;
    overflow: hidden;
 
    &.pullZoneCanPull,
@@ -73,7 +74,11 @@
 }
 
 .pullZoneContentTopMarker {
+   position: absolute;
+   top: calc(35% + 0.25rem);
+   left: 0;
    width: 100%;
    height: 0.25rem;
+   z-index: 99;
    pointer-events: none;
 }

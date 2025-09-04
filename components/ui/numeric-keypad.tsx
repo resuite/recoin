@@ -1,7 +1,7 @@
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
 import { defer } from '@/utilities/miscellaneous'
-import { Cell, For, type SourceCell, useObserver } from 'retend'
+import { Cell, For, type SourceCell, useSetupEffect } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './numeric-keypad.module.css'
@@ -11,12 +11,10 @@ type DivProps = JSX.IntrinsicElements['div']
 interface NumericKeypadProps extends DivProps {
    model?: SourceCell<string | null>
    disabled?: JSX.ValueOrCell<boolean>
-   ref?: SourceCell<HTMLDivElement | null>
 }
 
 export function NumericKeypad(props: NumericKeypadProps) {
-   const { model, disabled: disabledProp, ref = Cell.source(null), ...rest } = props
-   const observer = useObserver()
+   const { model, disabled: disabledProp, ...rest } = props
    const disabled = useDerivedValue(disabledProp)
    const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', '0']
 
@@ -55,8 +53,10 @@ export function NumericKeypad(props: NumericKeypadProps) {
       }
    }
 
-   observer.onConnected(ref, () => {
-      window.addEventListener('keydown', handleKeydown)
+   useSetupEffect(() => {
+      if (!disabled.get()) {
+         window.addEventListener('keydown', handleKeydown)
+      }
       return () => {
          window.removeEventListener('keydown', handleKeydown)
       }
@@ -71,7 +71,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
    })
 
    return (
-      <div {...rest} ref={ref} class={[styles.keypad, rest.class]}>
+      <div {...rest} class={[styles.keypad, rest.class]}>
          {For(keys, (row) => {
             const selectChar = (event: Event) => {
                const target = event.currentTarget as HTMLButtonElement

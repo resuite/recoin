@@ -1,4 +1,11 @@
-import { Cell, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
+import {
+   Cell,
+   type SourceCell,
+   createScope,
+   useObserver,
+   useScopeContext,
+   useSetupEffect
+} from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './virtual-keyboard-aware-view.module.css'
 
@@ -33,7 +40,7 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
 
 export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    const { children, ref: containerRef = Cell.source(null), onFocusOut, ...rest } = props
-   const observer = useObserver()
+
    const currentVisualHeight = Cell.source(0)
    const redirectingFocus = Cell.source(false)
    let oldHeight = 0
@@ -95,7 +102,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       window.scrollTo(0, 0)
    }
 
-   observer.onConnected(containerRef, () => {
+   useSetupEffect(() => {
       currentVisualHeight.set(window.visualViewport?.height ?? innerHeight)
       oldHeight = currentVisualHeight.get()
       updateHeight()

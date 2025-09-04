@@ -300,7 +300,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
          reachedTop.set(entry.isIntersecting)
       },
       () => {
-         return { root: pullZoneRef.peek(), threshold: 0.9 }
+         return { root: pullZoneRef.peek(), threshold: 0.95 }
       }
    )
 
@@ -339,11 +339,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
             <div
                {...rest}
                ref={pullZoneRef}
-               class={[
-                  styles.pullZone,
-                  { [styles.pullZoneCanPull as string]: canPull },
-                  rest.class
-               ]}
+               class={[styles.pullZone, { [styles.pullZoneCanPull]: canPull }, rest.class]}
             >
                <div ref={scrollContainerRef} class={styles.pullZoneScrollContainer}>
                   <div ref={thresholdMarkerRef} />

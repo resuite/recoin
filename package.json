@@ -15,8 +15,8 @@
    },
    "devDependencies": {
       "@biomejs/biome": "1.9.4",
-      "@cloudflare/vite-plugin": "^1.9.4",
-      "@cloudflare/workers-types": "^4.20250712.0",
+      "@cloudflare/vite-plugin": "^1.12.2",
+      "@cloudflare/workers-types": "^4.20250904.0",
       "@tailwindcss/vite": "^4.1.5",
       "@types/node": "^22.15.29",
       "@typescript/native-preview": "7.0.0-dev.20250608.1",
@@ -26,7 +26,7 @@
       "postcss": "^8.5.6",
       "postcss-nesting": "^13.0.2",
       "tailwindcss": "^4.1.8",
-      "vite": "npm:rolldown-vite@latest",
+      "vite": "npm:rolldown-vite@^7.1.5",
       "vite-css-modules": "^1.10.0",
       "vite-plugin-pwa": "^1.0.0",
       "wrangler": "^4.24.3"
@@ -36,9 +36,9 @@
       "bowser": "^2.11.0",
       "hono": "^4.7.11",
       "hotkeys-js": "^3.13.15",
-      "retend": "https://pkg.pr.new/resuite/retend@d88d54e",
-      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@d88d54e",
-      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@d88d54e",
+      "retend": "https://pkg.pr.new/resuite/retend@50a2770",
+      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@50a2770",
+      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@50a2770",
       "zod": "^3.25.46"
    },
    "lint-staged": {

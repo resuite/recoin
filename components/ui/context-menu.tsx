@@ -9,13 +9,7 @@ import {
    polyfillTouchContextMenuEvent,
    removeTouchContextMenuEventPolyfill
 } from '@/utilities/contextmenu-event-ios-polyfill'
-import {
-   clamp,
-   defer,
-   getFocusableElementInItem,
-   useDocumentVisibility,
-   usePointerPosition
-} from '@/utilities/miscellaneous'
+import { clamp, defer, getFocusableElementInItem } from '@/utilities/miscellaneous'
 import {
    Cell,
    For,
@@ -24,9 +18,10 @@ import {
    Switch,
    createScope,
    useObserver,
-   useScopeContext
+   useScopeContext,
+   useSetupEffect
 } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
+import { useCursorPosition, useDerivedValue, useDocumentVisibility } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { Teleport } from 'retend/teleport'
 import { DynamicIcon, type IconName } from '../icons'
@@ -254,8 +249,8 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
       ...rest
    } = props
    const observer = useObserver()
-   const cursorCoordinates = usePointerPosition()
-   const documentIsVisible = useDocumentVisibility()
+   const cursorCoordinates = useCursorPosition()
+   const docVisibility = useDocumentVisibility()
    const items = useDerivedValue(itemsProp)
    const positionArea = useDerivedValue(positionAreaProp)
    const alignSelf = useDerivedValue(alignSelfProp)
@@ -274,7 +269,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
    })
 
    const isOpen = Cell.derived(() => {
-      return menuShouldBeOpen.get() && documentIsVisible.get()
+      return menuShouldBeOpen.get() && docVisibility.get() === 'visible'
    })
 
    const anchorStyle = Cell.derived(() => {
@@ -554,13 +549,11 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
       trigger.set(button.parentElement as HTMLLIElement)
    })
 
-   contextMenu.listen(() => {
-      observer.onConnected(contextMenu, () => {
-         subMenus.add(contextMenu)
-         return () => {
-            subMenus.delete(contextMenu)
-         }
-      })
+   useSetupEffect(() => {
+      subMenus.add(contextMenu)
+      return () => {
+         subMenus.delete(contextMenu)
+      }
    })
 
    return (

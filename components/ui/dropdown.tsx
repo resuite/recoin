@@ -1,5 +1,5 @@
 import { getFocusableElementInItem } from '@/utilities/miscellaneous'
-import { Cell, For, If, type SourceCell, useObserver } from 'retend'
+import { Cell, For, If, type SourceCell, useObserver, useSetupEffect } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import Caret from '../icons/svg/caret'
@@ -136,7 +136,7 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
       }
    })
 
-   observer.onConnected(select, () => {
+   useSetupEffect(() => {
       return () => {
          document.removeEventListener('keydown', handleKeydown)
       }
