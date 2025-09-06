@@ -41,7 +41,7 @@ export interface PartitionOptions {
  *
  * @example
  * // For a variable that goes 0-1, create 3 partitions
- * const [first, second, third] = createPartitions('var(--progress)', 3);
+ * const [first, second, third] = createPartitions('var(--progress)', { count: 3 });
  * // Returns calc expressions where:
  * // - first: 0 → 1 when --progress goes 0 → 0.3333
  * // - second: 0 → 1 when --progress goes 0.3333 → 0.667

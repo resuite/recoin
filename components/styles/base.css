@@ -160,9 +160,10 @@ body {
       }
    }
 
-   a {
-      @apply grid py-0.75 border-b-2 w-full;
-      @apply has-[.link-icon]:flex has-[.link-icon]:items-center has-[.link-icon]:gap-0.125;
+   a,
+   .btn-link {
+      @apply grid py-0.75 border-b-2 w-full bg-transparent text-canvas-text;
+      @apply has-[.link-icon,.link-icon-large]:flex has-[.link-icon,.link-icon-large]:items-center has-[.link-icon,.link-icon-large]:gap-0.125;
    }
 }
 
@@ -277,6 +278,11 @@ body {
    @apply bg-transparent text-canvas-text border-canvas-text;
 }
 
+@utility btn-link {
+   @apply px-0 border-0 border-b-2 border-canvas-text rounded-none [font-size:inherit];
+   @apply active:scale-100;
+}
+
 @utility btn-danger-outline {
    @apply text-amaranth bg-transparent border-3 border-amaranth;
 }
@@ -287,6 +293,10 @@ body {
 
 @utility link-icon {
    @apply w-1 h-1;
+}
+
+@utility link-icon-large {
+   @apply w-1.5 h-1.5;
 }
 
 @utility link-bare {

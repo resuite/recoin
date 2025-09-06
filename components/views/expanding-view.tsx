@@ -1,4 +1,4 @@
-import { defer } from '@/utilities/miscellaneous'
+import { animationsSettled } from '@/utilities/animations'
 import { Cell, If } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -79,31 +79,19 @@ export function ExpandingView(props: ExpandingViewProps) {
       '--expand-color': expandColor
    }
 
-   isOpen.listen((viewIsOpen) => {
-      if (viewIsOpen) {
-         contentLoaded.set(true)
-         return
-      }
-      // Deferred till next event loop cycle so that the
-      // needed animations can be collected.
-      defer(async () => {
-         const clipPath = clipPathRef.get()
-         if (!clipPath) {
+   isOpen.listen(
+      async (viewIsOpen) => {
+         await animationsSettled(clipPathRef)
+         if (viewIsOpen) {
+            contentLoaded.set(true)
             return
          }
-         const closingViewTransitions = clipPath.getAnimations()
-         await Promise.allSettled(
-            closingViewTransitions.map((c) => {
-               return c.finished
-            })
-         )
-         // We need to check again, in case the transition and closing
-         // was cancelled.
          if (!isOpen.get()) {
             contentLoaded.set(false)
          }
-      })
-   })
+      },
+      { priority: -1 }
+   )
 
    return (
       <div class={styles.container} style={style}>

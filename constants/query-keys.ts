@@ -1,4 +1,4 @@
-export const QUERY_KEYS = {
+export const QueryKeys = {
    TransactionFlow: {
       _root: 'TransactionFlow',
       Type: 'TransactionFlow.Type'

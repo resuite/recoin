@@ -8,7 +8,7 @@ const Loading = () => {
    useSetupEffect(() => {
       const timeoutId = setTimeout(() => {
          logIn()
-      }, 1000)
+      }, 200)
 
       return () => {
          clearTimeout(timeoutId)

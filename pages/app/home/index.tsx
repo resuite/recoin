@@ -9,14 +9,14 @@ const Home = () => {
    const goToStyleguide = () => {}
 
    return (
-      <>
+      <div class='grid grid-rows-[auto_1fr] translate-0 h-full'>
          <Header />
-         <div class='grid place-items-center place-content-center'>
+         <main class='grid place-items-center place-content-center'>
             <Button onClick={goToStyleguide}>Go to styleguide</Button>
             <Button onClick={logOut}>Log Out</Button>
-         </div>
+         </main>
          <AddNewTransactionButton />
-      </>
+      </div>
    )
 }
 

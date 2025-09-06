@@ -7,27 +7,27 @@
    grid-template-columns: 100% 100%;
 
    &[data-changed] {
-      .nextView {
+      & > .nextView {
          transition-delay: var(--speed-default);
       }
    }
 
    &:not([data-changed]) {
-      .previousView {
+      & > .previousView {
          transition-delay: var(--speed-default);
       }
    }
 
    &[data-transition="slide-up"] {
       &:not([data-changed]) {
-         .nextView {
+         & > .nextView {
             translate: 0 100dvh;
             opacity: 30%;
          }
       }
 
       &[data-changed] {
-         .previousView {
+         & > .previousView {
             opacity: 30%;
             scale: 0.4;
          }
@@ -36,14 +36,14 @@
 
    &[data-transition="slide-down"] {
       &:not([data-changed]) {
-         .nextView {
+         & > .nextView {
             translate: 0 -100dvh;
             opacity: 30%;
          }
       }
 
       &[data-changed] {
-         .previousView {
+         & > .previousView {
             opacity: 30%;
             scale: 0.4;
          }
@@ -52,24 +52,24 @@
 
    &[data-transition="fade-in"] {
       &:not([data-changed]) {
-         .nextView {
+         & > .nextView {
             pointer-events: none;
             opacity: 0%;
-            scale: 1.25;
+            scale: 1.05;
          }
       }
 
       &[data-changed] {
-         .previousView {
-            opacity: 30%;
-            scale: 0.4;
+         & > .previousView {
+            opacity: 0%;
+            scale: 0.75;
          }
       }
    }
 
    &[data-transition="fade-out"] {
       &:not([data-changed]) {
-         .nextView {
+         & > .nextView {
             pointer-events: none;
             opacity: 0%;
             scale: 0.75;
@@ -77,9 +77,26 @@
       }
 
       &[data-changed] {
-         .previousView {
+         & > .previousView {
             opacity: 30%;
             scale: 1.75;
+         }
+      }
+   }
+
+   &[data-transition="blink"] {
+      &:not([data-changed]) {
+         & > .nextView {
+            pointer-events: none;
+            opacity: 0%;
+            scale: 0.97;
+         }
+      }
+
+      &[data-changed] {
+         & > .previousView {
+            opacity: 0%;
+            scale: 0.97;
          }
       }
    }
@@ -91,7 +108,7 @@
    grid-template-columns: 1fr;
    grid-area: 1 / 1;
 
-   transition-duration: var(--speed-device);
+   transition-duration: var(--full-screen-transition-speed);
    transition-property: opacity, translate, scale;
    transition-timing-function: var(--timing);
 }

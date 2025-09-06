@@ -4,7 +4,8 @@ import { defer } from '@/utilities/miscellaneous'
 import { useRouteQuery, useRouter } from 'retend/router'
 import { defaultError, errorCodeToHumanReadable } from './error-messages'
 
-export function useRouteQueryControl(key: string, value = 'true') {
+export function useRouteQueryControl(_key: string | { _root: string }, value = 'true') {
+   const key = typeof _key === 'string' ? _key : _key._root
    const query = useRouteQuery()
    const router = useRouter()
    const current = router.getCurrentRoute()

@@ -4,7 +4,8 @@ import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './full-screen-transition-view.module.css'
 
-type FullScreenTransition = 'slide-up' | 'slide-down' | 'fade-in' | 'fade-out'
+type FullScreenTransition = 'slide-up' | 'slide-down' | 'fade-in' | 'fade-out' | 'blink'
+type TransitionSpeed = 'default' | 'fast' | 'device' | 'slow'
 type DivProps = JSX.IntrinsicElements['div']
 
 /**
@@ -29,6 +30,11 @@ interface FullScreenTransitionViewProps extends DivProps {
     * @default 'slide-up'
     */
    transition?: JSX.ValueOrCell<FullScreenTransition>
+   /**
+    * How long the transition should take.
+    * @default '--speed-device'
+    */
+   speed?: JSX.ValueOrCell<TransitionSpeed>
 }
 
 /**
@@ -49,6 +55,7 @@ interface FullScreenTransitionViewProps extends DivProps {
  *   from={() => <HomePage />}
  *   to={() => <SettingsPage />}
  *   transition="slide-up"
+ *   speed="device"
  * />
  * ```
  */
@@ -58,13 +65,19 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
       from: current,
       to: next,
       transition: transitionProp = 'slide-up',
+      speed: speedProp = 'device',
       ...rest
    } = props
    const changeWhen = useDerivedValue(changeWhenProp)
    const transition = useDerivedValue(transitionProp)
+   const speed = useDerivedValue(speedProp)
    const previousContentShown = Cell.source(!changeWhen.get())
    const nextContentShown = Cell.source(changeWhen.get())
    const nextViewRef = Cell.source<HTMLDivElement | null>(null)
+
+   const transitionSpeed = Cell.derived(() => {
+      return `var(--speed-${speed.get()})`
+   })
 
    changeWhen.listen(
       async (hasTransitioned) => {
@@ -83,9 +96,10 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
 
    return (
       <div
+         {...rest}
+         style={{ '--full-screen-transition-speed': transitionSpeed }}
          data-transition={transition}
          data-changed={changeWhen}
-         {...rest}
          class={[styles.fullScreenTransition, rest.class]}
       >
          <div class={styles.previousView}>{If(previousContentShown, current)}</div>

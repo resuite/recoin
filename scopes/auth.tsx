@@ -24,7 +24,7 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
       authState.set('logged-in')
       setTimeout(() => {
          authState.set('ready')
-      }, 3000)
+      }, 400)
    }
 
    const logOut = () => {

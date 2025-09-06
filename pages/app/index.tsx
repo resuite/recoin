@@ -9,6 +9,7 @@ import { useRouter } from 'retend/router'
 
 const AppContent = () => {
    const { Outlet } = useRouter()
+
    return (
       <PullToRefreshView class='dark-scheme'>
          {() => (
@@ -16,7 +17,7 @@ const AppContent = () => {
                {() => (
                   <Outlet
                      style={{ display: 'grid' }}
-                     class='light-scheme grid-rows-[auto_1fr] h-full translate-0 rounded-t-3xl'
+                     class='light-scheme h-full translate-0 rounded-t-3xl'
                   />
                )}
             </SidebarProviderView>
