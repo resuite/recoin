@@ -1,7 +1,8 @@
 import Add from '@/components/icons/svg/add'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { ExpandingView } from '@/components/views'
-import TransactionFlow, { TransactionFlowQuery } from '@/pages/app/transaction-flow'
+import { QUERY_KEYS } from '@/constants/query-keys'
+import TransactionFlow from '@/pages/app/transaction-flow'
 import { useRouteQueryControl } from '@/utilities/composables'
 
 export function AddNewTransactionButton() {
@@ -9,7 +10,7 @@ export function AddNewTransactionButton() {
       add: startNewTransactionFlow,
       hasKey: transactionFlowIsOpen,
       remove: closeNewTransactionFlow
-   } = useRouteQueryControl(TransactionFlowQuery)
+   } = useRouteQueryControl(QUERY_KEYS.TransactionFlow._root)
 
    const toggleState = () => {
       if (transactionFlowIsOpen.get()) {

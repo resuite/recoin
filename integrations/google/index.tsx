@@ -44,7 +44,6 @@ interface GoogleIdentityProviderProps {
 
 interface GoogleCredentialHandlers {
    onSuccess: (response: GoogleCredentialResponse) => void
-   onError: () => void
 }
 
 const GoogleAuthScope = createScope<GoogleAuthCtx>('GoogleAuth')
@@ -86,7 +85,7 @@ export function useGoogleSignInButton(
       observer.onConnected(buttonRef, async (button) => {
          await scope.initializing
          window.google.accounts.id.prompt()
-         scope.resolvers.add({ resolve: handlers.onSuccess, reject: handlers.onError })
+         scope.resolvers.add({ resolve: handlers.onSuccess })
 
          window.google.accounts.id.renderButton(button, {
             type: 'standard',

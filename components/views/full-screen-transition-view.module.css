@@ -6,6 +6,18 @@
    width: 100dvw;
    grid-template-columns: 100% 100%;
 
+   &[data-changed] {
+      .nextView {
+         transition-delay: var(--speed-default);
+      }
+   }
+
+   &:not([data-changed]) {
+      .previousView {
+         transition-delay: var(--speed-default);
+      }
+   }
+
    &[data-transition="slide-up"] {
       &:not([data-changed]) {
          .nextView {
@@ -82,10 +94,4 @@
    transition-duration: var(--speed-device);
    transition-property: opacity, translate, scale;
    transition-timing-function: var(--timing);
-   will-change: opacity, translate, scale;
-   isolation: isolate;
-}
-
-.nextView {
-   transition-delay: var(--speed-default);
 }
