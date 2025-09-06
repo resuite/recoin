@@ -114,10 +114,6 @@ body {
    }
 
    button {
-      &:disabled {
-         visibility: hidden;
-      }
-
       @apply text-canvas bg-canvas-text border-3 border-canvas;
       @apply rounded-(--half-spacing) whitespace-nowrap px-0.75 py-[calc(var(--spacing)*0.65)] text-normal min-w-[min(calc(var(--spacing)*10),30dvw)];
       @apply active:scale-[95%] duration-default transition-[scale] active:ease-out not-[active]:ease-in;
@@ -262,8 +258,14 @@ body {
    background-size: 50px 50px; /* Adjust grid size */
 }
 
+@utility grid-lines-with-fade {
+   @apply grid-lines;
+   @apply before:pointer-events-none before:block before:absolute before:h-full before:w-full;
+   @apply before:bg-linear-to-b before:from-canvas-background before:via-transparent before:via-30% before:to-transparent;
+}
+
 @utility button-bare {
-   @apply border-none px-0 justify-start flex bg-transparent text-canvas-text;
+   @apply border-none px-0 justify-start flex bg-transparent text-canvas-text min-w-fit p-0;
    @apply active:scale-100;
 }
 
@@ -323,6 +325,24 @@ body {
    &::-webkit-scrollbar {
       display: none;
    }
+}
+
+@utility debug {
+   &,
+   & * {
+      &,
+      &::after,
+      &::before {
+         outline: 2px solid red;
+      }
+   }
+}
+
+@utility touch-target {
+   @apply relative h-1 w-1;
+   @apply after:absolute after:-z-1;
+   @apply after:block after:min-h-[47px] after:min-w-[47px];
+   @apply after:-top-[calc(var(--spacing)*0.45)] after:-left-[calc(var(--spacing)*0.45)];
 }
 
 @custom-variant expanded-ctx {

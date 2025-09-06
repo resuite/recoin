@@ -1,12 +1,10 @@
-import { RecoinError } from '@/api/error'
 import { addEmailToWaitingList } from '@/api/modules/waiting-list/client'
 import Arrows from '@/components/icons/svg/arrows'
 import Loader from '@/components/icons/svg/loader'
 import { Coins } from '@/components/illustrations/coins'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/toast'
 import { WaitingListStateScope } from '@/scopes'
-import { defaultError, errorCodeToHumanReadable } from '@/utilities/error-messages'
+import { useErrorNotifier } from '@/utilities/composables'
 import { Cell, If, useScopeContext } from 'retend'
 import { Input } from 'retend-utils/components'
 import { useRouter } from 'retend/router'
@@ -17,7 +15,7 @@ function WaitingListHome() {
    const router = useRouter()
    const email = Cell.source('')
    const resource = Cell.async(addEmailToWaitingList)
-   const { showToast } = useToast()
+   const errorNotifier = useErrorNotifier()
 
    const handleSubmit = () => {
       resource.run(email.get())
@@ -31,18 +29,7 @@ function WaitingListHome() {
       router.navigate('/waiting-list/success')
    })
 
-   resource.error.listen((error) => {
-      if (!error) {
-         return
-      }
-      if (!(error instanceof RecoinError)) {
-         const content = error.message ?? defaultError()
-         showToast({ content, duration: 3000 })
-         return
-      }
-      const content = errorCodeToHumanReadable(error.errorCode)
-      showToast({ content, duration: 3000 })
-   })
+   resource.error.listen(errorNotifier)
 
    return (
       <div class='relative grid grid-rows-[auto_1fr] grid-lines h-screen w-screen'>

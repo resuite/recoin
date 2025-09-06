@@ -16,7 +16,8 @@ import type { Context } from 'hono'
  */
 export const Errors = {
    EMAIL_ALREADY_EXISTS: 101,
-   UNKNOWN_ERROR_OCCURRED: 102
+   UNKNOWN_ERROR_OCCURRED: 102,
+   GOOGLE_AUTH_FAILED: 103
 } as const
 
 export type ErrorCode = (typeof Errors)[keyof typeof Errors]

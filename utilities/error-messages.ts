@@ -6,6 +6,8 @@ export function errorCodeToHumanReadable(errorCode: ErrorCode): string {
          return 'This email is already registered.'
       case Errors.UNKNOWN_ERROR_OCCURRED:
          return 'An unexpected error occurred. Please try again later.'
+      case Errors.GOOGLE_AUTH_FAILED:
+         return 'Google authentication failed. Please try again later.'
       default:
          return 'Unknown error'
    }

@@ -15,6 +15,7 @@
 
    scrollbar-width: none;
    animation-timeline: scroll(self inline);
+
    &::-webkit-scrollbar {
       display: none;
    }

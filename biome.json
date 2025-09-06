@@ -13,6 +13,7 @@
       "lineWidth": 100
    },
    "javascript": {
+      "globals": ["google"],
       "formatter": {
          "quoteStyle": "single",
          "jsxQuoteStyle": "single",

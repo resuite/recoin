@@ -1,3 +1,4 @@
+/// <reference types="google.accounts" />
 import Index from '@/pages'
 import { createWebRouter, lazy } from 'retend/router'
 
@@ -20,15 +21,15 @@ export const createRouter = () => {
             children: [
                {
                   path: 'styleguide',
-                  subtree: lazy(() => import('@/pages/styleguide/routes'))
+                  subtree: lazy(() => import('@/pages/styleguide/styleguide.routes'))
                },
                {
                   path: 'waiting-list',
-                  subtree: lazy(() => import('@/pages/waiting-list/routes'))
+                  subtree: lazy(() => import('@/pages/waiting-list/waiting-list.routes'))
                },
                {
                   path: 'app',
-                  subtree: lazy(() => import('@/pages/app/routes'))
+                  subtree: lazy(() => import('@/pages/app/app.routes'))
                }
             ]
          }

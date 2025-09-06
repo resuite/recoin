@@ -1,6 +1,6 @@
 import App from '@/pages/app'
 import { defineRoute } from 'retend/router'
-import StartScreen from './start-screen'
+import Home from './home'
 
 export default defineRoute({
    name: 'application',
@@ -9,7 +9,7 @@ export default defineRoute({
    children: [
       {
          path: '',
-         component: StartScreen
+         component: Home
       }
    ]
 })

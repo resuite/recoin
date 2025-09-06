@@ -1,0 +1,91 @@
+.fullScreenTransition {
+   position: fixed;
+   top: 0;
+   display: grid;
+   height: 100dvh;
+   width: 100dvw;
+   grid-template-columns: 100% 100%;
+
+   &[data-transition="slide-up"] {
+      &:not([data-changed]) {
+         .nextView {
+            translate: 0 100dvh;
+            opacity: 30%;
+         }
+      }
+
+      &[data-changed] {
+         .previousView {
+            opacity: 30%;
+            scale: 0.4;
+         }
+      }
+   }
+
+   &[data-transition="slide-down"] {
+      &:not([data-changed]) {
+         .nextView {
+            translate: 0 -100dvh;
+            opacity: 30%;
+         }
+      }
+
+      &[data-changed] {
+         .previousView {
+            opacity: 30%;
+            scale: 0.4;
+         }
+      }
+   }
+
+   &[data-transition="fade-in"] {
+      &:not([data-changed]) {
+         .nextView {
+            pointer-events: none;
+            opacity: 0%;
+            scale: 1.25;
+         }
+      }
+
+      &[data-changed] {
+         .previousView {
+            opacity: 30%;
+            scale: 0.4;
+         }
+      }
+   }
+
+   &[data-transition="fade-out"] {
+      &:not([data-changed]) {
+         .nextView {
+            pointer-events: none;
+            opacity: 0%;
+            scale: 0.75;
+         }
+      }
+
+      &[data-changed] {
+         .previousView {
+            opacity: 30%;
+            scale: 1.75;
+         }
+      }
+   }
+}
+
+.previousView,
+.nextView {
+   display: grid;
+   grid-template-columns: 1fr;
+   grid-area: 1 / 1;
+
+   transition-duration: var(--speed-device);
+   transition-property: opacity, translate, scale;
+   transition-timing-function: var(--timing);
+   will-change: opacity, translate, scale;
+   isolation: isolate;
+}
+
+.nextView {
+   transition-delay: var(--speed-default);
+}
