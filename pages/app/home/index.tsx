@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Header } from '@/pages/app/$fragments/header'
-import { AddNewTransactionButton } from '@/pages/app/transaction-flow/$fragments/add-new-transaction-button'
+import { AddNewTransactionButton } from '@/pages/app/home/$fragments/add-new-transaction-button'
 import { AuthScope } from '@/scopes/auth'
 import { useScopeContext } from 'retend'
 
