@@ -10,6 +10,8 @@ export function errorCodeToHumanReadable(errorCode: ErrorCode): string {
          return 'The provided Google token does not look valid. Please crosscheck and try again.'
       case Errors.GOOGLE_AUTH_FAILED:
          return 'Google authentication failed. Please try again later.'
+      case Errors.UNAUTHORIZED:
+         return 'You are not authorized to perform this action. Please log in and try again.'
       default:
          return 'Unknown error'
    }

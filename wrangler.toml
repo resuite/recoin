@@ -12,7 +12,15 @@ run_worker_first = [ "/__api", "/__api/*" ]
 binding = "RECOIN_WAITING_LIST"
 id = "17db23d443574424b365adc2144939b1"
 
+[[kv_namespaces]]
+binding = "RECOIN_SESSIONS"
+id = "0402226b1a0746b4bd1c5ea4115f25f9"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "recoin-db"
 database_id = "2a8921e1-6894-4e17-8ba0-19a38996a1a2"
+
+[env.production]
+[env.production.vars]
+CF_ENVIRONMENT = "production"

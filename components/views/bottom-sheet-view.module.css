@@ -79,6 +79,7 @@
    animation-timing-function: var(--timing);
    pointer-events: auto;
    animation-fill-mode: backwards;
+   will-change: translate;
 
    &::before {
       --width: 45px;

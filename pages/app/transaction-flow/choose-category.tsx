@@ -10,7 +10,7 @@ const ChooseCategory = () => {
    const arrowDirection = type.get() === 'income' ? 'bottom-left' : 'top-right'
 
    return (
-      <div class='grid place-items-center relative px-1'>
+      <div class='grid place-items-center place-content-center grid-cols-1 gap-0.5 relative px-1'>
          <BackButton />
          <h2
             class={[
@@ -27,7 +27,7 @@ const ChooseCategory = () => {
             </span>
             <sub class='text-normal'>Choose an {type.get()} category.</sub>
          </h2>
-         <ul>Hello</ul>
+         <ul class='h-[55dvh] w-full debug'>Hello</ul>
       </div>
    )
 }

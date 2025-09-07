@@ -1,5 +1,3 @@
-// FILE: api/db/schema.ts
-
 import { relations } from 'drizzle-orm'
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
@@ -7,7 +5,10 @@ export const users = sqliteTable('users', {
    id: text('id').primaryKey(),
    googleId: text('google_id').unique().notNull(),
    email: text('email').unique().notNull(),
-   name: text('name'),
+   firstName: text('first_name'),
+   lastName: text('last_name'),
+   fullName: text('full_name'),
+   avatarUrl: text('avatar_url'),
    createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull()
 })
 

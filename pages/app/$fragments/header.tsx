@@ -15,9 +15,9 @@ export function Header() {
          >
             <Hamburger class='h-1' />
          </Button>
-         <div class='text-header'>recoin.</div>
-         <Button class='touch-target button-bare '>
-            <User class='h-1' />
+         <div class='text-header'>recoin</div>
+         <Button class='touch-target button-bare outline-[1.8px] rounded-full  h-1.25 w-1.25 flex items-center justify-center'>
+            <User class='h-0.75 [&_path]:stroke-[1.8px]' />
          </Button>
       </header>
    )

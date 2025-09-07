@@ -1,18 +1,34 @@
-import type { GoogleIdTokenPayload } from '@/api/types'
-import { GOOGLE_JWK_URL, RECOIN_SESSION_COOKIE } from '@/constants/shared'
+import type { GoogleIdTokenPayload, RecoinApiEnv } from '@/api/types'
+import {
+   GOOGLE_JWK_URL,
+   RECOIN_SESSION_COOKIE,
+   SESSION_EXPIRATION_SECONDS
+} from '@/constants/shared'
 import type { Context } from 'hono'
-import { setCookie } from 'hono/cookie'
+import { deleteCookie, getCookie, setCookie } from 'hono/cookie'
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 
-export function setAuthCookie(context: unknown) {
+export async function setAuthCookie(context: Context<RecoinApiEnv>, userId: string) {
+   const isProduction = context.env.CF_ENVIRONMENT === 'production'
    const sessionToken = crypto.randomUUID()
-   setCookie(context as Context, RECOIN_SESSION_COOKIE, sessionToken, {
+   await context.env.RECOIN_SESSIONS.put(sessionToken, userId, {
+      expirationTtl: SESSION_EXPIRATION_SECONDS
+   })
+   setCookie(context, RECOIN_SESSION_COOKIE, sessionToken, {
       path: '/',
-      secure: true,
+      secure: isProduction,
       httpOnly: true,
       sameSite: 'Lax',
-      maxAge: 60 * 60 * 24 * 30
+      maxAge: SESSION_EXPIRATION_SECONDS
    })
+}
+
+export async function clearAuthCookie(context: Context<RecoinApiEnv>) {
+   const sessionToken = getCookie(context, RECOIN_SESSION_COOKIE)
+   if (sessionToken) {
+      await context.env.RECOIN_SESSIONS.delete(sessionToken)
+   }
+   deleteCookie(context, RECOIN_SESSION_COOKIE, { path: '/' })
 }
 
 export async function verifyGoogleIdToken(idToken: string, clientId: string) {

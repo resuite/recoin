@@ -42,6 +42,15 @@ export type Split<S extends string, D extends string> = string extends S
        ? [T, ...Split<U, D>]
        : [S]
 
+/**
+ * A type alias for the result of `Cell.async`.
+ * Represents a resource that can be in an uninitialized, loading, or loaded state.
+ *
+ * @typeParam In - The type of the input argument for the asynchronous operation.
+ * @typeParam Out - The type of the output (resolved value) of the asynchronous operation.
+ */
+export type Resource<In, Out> = ReturnType<typeof Cell.async<In, Out>>
+
 export function vibrate() {
    navigator.vibrate?.([15, 15])
 }

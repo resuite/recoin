@@ -2,7 +2,10 @@ CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`google_id` text NOT NULL,
 	`email` text NOT NULL,
-	`name` text,
+	`first_name` text,
+	`last_name` text,
+	`full_name` text,
+    `avatar_url` text,
 	`created_at` integer NOT NULL
 );
 --> statement-breakpoint

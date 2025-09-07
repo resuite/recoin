@@ -17,12 +17,17 @@ export type ServerResponse<T = never> = Promise<SuccessResponse<T> | ErrorRespon
 export interface RecoinApiEnv {
    Bindings: {
       RECOIN_WAITING_LIST: KVNamespace
+      RECOIN_SESSIONS: KVNamespace
       DB: D1Database
+
       CF_GOOGLE_CLIENT_ID: string
       CF_GOOGLE_CLIENT_SECRET: string
       CF_GOOGLE_PROJECT_ID: string
+      CF_ENVIRONMENT: 'development' | 'production'
    }
-   Variables: Record<string, unknown>
+   Variables: {
+      userId?: string
+   }
 }
 
 export interface GoogleIdTokenPayload {

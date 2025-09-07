@@ -4,64 +4,86 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import * as schema from '@/api/database/schema'
+import type { UserData } from '@/api/database/types'
 import { Errors, errorOccurred, success } from '@/api/error'
 import { route } from '@/api/route-helper'
 import type { RecoinApiEnv } from '@/api/types'
-import { setAuthCookie, verifyGoogleIdToken } from '@/api/utils'
-import { DEFAULT_WORKSPACE_NAME } from '@/constants/shared'
+import { clearAuthCookie, setAuthCookie, verifyGoogleIdToken } from '@/api/utils'
+import { DEFAULT_WORKSPACE } from '@/constants/shared'
 
-const authRoute = new Hono<RecoinApiEnv>()
+const authenticationRoute = new Hono<RecoinApiEnv>()
 
-authRoute.post(
+authenticationRoute.post(
    '/google/callback',
    ...route({
       body: z.object({ credential: z.string() }),
-      controller: async (c) => {
-         const { credential } = c.req.valid('json')
-         const db = drizzle(c.env.DB, { schema })
+      controller: async (context) => {
+         const { credential } = context.req.valid('json')
+         const db = drizzle(context.env.DB, { schema })
 
          try {
-            const payload = await verifyGoogleIdToken(credential, c.env.CF_GOOGLE_CLIENT_ID)
+            const payload = await verifyGoogleIdToken(credential, context.env.CF_GOOGLE_CLIENT_ID)
             if (!payload?.sub || !payload.email) {
-               return errorOccurred(c, Errors.GOOGLE_AUTH_FAILED)
+               return errorOccurred(context, Errors.GOOGLE_AUTH_FAILED)
             }
-            const { sub: googleId, email, name } = payload
-            const existingUser = await db.query.users.findFirst({
+
+            const {
+               sub: googleId,
+               email,
+               name: fullName = null,
+               given_name: firstName,
+               family_name: lastName
+            } = payload
+            let user = await db.query.users.findFirst({
                where: and(eq(schema.users.googleId, googleId), eq(schema.users.email, email))
             })
 
-            if (!existingUser) {
-               const userId = crypto.randomUUID()
+            const userId = user?.id ?? crypto.randomUUID()
+            if (!user) {
                const workspaceId = crypto.randomUUID()
                const createdAt = new Date()
-
-               await db.insert(schema.users).values({
-                  id: userId,
-                  googleId,
-                  email,
-                  name: name ?? null,
-                  createdAt
-               })
-
-               await db.insert(schema.workspaces).values({
-                  id: workspaceId,
-                  name: DEFAULT_WORKSPACE_NAME,
-                  userId: userId,
-                  createdAt
-               })
+               // todo: wrap in transaction when drizzle supports it for D1.
+               const [[newUser]] = await Promise.all([
+                  db
+                     .insert(schema.users)
+                     .values({
+                        id: userId,
+                        googleId,
+                        email,
+                        fullName,
+                        firstName,
+                        lastName,
+                        createdAt
+                     })
+                     .returning(),
+                  db
+                     .insert(schema.workspaces)
+                     .values({ id: workspaceId, name: DEFAULT_WORKSPACE, userId, createdAt })
+               ])
+               user = newUser
             }
-
-            setAuthCookie(c)
-            return success(c)
+            await setAuthCookie(context, userId)
+            const { googleId: _, createdAt, ...userData } = user
+            return success(context, userData satisfies UserData)
          } catch (error) {
-            c.status(500)
+            context.status(500)
             if (error instanceof Error) {
-               return errorOccurred(c, Errors.UNKNOWN_ERROR_OCCURRED, error)
+               return errorOccurred(context, Errors.UNKNOWN_ERROR_OCCURRED, error)
             }
-            return errorOccurred(c, Errors.GOOGLE_AUTH_FAILED)
+            return errorOccurred(context, Errors.GOOGLE_AUTH_FAILED)
          }
       }
    })
 )
 
-export default authRoute
+authenticationRoute.post(
+   '/logout',
+   ...route({
+      controller: async (context) => {
+         await clearAuthCookie(context)
+         return context.json({ success: true })
+      }
+   })
+)
+
+export default authenticationRoute

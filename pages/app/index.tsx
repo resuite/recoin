@@ -3,8 +3,8 @@ import { FullScreenTransitionView } from '@/components/views/full-screen-transit
 import { GoogleIdentityProvider } from '@/integrations/google'
 import { Sidebar } from '@/pages/app/$fragments/sidebar'
 import StartPage from '@/pages/app/auth/start-page'
-import { AuthScope, AuthenticationProvider } from '@/scopes/auth'
-import { Cell, useScopeContext } from 'retend'
+import { AuthenticationProvider, useAuthContext } from '@/scopes/auth'
+import { Cell } from 'retend'
 import { useRouter } from 'retend/router'
 
 const AppContent = () => {
@@ -32,7 +32,7 @@ const App = () => {
          {() => (
             <AuthenticationProvider>
                {() => {
-                  const { authState } = useScopeContext(AuthScope)
+                  const { authState } = useAuthContext()
                   const isReady = Cell.derived(() => {
                      return authState.get() === 'ready'
                   })
