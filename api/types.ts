@@ -1,5 +1,5 @@
 import type { ErrorCode } from '@/api/error'
-import type { KVNamespace } from '@cloudflare/workers-types'
+import type { D1Database, KVNamespace } from '@cloudflare/workers-types'
 
 export interface SuccessResponse<T = never> {
    success: true
@@ -17,6 +17,8 @@ export type ServerResponse<T = never> = Promise<SuccessResponse<T> | ErrorRespon
 export interface RecoinApiEnv {
    Bindings: {
       RECOIN_WAITING_LIST: KVNamespace
+      DB: D1Database
+      GOOGLE_CLIENT_ID: string
    }
    Variables: Record<string, unknown>
 }

@@ -1,3 +1,4 @@
+import authentication from '@/api/modules/authentication/server'
 import waitingList from '@/api/modules/waiting-list/server'
 import { Hono } from 'hono'
 
@@ -6,5 +7,6 @@ const app = new Hono()
       return c.text(`The recoin server is running on ${navigator.userAgent}!`)
    })
    .route('/__api/waiting-list', waitingList)
+   .route('/__api/auth', authentication)
 
 export default app

@@ -5,13 +5,13 @@ import { Cell, If, useScopeContext } from 'retend'
 
 const StartPage = () => {
    const { authState } = useScopeContext(AuthScope)
-   const isNewUser = Cell.derived(() => {
-      return authState.get() === 'new-user'
+   const isIdle = Cell.derived(() => {
+      return authState.get() === 'idle'
    })
 
    return (
       <div class='grid place-items-center gap-1 place-content-center'>
-         {If(isNewUser, {
+         {If(isIdle, {
             true: Welcome,
             false: Loading
          })}

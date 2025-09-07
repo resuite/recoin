@@ -1,10 +1,12 @@
+import { verifyGoogleSignIn } from '@/api/modules/authentication/client'
+import type { GoogleCredentialResponse } from '@/integrations/google'
+import { useErrorNotifier } from '@/utilities/composables'
 import { Cell, createScope } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 
-type AuthState = null | 'logged-in' | 'new-user' | 'ready'
-
+type AuthState = 'idle' | 'pending' | 'ready'
 interface AuthCtx {
-   logIn: () => void
+   logIn: (response: GoogleCredentialResponse) => void
    logOut: () => void
    authState: Cell<AuthState>
 }
@@ -17,21 +19,30 @@ interface AuthenticationProviderProps {
 
 export function AuthenticationProvider(props: AuthenticationProviderProps) {
    const { children } = props
+   const errorNotitifer = useErrorNotifier()
 
-   const authState = Cell.source<AuthState>(null)
+   const resource = Cell.async(verifyGoogleSignIn)
+   const authState = Cell.derived(() => {
+      if (resource.pending.get()) {
+         return 'pending'
+      }
+      if (resource.data.get()?.success) {
+         return 'ready'
+      }
+      return 'idle'
+   })
 
-   const logIn = () => {
-      authState.set('logged-in')
-      setTimeout(() => {
-         authState.set('ready')
-      }, 400)
+   resource.error.listen(errorNotitifer)
+
+   const ctx: AuthCtx = {
+      authState,
+      logIn(response) {
+         resource.run(response.credential)
+      },
+      logOut() {
+         resource.data.set(null)
+      }
    }
-
-   const logOut = () => {
-      authState.set('new-user')
-   }
-
-   const ctx = { authState, logIn, logOut }
 
    return <AuthScope.Provider value={ctx}>{children}</AuthScope.Provider>
 }
