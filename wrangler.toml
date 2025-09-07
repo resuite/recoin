@@ -8,9 +8,6 @@ not_found_handling = "single-page-application"
 run_worker_first = [ "/__api", "/__api/*" ]
 
 
-[vars]
-GOOGLE_CLIENT_ID = "1035831609752-qq2qf8br6ik20qpu7b9i8hau4ihdmf8v.apps.googleusercontent.com"
-
 [[kv_namespaces]]
 binding = "RECOIN_WAITING_LIST"
 id = "17db23d443574424b365adc2144939b1"

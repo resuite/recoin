@@ -1,17 +1,26 @@
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
-import { OAuth2Client } from 'google-auth-library'
 import { type Context, Hono } from 'hono'
 import { setCookie } from 'hono/cookie'
+import { createRemoteJWKSet, jwtVerify } from 'jose'
 import { z } from 'zod'
 
 import * as schema from '@/api/database/schema'
 import { Errors, errorOccurred, success } from '@/api/error'
 import { route } from '@/api/route-helper'
-import type { RecoinApiEnv } from '@/api/types'
-import { DEFAULT_WORKSPACE_NAME, RECOIN_SESSION_COOKIE } from '@/constants/shared'
+import type { GoogleIdTokenPayload, RecoinApiEnv } from '@/api/types'
+import { DEFAULT_WORKSPACE_NAME, GOOGLE_JWK_URL, RECOIN_SESSION_COOKIE } from '@/constants/shared'
 
 const authRoute = new Hono<RecoinApiEnv>()
+
+async function verifyGoogleIdToken(idToken: string, clientId: string) {
+   const JWKS = createRemoteJWKSet(new URL(GOOGLE_JWK_URL))
+   const { payload } = await jwtVerify(idToken, JWKS, {
+      issuer: ['accounts.google.com', 'https://accounts.google.com'],
+      audience: clientId
+   })
+   return payload as unknown as GoogleIdTokenPayload
+}
 
 authRoute.post(
    '/google/callback',
@@ -19,25 +28,16 @@ authRoute.post(
       body: z.object({ credential: z.string() }),
       controller: async (c) => {
          const { credential } = c.req.valid('json')
-         const GOOGLE_CLIENT_ID = c.env.GOOGLE_CLIENT_ID
-         const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID)
          const db = drizzle(c.env.DB, { schema })
 
          try {
-            const ticket = await googleClient.verifyIdToken({
-               idToken: credential,
-               audience: GOOGLE_CLIENT_ID
-            })
-
-            const payload = ticket.getPayload()
+            const payload = await verifyGoogleIdToken(credential, c.env.CF_GOOGLE_CLIENT_ID)
             if (!payload?.sub || !payload.email) {
                return errorOccurred(c, Errors.GOOGLE_AUTH_FAILED)
             }
-
             const { sub: googleId, email, name } = payload
-
             const existingUser = await db.query.users.findFirst({
-               where: eq(schema.users.googleId, googleId)
+               where: and(eq(schema.users.googleId, googleId), eq(schema.users.email, email))
             })
 
             if (!existingUser) {

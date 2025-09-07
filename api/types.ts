@@ -18,7 +18,26 @@ export interface RecoinApiEnv {
    Bindings: {
       RECOIN_WAITING_LIST: KVNamespace
       DB: D1Database
-      GOOGLE_CLIENT_ID: string
+      CF_GOOGLE_CLIENT_ID: string
+      CF_GOOGLE_CLIENT_SECRET: string
+      CF_GOOGLE_PROJECT_ID: string
    }
    Variables: Record<string, unknown>
+}
+
+export interface GoogleIdTokenPayload {
+   iss: string
+   azp: string
+   aud: string
+   sub: string
+   email: string
+   email_verified: boolean
+   nbf: number
+   name: string
+   picture: string
+   given_name: string
+   family_name: string
+   iat: number
+   exp: number
+   jti: string
 }
