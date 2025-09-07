@@ -1,26 +1,16 @@
 import { and, eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
-import { type Context, Hono } from 'hono'
-import { setCookie } from 'hono/cookie'
-import { createRemoteJWKSet, jwtVerify } from 'jose'
+import { Hono } from 'hono'
 import { z } from 'zod'
 
 import * as schema from '@/api/database/schema'
 import { Errors, errorOccurred, success } from '@/api/error'
 import { route } from '@/api/route-helper'
-import type { GoogleIdTokenPayload, RecoinApiEnv } from '@/api/types'
-import { DEFAULT_WORKSPACE_NAME, GOOGLE_JWK_URL, RECOIN_SESSION_COOKIE } from '@/constants/shared'
+import type { RecoinApiEnv } from '@/api/types'
+import { setAuthCookie, verifyGoogleIdToken } from '@/api/utils'
+import { DEFAULT_WORKSPACE_NAME } from '@/constants/shared'
 
 const authRoute = new Hono<RecoinApiEnv>()
-
-async function verifyGoogleIdToken(idToken: string, clientId: string) {
-   const JWKS = createRemoteJWKSet(new URL(GOOGLE_JWK_URL))
-   const { payload } = await jwtVerify(idToken, JWKS, {
-      issuer: ['accounts.google.com', 'https://accounts.google.com'],
-      audience: clientId
-   })
-   return payload as unknown as GoogleIdTokenPayload
-}
 
 authRoute.post(
    '/google/callback',
@@ -41,37 +31,27 @@ authRoute.post(
             })
 
             if (!existingUser) {
-               await db.transaction(async (tx) => {
-                  const userId = crypto.randomUUID()
-                  const workspaceId = crypto.randomUUID()
-                  const createdAt = new Date()
+               const userId = crypto.randomUUID()
+               const workspaceId = crypto.randomUUID()
+               const createdAt = new Date()
 
-                  await tx.insert(schema.users).values({
-                     id: userId,
-                     googleId,
-                     email,
-                     name: name ?? null,
-                     createdAt
-                  })
+               await db.insert(schema.users).values({
+                  id: userId,
+                  googleId,
+                  email,
+                  name: name ?? null,
+                  createdAt
+               })
 
-                  await tx.insert(schema.workspaces).values({
-                     id: workspaceId,
-                     name: DEFAULT_WORKSPACE_NAME,
-                     userId: userId,
-                     createdAt
-                  })
+               await db.insert(schema.workspaces).values({
+                  id: workspaceId,
+                  name: DEFAULT_WORKSPACE_NAME,
+                  userId: userId,
+                  createdAt
                })
             }
 
-            const sessionToken = crypto.randomUUID()
-            setCookie(c as unknown as Context, RECOIN_SESSION_COOKIE, sessionToken, {
-               path: '/',
-               secure: true,
-               httpOnly: true,
-               sameSite: 'Lax',
-               maxAge: 60 * 60 * 24 * 30
-            })
-
+            setAuthCookie(c)
             return success(c)
          } catch (error) {
             c.status(500)
