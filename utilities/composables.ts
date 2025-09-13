@@ -1,6 +1,7 @@
 import { RecoinError } from '@/api/error'
 import { useToast } from '@/components/ui/toast'
 import { defer } from '@/utilities/miscellaneous'
+import { Cell, useSetupEffect } from 'retend'
 import { Modes, getGlobalContext, matchContext } from 'retend/context'
 import { useRouteQuery, useRouter } from 'retend/router'
 import { defaultError, errorCodeToHumanReadable } from './error-messages'
@@ -49,7 +50,13 @@ export function useErrorNotifier() {
 
 export function useIsServer() {
    const { window } = getGlobalContext()
-   return matchContext(window, Modes.VDom)
+   const isServer = Cell.source(matchContext(window, Modes.VDom))
+
+   useSetupEffect(() => {
+      isServer.set(false)
+   })
+
+   return isServer
 }
 
 export function useHrefWithAppendedParams(record: Record<string, string>) {
