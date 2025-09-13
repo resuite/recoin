@@ -2,7 +2,7 @@ import type { UserData } from '@/api/database/types'
 import { getMe } from '@/api/modules/application/client'
 import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/client'
 import type { ErrorResponse, SuccessResponse } from '@/api/types'
-import { useErrorNotifier } from '@/utilities/composables'
+import { useErrorNotifier, useIsServer } from '@/utilities/composables'
 import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
 import { useLocalStorage } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -33,7 +33,8 @@ interface AuthenticationProviderProps {
 
 export function AuthenticationProvider(props: AuthenticationProviderProps) {
    const { children } = props
-   const errorNotitifer = useErrorNotifier()
+   const isServer = useIsServer()
+   const errorNotifier = useErrorNotifier()
    const cachedUser = useLocalStorage<UserData | null>('userData', null)
 
    const logInWithGoogle = Cell.async(verifyGoogleSignIn)
@@ -44,9 +45,15 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
       if (sessionCheck.pending.get() || logInWithGoogle.pending.get()) {
          return 'pending'
       }
+
       if (sessionCheck.data.get()?.success || logInWithGoogle.data.get()?.success) {
          return 'ready'
       }
+
+      if (isServer) {
+         return 'pending'
+      }
+
       return 'idle'
    })
 
@@ -78,8 +85,8 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
          cachedUser.set(data.data)
       }
    })
-   logInWithGoogle.error.listen(errorNotitifer)
-   logOut.error.listen(errorNotitifer)
+   logInWithGoogle.error.listen(errorNotifier)
+   logOut.error.listen(errorNotifier)
    logOut.data.listen((data) => {
       if (data?.success) {
          Cell.batch(() => {

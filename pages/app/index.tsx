@@ -32,13 +32,14 @@ const App = () => {
          {() => (
             <AuthenticationProvider>
                {() => {
-                  const { authState } = useAuthContext()
-                  const isReady = Cell.derived(() => {
-                     return authState.get() === 'ready'
+                  const { userData } = useAuthContext()
+                  const userDataDefined = Cell.derived(() => {
+                     return userData.get() !== null
                   })
+
                   return (
                      <FullScreenTransitionView
-                        when={isReady}
+                        when={userDataDefined}
                         transition='slide-up'
                         from={StartPage}
                         to={AppContent}

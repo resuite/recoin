@@ -1,6 +1,7 @@
 import { RecoinError } from '@/api/error'
 import { useToast } from '@/components/ui/toast'
 import { defer } from '@/utilities/miscellaneous'
+import { Modes, getGlobalContext, matchContext } from 'retend/context'
 import { useRouteQuery, useRouter } from 'retend/router'
 import { defaultError, errorCodeToHumanReadable } from './error-messages'
 
@@ -44,6 +45,11 @@ export function useErrorNotifier() {
       const content = errorCodeToHumanReadable(error.errorCode)
       showToast({ content, duration: 3000 })
    }
+}
+
+export function useIsServer() {
+   const { window } = getGlobalContext()
+   return matchContext(window, Modes.VDom)
 }
 
 export function useHrefWithAppendedParams(record: Record<string, string>) {
