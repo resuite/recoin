@@ -421,7 +421,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
                <PopoverView
                   class={popoverClass}
                   isOpen
-                  anchor={(useTriggerAsAnchor ? trigger : anchor) as SourceCell<HTMLElement | null>}
+                  anchor={useTriggerAsAnchor ? trigger : anchor}
                   positionArea={positionArea}
                   alignSelf={alignSelf}
                   justifySelf={justifySelf}

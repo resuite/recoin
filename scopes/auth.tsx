@@ -3,7 +3,6 @@ import { getMe } from '@/api/modules/application/client'
 import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/client'
 import type { ErrorResponse, SuccessResponse } from '@/api/types'
 import { useErrorNotifier } from '@/utilities/composables'
-import type { Resource } from '@/utilities/miscellaneous'
 import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
 import { useLocalStorage } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -11,8 +10,18 @@ import type { JSX } from 'retend/jsx-runtime'
 type AuthState = 'idle' | 'pending' | 'ready'
 interface AuthCtx {
    userData: Cell<UserData | null>
-   logInWithGoogle: Resource<string, ErrorResponse | SuccessResponse<UserData>>
-   logOut: Resource<unknown, ErrorResponse | SuccessResponse<never>>
+   logInWithGoogle: {
+      run: (...args: Parameters<typeof verifyGoogleSignIn>) => Promise<void>
+      data: Cell<ErrorResponse | SuccessResponse<UserData> | null>
+      pending: Cell<boolean>
+      error: Cell<Error | null>
+   }
+   logOut: {
+      run: (...args: Parameters<typeof logOutUser>) => Promise<void>
+      data: Cell<ErrorResponse | SuccessResponse<UserData> | null>
+      pending: Cell<boolean>
+      error: Cell<Error | null>
+   }
    authState: Cell<AuthState>
 }
 
