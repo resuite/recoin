@@ -1,5 +1,7 @@
 import { NumericKeypad } from '@/components/ui/numeric-keypad'
+import { VibrationPatterns } from '@/constants/vibration'
 import { animationsSettled } from '@/utilities/animations'
+import { vibrate } from '@/utilities/miscellaneous'
 import { Cell, For, If } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -71,7 +73,7 @@ export function PinInput(props: PinInputProps) {
 
    const keypadDisabled = Cell.derived(() => {
       const value = number.get()
-      return (value !== null && value.length === 4) || disabled.get()
+      return (value !== null && value.length === length.get()) || disabled.get()
    })
 
    number.listen(async (value) => {
@@ -79,11 +81,11 @@ export function PinInput(props: PinInputProps) {
          return
       }
 
-      if (value.length === 4) {
+      if (value.length === length.get()) {
          const isSuccessful = await onFill?.(value)
          if (!isSuccessful) {
             errored.set(true)
-            navigator.vibrate?.([30, 30, 30])
+            vibrate(VibrationPatterns.Error)
             await animationsSettled(outputRef)
             errored.set(false)
          } else {

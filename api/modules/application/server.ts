@@ -3,6 +3,7 @@ import type { UserData } from '@/api/database/types'
 import { Errors, errorOccurred, success } from '@/api/error'
 import { route } from '@/api/route-helper'
 import type { RecoinApiEnv } from '@/api/types'
+import { StatusCodes } from '@/constants/server'
 import { eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
 import { Hono } from 'hono'
@@ -22,11 +23,12 @@ applicationRoute.get(
 
          if (!user) {
             // This could happen if a user is deleted but their session is still active.
-            return errorOccurred(c, Errors.UNAUTHORIZED, 'User not found')
+            c.status(StatusCodes.Unauthorized)
+            return errorOccurred(c, Errors.UnAuthorized, 'User not found')
          }
 
-         const { googleId, createdAt, ...safeUserData } = user
-         c.status(200)
+         const { googleId: _, createdAt: __, ...safeUserData } = user
+         c.status(StatusCodes.Ok)
          return success(c, safeUserData satisfies UserData)
       }
    })

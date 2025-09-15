@@ -42,7 +42,12 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    const sessionCheck = Cell.async(getMe)
 
    const authState = Cell.derived(() => {
-      if (isServer.get() || sessionCheck.pending.get() || logInWithGoogle.pending.get()) {
+      if (
+         cachedUser.get() ||
+         isServer.get() ||
+         sessionCheck.pending.get() ||
+         logInWithGoogle.pending.get()
+      ) {
          return 'pending'
       }
 

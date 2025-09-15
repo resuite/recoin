@@ -1,6 +1,7 @@
 import { Errors, errorOccurred, success } from '@/api/error'
 import { route } from '@/api/route-helper'
 import type { RecoinApiEnv } from '@/api/types'
+import { StatusCodes } from '@/constants/server'
 import { Hono } from 'hono'
 import { z } from 'zod'
 
@@ -18,18 +19,18 @@ waitingListRoute.post(
          const waitingList = c.env.RECOIN_WAITING_LIST
 
          if (await waitingList.get(email)) {
-            c.status(409)
-            return errorOccurred(c, Errors.EMAIL_ALREADY_EXISTS)
+            c.status(StatusCodes.Conflict)
+            return errorOccurred(c, Errors.EmailAlreadyExists)
          }
 
          try {
             await waitingList.put(email, new Date().toISOString())
          } catch (error) {
-            c.status(500)
+            c.status(StatusCodes.InternalServerError)
             if (error instanceof Error) {
-               return errorOccurred(c, Errors.UNKNOWN_ERROR_OCCURRED, error)
+               return errorOccurred(c, Errors.UnknownErrorOccured, error)
             }
-            return errorOccurred(c, Errors.UNKNOWN_ERROR_OCCURRED)
+            return errorOccurred(c, Errors.UnknownErrorOccured)
          }
 
          return success(c)

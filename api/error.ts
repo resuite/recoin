@@ -15,11 +15,11 @@ import type { Context } from 'hono'
  * ```
  */
 export const Errors = {
-   EMAIL_ALREADY_EXISTS: 101,
-   UNKNOWN_ERROR_OCCURRED: 102,
-   INVALID_GOOGLE_TOKEN: 103,
-   GOOGLE_AUTH_FAILED: 104,
-   UNAUTHORIZED: 105
+   EmailAlreadyExists: 101,
+   UnknownErrorOccured: 102,
+   InvalidGoogleToken: 103,
+   GoogleAuthFailed: 104,
+   UnAuthorized: 105
 } as const
 
 export type ErrorCode = (typeof Errors)[keyof typeof Errors]
@@ -56,9 +56,6 @@ export function errorOccurred(
    errorCode: ErrorCode,
    details?: unknown
 ): Response {
-   if (errorCode === Errors.UNAUTHORIZED) {
-      c.status(401)
-   }
    return c.json({ success: false, code: errorCode, details } as ErrorResponse)
 }
 

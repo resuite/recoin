@@ -9,7 +9,7 @@ import { Errors, errorOccurred, success } from '@/api/error'
 import { route } from '@/api/route-helper'
 import type { RecoinApiEnv } from '@/api/types'
 import { clearAuthCookie, setAuthCookie, verifyGoogleIdToken } from '@/api/utils'
-import { DEFAULT_WORKSPACE } from '@/constants/shared'
+import { DEFAULT_WORKSPACE, StatusCodes } from '@/constants/server'
 
 const authenticationRoute = new Hono<RecoinApiEnv>()
 
@@ -24,7 +24,7 @@ authenticationRoute.post(
          try {
             const payload = await verifyGoogleIdToken(credential, context.env.CF_GOOGLE_CLIENT_ID)
             if (!payload?.sub || !payload.email) {
-               return errorOccurred(context, Errors.GOOGLE_AUTH_FAILED)
+               return errorOccurred(context, Errors.GoogleAuthFailed)
             }
 
             const {
@@ -63,14 +63,16 @@ authenticationRoute.post(
                user = newUser
             }
             await setAuthCookie(context, userId)
-            const { googleId: _, createdAt, ...userData } = user
+            const { googleId: _, createdAt: __, ...userData } = user
+
+            context.status(StatusCodes.Created)
             return success(context, userData satisfies UserData)
          } catch (error) {
-            context.status(500)
+            context.status(StatusCodes.InternalServerError)
             if (error instanceof Error) {
-               return errorOccurred(context, Errors.UNKNOWN_ERROR_OCCURRED, error)
+               return errorOccurred(context, Errors.UnknownErrorOccured, error)
             }
-            return errorOccurred(context, Errors.GOOGLE_AUTH_FAILED)
+            return errorOccurred(context, Errors.GoogleAuthFailed)
          }
       }
    })

@@ -1,4 +1,5 @@
 import { animationsSettled } from '@/utilities/animations'
+import { vibrate } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import {
@@ -216,7 +217,7 @@ export function StackView(props: StackViewProps) {
       }
       stackGroupElement.setAttribute('data-dragging', '')
       stackWidth = stackGroupElement.clientWidth
-      navigator.vibrate?.([15, 15])
+      vibrate()
 
       animation = stackGroupElement.animate(ANIMATION_KEYFRAMES, ANIMATION_OPTIONS)
       animation.pause()

@@ -1,6 +1,7 @@
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
-import { defer } from '@/utilities/miscellaneous'
+import { VibrationPatterns } from '@/constants/vibration'
+import { defer, vibrate } from '@/utilities/miscellaneous'
 import { Cell, For, type SourceCell, useSetupEffect } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -19,7 +20,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
    const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', '0']
 
    const handleBackspace = () => {
-      navigator.vibrate?.([5, 5])
+      vibrate(VibrationPatterns.ButtonPress)
       if (!model) {
          return
       }
@@ -45,7 +46,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
    const handleKeydown = (event: KeyboardEvent) => {
       const number = Number(event.key)
       if (!Number.isNaN(number)) {
-         navigator.vibrate?.([5, 5])
+         vibrate(VibrationPatterns.ButtonPress)
          const newValue = model?.get() ?? ''
          model?.set(newValue + number.toString())
       } else if (event.key === 'Backspace') {
@@ -90,7 +91,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
                if (event.defaultPrevented) {
                   return
                }
-               navigator.vibrate?.([5, 5])
+               vibrate(VibrationPatterns.ButtonPress)
                const newValue = model?.get() ?? ''
                model?.set(newValue + row.toString())
             }

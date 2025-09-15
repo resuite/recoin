@@ -7,6 +7,15 @@ export const Browsers = {
    Edge: 'Edge'
 }
 
+export const Platform = {
+   Android: 'Android',
+   iOS: 'iOS',
+   Windows: 'Windows',
+   MacOS: 'MacOS',
+   Linux: 'Linux',
+   Unknown: 'Unknown'
+}
+
 export function currentBrowser() {
    return Bowser.getParser(window.navigator.userAgent)
 }

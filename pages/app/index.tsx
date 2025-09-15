@@ -4,7 +4,7 @@ import { GoogleIdentityProvider } from '@/integrations/google'
 import { Sidebar } from '@/pages/app/$fragments/sidebar'
 import StartPage from '@/pages/app/auth/start-page'
 import { AuthenticationProvider, useAuthContext } from '@/scopes/auth'
-import { Cell } from 'retend'
+import { Cell, useSetupEffect } from 'retend'
 import { useRouter } from 'retend/router'
 
 const AppContent = () => {
@@ -17,7 +17,7 @@ const AppContent = () => {
                {() => (
                   <Outlet
                      style={{ display: 'grid' }}
-                     class='light-scheme h-full translate-0 rounded-t-3xl'
+                     class='light-scheme h-full select-none translate-0 rounded-t-3xl'
                   />
                )}
             </SidebarProviderView>
@@ -33,8 +33,18 @@ const App = () => {
             <AuthenticationProvider>
                {() => {
                   const { userData } = useAuthContext()
+                  const isReady = Cell.source(false)
+
                   const userDataDefined = Cell.derived(() => {
-                     return userData.get() !== null
+                     return userData.get() !== null && isReady.get()
+                  })
+
+                  useSetupEffect(() => {
+                     const timeout = setTimeout(() => {
+                        isReady.set(true)
+                     }, 250)
+
+                     return () => clearTimeout(timeout)
                   })
 
                   return (

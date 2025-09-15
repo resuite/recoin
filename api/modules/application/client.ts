@@ -5,7 +5,7 @@ import type { ServerResponse } from '@/api/types'
 export async function getMe(): ServerResponse<UserData> {
    const res = await fetch('/__api/app/me')
    if (!res.ok) {
-      throw new RecoinError(Errors.UNAUTHORIZED)
+      throw new RecoinError(Errors.UnAuthorized)
    }
    return await res.json()
 }

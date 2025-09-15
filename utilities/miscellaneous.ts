@@ -1,3 +1,4 @@
+import { VibrationPatterns } from '@/constants/vibration'
 import type { Cell } from 'retend'
 
 /**
@@ -42,8 +43,8 @@ export type Split<S extends string, D extends string> = string extends S
        ? [T, ...Split<U, D>]
        : [S]
 
-export function vibrate() {
-   navigator.vibrate?.([15, 15])
+export function vibrate(pattern?: VibratePattern) {
+   navigator.vibrate?.(pattern ?? VibrationPatterns.Default)
 }
 
 export interface PointerDownCoordinates {

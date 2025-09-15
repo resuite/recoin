@@ -1,3 +1,4 @@
+import { vibrate } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS, getScrollableY } from '@/utilities/scrolling'
 import { Cell, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
@@ -222,7 +223,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       if (thresholdMarkerIsVisible) {
          changeState('actiontriggered')
          pullZone.classList.add(styles.pullZoneActionTriggered as string)
-         navigator.vibrate?.([15, 15])
+         vibrate()
          await onActionTriggered?.()
       }
       pullZone.classList.remove(styles.pullZoneActionTriggered as string)
