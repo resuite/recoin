@@ -1,4 +1,3 @@
 [ -f ~/.zshrc ] && source ~/.zshrc
 
 bunx lint-staged
-bunx oxlint

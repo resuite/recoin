@@ -2,6 +2,9 @@
    "rules": {
       "oxc/no-map-spread": "error",
       "react/jsx-boolean-value": "error",
+      "import/default": "error",
+      "react-perf/jsx-no-jsx-as-prop": "error",
+      "react-perf/jsx-no-new-function-as-prop": "error",
       "max-lines-per-function": [
          "error",
          {

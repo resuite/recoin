@@ -5,7 +5,7 @@
    "private": true,
    "scripts": {
       "dev": "vite --port 5229",
-      "lint": "biome lint --write",
+      "lint": "biome lint --write; bunx oxlint",
       "format": "biome format --write",
       "check": "tsgo --project ./tsconfig.json",
       "build": "vite build",
