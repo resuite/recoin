@@ -81,8 +81,7 @@ body {
    --timing: cubic-bezier(0.3, 0.4, 0.05, 1);
    --timing-keyboard: ease-out;
    --speed-keyboard: calc(var(--default-speed) * 0.75);
-   --timing-bounce: cubic-bezier(0.25, 0.46, 0.45, 1.7);
-   --timing-bounce-slower: cubic-bezier(0, 0, 0.6, 1.4);
+   --timing-bounce-slower: cubic-bezier(0.3, 0.4, 0.05, 1.5);
 
    --speed-device: calc(var(--default-speed) * 3.05);
    --speed-default: var(--default-speed);
@@ -190,6 +189,7 @@ body {
 
    color: var(--color-base);
    background-color: white;
+   color-scheme: light;
 
    input,
    select {
@@ -218,6 +218,7 @@ body {
 
    color: var(--color-light-yellow);
    background-color: var(--color-base);
+   color-scheme: dark;
 
    input,
    select {

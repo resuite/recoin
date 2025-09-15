@@ -1,7 +1,7 @@
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
 import { VibrationPatterns } from '@/constants/vibration'
-import { defer, vibrate } from '@/utilities/miscellaneous'
+import { createPointerOrClickHander, vibrate } from '@/utilities/miscellaneous'
 import { Cell, For, type SourceCell, useSetupEffect } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -74,27 +74,11 @@ export function NumericKeypad(props: NumericKeypadProps) {
    return (
       <div {...rest} class={[styles.keypad, rest.class]}>
          {For(keys, (row) => {
-            const selectChar = (event: Event) => {
-               const target = event.currentTarget as HTMLButtonElement
-               if (event.type === 'pointerdown') {
-                  // Prevents click from firing, given that pointerdown has already handled
-                  // adding the character.
-                  const preventDblClick = (event: Event) => {
-                     event.preventDefault()
-                  }
-                  target.addEventListener('click', preventDblClick, { capture: true, once: true })
-                  defer(() => {
-                     target.removeEventListener('click', preventDblClick)
-                  })
-               }
-
-               if (event.defaultPrevented) {
-                  return
-               }
+            const selectChar = createPointerOrClickHander(() => {
                vibrate(VibrationPatterns.ButtonPress)
                const newValue = model?.get() ?? ''
                model?.set(newValue + row.toString())
-            }
+            })
 
             return (
                <Button

@@ -10,6 +10,10 @@
       & > .nextView {
          transition-delay: var(--speed-default);
       }
+
+      & > .previousView {
+         pointer-events: none;
+      }
    }
 
    &:not([data-changed]) {

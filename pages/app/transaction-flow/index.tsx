@@ -3,6 +3,7 @@ import { FullScreenTransitionView } from '@/components/views/full-screen-transit
 import { QueryKeys } from '@/constants/query-keys'
 import ChooseCategory from '@/pages/app/transaction-flow/choose-category'
 import ChooseTransactionType from '@/pages/app/transaction-flow/choose-transaction-type'
+import EnterTransactionDetails from '@/pages/app/transaction-flow/enter-transaction-details'
 import { Cell, useSetupEffect } from 'retend'
 import { useRouteQuery } from 'retend/router'
 
@@ -11,8 +12,12 @@ const TransactionFlow = () => {
    const { toggleSidebarEnabled } = useSidebarContext()
    const { togglePullToRefreshEnabled } = usePullToRefreshContext()
    const type = query.get(QueryKeys.TransactionFlow.Type)
+   const category = query.get(QueryKeys.TransactionFlow.Category)
    const typeChosen = Cell.derived(() => {
       return type.get() !== null
+   })
+   const categoryChosen = Cell.derived(() => {
+      return category.get() !== null
    })
 
    useSetupEffect(() => {
@@ -30,7 +35,15 @@ const TransactionFlow = () => {
          transition='blink'
          speed='default'
          from={ChooseTransactionType}
-         to={ChooseCategory}
+         to={() => (
+            <FullScreenTransitionView
+               when={categoryChosen}
+               transition='blink'
+               speed='default'
+               from={ChooseCategory}
+               to={EnterTransactionDetails}
+            />
+         )}
       />
    )
 }

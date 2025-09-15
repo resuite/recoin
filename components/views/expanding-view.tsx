@@ -82,23 +82,17 @@ export function ExpandingView(props: ExpandingViewProps) {
    isOpen.listen(
       async (viewIsOpen) => {
          await animationsSettled(clipPathRef)
-         if (viewIsOpen) {
-            contentLoaded.set(true)
-            return
-         }
-         if (!isOpen.get()) {
-            contentLoaded.set(false)
-         }
+         contentLoaded.set(isOpen.get() && viewIsOpen)
       },
       { priority: -1 }
    )
 
    return (
-      <div class={styles.container} style={style}>
-         <div {...rest} class={[styles.content, rest.class]} data-open={isOpen}>
+      <div class={styles.container} style={style} data-open={isOpen}>
+         <div ref={clipPathRef} class={styles.clipPath} />
+         <div {...rest} class={[styles.content, rest.class]}>
             {If(contentLoaded, children)}
          </div>
-         <div ref={clipPathRef} class={styles.clipPath} />
       </div>
    )
 }

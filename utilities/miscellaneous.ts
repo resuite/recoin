@@ -1,5 +1,4 @@
 import { VibrationPatterns } from '@/constants/vibration'
-import type { Cell } from 'retend'
 
 /**
  * Defers execution of a function to the next event loop tick using setTimeout.
@@ -47,11 +46,6 @@ export function vibrate(pattern?: VibratePattern) {
    navigator.vibrate?.(pattern ?? VibrationPatterns.Default)
 }
 
-export interface PointerDownCoordinates {
-   x: Cell<number>
-   y: Cell<number>
-}
-
 /**
  * Finds the first focusable element within a given parent HTML element.
  * A focusable element is considered an input or button that is not disabled.
@@ -61,4 +55,33 @@ export interface PointerDownCoordinates {
  */
 export function getFocusableElementInItem(parent: HTMLElement) {
    return parent.querySelector(':is(input, button):not(:disabled)') as HTMLElement | null
+}
+
+/**
+ * Ensures immediate action by prioritizing the initial pointer event.
+ * Prevents redundant triggers from subsequent click events for a more responsive feel.
+ *
+ * @param handler - The action to execute immediately.
+ * @returns An event handler that triggers the action on the first pointer interaction.
+ */
+export function createPointerOrClickHander(handler: () => void) {
+   return (event: Event) => {
+      const target = event.currentTarget as HTMLButtonElement
+      if (event.type === 'pointerdown') {
+         // Prevents click from firing, given that pointerdown has already been fired.
+         const preventDblClick = (event: Event) => {
+            event.preventDefault()
+         }
+         target.addEventListener('click', preventDblClick, { capture: true, once: true })
+         defer(() => {
+            target.removeEventListener('click', preventDblClick)
+         })
+      }
+
+      if (event.defaultPrevented) {
+         return
+      }
+
+      handler()
+   }
 }

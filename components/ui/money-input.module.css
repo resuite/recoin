@@ -1,0 +1,7 @@
+.moneyInputContainer {
+   display: grid;
+}
+
+.input {
+   font-size: var(--text-3xl);
+}

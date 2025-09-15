@@ -5,7 +5,7 @@ import {
    StackView,
    StackViewGroup,
    VirtualKeyboardAwareView,
-   VirtualKeyboardTrigger,
+   VirtualKeyboardTriggers,
    useSidebarContext
 } from '@/components/views'
 import { Cell, useScopeContext } from 'retend'
@@ -92,14 +92,14 @@ function SecondPage() {
                            <Icon name='caret' direction='right' class='btn-icon' />
                         </Button>
                      </div>
-                     <VirtualKeyboardTrigger class='w-full text-big place-self-end'>
+                     <VirtualKeyboardTriggers class='w-full text-big place-self-end'>
                         <input
                            class='duration-slow will-change-transform px-0.25'
                            type='text'
                            placeholder='Enter text'
                            style={{ translate }}
                         />
-                     </VirtualKeyboardTrigger>
+                     </VirtualKeyboardTriggers>
                   </div>
                )}
             </VirtualKeyboardAwareView>

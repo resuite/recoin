@@ -1,0 +1,41 @@
+.container {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   display: grid;
+
+   &::after {
+      position: absolute;
+      grid-area: 1 / 1;
+      pointer-events: none;
+      height: 100%;
+      width: 100%;
+      content: "";
+      background-image: linear-gradient(
+         to bottom,
+         transparent,
+         transparent,
+         transparent,
+         transparent,
+         transparent,
+         transparent,
+         transparent,
+         var(--color-canvas)
+      );
+   }
+}
+
+.content {
+   grid-area: 1 / 1;
+   width: 100%;
+   height: 100%;
+   overflow-y: scroll;
+   overscroll-behavior: auto;
+   padding-bottom: calc(var(--spacing) * 2);
+   scrollbar-color: initial;
+   scrollbar-width: initial;
+
+   &::-webkit-scrollbar {
+      display: initial;
+   }
+}

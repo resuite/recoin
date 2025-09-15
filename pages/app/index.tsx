@@ -1,5 +1,6 @@
 import { PullToRefreshView, SidebarProviderView } from '@/components/views'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
+import { ROOT_APP_OUTLET } from '@/constants'
 import { GoogleIdentityProvider } from '@/integrations/google'
 import { Sidebar } from '@/pages/app/$fragments/sidebar'
 import StartPage from '@/pages/app/auth/start-page'
@@ -16,8 +17,9 @@ const AppContent = () => {
             <SidebarProviderView sidebar={() => <Sidebar />}>
                {() => (
                   <Outlet
+                     id={ROOT_APP_OUTLET}
                      style={{ display: 'grid' }}
-                     class='light-scheme h-full select-none translate-0 rounded-t-3xl'
+                     class='h-full select-none translate-0'
                   />
                )}
             </SidebarProviderView>

@@ -46,6 +46,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    let oldHeight = 0
 
    const handleFocusOut = (e: FocusEvent) => {
+      const container = containerRef.get()
       if (redirectingFocus.get()) {
          return
       }
@@ -53,6 +54,21 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       if (!e.relatedTarget) {
          dispatchVisibilityChange(innerHeight)
       }
+
+      if (
+         e.relatedTarget instanceof HTMLElement &&
+         container?.contains(e.relatedTarget) &&
+         e.relatedTarget.matches('[data-kbd-trigger] *')
+      ) {
+         // when focus is transferred to another virtual keyboard trigger,
+         // Safari tries once again to force a scroll change, so it must
+         // be misdirected here, again.
+         redirectingFocus.set(true)
+         e.relatedTarget.blur()
+         e.relatedTarget.focus({ preventScroll: true })
+         redirectingFocus.set(false)
+      }
+
       if (typeof onFocusOut === 'function') {
          onFocusOut.bind(e.currentTarget as HTMLInputElement)(e)
       }
@@ -152,7 +168,7 @@ export interface VirtualKeyboardTriggerProps extends DivProps {
    ref?: SourceCell<HTMLDivElement | null>
 }
 
-export function VirtualKeyboardTrigger(props: VirtualKeyboardTriggerProps) {
+export function VirtualKeyboardTriggers(props: VirtualKeyboardTriggerProps) {
    const observer = useObserver()
    const { ref = Cell.source(null), ...rest } = props
    const { dispatchVisibilityChange, currentVisualHeight, redirectingFocus } =
@@ -189,18 +205,19 @@ export function VirtualKeyboardTrigger(props: VirtualKeyboardTriggerProps) {
    }
 
    observer.onConnected(ref, (trigger) => {
-      const child = trigger.children[0]
-      if (!(child instanceof HTMLElement)) {
-         throw new Error('<VirtualKeyboardTrigger/> child must be an HTMLElement.')
+      const focusableChildren = trigger.querySelectorAll('textarea, input')
+      for (const child of focusableChildren) {
+         child.addEventListener('focus', handleFocus)
       }
-      child.addEventListener('focus', handleFocus)
 
       return () => {
-         child.removeEventListener('focus', handleFocus)
+         for (const child of focusableChildren) {
+            child.removeEventListener('focus', handleFocus)
+         }
       }
    })
 
-   return <div {...rest} ref={ref} />
+   return <div {...rest} ref={ref} data-kbd-trigger />
 }
 
 export class KeyboardVisibilityEvent extends Event {

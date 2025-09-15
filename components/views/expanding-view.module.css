@@ -3,6 +3,7 @@
    --expand-color: var(--color-canvas-text);
    --expand-size: var(--fab-size);
    display: contents;
+   isolation: isolate;
 }
 
 .content {
@@ -10,23 +11,11 @@
    top: 0;
    width: 100dvw;
    height: 100dvh;
-
-   /* This should just be 0ms, but if it is, compositing fails. */
-   transition-duration: 0.05ms;
-   transition-property: opacity;
    isolation: isolate;
 
-   &:not([data-open]) {
-      opacity: 0;
-      pointer-events: none;
-   }
-
-   &[data-open] {
-      opacity: 1;
-      /* Ensures that the transition to being visible occurs at the exact same time
-      on the document timeline as the clipPath element being transitioned to
-      invisible.*/
-      transition-delay: calc(var(--speed-bit-slower) - 0.05ms);
+   &:empty,
+   &:not(.container[data-open] > &) {
+      display: none;
    }
 }
 
@@ -46,17 +35,15 @@
    background-color: var(--expand-color);
    pointer-events: none;
    inset: var(--expand-origin);
+   will-change: opacity, scale;
+   transition-property: scale;
+   transition-duration: var(--speed-bit-slower);
 
-   .container:has(> .content[data-open]) > & {
-      opacity: 0;
-      /* Opacity should just be 0ms, but if it is, compositing fails. */
-      transition: scale var(--speed-bit-slower) ease-in-out, opacity 0.05ms var(--speed-bit-slower);
-      scale: 20;
+   .container[data-open] > & {
+      scale: 18;
    }
 
-   .container:has(> .content:not([data-open])) > & {
-      /* Opacity should just be 0ms, but if it is, compositing fails. */
-      transition: scale var(--speed-bit-slower) ease-in-out, opacity 0.05ms;
+   .container:not([data-open]) > & {
       scale: 0;
    }
 }

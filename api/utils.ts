@@ -3,7 +3,7 @@ import {
    GOOGLE_JWK_URL,
    RECOIN_SESSION_COOKIE,
    SESSION_EXPIRATION_SECONDS
-} from '@/constants/shared'
+} from '@/constants/server'
 import type { Context } from 'hono'
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie'
 import { createRemoteJWKSet, jwtVerify } from 'jose'

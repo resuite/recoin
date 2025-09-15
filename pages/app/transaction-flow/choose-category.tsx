@@ -1,48 +1,22 @@
-import { Icon, type IconName } from '@/components/icons'
+import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
+import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
+import { type Category, defaultExpenseCategories, defaultIncomeCategories } from '@/data'
 import { BackButton } from '@/pages/app/$fragments/back-btn'
+import { useRouteQueryControl } from '@/utilities/composables'
 import { For, Switch } from 'retend'
-import { useRouteQuery, useRouter } from 'retend/router'
+import { useRouteQuery } from 'retend/router'
 
-interface CategoryProps {
-   name: string
-   icon: IconName
-}
-
-const defaultCategories: CategoryProps[] = [
-   { name: 'Utilities', icon: 'house' },
-   {
-      name: 'Food and Drinks',
-      icon: 'cutlery'
-   },
-   {
-      name: 'Transportation',
-      icon: 'car'
-   },
-   {
-      name: 'Health and Personal Care',
-      icon: 'healthcare'
-   },
-   {
-      name: 'Financial Obligation',
-      icon: 'credit-card'
-   }
-]
-
-const Category = (props: CategoryProps) => {
-   const { name, icon } = props
-   const router = useRouter()
-
-   const selectCategory = () => {
-      router.params
-   }
+const CategoryLink = (props: Category) => {
+   const { name, icon, key } = props
+   const { add: setCategory } = useRouteQueryControl(QueryKeys.TransactionFlow.Category, key)
 
    return (
       <li>
          <Button
-            onClick={selectCategory}
+            onClick={setCategory}
             class='btn-link grid grid-cols-[auto_1fr] gap-0.5 items-center'
          >
             <Icon name={icon} class='h-1.5' />
@@ -54,18 +28,13 @@ const Category = (props: CategoryProps) => {
 
 const ChooseCategory = () => {
    const query = useRouteQuery()
-   const type = query.get(QueryKeys.TransactionFlow.Type).get()
+   const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
    const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
 
    return (
-      <div class='grid place-items-center place-content-center grid-cols-1 gap-0.5 relative px-1'>
+      <div class='grid place-items-center place-content-center grid-cols-1 relative px-1'>
          <BackButton />
-         <h2
-            class={[
-               'border-b-2 w-full',
-               'grid gap-x-0.5 gap-y-0.25 grid-rows-[1fr_.5fr] grid-cols-[auto_1fr]'
-            ]}
-         >
+         <h2 class='border-b-2 w-full grid gap-x-0.5 gap-y-0.25 grid-rows-[1fr_.5fr] grid-cols-[auto_1fr]'>
             <Arrows class='h-1.5 row-span-2 self-center' direction={arrowDirection} />
             <span class='text-title'>
                {Switch(type, {
@@ -75,7 +44,14 @@ const ChooseCategory = () => {
             </span>
             <sub class='text-normal'>Choose an {type} category.</sub>
          </h2>
-         <ul class='h-[55dvh] w-full'>{For(defaultCategories, Category)}</ul>
+         <FadeScrollView class='pt-0.5 max-h-[55dvh]'>
+            <ul>
+               {Switch(type, {
+                  expense: () => For(defaultExpenseCategories, CategoryLink),
+                  income: () => For(defaultIncomeCategories, CategoryLink)
+               })}
+            </ul>
+         </FadeScrollView>
       </div>
    )
 }

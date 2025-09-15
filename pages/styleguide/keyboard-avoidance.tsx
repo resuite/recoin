@@ -1,7 +1,7 @@
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
-   VirtualKeyboardTrigger
+   VirtualKeyboardTriggers
 } from '@/components/views'
 import { Cell } from 'retend'
 
@@ -27,13 +27,13 @@ const KeyboardAvoidanceTest = () => {
                   This page demonstrates keyboard avoidance behavior when input fields are focused.
                   Keyboard Height: {keyboardHeight}
                </p>
-               <VirtualKeyboardTrigger>
+               <VirtualKeyboardTriggers>
                   <input
                      placeholder='Write something here...'
                      class='w-full h-fit pl-0.25 mb-1 duration-slow will-change-transform'
                      style={{ translate }}
                   />
-               </VirtualKeyboardTrigger>
+               </VirtualKeyboardTriggers>
             </>
          )}
       </VirtualKeyboardAwareView>

@@ -73,6 +73,10 @@ export function createPartitions(variable: string, options?: PartitionOptions): 
    return partitions
 }
 
+interface AnimationsSettledOptions {
+   subtree?: boolean
+}
+
 /**
  * Retrieves the running animations on an element and returns
  * a promise that resolves when they are all settled.
@@ -81,7 +85,10 @@ export function createPartitions(variable: string, options?: PartitionOptions): 
  * collect animations started by style changes in this cycle.
  * @param el The element to track animations on.
  */
-export function animationsSettled(el: HTMLElement | Cell<HTMLElement | null>) {
+export function animationsSettled(
+   el: HTMLElement | Cell<HTMLElement | null>,
+   options?: AnimationsSettledOptions
+) {
    let resolver: (() => void) | null = null
    const promise = new Promise<void>((resolve) => {
       resolver = resolve
@@ -92,7 +99,7 @@ export function animationsSettled(el: HTMLElement | Cell<HTMLElement | null>) {
          resolver?.()
          return
       }
-      const animations = element.getAnimations()
+      const animations = element.getAnimations({ subtree: options?.subtree })
       const animationPromises = animations.map((a) => {
          return a.finished
       })
