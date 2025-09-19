@@ -23,6 +23,7 @@ const EnterTransactionDetails = () => {
    const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
    const chosenCategory = query.get(QueryKeys.TransactionFlow.Category)
    const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
+   const scrollViewRef = Cell.source<HTMLElement | null>(null)
    const categoryList = type === 'income' ? defaultIncomeCategories : defaultExpenseCategories
    const selectedCategory = categoryList.find((category) => {
       return category.key === chosenCategory.get()
@@ -39,11 +40,15 @@ const EnterTransactionDetails = () => {
    }
 
    const handleKeyboardOpen = (event: KeyboardVisibilityEvent) => {
-      keyboardHeight.set(event.approximateHeight)
-      keyboardIsVisible.set(event.isVisible)
-      if (event.isVisible) {
-         const focusedElement = event.relatedTarget as HTMLElement
-         focusedElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const scrollView = scrollViewRef.get()
+      const { isVisible, approximateHeight } = event
+      keyboardHeight.set(approximateHeight)
+      keyboardIsVisible.set(isVisible)
+
+      if (isVisible && scrollView !== null) {
+         const target = event.relatedTarget as HTMLElement
+         const scrollOffset = Math.max(target.offsetTop - scrollView.clientHeight / 2, 0)
+         scrollView.scrollTo({ top: scrollOffset, behavior: 'smooth' })
       }
    }
 
@@ -73,7 +78,7 @@ const EnterTransactionDetails = () => {
                   </sub>
                </div>
                <p class='text-big text-center'>Share more details about this transaction.</p>
-               <FadeScrollView class='max-h-[45dvh]'>
+               <FadeScrollView ref={scrollViewRef} class='max-h-[45dvh]'>
                   <form
                      style={{ paddingBottom }}
                      class={[
