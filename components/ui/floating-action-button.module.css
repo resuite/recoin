@@ -10,12 +10,12 @@
    padding: 0;
    background-color: var(--color-canvas-text);
    color: var(--color-canvas-background);
-   transition: scale var(--speed-default), translate var(--speed-default), rotate
-      var(--speed-slower) var(--timing-bounce-slower);
+   transition: translate var(--speed-default), rotate var(--speed-slower)
+      var(--timing-bounce-slower);
    border: 2px solid var(--color-canvas);
 
    &:active {
-      scale: 0.7;
+      scale: 1;
    }
 
    &:disabled {
