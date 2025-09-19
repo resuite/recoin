@@ -20,8 +20,8 @@ const Home = () => {
       <div
          class={[
             'grid grid-rows-[auto_1fr] translate-0 h-full w-full light-scheme rounded-t-3xl',
-            'duration-slower transition-transform ease',
-            { 'translate-y-3 scale-80': transactionFlowIsOpen }
+            'duration-slow transition-transform ease',
+            { 'translate-y-3 scale-90': transactionFlowIsOpen }
          ]}
       >
          <Header />
