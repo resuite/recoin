@@ -48,6 +48,10 @@
    }
 }
 
+#credential_picker_container {
+   color-scheme: initial;
+}
+
 body {
    font-family: "Instrument Sans Italic O", "Instrument Sans Regular", sans-serif;
    @apply dark-scheme;

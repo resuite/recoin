@@ -13,6 +13,7 @@ export const GoogleSignIn = (props: GoogleSignInProps) => {
    return (
       <button
          type='button'
+         style={{ colorScheme: 'initial' }}
          ref={buttonRef}
          class='button-bare min-h-[60px] max-w-fit grid grid-flow-col place-items-center gap-0.5'
       >
