@@ -4,14 +4,14 @@ import { Button } from '@/components/ui/button'
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { type Category, defaultExpenseCategories, defaultIncomeCategories } from '@/data'
-import { BackButton } from '@/pages/app/$fragments/back-btn'
+import { BackButton } from '@/pages/app/_fragments/back-btn'
 import { useRouteQueryControl } from '@/utilities/composables'
 import { For, Switch } from 'retend'
 import { useRouteQuery } from 'retend/router'
 
 const CategoryLink = (props: Category) => {
-   const { name, icon, key } = props
-   const { add: setCategory } = useRouteQueryControl(QueryKeys.TransactionFlow.Category, key)
+   const { name, icon, id } = props
+   const { add: setCategory } = useRouteQueryControl(QueryKeys.TransactionFlow.Category, id)
 
    return (
       <li>

@@ -11,8 +11,9 @@ import {
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { defaultCurrency, defaultExpenseCategories, defaultIncomeCategories } from '@/data'
-import { BackButton } from '@/pages/app/$fragments/back-btn'
+import { BackButton } from '@/pages/app/_fragments/back-btn'
 import { NewTransactionDetailsScope } from '@/scopes/forms'
+import { scrollIntoView } from '@/utilities/miscellaneous'
 import { Cell, Switch, useScopeContext } from 'retend'
 import { Input } from 'retend-utils/components'
 import { useRouteQuery } from 'retend/router'
@@ -26,7 +27,7 @@ const EnterTransactionDetails = () => {
    const scrollViewRef = Cell.source<HTMLElement | null>(null)
    const categoryList = type === 'income' ? defaultIncomeCategories : defaultExpenseCategories
    const selectedCategory = categoryList.find((category) => {
-      return category.key === chosenCategory.get()
+      return category.id === chosenCategory.get()
    })
    const keyboardHeight = Cell.source(0)
    const keyboardIsVisible = Cell.source(false)
@@ -46,15 +47,13 @@ const EnterTransactionDetails = () => {
       keyboardIsVisible.set(isVisible)
 
       if (isVisible && scrollView !== null) {
-         const target = event.relatedTarget as HTMLElement
-         const scrollOffset = Math.max(target.offsetTop - scrollView.clientHeight / 2, 0)
-         scrollView.scrollTo({ top: scrollOffset, behavior: 'smooth' })
+         scrollIntoView(event.relatedTarget as HTMLElement, scrollView)
       }
    }
 
    return (
       <VirtualKeyboardAwareView
-         class='px-1 pb-2 grid place-items-center gap-1 place-content-center'
+         class='px-1 pb-2 grid grid-cols-1 place-items-center gap-1 place-content-center'
          onKeyboardVisibilityChange={handleKeyboardOpen}
       >
          {() => (
@@ -82,12 +81,12 @@ const EnterTransactionDetails = () => {
                   <form
                      style={{ paddingBottom }}
                      class={[
-                        '[&_input]:duration-default [&_input]:transition-opacity',
+                        '[&_input]:duration-slow [&_input]:transition-opacity',
                         '[&:has(input:focus-within)_input:not(:focus-within)]:opacity-30'
                      ]}
                   >
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
-                        <MoneyInput model={amount} currency={defaultCurrency} />
+                        <MoneyInput model={amount} currency={defaultCurrency.value} />
                         <Input type='text' placeholder='Label' />
                         <Input type='date' placeholder='Amount' />
                         <Input type='time' placeholder='Amount' />

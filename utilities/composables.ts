@@ -1,7 +1,7 @@
 import { RecoinError } from '@/api/error'
 import { useToast } from '@/components/ui/toast'
 import { defer } from '@/utilities/miscellaneous'
-import { Cell, useSetupEffect } from 'retend'
+import { Cell, useObserver, useSetupEffect } from 'retend'
 import { Modes, getGlobalContext, matchContext } from 'retend/context'
 import { useRouteQuery, useRouter } from 'retend/router'
 import { defaultError, errorCodeToHumanReadable } from './error-messages'
@@ -67,4 +67,26 @@ export function useHrefWithAppendedParams(record: Record<string, string>) {
       query.append(key, value)
    }
    return `${currentRoute.path}?${query}`
+}
+
+export function useTextContentLength(ref: Cell<HTMLElement | null>): Cell<number> {
+   const observer = useObserver()
+   const count = Cell.source(0)
+
+   observer.onConnected(ref, (element) => {
+      const update = () => {
+         count.set(element.innerText.length)
+      }
+      update()
+      const observer = new MutationObserver(update)
+      observer.observe(element, {
+         characterData: true,
+         childList: true,
+         subtree: true
+      })
+
+      return () => observer.disconnect()
+   })
+
+   return count
 }

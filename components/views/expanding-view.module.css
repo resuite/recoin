@@ -40,15 +40,15 @@
    inset: var(--expand-origin);
    will-change: opacity, scale;
    transition-property: scale;
-   transition-duration: var(--speed-slow);
 
    .container[data-open] > & {
+      transition-duration: var(--speed-slow);
       transition-timing-function: ease-in-out;
       scale: 18;
    }
 
    .container:not([data-open]) > & {
-      transition-timing-function: ease-out;
+      transition-duration: var(--speed-bit-slower);
       scale: 0;
    }
 }

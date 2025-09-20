@@ -85,3 +85,21 @@ export function createPointerOrClickHander(handler: () => void) {
       handler()
    }
 }
+
+const OFFSET_FROM_KEYBOARD = 30
+
+/**
+ * Scrolls a target element into view within a scrollable parent element.
+ * The target element will be centered vertically in the scroll view, with an additional offset.
+ *
+ * @param target The HTMLElement to scroll into view.
+ * @param scrollView The HTMLElement that is scrollable.
+ */
+export function scrollIntoView(target: HTMLElement, scrollView: HTMLElement) {
+   const { offsetTop, clientHeight } = target
+   const { clientHeight: scrollViewClientHeight } = scrollView
+   scrollView.scrollTo({
+      top: offsetTop + clientHeight - scrollViewClientHeight / 2 + OFFSET_FROM_KEYBOARD,
+      behavior: 'smooth'
+   })
+}
