@@ -1,0 +1,19 @@
+.fitText {
+   container-name: fit-text;
+   container-type: inline-size;
+   display: grid;
+   place-items: center;
+
+   & > .content {
+      display: grid;
+      place-items: center;
+      min-height: var(--fit-text-max-font-size);
+      font-size: calc(
+         min(
+            (100cqw / var(--fit-text-char-count)) *
+            var(--fit-text-scaling-factor),
+            var(--fit-text-max-font-size)
+         )
+      );
+   }
+}
