@@ -1,6 +1,7 @@
 import { PullToRefreshView, SidebarProviderView } from '@/components/views'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
 import { ROOT_APP_OUTLET } from '@/constants'
+import { initializeDbWorker } from '@/data'
 import { GoogleIdentityProvider } from '@/integrations/google'
 import { Sidebar } from '@/pages/app/_fragments/sidebar'
 import StartPage from '@/pages/app/auth/start-page'
@@ -42,6 +43,7 @@ const App = () => {
                   })
 
                   useSetupEffect(() => {
+                     initializeDbWorker()
                      const timeout = setTimeout(() => {
                         isReady.set(true)
                      }, 200)
