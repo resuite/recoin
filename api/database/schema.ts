@@ -18,7 +18,9 @@ export const workspaces = sqliteTable('workspaces', {
    userId: text('user_id')
       .notNull()
       .references(() => users.id),
-   createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull()
+   createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
+   currency: text('currency'),
+   startingBalance: integer('starting_balance').default(0)
 })
 
 export const usersRelations = relations(users, ({ many }) => ({

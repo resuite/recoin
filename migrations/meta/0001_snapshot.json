@@ -1,8 +1,8 @@
 {
    "version": "6",
    "dialect": "sqlite",
-   "id": "36aac83b-32cc-499d-b11f-40db7e3e20fe",
-   "prevId": "00000000-0000-0000-0000-000000000000",
+   "id": "09a88085-a241-40be-ae4f-0ffa286bc0b6",
+   "prevId": "36aac83b-32cc-499d-b11f-40db7e3e20fe",
    "tables": {
       "users": {
          "name": "users",
@@ -111,6 +111,21 @@
                "primaryKey": false,
                "notNull": true,
                "autoincrement": false
+            },
+            "currency": {
+               "name": "currency",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "starting_balance": {
+               "name": "starting_balance",
+               "type": "integer",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false,
+               "default": 0
             }
          },
          "indexes": {},
