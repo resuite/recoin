@@ -100,6 +100,12 @@
    }
 }
 
+@keyframes fade {
+   from {
+      opacity: 0;
+   }
+}
+
 @keyframes fade-y {
    from {
       opacity: 0;

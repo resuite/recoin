@@ -16,8 +16,8 @@ interface HomeStatsContentProps {
 const HomeStatsContent = (props: HomeStatsContentProps) => {
    const { startingBalance, totalExpense, totalIncome } = props
    return (
-      <>
-         <div class='text-center animate-fade-in [--starting-translate:0] py-0.75 border-b-3 w-full'>
+      <div class='animate-fade grid grid-cols-2 gap-x-1'>
+         <div class='text-center py-0.75 border-b-3 col-span-2'>
             <h4 class='text-lg'>Current Balance</h4>
             <FitText scalingFactor={1.7} maxFontSize='var(--text-logo)' class='h-3.5'>
                <FormattedMoney currency={defaultCurrency.value}>
@@ -26,55 +26,64 @@ const HomeStatsContent = (props: HomeStatsContentProps) => {
             </FitText>
          </div>
 
-         <div class='text-center w-full h-fit grid grid-cols-2 gap-1'>
-            {/* Income */}
-            <div class='border-b-3 py-0.75 grid grid-cols-[auto_auto] gap-x-0.25'>
-               <Arrows class='h-0.75 justify-self-end' />
-               <h4 class='text-sm justify-self-start'>Income</h4>
-               <FitText
-                  scalingFactor={1.5}
-                  maxFontSize='var(--text-4xl)'
-                  class='col-span-2 min-h-[6.98dvh]'
-               >
-                  <FormattedMoney currency={defaultCurrency.value}>{totalIncome}</FormattedMoney>
-               </FitText>
-            </div>
-
-            {/* Expense */}
-            <div class='border-b-3 py-0.75 grid grid-rows-[auto_1fr] grid-cols-[auto_auto] gap-x-0.25'>
-               <Arrows class='h-0.75 justify-self-end' direction='top-right' />
-               <h4 class='text-sm justify-self-start'>Expense</h4>
-               <FitText
-                  scalingFactor={1.5}
-                  maxFontSize='var(--text-4xl)'
-                  class='col-span-2 min-h-[6.98dvh]'
-               >
-                  <FormattedMoney currency={defaultCurrency.value}>{totalExpense}</FormattedMoney>
-               </FitText>
-            </div>
+         {/* Income */}
+         <div class='border-b-3 py-0.75 grid grid-cols-[auto_auto] gap-x-0.25'>
+            <Arrows class='h-0.75 justify-self-end' />
+            <h4 class='text-sm justify-self-start'>Income</h4>
+            <FitText
+               scalingFactor={1.5}
+               maxFontSize='var(--text-4xl)'
+               class='col-span-2 min-h-[6.98dvh]'
+            >
+               <FormattedMoney currency={defaultCurrency.value}>{totalIncome}</FormattedMoney>
+            </FitText>
          </div>
-      </>
+
+         {/* Expense */}
+         <div class='border-b-3 py-0.75 grid grid-rows-[auto_1fr] grid-cols-[auto_auto] gap-x-0.25'>
+            <Arrows class='h-0.75 justify-self-end' direction='top-right' />
+            <h4 class='text-sm justify-self-start'>Expense</h4>
+            <FitText
+               scalingFactor={1.5}
+               maxFontSize='var(--text-4xl)'
+               class='col-span-2 min-h-[6.98dvh]'
+            >
+               <FormattedMoney currency={defaultCurrency.value}>{totalExpense}</FormattedMoney>
+            </FitText>
+         </div>
+      </div>
    )
 }
 
 export const HomeStats = () => {
    const homeStats = usePromise(getHomeStats)
+   const heightValues = [
+      // current balance.
+      'var(--spacing) * 0.75 * 2',
+      'var(--text-lg)',
+      'max(var(--spacing) * 3.5, var(--text-logo))',
+      '3px',
+      // income/expense
+      'var(--spacing) * 0.75 * 2',
+      'max(var(--spacing) * 0.75, var(--text-sm))',
+      '6.98dvh',
+      '3px',
+      // line heights
+      '0.625rem + 0.078125rem'
+   ]
+   const height = `calc(${heightValues.map((cssString) => `(${cssString})`).join(' + ')})`
 
-   return (
-      <div>
-         {Switch.OnProperty(homeStats, 'state', {
-            error: ({ error }) => <ErrorMessage error={error} />,
-            pending: () => (
-               <div class='grid place-items-center place-content-center'>
-                  <Loader class='[grid-area:1/1] h-1 opacity-50' />
-                  <div class='[grid-area:1/1] invisible'>
-                     {/*Forces the loader to occupy the same width as the data.*/}
-                     <HomeStatsContent startingBalance={0} totalExpense={0} totalIncome={0} />
-                  </div>
-               </div>
-            ),
-            complete: ({ data: stats }) => <HomeStatsContent {...stats} />
-         })}
-      </div>
-   )
+   return Switch.OnProperty(homeStats, 'state', {
+      error: ({ error }) => (
+         <div style={{ height }} class='grid place-items-center place-content-center'>
+            <ErrorMessage error={error} />
+         </div>
+      ),
+      pending: () => (
+         <div style={{ height }} class='grid place-items-center place-content-center'>
+            <Loader class='[grid-area:1/1] h-1 opacity-50' />
+         </div>
+      ),
+      complete: ({ data: stats }) => <HomeStatsContent {...stats} />
+   })
 }

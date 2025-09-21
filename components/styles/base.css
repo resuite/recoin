@@ -99,6 +99,7 @@ body {
 
    --animate-spin: spin var(--speed-slowest) linear infinite;
    --animate-fade-in: fade-in var(--speed-fast) ease-in backwards;
+   --animate-fade: fade var(--speed-default) ease-in-out backwards;
    --animate-lining: lining var(--speed-slow) ease-in-out var(--speed-slow) backwards;
    --animate-fade-y: fade-y var(--speed-default) ease-in-out backwards;
 
