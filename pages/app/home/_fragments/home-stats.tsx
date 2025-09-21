@@ -7,13 +7,13 @@ import { defaultCurrency, getHomeStats } from '@/data'
 import { usePromise } from '@/utilities/composables'
 import { Switch } from 'retend'
 
-interface HomeStatsContenrtProps {
+interface HomeStatsContentProps {
    startingBalance: number
    totalExpense: number
    totalIncome: number
 }
 
-const HomeStatsContent = (props: HomeStatsContenrtProps) => {
+const HomeStatsContent = (props: HomeStatsContentProps) => {
    const { startingBalance, totalExpense, totalIncome } = props
    return (
       <>
