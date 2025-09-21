@@ -38,6 +38,7 @@
    "dependencies": {
       "@hono/zod-validator": "^0.7.0",
       "@types/google.accounts": "^0.0.18",
+      "bidc": "^0.0.3",
       "bowser": "^2.11.0",
       "drizzle-orm": "^0.44.5",
       "google-auth-library": "^10.3.0",

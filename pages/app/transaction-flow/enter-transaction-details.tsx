@@ -1,6 +1,8 @@
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
 import Checkmark from '@/components/icons/svg/checkmark'
+import Loader from '@/components/icons/svg/loader'
+import { ErrorMessage } from '@/components/ui/error-message'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { MoneyInput } from '@/components/ui/money-input'
 import {
@@ -10,9 +12,10 @@ import {
 } from '@/components/views'
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
-import { defaultCurrency, defaultExpenseCategories, defaultIncomeCategories } from '@/data'
+import { defaultCurrency, getCategoryById } from '@/data'
 import { BackButton } from '@/pages/app/_fragments/back-btn'
 import { NewTransactionDetailsScope } from '@/scopes/forms'
+import { usePromise } from '@/utilities/composables'
 import { scrollIntoView } from '@/utilities/miscellaneous'
 import { Cell, Switch, useScopeContext } from 'retend'
 import { Input } from 'retend-utils/components'
@@ -22,23 +25,21 @@ const EnterTransactionDetails = () => {
    const query = useRouteQuery()
    const { amount } = useScopeContext(NewTransactionDetailsScope)
    const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
-   const chosenCategory = query.get(QueryKeys.TransactionFlow.Category)
    const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
    const scrollViewRef = Cell.source<HTMLElement | null>(null)
-   const categoryList = type === 'income' ? defaultIncomeCategories : defaultExpenseCategories
-   const selectedCategory = categoryList.find((category) => {
-      return category.id === chosenCategory.get()
-   })
+   const getCategoryDetails = async () => {
+      const chosenCategoryId = query.get(QueryKeys.TransactionFlow.Category).get()
+      if (!chosenCategoryId) {
+         return null
+      }
+      return await getCategoryById(chosenCategoryId)
+   }
+   const selectedCategory = usePromise(getCategoryDetails)
    const keyboardHeight = Cell.source(0)
    const keyboardIsVisible = Cell.source(false)
    const paddingBottom = Cell.derived(() => {
       return `${keyboardHeight.get()}px`
    })
-
-   if (!selectedCategory) {
-      query.delete(QueryKeys.TransactionFlow.Category)
-      return
-   }
 
    const handleKeyboardOpen = (event: KeyboardVisibilityEvent) => {
       const scrollView = scrollViewRef.get()
@@ -69,12 +70,24 @@ const EnterTransactionDetails = () => {
                         })}
                      </span>
                   </h2>
-                  <sub class='text-bigger flex gap-0.25 items-center justify-center'>
-                     <div class='h-1 w-1'>
-                        <Icon name={selectedCategory.icon} />
-                     </div>
-                     <span>{selectedCategory.name}</span>
-                  </sub>
+                  {Switch.OnProperty(selectedCategory, 'state', {
+                     error: ({ error }) => <ErrorMessage error={error} />,
+                     pending: Loader,
+                     complete: ({ data: selectedCategory }) => {
+                        if (selectedCategory === null) {
+                           query.delete(QueryKeys.TransactionFlow.Category)
+                           return
+                        }
+                        return (
+                           <sub class='text-bigger flex gap-0.25 items-center justify-center'>
+                              <div class='h-1 w-1'>
+                                 <Icon name={selectedCategory.icon} />
+                              </div>
+                              <span>{selectedCategory.name}</span>
+                           </sub>
+                        )
+                     }
+                  })}
                </div>
                <p class='text-big text-center'>Share more details about this transaction.</p>
                <FadeScrollView ref={scrollViewRef} class='max-h-[45dvh]'>

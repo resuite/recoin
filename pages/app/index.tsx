@@ -44,7 +44,7 @@ const App = () => {
                   useSetupEffect(() => {
                      const timeout = setTimeout(() => {
                         isReady.set(true)
-                     }, 250)
+                     }, 200)
 
                      return () => clearTimeout(timeout)
                   })

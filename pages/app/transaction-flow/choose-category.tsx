@@ -1,11 +1,13 @@
+import type { Category, TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
+import Loader from '@/components/icons/svg/loader'
 import { Button } from '@/components/ui/button'
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
-import { type Category, defaultExpenseCategories, defaultIncomeCategories } from '@/data'
+import { getExpenseCategories, getIncomeCategories } from '@/data'
 import { BackButton } from '@/pages/app/_fragments/back-btn'
-import { useRouteQueryControl } from '@/utilities/composables'
+import { usePromise, useRouteQueryControl } from '@/utilities/composables'
 import { For, Switch } from 'retend'
 import { useRouteQuery } from 'retend/router'
 
@@ -26,14 +28,16 @@ const CategoryLink = (props: Category) => {
    )
 }
 
-const ChooseCategory = () => {
-   const query = useRouteQuery()
-   const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
-   const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
+interface CategoryListingProps {
+   type: TransactionType
+   categories: Category[]
+}
 
+const CategoriesListing = (props: CategoryListingProps) => {
+   const { type, categories } = props
+   const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
    return (
-      <div class='grid place-items-center place-content-center grid-cols-1 relative px-1'>
-         <BackButton />
+      <>
          <h2 class='border-b-2 w-full grid gap-x-0.5 gap-y-0.25 grid-rows-[1fr_.5fr] grid-cols-[auto_1fr]'>
             <Arrows class='h-1.5 row-span-2 self-center' direction={arrowDirection} />
             <span class='text-title'>
@@ -45,13 +49,28 @@ const ChooseCategory = () => {
             <sub class='text-normal'>Choose an {type} category.</sub>
          </h2>
          <FadeScrollView class='pt-0.5 max-h-[55dvh]'>
-            <ul>
-               {Switch(type, {
-                  expense: () => For(defaultExpenseCategories, CategoryLink),
-                  income: () => For(defaultIncomeCategories, CategoryLink)
-               })}
-            </ul>
+            <ul>{For(categories, CategoryLink)}</ul>
          </FadeScrollView>
+      </>
+   )
+}
+
+const ChooseCategory = () => {
+   const query = useRouteQuery()
+   const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
+   const getCategories = type === 'income' ? getIncomeCategories : getExpenseCategories
+   const categories = usePromise(getCategories)
+
+   return (
+      <div class='grid place-items-center place-content-center grid-cols-1 relative px-1'>
+         <BackButton />
+         {Switch.OnProperty(categories, 'state', {
+            error: () => <>Could not load categories.</>,
+            pending: () => <Loader class='h-2' />,
+            complete: ({ data: categories }) => (
+               <CategoriesListing type={type} categories={categories} />
+            )
+         })}
       </div>
    )
 }
