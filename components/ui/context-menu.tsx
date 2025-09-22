@@ -410,7 +410,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
          {() => (
             // This needs to be a teleport in case of recursive submenus.
             // the anchor needs to be position:fixed to anchor with the current cursor position,
-            // and the behaviour of nested fixed elements in browsers is...questionable.
+            // and the behavior of nested fixed elements in browsers is...questionable.
             <Teleport
                to='body'
                class={styles.anchor}

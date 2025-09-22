@@ -1,6 +1,9 @@
-import type { users } from '@/api/database/schema'
+import type { users, workspaces } from '@/api/database/schema'
 import type { IconName } from '@/components/icons'
-export type UserData = Omit<typeof users.$inferSelect, 'googleId' | 'createdAt'>
+export type WorkspaceProfile = Omit<typeof workspaces.$inferSelect, 'createdAt'>
+export type UserData = Omit<typeof users.$inferSelect, 'googleId' | 'createdAt'> & {
+   workspaces: Array<WorkspaceProfile>
+}
 
 interface Model {
    id: `${string}_${string}`

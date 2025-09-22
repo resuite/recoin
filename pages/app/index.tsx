@@ -4,10 +4,35 @@ import { ROOT_APP_OUTLET } from '@/constants'
 import { initializeDbWorker } from '@/data'
 import { GoogleIdentityProvider } from '@/integrations/google'
 import { Sidebar } from '@/pages/app/_fragments/sidebar'
+import Onboarding from '@/pages/app/auth/onboarding'
 import StartPage from '@/pages/app/auth/start-page'
 import { AuthenticationProvider, useAuthContext } from '@/scopes/auth'
 import { Cell, useSetupEffect } from 'retend'
 import { useRouter } from 'retend/router'
+
+function useApplicationSetup() {
+   const { userData } = useAuthContext()
+   const waitTimeLoaded = Cell.source(false)
+
+   const ready = Cell.derived(() => {
+      return userData.get() !== null && waitTimeLoaded.get()
+   })
+
+   const hasFinishedOnboarding = Cell.derived(() => {
+      return Boolean(userData.get()?.workspaces[0]?.currency)
+   })
+
+   useSetupEffect(() => {
+      initializeDbWorker()
+      const timeout = setTimeout(() => {
+         waitTimeLoaded.set(true)
+      }, 200)
+
+      return () => clearTimeout(timeout)
+   })
+
+   return { hasFinishedOnboarding, ready }
+}
 
 const AppContent = () => {
    const { Outlet } = useRouter()
@@ -35,28 +60,24 @@ const App = () => {
          {() => (
             <AuthenticationProvider>
                {() => {
-                  const { userData } = useAuthContext()
-                  const isReady = Cell.source(false)
-
-                  const userDataDefined = Cell.derived(() => {
-                     return userData.get() !== null && isReady.get()
-                  })
-
-                  useSetupEffect(() => {
-                     initializeDbWorker()
-                     const timeout = setTimeout(() => {
-                        isReady.set(true)
-                     }, 200)
-
-                     return () => clearTimeout(timeout)
+                  const { ready, hasFinishedOnboarding } = useApplicationSetup()
+                  const initialTransition = Cell.derived(() => {
+                     return hasFinishedOnboarding.get() ? 'slide-up' : 'fade-in'
                   })
 
                   return (
                      <FullScreenTransitionView
-                        when={userDataDefined}
-                        transition='slide-up'
+                        when={ready}
+                        transition={initialTransition}
                         from={StartPage}
-                        to={AppContent}
+                        to={() => (
+                           <FullScreenTransitionView
+                              when={hasFinishedOnboarding}
+                              transition='slide-up'
+                              from={Onboarding}
+                              to={AppContent}
+                           />
+                        )}
                         class='grid-lines-with-fade'
                      />
                   )

@@ -103,3 +103,15 @@ export function scrollIntoView(target: HTMLElement, scrollView: HTMLElement) {
       behavior: 'smooth'
    })
 }
+
+export function groupByCount<T>(arr: T[], groupSize?: number) {
+   if (!groupSize) {
+      return [arr]
+   }
+   const result = []
+   for (let i = 0; i < arr.length; i += groupSize) {
+      const group = arr.slice(i, i + groupSize)
+      result.push(group)
+   }
+   return result
+}
