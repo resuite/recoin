@@ -48,22 +48,30 @@ applicationRoute.post(
          const userId = c.get('userId')
          const { currency, startingBalance } = c.req.valid('json')
 
-         const workspace = await db.query.workspaces.findFirst({
-            where: eq(schema.workspaces.userId, userId)
+         const user = await db.query.users.findFirst({
+            where: eq(schema.users.id, userId),
+            with: { workspaces: { limit: 1 } }
          })
+         const workspace = user?.workspaces?.at(0)
+
+         if (!user) {
+            c.status(StatusCodes.InternalServerError)
+            return errorOccurred(c, Errors.UnAuthorized, 'User not found.')
+         }
 
          if (!workspace) {
             c.status(StatusCodes.InternalServerError)
-            return errorOccurred(c, Errors.UnknownErrorOccured, 'User workspace not found.')
+            return errorOccurred(c, Errors.UnAuthorized, 'User workspace not found.')
          }
 
-         await db
+         const [updatedWorkspace] = await db
             .update(schema.workspaces)
             .set({ currency, startingBalance })
             .where(eq(schema.workspaces.id, workspace.id))
+            .returning()
 
          c.status(StatusCodes.Ok)
-         return success(c)
+         return success(c, { ...user, workspaces: [updatedWorkspace] } satisfies UserData)
       }
    })
 )

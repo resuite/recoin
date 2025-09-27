@@ -266,7 +266,7 @@ body {
 }
 
 @utility grid-lines-with-fade {
-   @apply grid-lines relative;
+   @apply grid-lines relative [&>*]:relative;
    @apply before:pointer-events-none before:block before:absolute before:h-full before:w-full;
    @apply before:bg-linear-to-b before:from-canvas-background before:via-transparent before:via-30% before:to-transparent;
 }

@@ -3,13 +3,14 @@ import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './money-input.module.css'
 
-interface MoneyInputProps {
+type InputProps = JSX.IntrinsicElements['input']
+interface MoneyInputProps extends InputProps {
    model: SourceCell<number>
    currency: JSX.ValueOrCell<string>
 }
 
 export function MoneyInput(props: MoneyInputProps) {
-   const { model, currency: currencyProp } = props
+   const { model, currency: currencyProp, ...rest } = props
    const currency = useDerivedValue(currencyProp)
    const inputRef = Cell.source<HTMLInputElement | null>(null)
    const formatter = Cell.derived(() => {
@@ -42,7 +43,8 @@ export function MoneyInput(props: MoneyInputProps) {
    return (
       <div class={styles.moneyInputContainer}>
          <input
-            class={styles.input}
+            {...rest}
+            class={[styles.input, rest.class]}
             ref={inputRef}
             type='text'
             onInput={update}

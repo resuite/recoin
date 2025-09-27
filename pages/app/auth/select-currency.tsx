@@ -7,12 +7,15 @@ import { useRouteQuery } from 'retend/router'
 
 const CurrencySelection = () => {
    const query = useRouteQuery()
-   const currency = Cell.source({ label: 'USD', value: 'USD' })
+   const initialCurrency = query.get(QueryKeys.Onboarding.Currency).get()
    const display = new Intl.DisplayNames(['en'], { type: 'currency', style: 'long' })
    const currencyOptions = Intl.supportedValuesOf('currency').map((currency) => ({
       label: `${display.of(currency)} - ${currency}`,
       value: currency
    }))
+   const currency = Cell.source(
+      currencyOptions.find((option) => option.value === initialCurrency) ?? currencyOptions[0]
+   )
 
    const goToInitialBalancePage = () => {
       query.set(QueryKeys.Onboarding.Currency, currency.get().value)

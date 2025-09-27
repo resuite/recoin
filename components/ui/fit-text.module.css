@@ -7,7 +7,6 @@
    & > .content {
       display: grid;
       place-items: center;
-      min-height: var(--fit-text-max-font-size);
       font-size: calc(
          min(
             (100cqw / var(--fit-text-char-count)) *

@@ -1,5 +1,5 @@
 import type { UserData } from '@/api/database/types'
-import { getMe } from '@/api/modules/application/client'
+import { completeOnboarding, getMe } from '@/api/modules/application/client'
 import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/client'
 import type { ErrorResponse, SuccessResponse } from '@/api/types'
 import { useErrorNotifier, useIsServer } from '@/utilities/composables'
@@ -23,6 +23,12 @@ interface AuthCtx {
       error: Cell<Error | null>
    }
    authState: Cell<AuthState>
+   completeSetup: {
+      run: (...args: Parameters<typeof completeOnboarding>) => Promise<void>
+      data: Cell<ErrorResponse | SuccessResponse<UserData> | null>
+      pending: Cell<boolean>
+      error: Cell<Error | null>
+   }
 }
 
 const AuthScope = createScope<AuthCtx>('Authentication')
@@ -38,6 +44,7 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    const cachedUser = useLocalStorage<UserData | null>('userData', null)
 
    const logInWithGoogle = Cell.async(verifyGoogleSignIn)
+   const completeSetup = Cell.async(completeOnboarding)
    const logOut = Cell.async(logOutUser)
    const sessionCheck = Cell.async(getMe)
 
@@ -77,6 +84,14 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
       return null
    })
 
+   const setUserData = (data: UserData | null) => {
+      Cell.batch(() => {
+         cachedUser.set(data)
+         logInWithGoogle.data.set(data ? { data: data, success: true } : null)
+         sessionCheck.data.set(data ? { data: data, success: true } : null)
+      })
+   }
+
    useSetupEffect(() => {
       sessionCheck.run()
    })
@@ -90,15 +105,16 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    logOut.error.listen(errorNotifier)
    logOut.data.listen((data) => {
       if (data?.success) {
-         Cell.batch(() => {
-            cachedUser.set(null)
-            logInWithGoogle.data.set(null)
-            sessionCheck.data.set(null)
-         })
+         setUserData(null)
+      }
+   })
+   completeSetup.data.listen((data) => {
+      if (data?.success) {
+         setUserData(data.data)
       }
    })
 
-   const ctx: AuthCtx = { authState, logInWithGoogle, userData, logOut }
+   const ctx: AuthCtx = { authState, logInWithGoogle, userData, logOut, completeSetup }
 
    return <AuthScope.Provider value={ctx}>{children}</AuthScope.Provider>
 }

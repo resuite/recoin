@@ -15,7 +15,7 @@ interface OnboardingDetails {
    startingBalance: number
 }
 
-export async function completeOnboarding(data: OnboardingDetails): ServerResponse {
+export async function completeOnboarding(data: OnboardingDetails): ServerResponse<UserData> {
    const res = await fetch('/__api/app/onboarding', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
