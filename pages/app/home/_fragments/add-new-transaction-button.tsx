@@ -5,8 +5,9 @@ import { ROOT_APP_OUTLET } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { VibrationPatterns } from '@/constants/vibration'
 import TransactionFlow from '@/pages/app/transaction-flow'
-import { type NewTransactionDetails, NewTransactionDetailsScope } from '@/scopes/forms'
+import { type TransactionDetailsForm, TransactionDetailsFormScope } from '@/scopes/forms'
 import { useRouteQueryControl } from '@/utilities/composables'
+import { createForm } from '@/utilities/form'
 import { vibrate } from '@/utilities/miscellaneous'
 import { Cell } from 'retend'
 import { Teleport } from 'retend/teleport'
@@ -20,14 +21,18 @@ export function AddNewTransactionButton() {
    const { hasKey: isOnTransactionDetailsPage } = useRouteQueryControl(
       QueryKeys.TransactionFlow.Category
    )
+   const rootOutlet = `#${ROOT_APP_OUTLET}`
 
-   const details: NewTransactionDetails = {
-      amount: Cell.source(0),
-      label: Cell.source('')
-   }
+   const details = createForm<TransactionDetailsForm>({
+      amount: 0,
+      label: '',
+      date: new Date(),
+      time: new Date().toTimeString().slice(0, 5),
+      location: ''
+   })
 
    const amountFilled = Cell.derived(() => {
-      return details.amount.get() > 0 && isOnTransactionDetailsPage.get()
+      return details.values.amount.get() > 0 && isOnTransactionDetailsPage.get()
    })
 
    const toggleState = () => {
@@ -40,30 +45,30 @@ export function AddNewTransactionButton() {
    }
 
    return (
-      <NewTransactionDetailsScope.Provider value={details}>
-         {() => (
-            <Teleport to={`#${ROOT_APP_OUTLET}`} class='light-scheme'>
-               <FloatingActionButton
-                  class={[
-                     { 'rotate-135 dark-scheme': transactionFlowIsOpen },
-                     { '-translate-x-[60%]': amountFilled }
-                  ]}
-                  inline='center'
-                  block='bottom'
-                  onClick={toggleState}
-               >
-                  <Add />
-               </FloatingActionButton>
-               <ExpandingView
-                  isOpen={transactionFlowIsOpen}
-                  class='dark-scheme'
-                  expandOrigin='auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)'
-                  expandColor='var(--color-base)'
-               >
+      <Teleport to={rootOutlet} class='light-scheme'>
+         <FloatingActionButton
+            class={[
+               { 'rotate-135 dark-scheme': transactionFlowIsOpen },
+               { '-translate-x-[60%]': amountFilled }
+            ]}
+            inline='center'
+            block='bottom'
+            onClick={toggleState}
+         >
+            <Add />
+         </FloatingActionButton>
+         <ExpandingView
+            isOpen={transactionFlowIsOpen}
+            class='dark-scheme'
+            expandOrigin='auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)'
+            expandColor='var(--color-base)'
+         >
+            {() => (
+               <TransactionDetailsFormScope.Provider value={details}>
                   {TransactionFlow}
-               </ExpandingView>
-            </Teleport>
-         )}
-      </NewTransactionDetailsScope.Provider>
+               </TransactionDetailsFormScope.Provider>
+            )}
+         </ExpandingView>
+      </Teleport>
    )
 }

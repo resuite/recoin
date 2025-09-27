@@ -4,11 +4,13 @@ import { QueryKeys } from '@/constants/query-keys'
 import ChooseCategory from '@/pages/app/transaction-flow/choose-category'
 import ChooseTransactionType from '@/pages/app/transaction-flow/choose-transaction-type'
 import EnterTransactionDetails from '@/pages/app/transaction-flow/enter-transaction-details'
-import { Cell, useSetupEffect } from 'retend'
+import { TransactionDetailsFormScope } from '@/scopes/forms'
+import { Cell, useScopeContext, useSetupEffect } from 'retend'
 import { useRouteQuery } from 'retend/router'
 
 const TransactionFlow = () => {
    const query = useRouteQuery()
+   const form = useScopeContext(TransactionDetailsFormScope)
    const { toggleSidebarEnabled } = useSidebarContext()
    const { togglePullToRefreshEnabled } = usePullToRefreshContext()
    const type = query.get(QueryKeys.TransactionFlow.Type)
@@ -26,6 +28,7 @@ const TransactionFlow = () => {
       return () => {
          toggleSidebarEnabled(true)
          togglePullToRefreshEnabled(true)
+         form.reset()
       }
    })
 

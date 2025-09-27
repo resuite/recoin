@@ -40,7 +40,7 @@ export function TimeInput(props: TimeInputProps) {
             onClick={handlePlaceholderClick}
             onKeyDown={handlePlaceholderClick}
          >
-            <span>{value}</span>
+            {value}
             <Clock class={styles.timeInputClockIcon} />
          </div>
 

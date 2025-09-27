@@ -10,6 +10,7 @@ import type { JSX } from 'retend/jsx-runtime'
 type AuthState = 'idle' | 'pending' | 'ready'
 interface AuthCtx {
    userData: Cell<UserData | null>
+   currency: Cell<string>
    logInWithGoogle: {
       run: (...args: Parameters<typeof verifyGoogleSignIn>) => Promise<void>
       data: Cell<ErrorResponse | SuccessResponse<UserData> | null>
@@ -81,7 +82,11 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
          return { ...cachedUserData }
       }
 
-      return null
+      return null as unknown as UserData
+   })
+
+   const currency = Cell.derived(() => {
+      return userData.get()?.workspaces.at(0)?.currency as string
    })
 
    const setUserData = (data: UserData | null) => {
@@ -114,7 +119,14 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
       }
    })
 
-   const ctx: AuthCtx = { authState, logInWithGoogle, userData, logOut, completeSetup }
+   const ctx: AuthCtx = {
+      authState,
+      logInWithGoogle,
+      userData,
+      logOut,
+      completeSetup,
+      currency
+   }
 
    return <AuthScope.Provider value={ctx}>{children}</AuthScope.Provider>
 }

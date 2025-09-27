@@ -10,7 +10,7 @@ interface DateInputProps extends InputProps<'date'> {
 const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' }
 
 export function DateInput(props: DateInputProps) {
-   const { ref = Cell.source(null), ...rest } = props
+   const { ref = Cell.source(null), model, ...rest } = props
    const max = new Date().toLocaleDateString('en-CA', {
       year: 'numeric',
       month: '2-digit',
@@ -18,11 +18,11 @@ export function DateInput(props: DateInputProps) {
    })
 
    const inputIsUnfilled = Cell.derived(() => {
-      return !props.model?.get()
+      return !model?.get()
    })
 
    const value = Cell.derived(() => {
-      return props.model?.get().toLocaleDateString('en-GB', options) || props.placeholder
+      return model?.get().toLocaleDateString('en-GB', options) || props.placeholder
    })
 
    const handlePlaceholderClick = () => {
@@ -36,11 +36,11 @@ export function DateInput(props: DateInputProps) {
             onClick={handlePlaceholderClick}
             onKeyDown={handlePlaceholderClick}
          >
-            <span>{value}</span>
+            {value}
             <Calendar class={styles.dateInputCalendarIcon} />
          </div>
 
-         <Input ref={ref} max={max} type='date' {...rest} />
+         <Input model={model} ref={ref} max={max} type='date' {...rest} />
       </div>
    )
 }

@@ -14,9 +14,10 @@ import {
 } from '@/components/views'
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
-import { defaultCurrency, getCategoryById } from '@/data'
+import { getCategoryById } from '@/data'
 import { BackButton } from '@/pages/app/_fragments/back-btn'
-import { NewTransactionDetailsScope } from '@/scopes/forms'
+import { useAuthContext } from '@/scopes/auth'
+import { TransactionDetailsFormScope } from '@/scopes/forms'
 import { usePromise } from '@/utilities/composables'
 import { scrollIntoView } from '@/utilities/miscellaneous'
 import { Cell, Switch, useScopeContext } from 'retend'
@@ -25,10 +26,9 @@ import { useRouteQuery } from 'retend/router'
 
 const EnterTransactionDetails = () => {
    const query = useRouteQuery()
-   const { amount } = useScopeContext(NewTransactionDetailsScope)
+   const { currency } = useAuthContext()
+   const form = useScopeContext(TransactionDetailsFormScope)
    const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
-   const date = Cell.source(new Date())
-   const time = Cell.source(new Date().toTimeString().slice(0, 5))
    const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
    const scrollViewRef = Cell.source<HTMLElement | null>(null)
    const getCategoryDetails = async () => {
@@ -69,8 +69,8 @@ const EnterTransactionDetails = () => {
                      <Arrows class='h-1.25 self-center' direction={arrowDirection} />
                      <span class='text-header'>
                         {Switch(type, {
-                           expense: () => <>Expense</>,
-                           income: () => <>Income</>
+                           expense: () => 'Expense',
+                           income: () => 'Income'
                         })}
                      </span>
                   </h2>
@@ -103,21 +103,31 @@ const EnterTransactionDetails = () => {
                      ]}
                   >
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
-                        <MoneyInput model={amount} currency={defaultCurrency.value} autoFocus />
-                        <Input type='text' placeholder='Label' />
-                        <DateInput model={date} required placeholder='Date' />
-                        <TimeInput model={time} required placeholder='Time' />
-                        <Input type='text' placeholder='Location' />
+                        <MoneyInput
+                           model={form.values.amount}
+                           currency={currency}
+                           autoFocus
+                           required
+                        />
+                        <Input model={form.values.label} type='text' required placeholder='Label' />
+                        <DateInput model={form.values.date} placeholder='Date' />
+                        <TimeInput model={form.values.time} placeholder='Time' />
+                        <Input
+                           model={form.values.location}
+                           type='text'
+                           required
+                           placeholder='Location'
+                        />
                      </VirtualKeyboardTriggers>
+                     <FloatingActionButton
+                        outlined
+                        type='submit'
+                        class={['bg-transparent', { 'translate-x-[60%]': form.values.amount }]}
+                     >
+                        <Checkmark class='text-canvas-text' />
+                     </FloatingActionButton>
                   </form>
                </FadeScrollView>
-               <FloatingActionButton
-                  outlined
-                  type='submit'
-                  class={['bg-transparent', { 'translate-x-[60%]': amount }]}
-               >
-                  <Checkmark class='text-canvas-text' />
-               </FloatingActionButton>
             </>
          )}
       </VirtualKeyboardAwareView>
