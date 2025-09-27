@@ -28,7 +28,6 @@
 .content {
    grid-area: 1 / 1;
    width: 100%;
-   height: 100%;
    overflow-y: scroll;
    overscroll-behavior: auto;
    padding-bottom: calc(var(--spacing) * 2);

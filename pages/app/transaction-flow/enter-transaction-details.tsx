@@ -2,6 +2,7 @@ import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
 import Checkmark from '@/components/icons/svg/checkmark'
 import Loader from '@/components/icons/svg/loader'
+import { DateInput } from '@/components/ui/date-input'
 import { ErrorMessage } from '@/components/ui/error-message'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { MoneyInput } from '@/components/ui/money-input'
@@ -25,6 +26,7 @@ const EnterTransactionDetails = () => {
    const query = useRouteQuery()
    const { amount } = useScopeContext(NewTransactionDetailsScope)
    const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
+   const date = Cell.source(new Date())
    const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
    const scrollViewRef = Cell.source<HTMLElement | null>(null)
    const getCategoryDetails = async () => {
@@ -72,7 +74,7 @@ const EnterTransactionDetails = () => {
                   </h2>
                   {Switch.OnProperty(selectedCategory, 'state', {
                      error: ({ error }) => <ErrorMessage error={error} />,
-                     pending: Loader,
+                     pending: () => <Loader class='h-1.5' />,
                      complete: ({ data: selectedCategory }) => {
                         if (selectedCategory === null) {
                            query.delete(QueryKeys.TransactionFlow.Category)
@@ -90,7 +92,7 @@ const EnterTransactionDetails = () => {
                   })}
                </div>
                <p class='text-big text-center'>Share more details about this transaction.</p>
-               <FadeScrollView ref={scrollViewRef} class='max-h-[45dvh]'>
+               <FadeScrollView ref={scrollViewRef} class='h-[45dvh] max-h-[45dvh]'>
                   <form
                      style={{ paddingBottom }}
                      class={[
@@ -101,9 +103,9 @@ const EnterTransactionDetails = () => {
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
                         <MoneyInput model={amount} currency={defaultCurrency.value} />
                         <Input type='text' placeholder='Label' />
-                        <Input type='date' placeholder='Amount' />
-                        <Input type='time' placeholder='Amount' />
-                        <Input type='text' placeholder='Label' />
+                        <DateInput model={date} type='date' placeholder='Date' />
+                        <Input type='time' placeholder='Time' />
+                        <Input type='text' placeholder='Location' />
                      </VirtualKeyboardTriggers>
                   </form>
                </FadeScrollView>
