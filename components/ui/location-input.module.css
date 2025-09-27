@@ -1,0 +1,33 @@
+.locationInputContainer {
+   position: relative;
+   display: grid;
+
+   &[data-unfilled] {
+      .locationPlaceholder {
+         opacity: 0.5;
+      }
+   }
+
+   input {
+      all: unset;
+      appearance: none;
+      grid-area: 1 / 1;
+      width: 100%;
+      height: 100%;
+      min-height: calc(var(--spacing) * 2);
+      opacity: 0;
+   }
+}
+
+.locationPlaceholder {
+   display: grid;
+   grid-template-columns: 1fr auto;
+   align-content: center;
+   grid-area: 1 / 1;
+   border-bottom: 3px solid var(--color-canvas-text);
+}
+
+.locationInputLocationIcon {
+   width: var(--spacing);
+   height: var(--spacing);
+}

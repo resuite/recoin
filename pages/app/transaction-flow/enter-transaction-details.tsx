@@ -5,6 +5,7 @@ import Loader from '@/components/icons/svg/loader'
 import { DateInput } from '@/components/ui/date-input'
 import { ErrorMessage } from '@/components/ui/error-message'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
+import { LocationInput } from '@/components/ui/location-input'
 import { MoneyInput } from '@/components/ui/money-input'
 import { TimeInput } from '@/components/ui/time-input'
 import {
@@ -112,12 +113,7 @@ const EnterTransactionDetails = () => {
                         <Input model={form.values.label} type='text' required placeholder='Label' />
                         <DateInput model={form.values.date} placeholder='Date' />
                         <TimeInput model={form.values.time} placeholder='Time' />
-                        <Input
-                           model={form.values.location}
-                           type='text'
-                           required
-                           placeholder='Location'
-                        />
+                        <LocationInput model={form.values.location} placeholder='Location' />
                      </VirtualKeyboardTriggers>
                      <FloatingActionButton
                         outlined
