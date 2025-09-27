@@ -6,6 +6,7 @@ import { DateInput } from '@/components/ui/date-input'
 import { ErrorMessage } from '@/components/ui/error-message'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { MoneyInput } from '@/components/ui/money-input'
+import { TimeInput } from '@/components/ui/time-input'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
@@ -27,6 +28,7 @@ const EnterTransactionDetails = () => {
    const { amount } = useScopeContext(NewTransactionDetailsScope)
    const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
    const date = Cell.source(new Date())
+   const time = Cell.source(new Date().toTimeString().slice(0, 5))
    const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
    const scrollViewRef = Cell.source<HTMLElement | null>(null)
    const getCategoryDetails = async () => {
@@ -101,10 +103,10 @@ const EnterTransactionDetails = () => {
                      ]}
                   >
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
-                        <MoneyInput model={amount} currency={defaultCurrency.value} />
+                        <MoneyInput model={amount} currency={defaultCurrency.value} autoFocus />
                         <Input type='text' placeholder='Label' />
-                        <DateInput model={date} type='date' placeholder='Date' />
-                        <Input type='time' placeholder='Time' />
+                        <DateInput model={date} required placeholder='Date' />
+                        <TimeInput model={time} required placeholder='Time' />
                         <Input type='text' placeholder='Location' />
                      </VirtualKeyboardTriggers>
                   </form>
