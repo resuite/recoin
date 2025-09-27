@@ -75,7 +75,10 @@ export function useTextContentLength(ref: Cell<HTMLElement | null>): Cell<number
 
    observer.onConnected(ref, (element) => {
       const update = () => {
-         count.set(element.innerText.length)
+         // This should be element.innerText, to cater for hidden text
+         // and such, but element.innerText causes too many reflows and
+         // cracks the initial slide-up animation.
+         count.set(element.textContent?.length ?? 0)
       }
       update()
       const observer = new MutationObserver(update)
