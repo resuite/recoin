@@ -53,7 +53,7 @@ export function vibrate(pattern?: VibratePattern) {
  * @param parent The HTMLElement to search within.
  * @returns The first focusable HTMLElement found, or null if none is found.
  */
-export function getFocusableElementInItem(parent: HTMLElement) {
+export function getFocusableElementInItem(parent: Element) {
    return parent.querySelector(':is(input, button):not(:disabled)') as HTMLElement | null
 }
 

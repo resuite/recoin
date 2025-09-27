@@ -27,7 +27,7 @@ const CurrencySelection = () => {
             <p class='text-bigger relative mt-0.5 mb-2'>What is your primary currency?</p>
 
             <div class='relative'>
-               <Dropdown options={currencyOptions} selectedOption={currency} chunkSize={5} />
+               <Dropdown options={currencyOptions} selectedOption={currency} />
             </div>
 
             <Button class='relative' type='submit'>

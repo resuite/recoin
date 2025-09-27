@@ -54,10 +54,6 @@ body:has(.contextMenu) {
       opacity: 0;
       scale: 0.75;
    }
-
-   60% {
-      scale: 1.03;
-   }
 }
 
 .anchor {
