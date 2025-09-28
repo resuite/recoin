@@ -4,7 +4,10 @@
 
    &[data-unfilled] {
       .locationPlaceholder {
-         opacity: 0.5;
+         span {
+            display: inline-block;
+            opacity: 0.5;
+         }
       }
    }
 
