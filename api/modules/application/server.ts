@@ -71,7 +71,8 @@ applicationRoute.post(
             .returning()
 
          c.status(StatusCodes.Ok)
-         return success(c, { ...user, workspaces: [updatedWorkspace] } satisfies UserData)
+         const { googleId: _, createdAt: __, ...userData } = user
+         return success(c, { ...userData, workspaces: [updatedWorkspace] } satisfies UserData)
       }
    })
 )
