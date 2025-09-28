@@ -6,9 +6,18 @@ type MakeReactiveKeys<T extends object> = {
 export interface Form<Values extends object> {
    reset: () => void
    values: MakeReactiveKeys<Values>
+   submitted: boolean
+   submit: () => Promise<void>
 }
 
-export function createForm<Values extends object>(defaultValues: Values): Form<Values> {
+interface FormOptions<Values extends object> {
+   onSubmit?: (values: Values) => void | Promise<void>
+}
+
+export function createForm<Values extends object>(
+   defaultValues: Values,
+   options?: FormOptions<Values>
+): Form<Values> {
    const values = Object.fromEntries(
       Object.entries(defaultValues).map(([key, value]) => {
          return [key, Cell.source(value)]
@@ -17,6 +26,17 @@ export function createForm<Values extends object>(defaultValues: Values): Form<V
 
    return {
       values,
+      submitted: false,
+      async submit() {
+         await options?.onSubmit?.(
+            Object.fromEntries(
+               Object.entries(values).map(([key, value]) => {
+                  return [key, (value as Cell<unknown>).get()]
+               })
+            ) as Values
+         )
+         this.submitted = true
+      },
       reset() {
          for (const key in values) {
             values[key].set(defaultValues[key])

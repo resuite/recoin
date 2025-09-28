@@ -47,7 +47,7 @@ const EnterTransactionDetails = () => {
    })
 
    const handleKeyboardOpen = (event: KeyboardVisibilityEvent) => {
-      const scrollView = scrollViewRef.get()
+      const scrollView = scrollViewRef.peek()
       const { isVisible, approximateHeight } = event
       keyboardHeight.set(approximateHeight)
       keyboardIsVisible.set(isVisible)
@@ -98,10 +98,8 @@ const EnterTransactionDetails = () => {
                <FadeScrollView ref={scrollViewRef} class='h-[45dvh] max-h-[45dvh]'>
                   <form
                      style={{ paddingBottom }}
-                     class={[
-                        '[&_input]:duration-slow [&_input]:transition-opacity',
-                        '[&:has(input:focus-within)_input:not(:focus-within)]:opacity-30'
-                     ]}
+                     class='[&_input]:duration-slow [&_input]:transition-opacity'
+                     onSubmit--prevent={form.submit}
                   >
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
                         <MoneyInput

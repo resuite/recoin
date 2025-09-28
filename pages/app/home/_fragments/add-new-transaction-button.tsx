@@ -21,14 +21,21 @@ export function AddNewTransactionButton() {
    const { hasKey: isOnTransactionDetailsPage } = useRouteQueryControl(
       QueryKeys.TransactionFlow.Category
    )
+
    const rootOutlet = `#${ROOT_APP_OUTLET}`
 
-   const details = createForm<TransactionDetailsForm>({
+   const defaultValues: TransactionDetailsForm = {
       amount: 0,
       label: '',
       date: new Date(),
       time: new Date().toTimeString().slice(0, 5),
       location: ''
+   }
+
+   const details = createForm<TransactionDetailsForm>(defaultValues, {
+      onSubmit: () => {
+         ''
+      }
    })
 
    const amountFilled = Cell.derived(() => {
