@@ -1,6 +1,6 @@
 import Add from '@/components/icons/svg/add'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
-import { ExpandingView } from '@/components/views'
+import { ExpandingView } from '@/components/views/expanding-view'
 import { ROOT_APP_OUTLET } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { VibrationPatterns } from '@/constants/vibration'

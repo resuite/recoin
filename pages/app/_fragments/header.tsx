@@ -1,7 +1,7 @@
 import Hamburger from '@/components/icons/svg/hamburger'
 import User from '@/components/icons/svg/user'
 import { Button } from '@/components/ui/button'
-import { useSidebarContext } from '@/components/views'
+import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 
 export function Header() {
    const { toggleSidebar } = useSidebarContext()

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { type Alignment, PopoverView, type PositionArea } from '@/components/views'
+import { type Alignment, PopoverView, type PositionArea } from '@/components/views/popover-view'
 import { Cell, type SourceCell } from 'retend'
 import { Input } from 'retend-utils/components'
 

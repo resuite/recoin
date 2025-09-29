@@ -8,12 +8,12 @@ import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { LocationInput } from '@/components/ui/location-input'
 import { MoneyInput } from '@/components/ui/money-input'
 import { TimeInput } from '@/components/ui/time-input'
+import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
-} from '@/components/views'
-import { FadeScrollView } from '@/components/views/fade-scroll-view'
+} from '@/components/views/virtual-keyboard-aware-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { getCategoryById } from '@/data'
 import { BackButton } from '@/pages/app/_fragments/back-btn'

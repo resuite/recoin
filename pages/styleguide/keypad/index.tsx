@@ -1,4 +1,4 @@
-import { StackViewGroup } from '@/components/views'
+import { StackViewGroup } from '@/components/views/stack-view-group'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { Cell } from 'retend'
 import { AuthScreen } from './auth-screen'

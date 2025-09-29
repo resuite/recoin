@@ -1,5 +1,6 @@
-import { PullToRefreshView, SidebarProviderView } from '@/components/views'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
+import { PullToRefreshView } from '@/components/views/pull-to-refresh-view'
+import { SidebarProviderView } from '@/components/views/sidebar-provider-view'
 import { ROOT_APP_OUTLET } from '@/constants'
 import { GoogleIdentityProvider } from '@/integrations/google'
 import { Sidebar } from '@/pages/app/_fragments/sidebar'

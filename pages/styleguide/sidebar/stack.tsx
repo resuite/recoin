@@ -1,13 +1,12 @@
 import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { useSidebarContext } from '@/components/views/sidebar-provider-view'
+import { StackView, StackViewGroup } from '@/components/views/stack-view-group'
 import {
    type KeyboardVisibilityEvent,
-   StackView,
-   StackViewGroup,
    VirtualKeyboardAwareView,
-   VirtualKeyboardTriggers,
-   useSidebarContext
-} from '@/components/views'
+   VirtualKeyboardTriggers
+} from '@/components/views/virtual-keyboard-aware-view'
 import { Cell, useScopeContext } from 'retend'
 import FloatingActionButtonTest from '../fab'
 import { Scope } from './scope'

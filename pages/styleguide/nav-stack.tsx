@@ -1,6 +1,6 @@
 import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { StackView, StackViewGroup } from '@/components/views'
+import { StackView, StackViewGroup } from '@/components/views/stack-view-group'
 import { Cell } from 'retend'
 
 const page2IsOpen = Cell.source(false)

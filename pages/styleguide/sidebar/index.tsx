@@ -1,4 +1,4 @@
-import { SidebarProviderView } from '@/components/views'
+import { SidebarProviderView } from '@/components/views/sidebar-provider-view'
 import { createPartitions } from '@/utilities/animations'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { Cell } from 'retend'

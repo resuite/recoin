@@ -1,5 +1,6 @@
-import { usePullToRefreshContext, useSidebarContext } from '@/components/views'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
+import { usePullToRefreshContext } from '@/components/views/pull-to-refresh-view'
+import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { QueryKeys } from '@/constants/query-keys'
 import ChooseCategory from '@/pages/app/transaction-flow/choose-category'
 import ChooseTransactionType from '@/pages/app/transaction-flow/choose-transaction-type'

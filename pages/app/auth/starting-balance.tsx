@@ -1,8 +1,11 @@
 import Loader from '@/components/icons/svg/loader'
 import { Button } from '@/components/ui/button'
 import { MoneyInput } from '@/components/ui/money-input'
-import { VirtualKeyboardAwareView, VirtualKeyboardTriggers } from '@/components/views'
 import { SafeAreaView } from '@/components/views/safe-area-view'
+import {
+   VirtualKeyboardAwareView,
+   VirtualKeyboardTriggers
+} from '@/components/views/virtual-keyboard-aware-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { useAuthContext } from '@/scopes/auth'
 import { Cell, If } from 'retend'
