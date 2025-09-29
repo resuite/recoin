@@ -4,7 +4,7 @@ import { QueryKeys } from '@/constants/query-keys'
 import CurrencySelection from '@/pages/app/auth/select-currency'
 import StartingBalance from '@/pages/app/auth/starting-balance'
 import { useAuthContext } from '@/scopes/auth'
-import { useRouteQueryControl } from '@/utilities/composables'
+import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { useSetupEffect } from 'retend'
 import { useRouteQuery, useRouter } from 'retend/router'
 

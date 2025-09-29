@@ -4,7 +4,7 @@ import { AddNewTransactionButton } from '@/pages/app/home/_fragments/add-new-tra
 import { HomeStats } from '@/pages/app/home/_fragments/home-stats'
 import { RecentTransactions } from '@/pages/app/home/_fragments/recent-transactions'
 import { useAuthContext } from '@/scopes/auth'
-import { useRouteQueryControl } from '@/utilities/composables'
+import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 
 const HomeGreeting = () => {
    const { userData } = useAuthContext()

@@ -4,7 +4,7 @@ import { ErrorMessage } from '@/components/ui/error-message'
 import { FitText } from '@/components/ui/fit-text'
 import { FormattedMoney } from '@/components/ui/formatted-money'
 import { defaultCurrency, getHomeStats } from '@/data'
-import { usePromise } from '@/utilities/composables'
+import { usePromise } from '@/utilities/composables/use-promise'
 import { Switch } from 'retend'
 
 interface HomeStatsContentProps {

@@ -1,6 +1,6 @@
 import { SidebarProviderView } from '@/components/views'
 import { createPartitions } from '@/utilities/animations'
-import { useRouteQueryControl } from '@/utilities/composables'
+import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { Cell } from 'retend'
 import PullToRefreshViewTest from '../pull-zone'
 import { lowerLinks, upperLinks } from './constants'

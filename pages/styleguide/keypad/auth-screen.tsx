@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { StackView } from '@/components/views'
-import { useRouteQueryControl } from '@/utilities/composables'
+import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { useScopeContext } from 'retend'
 import { AuthenticationScope } from './scope'
 

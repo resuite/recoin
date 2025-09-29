@@ -1,4 +1,4 @@
-import { useTextContentLength } from '@/utilities/composables'
+import { useTextContentLength } from '@/utilities/composables/use-text-content-length'
 import { Cell } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './fit-text.module.css'
