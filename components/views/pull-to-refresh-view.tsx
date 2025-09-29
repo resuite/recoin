@@ -47,6 +47,7 @@ export interface PullToRefreshViewProps extends DivProps {
 }
 
 interface PullToRefreshContext {
+   contentTopMarkerRef: SourceCell<HTMLElement | null>
    togglePullToRefreshEnabled: (value?: boolean) => void
 }
 
@@ -229,6 +230,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    }
 
    const scopeData: PullToRefreshContext = {
+      contentTopMarkerRef,
       togglePullToRefreshEnabled(value) {
          allowPull.set(value ?? !allowPull.get())
       }
@@ -286,22 +288,24 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       }
    )
 
-   // Another marker to indicate when pull-to-refresh can be used,
-   // or if we should default to normal scroll.
-   useIntersectionObserver(
-      contentTopMarkerRef,
-      ([entry]) => {
-         if (entry === undefined) {
-            return
+   contentTopMarkerRef.listen(() => {
+      // Another marker to indicate when pull-to-refresh can be used,
+      // or if we should default to normal scroll.
+      useIntersectionObserver(
+         contentTopMarkerRef,
+         ([entry]) => {
+            if (entry === undefined) {
+               return
+            }
+            // on startup, this will trigger canPull to be true,
+            // and start the pull-to-refresh process.
+            reachedTop.set(entry.isIntersecting)
+         },
+         () => {
+            return { root: pullZoneRef.peek(), threshold: 0.95 }
          }
-         // on startup, this will trigger canPull to be true,
-         // and start the pull-to-refresh process.
-         reachedTop.set(entry.isIntersecting)
-      },
-      () => {
-         return { root: pullZoneRef.peek(), threshold: 0.95 }
-      }
-   )
+      )
+   })
 
    canPull.listen((canPull) => {
       const pullZone = getPullToRefreshElement()
