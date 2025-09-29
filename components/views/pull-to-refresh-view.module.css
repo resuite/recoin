@@ -28,29 +28,42 @@
    is 100%, making 135%.
 */
 .pullZoneScrollContainer {
+   position: relative;
    display: grid;
    width: 100%;
-   height: 135%;
+   height: 100%;
    transition-timing-function: ease-in-out;
    transition-duration: var(--speed-slow);
    transition-property: translate;
-   grid-template-rows:
-      calc(1500% / 135) /* 15*% of 135% */
-      calc(2000% / 135) /* 20*% of 135% */
-      calc(10000% / 135); /* 100*% of 135% */
+   grid-template-rows: 1fr;
    grid-template-columns: 1fr;
 
    .pullZoneDragging > & {
-      --translate-y: calc(min(var(--pull-zone-scroll-top) * 1%, 3500% / 135));
+      --translate-y: calc(min(var(--pull-zone-scroll-top) * 1%, 35%));
       transition-duration: 0s;
       translate: 0 var(--translate-y);
    }
 
    .pullZoneActionTriggered > & {
       /* Translate to 20% down, which shows the feedback layer, but hides the threshold marker. */
-      --translate-y: calc(2000% / 135);
+      --translate-y: 20%;
       translate: 0 var(--translate-y);
    }
+}
+
+.pullZoneThreshold {
+   z-index: 120;
+   height: 15%;
+   grid-area: 1 / 1;
+   translate: 0 -230%;
+}
+
+.pullZoneFeedbackLayer {
+   z-index: 100;
+   width: 100%;
+   height: 20%;
+   grid-area: 1 / 1;
+   translate: 0 -100%;
 }
 
 .pullZoneTriggered {
@@ -65,6 +78,7 @@
    height: 100%;
    min-height: 100%;
    background-color: var(--canvas-background);
+   grid-area: 1 / 1;
    overscroll-behavior: none;
 
    .pullZoneActionTriggered > .pullZoneScrollContainer > & {
@@ -75,10 +89,10 @@
 
 .pullZoneContentTopMarker {
    position: absolute;
-   top: calc(35% + 0.25rem);
+   z-index: 99;
+   top: 0;
    left: 0;
    width: 100%;
    height: 0.25rem;
-   z-index: 99;
    pointer-events: none;
 }

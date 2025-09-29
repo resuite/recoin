@@ -1,8 +1,8 @@
 import { vibrate } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS, getScrollableY } from '@/utilities/scrolling'
-import { Cell, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
-import { useIntersectionObserver, useMatchMedia, useWindowSize } from 'retend-utils/hooks'
+import { Cell, type SourceCell, createScope, useScopeContext } from 'retend'
+import { useIntersectionObserver, useMatchMedia } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './pull-to-refresh-view.module.css'
 
@@ -126,9 +126,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    const thresholdMarkerRef = Cell.source<HTMLElement | null>(null)
    const feedbackLayerRef = Cell.source<HTMLElement | null>(null)
    const contentTopMarkerRef = contentTopMarkerProp ?? Cell.source<HTMLElement | null>(null)
-   const observer = useObserver()
    const supportsTouch = useMatchMedia('(pointer: coarse)')
-   const { height } = useWindowSize()
    const reachedTop = Cell.source(false)
    const allowPull = Cell.source(true)
    const canPull = Cell.derived(() => {
@@ -193,7 +191,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
             return
          }
          const newTime = ((delta - PULL_TO_REFRESH_OFFSET) / pullZoneHeight) * GESTURE_ANIMATION_MS
-         pullScrollAnimation.currentTime = Math.min(newTime, MAX_PULL_ZONE_SCROLL_TOP)
+         pullScrollAnimation.currentTime = newTime
       })
    }
 
@@ -203,7 +201,7 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       scrollable = getScrollableY(pointerOriginTarget, pullZone)
 
       pullZone.classList.add(styles.pullZoneDragging as string)
-      pullZoneHeight = pullZone.clientHeight
+      pullZoneHeight = pullZone.clientHeight * FULL_PULL_EXPANSE
 
       pullScrollAnimation = pullZone.animate(KEYFRAMES, ANIMATION_OPTIONS)
       pullScrollAnimation.pause()
@@ -320,20 +318,6 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
       }
    })
 
-   height.listen(() => {
-      // Prevents any funny behavior when the window resizes.
-      contentRef.get()?.scrollIntoView({ behavior: 'instant', block: 'end' })
-   })
-
-   observer.onConnected(pullZoneRef, (pullZone) => {
-      requestAnimationFrame(() => {
-         pullZone.scrollTo({ top: pullZone.scrollHeight, behavior: 'instant' })
-      })
-      return () => {
-         height // Prevents GC until the pull-zone is unmounted.
-      }
-   })
-
    return (
       <PullToRefreshScope.Provider value={scopeData}>
          {() => (
@@ -343,8 +327,10 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
                class={[styles.pullZone, { [styles.pullZoneCanPull]: canPull }, rest.class]}
             >
                <div ref={scrollContainerRef} class={styles.pullZoneScrollContainer}>
-                  <div ref={thresholdMarkerRef} />
-                  <div ref={feedbackLayerRef}>{feedback?.()}</div>
+                  <div ref={thresholdMarkerRef} class={styles.pullZoneThreshold} />
+                  <div ref={feedbackLayerRef} class={styles.pullZoneFeedbackLayer}>
+                     {feedback?.()}
+                  </div>
                   <div ref={contentRef} class={[styles.pullZoneContent, contentClasses]}>
                      {!contentTopMarkerProp ? (
                         <div ref={contentTopMarkerRef} class={styles.pullZoneContentTopMarker} />
@@ -378,6 +364,7 @@ const KEYFRAMES = [
       '--pull-zone-scroll-top': 100
    }
 ]
-const MAX_PULL_ZONE_SCROLL_TOP = (3500 / 135) * 10
 
+/** Full height (1 or 100%) + Feedback layer height (0.2 or 20%) + Threshold marker height (0.15 or 15%) */
+const FULL_PULL_EXPANSE = 1.35
 const ANIMATION_OPTIONS = { duration: 1000, easing: 'linear' }

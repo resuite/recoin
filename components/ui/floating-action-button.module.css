@@ -1,18 +1,18 @@
 .floatingActionButton {
-   position: fixed;
+   position: absolute;
    z-index: var(--floating-button-layer);
    display: grid;
    width: var(--fab-size);
    min-width: unset;
    height: var(--fab-size);
-   border-radius: 50%;
-   place-items: center;
    padding: 0;
-   background-color: var(--color-canvas-text);
+   border: 2px solid var(--color-canvas);
+   border-radius: 50%;
    color: var(--color-canvas-background);
+   background-color: var(--color-canvas-text);
    transition: translate var(--speed-default), rotate var(--speed-slower)
       var(--timing-bounce-slower);
-   border: 2px solid var(--color-canvas);
+   place-items: center;
 
    &:active {
       scale: 1;

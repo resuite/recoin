@@ -1,7 +1,7 @@
 import Add from '@/components/icons/svg/add'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { ExpandingView } from '@/components/views/expanding-view'
-import { ROOT_APP_OUTLET } from '@/constants'
+import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { VibrationPatterns } from '@/constants/vibration'
 import TransactionFlow from '@/pages/app/transaction-flow'
@@ -22,8 +22,6 @@ export function AddNewTransactionButton() {
       QueryKeys.TransactionFlow.Category
    )
 
-   const rootOutlet = `#${ROOT_APP_OUTLET}`
-
    const defaultValues: TransactionDetailsForm = {
       amount: 0,
       label: '',
@@ -32,7 +30,7 @@ export function AddNewTransactionButton() {
       location: ''
    }
 
-   const details = createForm<TransactionDetailsForm>(defaultValues, {
+   const details = createForm(defaultValues, {
       onSubmit: () => {
          ''
       }
@@ -52,7 +50,7 @@ export function AddNewTransactionButton() {
    }
 
    return (
-      <Teleport to={rootOutlet} class='light-scheme'>
+      <Teleport to={ROOT_APP_OUTLET_ID} class='light-scheme'>
          <FloatingActionButton
             class={[
                { 'rotate-135 dark-scheme': transactionFlowIsOpen },

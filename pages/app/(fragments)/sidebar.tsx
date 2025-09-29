@@ -1,5 +1,6 @@
 import type { IconName } from '@/components/icons'
 import { Icon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { createPartitions } from '@/utilities/animations'
 import { Cell, For } from 'retend'
@@ -62,32 +63,39 @@ export function createLinkAnimationValues(progressValue: string) {
 
 function SidebarLink(props: SidebarLinkProps) {
    const { link, progressValue, height = '8dvh' } = props
-   const { Link } = useRouter()
+   const { navigate, getCurrentRoute } = useRouter()
+   const currentRoute = getCurrentRoute()
    const sidebarCtx = useSidebarContext()
    const { translate, opacity } = createLinkAnimationValues(progressValue)
 
-   const handleAfterNavigate = () => {
+   const handleClick = () => {
+      navigate(link.href)
       sidebarCtx.toggleSidebar()
    }
 
+   const isActive = Cell.derived(() => {
+      if (link.href === '/app') {
+         return currentRoute.get().path === '/app'
+      }
+      return currentRoute.get().path.startsWith(link.href)
+   })
+
    return (
-      <Link
-         href={link.href}
-         class='border-none py-0.5 px-1 ease-out duration-slow transition-[translate,opacity]'
+      <Button
+         class='btn-link border-none py-0.5 px-1 ease-out duration-slow transition-[translate,opacity]'
          style={{ translate, opacity, height }}
-         onAfterNavigate={handleAfterNavigate}
+         onClick={handleClick}
       >
          <div
             class={[
                'flex items-center gap-0.5 opacity-70',
-               '[:not(:has([active]:not([href="/app"])))>[active][href="/app"]>*]:opacity-100',
-               '[:is([active]:not([href="/app"]))>*]:opacity-100'
+               { '[:nth-child(n)]:opacity-100': isActive }
             ]}
          >
             <Icon name={link.icon} class='link-icon' />
             {link.name}
          </div>
-      </Link>
+      </Button>
    )
 }
 

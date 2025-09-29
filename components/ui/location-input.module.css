@@ -1,6 +1,8 @@
 .locationInputContainer {
    position: relative;
    display: grid;
+   grid-template-columns: 1fr;
+   grid-template-rows: 1fr;
 
    &[data-unfilled] {
       .locationPlaceholder {
@@ -13,21 +15,21 @@
 
    input {
       all: unset;
-      appearance: none;
-      grid-area: 1 / 1;
       width: 100%;
       height: 100%;
       min-height: calc(var(--spacing) * 2);
       opacity: 0;
+      appearance: none;
+      grid-area: 1 / 1;
    }
 }
 
 .locationPlaceholder {
    display: grid;
-   grid-template-columns: 1fr auto;
    align-content: center;
-   grid-area: 1 / 1;
    border-bottom: 3px solid var(--color-canvas-text);
+   grid-template-columns: 1fr auto;
+   grid-area: 1 / 1;
 }
 
 .locationInputLocationIcon {

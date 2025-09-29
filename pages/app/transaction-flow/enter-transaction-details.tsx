@@ -14,6 +14,7 @@ import {
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
+import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { getCategoryById } from '@/data'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
@@ -21,9 +22,10 @@ import { useAuthContext } from '@/scopes/auth'
 import { TransactionDetailsFormScope } from '@/scopes/forms'
 import { usePromise } from '@/utilities/composables/use-promise'
 import { scrollIntoView } from '@/utilities/miscellaneous'
-import { Cell, Switch, useScopeContext } from 'retend'
+import { Cell, If, Switch, useScopeContext } from 'retend'
 import { Input } from 'retend-utils/components'
 import { useRouteQuery } from 'retend/router'
+import { Teleport } from 'retend/teleport'
 
 const EnterTransactionDetails = () => {
    const query = useRouteQuery()
@@ -102,24 +104,26 @@ const EnterTransactionDetails = () => {
                      onSubmit--prevent={form.submit}
                   >
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
-                        <MoneyInput
-                           model={form.values.amount}
-                           currency={currency}
-                           autoFocus
-                           required
-                        />
+                        <MoneyInput model={form.values.amount} currency={currency} required />
                         <Input model={form.values.label} type='text' required placeholder='Label' />
                         <DateInput model={form.values.date} placeholder='Date' />
                         <TimeInput model={form.values.time} placeholder='Time' />
-                        <LocationInput model={form.values.location} placeholder='Location' />
+                        <LocationInput
+                           model={form.values.location}
+                           placeholder='Location (Optional)'
+                        />
                      </VirtualKeyboardTriggers>
-                     <FloatingActionButton
-                        outlined
-                        type='submit'
-                        class={['bg-transparent', { 'translate-x-[60%]': form.values.amount }]}
-                     >
-                        <Checkmark class='text-canvas-text' />
-                     </FloatingActionButton>
+                     {If(form.values.amount, () => (
+                        <Teleport to={ROOT_APP_OUTLET_ID}>
+                           <FloatingActionButton
+                              outlined
+                              type='submit'
+                              class='bg-transparent translate-x-[60%]'
+                           >
+                              <Checkmark class='text-canvas-text' />
+                           </FloatingActionButton>
+                        </Teleport>
+                     ))}
                   </form>
                </FadeScrollView>
             </>
