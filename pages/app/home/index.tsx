@@ -1,39 +1,27 @@
-import { QueryKeys } from '@/constants/query-keys'
 import { Header } from '@/pages/app/(fragments)/header'
+import { Stage } from '@/pages/app/(fragments)/stage'
 import { AddNewTransactionButton } from '@/pages/app/home/(fragments)/add-new-transaction-button'
 import { HomeStats } from '@/pages/app/home/(fragments)/home-stats'
 import { RecentTransactions } from '@/pages/app/home/(fragments)/recent-transactions'
 import { useAuthContext } from '@/scopes/auth'
-import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-
-const HomeGreeting = () => {
-   const { userData } = useAuthContext()
-   return (
-      <div class='text-center w-full'>
-         <h3 class='text-header'>Hello, {userData.get()?.firstName}.</h3>
-         <p class='text-sm opacity-60'>Add a new transaction to get started.</p>
-      </div>
-   )
-}
 
 const Home = () => {
-   const { hasKey: transactionFlowIsOpen } = useRouteQueryControl(QueryKeys.TransactionFlow)
+   const { userData } = useAuthContext()
+   const firstName = userData.get()?.firstName
+
    return (
-      <div
-         class={[
-            'grid grid-rows-[auto_1fr] translate-0 h-full light-scheme rounded-t-3xl',
-            'duration-bit-slower transition-transform ease',
-            { 'translate-y-3 scale-90': transactionFlowIsOpen }
-         ]}
-      >
+      <Stage class='grid grid-rows-[auto_1fr]'>
          <Header />
          <main class='grid grid-rows-[auto_auto_1fr] px-1 grid-cols-1 justify-center'>
-            <HomeGreeting />
+            <div class='text-center w-full'>
+               <h3 class='text-header'>Hello, {firstName}.</h3>
+               <p class='text-sm opacity-60'>Add a new transaction to get started.</p>
+            </div>
             <HomeStats />
             <RecentTransactions />
          </main>
          <AddNewTransactionButton />
-      </div>
+      </Stage>
    )
 }
 
