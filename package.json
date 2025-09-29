@@ -37,6 +37,12 @@
    },
    "dependencies": {
       "@hono/zod-validator": "^0.7.0",
+      "@livestore/adapter-web": "^0.3.1",
+      "@livestore/devtools-vite": "^0.3.1",
+      "@livestore/livestore": "^0.3.1",
+      "@livestore/peer-deps": "^0.3.1",
+      "@livestore/sync-cf": "^0.3.1",
+      "@livestore/wa-sqlite": "^1.0.5",
       "@types/google.accounts": "^0.0.18",
       "bidc": "^0.0.3",
       "bowser": "^2.11.0",

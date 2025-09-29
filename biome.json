@@ -30,7 +30,14 @@
             "noNestedTernary": "error"
          },
          "style": {
-            "useBlockStatements": "error"
+            "useBlockStatements": "error",
+            "useNamingConvention": "error",
+            "useConsistentArrayType": {
+               "level": "error",
+               "options": {
+                  "syntax": "generic"
+               }
+            }
          },
          "suspicious": {
             "useAwait": "error",
