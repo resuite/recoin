@@ -7,7 +7,7 @@ import {
 } from '@/data/shared'
 import { type SerializableValue, createChannel } from 'bidc'
 
-const defaultExpenseCategories: Category[] = [
+const defaultExpenseCategories: Array<Category> = [
    {
       id: 'category_utilities',
       name: 'Utilities',
@@ -40,7 +40,7 @@ const defaultExpenseCategories: Category[] = [
    }
 ]
 
-const defaultIncomeCategories: Category[] = [
+const defaultIncomeCategories: Array<Category> = [
    {
       id: 'category_salary-and-wages',
       name: 'Salary and Wages',
@@ -73,7 +73,7 @@ const defaultIncomeCategories: Category[] = [
    }
 ]
 
-const defaultTransactionListing: Transaction[] = [
+const defaultTransactionListing: Array<Transaction> = [
    {
       id: 'transaction_1',
       currency: 'currency_ngn',

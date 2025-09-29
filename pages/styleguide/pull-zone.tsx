@@ -50,9 +50,9 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
    }
 
    const handleActionTriggered = async () => {
-      const WAIT_TIME = 3500
+      const waitTime = 3500
       await new Promise((resolve) => {
-         setTimeout(resolve, WAIT_TIME)
+         setTimeout(resolve, waitTime)
       })
    }
 

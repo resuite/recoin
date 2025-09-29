@@ -38,7 +38,7 @@ export type RouteConfig<Params, Body, IsProtected> = {
    body?: Body
    isProtected?: IsProtected
    controller: RouteController<RecoinApiEnv, Params, Body, IsProtected>
-   middleware?: MiddlewareHandler[]
+   middleware?: Array<MiddlewareHandler>
 }
 
 export function route<
@@ -66,5 +66,5 @@ export function route<
 
    handlers.push(config.controller)
 
-   return handlers as [...MiddlewareHandler[]]
+   return handlers as [...Array<MiddlewareHandler>]
 }

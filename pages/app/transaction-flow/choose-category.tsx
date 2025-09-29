@@ -30,7 +30,7 @@ const CategoryLink = (props: Category) => {
 
 interface CategoryListingProps {
    type: TransactionType
-   categories: Category[]
+   categories: Array<Category>
 }
 
 const CategoriesListing = (props: CategoryListingProps) => {

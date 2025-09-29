@@ -24,8 +24,8 @@ export interface SidebarLinkProps {
 }
 
 export interface AnimatedLinkGroupProps {
-   links: LinkInfo[]
-   progressValues: string[]
+   links: Array<LinkInfo>
+   progressValues: Array<string>
    linkHeight?: string
    activeIndex?: number
 }

@@ -32,8 +32,8 @@ export async function clearAuthCookie(context: Context<RecoinApiEnv>) {
 }
 
 export async function verifyGoogleIdToken(idToken: string, clientId: string) {
-   const JWKS = createRemoteJWKSet(new URL(GOOGLE_JWK_URL))
-   const { payload } = await jwtVerify(idToken, JWKS, {
+   const jwks = createRemoteJWKSet(new URL(GOOGLE_JWK_URL))
+   const { payload } = await jwtVerify(idToken, jwks, {
       issuer: ['accounts.google.com', 'https://accounts.google.com'],
       audience: clientId
    })

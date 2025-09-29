@@ -63,7 +63,7 @@ export interface ToastDetails {
     * use `showToast` to add new toasts, and rely on the toast's internal
     * dismissal mechanisms (duration, swipe-to-dismiss, close button) to remove them.
     */
-   activeToasts: Cell<readonly (ToastProps & { id: string })[]>
+   activeToasts: Cell<ReadonlyArray<ToastProps & { id: string }>>
 }
 
 export interface ToastContainerProps {

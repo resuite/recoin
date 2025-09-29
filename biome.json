@@ -31,7 +31,6 @@
          },
          "style": {
             "useBlockStatements": "error",
-            "useNamingConvention": "error",
             "useConsistentArrayType": {
                "level": "error",
                "options": {

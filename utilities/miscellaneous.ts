@@ -35,7 +35,7 @@ export function clamp(value: number, min: number, max: number) {
  * type EmptyResult = Split<'', '.'> // []
  */
 export type Split<S extends string, D extends string> = string extends S
-   ? string[]
+   ? Array<string>
    : S extends ''
      ? []
      : S extends `${infer T}${D}${infer U}`
@@ -113,7 +113,7 @@ export function scrollIntoView(target: HTMLElement, scrollView: HTMLElement) {
    scrollView.scrollTo({ top, behavior: 'smooth' })
 }
 
-export function groupByCount<T>(arr: T[], groupSize?: number) {
+export function groupByCount<T>(arr: Array<T>, groupSize?: number) {
    if (!groupSize) {
       return [arr]
    }

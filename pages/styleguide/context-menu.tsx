@@ -6,7 +6,7 @@ const ContextMenuTest = () => {
    const checked = Cell.source(true)
    const checked2 = Cell.source(true)
 
-   const items: ContextMenuItemProps[] = [
+   const items: Array<ContextMenuItemProps> = [
       {
          type: ItemTypes.Action,
          label: 'Copy',

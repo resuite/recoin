@@ -22,7 +22,7 @@ interface DropdownOption<T extends PropertyKey> {
 
 interface DropdownProps<T extends PropertyKey> extends DivProps {
    selectedOption?: SourceCell<DropdownOption<T>>
-   options: JSX.ValueOrCell<DropdownOption<T>[]>
+   options: JSX.ValueOrCell<Array<DropdownOption<T>>>
    'list:class'?: unknown
 }
 
@@ -83,7 +83,7 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
       }
    }
 
-   const items = Cell.derived<ContextMenuItemProps[]>(() => {
+   const items = Cell.derived<Array<ContextMenuItemProps>>(() => {
       return options.get().map(renderDropdownOption)
    })
 

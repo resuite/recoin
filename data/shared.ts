@@ -30,8 +30,8 @@ export const DbWorkerMessages = {
 export type DbWorkerKey = (typeof DbWorkerMessages)[keyof typeof DbWorkerMessages]
 
 export interface DbWorkerResponseMap extends ResponseMap<DbWorkerKey> {
-   [DbWorkerMessages.GetIncomeCategories]: () => Promise<Category[]>
-   [DbWorkerMessages.GetExpenseCategories]: () => Promise<Category[]>
+   [DbWorkerMessages.GetIncomeCategories]: () => Promise<Array<Category>>
+   [DbWorkerMessages.GetExpenseCategories]: () => Promise<Array<Category>>
    [DbWorkerMessages.GetCategoryById]: (id: string) => Promise<Category | null>
    [DbWorkerMessages.GetHomeStats]: () => Promise<{
       startingBalance: number
