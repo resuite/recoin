@@ -1,8 +1,8 @@
 import { QueryKeys } from '@/constants/query-keys'
-import { Header } from '@/pages/app/_fragments/header'
-import { AddNewTransactionButton } from '@/pages/app/home/_fragments/add-new-transaction-button'
-import { HomeStats } from '@/pages/app/home/_fragments/home-stats'
-import { RecentTransactions } from '@/pages/app/home/_fragments/recent-transactions'
+import { Header } from '@/pages/app/(fragments)/header'
+import { AddNewTransactionButton } from '@/pages/app/home/(fragments)/add-new-transaction-button'
+import { HomeStats } from '@/pages/app/home/(fragments)/home-stats'
+import { RecentTransactions } from '@/pages/app/home/(fragments)/recent-transactions'
 import { useAuthContext } from '@/scopes/auth'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 

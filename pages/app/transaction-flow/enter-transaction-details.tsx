@@ -16,7 +16,7 @@ import {
 } from '@/components/views/virtual-keyboard-aware-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { getCategoryById } from '@/data'
-import { BackButton } from '@/pages/app/_fragments/back-btn'
+import { BackButton } from '@/pages/app/(fragments)/back-btn'
 import { useAuthContext } from '@/scopes/auth'
 import { TransactionDetailsFormScope } from '@/scopes/forms'
 import { usePromise } from '@/utilities/composables/use-promise'
