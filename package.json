@@ -22,7 +22,7 @@
       "@cloudflare/workers-types": "^4.20250904.0",
       "@tailwindcss/vite": "^4.1.5",
       "@types/node": "^22.15.29",
-      "@typescript/native-preview": "7.0.0-dev.20250907.1",
+      "@typescript/native-preview": "7.0.0-dev.20250920.1",
       "drizzle-kit": "^0.31.4",
       "husky": "^9.1.7",
       "lint-staged": "^16.1.0",
@@ -33,11 +33,18 @@
       "vite": "npm:rolldown-vite@^7.1.5",
       "vite-css-modules": "^1.10.0",
       "vite-plugin-pwa": "^1.0.0",
-      "wrangler": "^4.24.3"
+      "wrangler": "^4.38.0"
    },
    "dependencies": {
       "@hono/zod-validator": "^0.7.0",
+      "@livestore/adapter-web": "^0.3.1",
+      "@livestore/devtools-vite": "^0.3.1",
+      "@livestore/livestore": "^0.3.1",
+      "@livestore/peer-deps": "^0.3.1",
+      "@livestore/sync-cf": "^0.3.1",
+      "@livestore/wa-sqlite": "^1.0.5",
       "@types/google.accounts": "^0.0.18",
+      "bidc": "^0.0.3",
       "bowser": "^2.11.0",
       "drizzle-orm": "^0.44.5",
       "google-auth-library": "^10.3.0",

@@ -47,8 +47,8 @@ export interface PartitionOptions {
  * // - second: 0 → 1 when --progress goes 0.3333 → 0.667
  * // - third: 0 → 1 when --progress goes 0.6667 → 1
  */
-export function createPartitions(variable: string, options?: PartitionOptions): string[] {
-   const partitions: string[] = []
+export function createPartitions(variable: string, options?: PartitionOptions): Array<string> {
+   const partitions: Array<string> = []
    const {
       from: min = 0,
       to: max = 1,

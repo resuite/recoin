@@ -4,6 +4,9 @@
    --expand-size: var(--fab-size);
    display: contents;
    isolation: isolate;
+   overflow: hidden;
+   max-height: 100dvh;
+   max-width: 100dvw;
 }
 
 .content {
@@ -37,13 +40,15 @@
    inset: var(--expand-origin);
    will-change: opacity, scale;
    transition-property: scale;
-   transition-duration: var(--speed-bit-slower);
 
    .container[data-open] > & {
+      transition-duration: var(--speed-slow);
+      transition-timing-function: ease-in-out;
       scale: 18;
    }
 
    .container:not([data-open]) > & {
+      transition-duration: var(--speed-bit-slower);
       scale: 0;
    }
 }

@@ -1,7 +1,9 @@
 import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
-import { ExpandingView, usePullToRefreshContext, useSidebarContext } from '@/components/views'
+import { ExpandingView } from '@/components/views/expanding-view'
+import { usePullToRefreshContext } from '@/components/views/pull-to-refresh-view'
+import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { vibrate } from '@/utilities/miscellaneous'
 import { Cell } from 'retend'
 

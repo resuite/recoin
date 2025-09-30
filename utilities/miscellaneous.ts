@@ -35,7 +35,7 @@ export function clamp(value: number, min: number, max: number) {
  * type EmptyResult = Split<'', '.'> // []
  */
 export type Split<S extends string, D extends string> = string extends S
-   ? string[]
+   ? Array<string>
    : S extends ''
      ? []
      : S extends `${infer T}${D}${infer U}`
@@ -53,7 +53,7 @@ export function vibrate(pattern?: VibratePattern) {
  * @param parent The HTMLElement to search within.
  * @returns The first focusable HTMLElement found, or null if none is found.
  */
-export function getFocusableElementInItem(parent: HTMLElement) {
+export function getFocusableElementInItem(parent: Element) {
    return parent.querySelector(':is(input, button):not(:disabled)') as HTMLElement | null
 }
 
@@ -84,4 +84,43 @@ export function createPointerOrClickHander(handler: () => void) {
 
       handler()
    }
+}
+
+const OFFSET_FROM_KEYBOARD = 30
+
+function getOffsetFromScrollTop(element: HTMLElement, scrollContainer: HTMLElement): number {
+   const elementRect = element.getBoundingClientRect()
+   const containerRect = scrollContainer.getBoundingClientRect()
+
+   return elementRect.top - containerRect.top + scrollContainer.scrollTop
+}
+
+/**
+ * Scrolls a target element into view within a scrollable parent element.
+ * The target element will be centered vertically in the scroll view, with an additional offset.
+ *
+ * @param target The HTMLElement to scroll into view.
+ * @param scrollView The HTMLElement that is scrollable.
+ */
+export function scrollIntoView(target: HTMLElement, scrollView: HTMLElement) {
+   const { clientHeight: scrollViewClientHeight } = scrollView
+   const { clientHeight } = target
+   const top =
+      getOffsetFromScrollTop(target, scrollView) +
+      clientHeight -
+      scrollViewClientHeight / 2 +
+      OFFSET_FROM_KEYBOARD
+   scrollView.scrollTo({ top, behavior: 'smooth' })
+}
+
+export function groupByCount<T>(arr: Array<T>, groupSize?: number) {
+   if (!groupSize) {
+      return [arr]
+   }
+   const result = []
+   for (let i = 0; i < arr.length; i += groupSize) {
+      const group = arr.slice(i, i + groupSize)
+      result.push(group)
+   }
+   return result
 }

@@ -69,7 +69,7 @@ export interface ContextMenuSeparatorProps {
 
 export interface ContextMenuSubMenuProps extends ContextMenuItemBase {
    type: typeof ItemTypes.SubMenu
-   items: JSX.ValueOrCell<ContextMenuItemProps[]>
+   items: JSX.ValueOrCell<Array<ContextMenuItemProps>>
 }
 
 export type ContextMenuItemProps =
@@ -124,7 +124,7 @@ interface ContextMenuProps<T extends HTMLElement> extends MenuProps {
     * Can be a static array or a reactive cell that updates the menu items dynamically.
     * Supports action items, checkboxes, separators, and submenus.
     */
-   items: JSX.ValueOrCell<ContextMenuItemProps[]>
+   items: JSX.ValueOrCell<Array<ContextMenuItemProps>>
 
    /**
     * Determines how the context menu is opened and closed.
@@ -343,8 +343,8 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
       // - it is supported on mac versions
       // - it is defined in Element.oncontextmenu
       // Some old bug they just never got around to, surely.
-      const isIOS = 'GestureEvent' in window
-      if (isIOS && strategy === 'contextmenu') {
+      const isIos = 'GestureEvent' in window
+      if (isIos && strategy === 'contextmenu') {
          polyfillTouchContextMenuEvent(trigger)
       }
 
@@ -410,7 +410,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
          {() => (
             // This needs to be a teleport in case of recursive submenus.
             // the anchor needs to be position:fixed to anchor with the current cursor position,
-            // and the behaviour of nested fixed elements in browsers is...questionable.
+            // and the behavior of nested fixed elements in browsers is...questionable.
             <Teleport
                to='body'
                class={styles.anchor}
@@ -640,7 +640,7 @@ function createKeybindingHandler(
    ref: SourceCell<HTMLMenuElement | null>,
    subMenus: Set<Cell<HTMLMenuElement | null>>,
    selected: SourceCell<number>,
-   items: Cell<ContextMenuItemProps[]>,
+   items: Cell<Array<ContextMenuItemProps>>,
    close: () => void
 ) {
    const itemCount = Cell.derived(() => {

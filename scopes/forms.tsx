@@ -1,8 +1,12 @@
-import { type SourceCell, createScope } from 'retend'
+import type { Form } from '@/utilities/form'
+import { createScope } from 'retend'
 
-export interface NewTransactionDetails {
-   amount: SourceCell<number>
-   label: SourceCell<string>
+export interface TransactionDetailsForm {
+   amount: number
+   label: string
+   date: Date
+   time: string
+   location: string
 }
 
-export const NewTransactionDetailsScope = createScope<NewTransactionDetails>()
+export const TransactionDetailsFormScope = createScope<Form<TransactionDetailsForm>>()

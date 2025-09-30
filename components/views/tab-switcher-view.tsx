@@ -37,6 +37,10 @@ export interface TabSwitcherViewProps<T extends Tab> extends SectionProps {
     * Classes to be applied to the header element.
     */
    'header:class'?: unknown
+   /**
+    * Min width for the headers. It defaults to suitable sizing.
+    */
+   minTabHeaderWidth?: JSX.ValueOrCell<string>
 }
 
 /**
@@ -72,10 +76,12 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
       ref: tabContainerRef = Cell.source<HTMLElement | null>(null),
       'header:class': headerClasses,
       onActiveTabChange,
+      minTabHeaderWidth: minTabHeaderWidthProp,
       ...rest
    } = props
    const observer = useObserver()
    const tabs = useDerivedValue(tabsProp)
+   const minTabHeaderWidth = useDerivedValue(minTabHeaderWidthProp)
    const tabCount = Cell.derived(() => {
       return tabs.get().length
    })
@@ -168,7 +174,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
             <section
                {...rest}
                ref={tabContainerRef}
-               style={{ '--tabs': tabCount }}
+               style={{ '--tabs': tabCount, '--min-tab-header-width': minTabHeaderWidth }}
                class={[styles.tabSwitcherContainer, rest.class]}
             >
                <header ref={headerRef} class={[styles.header, headerClasses]}>
@@ -184,12 +190,6 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
 function TabHeader(tab: Tab, index: Cell<number>) {
    const { scrollToTab, activeTab } = useScopeContext(TabScope)
 
-   const style = {
-      translate: Cell.derived(() => {
-         return `calc(${index.get()}*100%)`
-      })
-   }
-
    const isActiveTab = Cell.derived(() => {
       return index.get() === activeTab.get()
    })
@@ -201,7 +201,6 @@ function TabHeader(tab: Tab, index: Cell<number>) {
    return (
       <Button
          type='button'
-         style={style}
          data-tab-heading-index={index}
          data-active={isActiveTab}
          class={styles.tabButton}

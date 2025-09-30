@@ -1,0 +1,158 @@
+{
+   "version": "6",
+   "dialect": "sqlite",
+   "id": "09a88085-a241-40be-ae4f-0ffa286bc0b6",
+   "prevId": "36aac83b-32cc-499d-b11f-40db7e3e20fe",
+   "tables": {
+      "users": {
+         "name": "users",
+         "columns": {
+            "id": {
+               "name": "id",
+               "type": "text",
+               "primaryKey": true,
+               "notNull": true,
+               "autoincrement": false
+            },
+            "google_id": {
+               "name": "google_id",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": true,
+               "autoincrement": false
+            },
+            "email": {
+               "name": "email",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": true,
+               "autoincrement": false
+            },
+            "first_name": {
+               "name": "first_name",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "last_name": {
+               "name": "last_name",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "full_name": {
+               "name": "full_name",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "avatar_url": {
+               "name": "avatar_url",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "created_at": {
+               "name": "created_at",
+               "type": "integer",
+               "primaryKey": false,
+               "notNull": true,
+               "autoincrement": false
+            }
+         },
+         "indexes": {
+            "users_google_id_unique": {
+               "name": "users_google_id_unique",
+               "columns": ["google_id"],
+               "isUnique": true
+            },
+            "users_email_unique": {
+               "name": "users_email_unique",
+               "columns": ["email"],
+               "isUnique": true
+            }
+         },
+         "foreignKeys": {},
+         "compositePrimaryKeys": {},
+         "uniqueConstraints": {},
+         "checkConstraints": {}
+      },
+      "workspaces": {
+         "name": "workspaces",
+         "columns": {
+            "id": {
+               "name": "id",
+               "type": "text",
+               "primaryKey": true,
+               "notNull": true,
+               "autoincrement": false
+            },
+            "name": {
+               "name": "name",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": true,
+               "autoincrement": false
+            },
+            "user_id": {
+               "name": "user_id",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": true,
+               "autoincrement": false
+            },
+            "created_at": {
+               "name": "created_at",
+               "type": "integer",
+               "primaryKey": false,
+               "notNull": true,
+               "autoincrement": false
+            },
+            "currency": {
+               "name": "currency",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "starting_balance": {
+               "name": "starting_balance",
+               "type": "integer",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false,
+               "default": 0
+            }
+         },
+         "indexes": {},
+         "foreignKeys": {
+            "workspaces_user_id_users_id_fk": {
+               "name": "workspaces_user_id_users_id_fk",
+               "tableFrom": "workspaces",
+               "tableTo": "users",
+               "columnsFrom": ["user_id"],
+               "columnsTo": ["id"],
+               "onDelete": "no action",
+               "onUpdate": "no action"
+            }
+         },
+         "compositePrimaryKeys": {},
+         "uniqueConstraints": {},
+         "checkConstraints": {}
+      }
+   },
+   "views": {},
+   "enums": {},
+   "_meta": {
+      "schemas": {},
+      "tables": {},
+      "columns": {}
+   },
+   "internal": {
+      "indexes": {}
+   }
+}

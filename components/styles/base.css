@@ -48,6 +48,10 @@
    }
 }
 
+#credential_picker_container {
+   color-scheme: initial;
+}
+
 body {
    font-family: "Instrument Sans Italic O", "Instrument Sans Regular", sans-serif;
    @apply dark-scheme;
@@ -95,6 +99,7 @@ body {
 
    --animate-spin: spin var(--speed-slowest) linear infinite;
    --animate-fade-in: fade-in var(--speed-fast) ease-in backwards;
+   --animate-fade: fade var(--speed-default) ease-in-out backwards;
    --animate-lining: lining var(--speed-slow) ease-in-out var(--speed-slow) backwards;
    --animate-fade-y: fade-y var(--speed-default) ease-in-out backwards;
 
@@ -261,7 +266,7 @@ body {
 }
 
 @utility grid-lines-with-fade {
-   @apply grid-lines;
+   @apply grid-lines relative [&>*]:relative;
    @apply before:pointer-events-none before:block before:absolute before:h-full before:w-full;
    @apply before:bg-linear-to-b before:from-canvas-background before:via-transparent before:via-30% before:to-transparent;
 }
@@ -318,16 +323,16 @@ body {
 
    &::before {
       position: absolute;
-      display: block;
-      opacity: 0.25;
-      content: "";
       top: 0;
       left: 0;
+      display: block;
       width: 100%;
       height: 100%;
-      border-radius: 12px;
-      background-color: var(--color-canvas-background);
       border: 0.5px solid var(--color-canvas-text);
+      border-radius: 12px;
+      opacity: 0.25;
+      background-color: var(--color-canvas-background);
+      content: "";
    }
 }
 

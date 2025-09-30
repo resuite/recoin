@@ -2,7 +2,7 @@ import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
-} from '@/components/views'
+} from '@/components/views/virtual-keyboard-aware-view'
 import { Cell } from 'retend'
 
 const KeyboardAvoidanceTest = () => {

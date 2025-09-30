@@ -3,21 +3,20 @@ body:has(.contextMenu) {
 }
 
 .contextMenu {
-   display: grid;
-   grid-template-rows: repeat(var(--context-menu-item-count), auto);
    position: relative;
-   border-radius: 8px;
-   min-width: 205px;
-   @media only screen and (pointer: coarse) and (max-width: 768px) {
-      min-width: min(80dvw, 225px);
-      border-radius: 13px;
-   }
-   -webkit-backdrop-filter: blur(8px);
-   backdrop-filter: blur(8px);
-   border: 0.25px solid var(--color-zinc-500);
-   box-shadow: 0 1px 10px 0px var(--color-canvas-shadow);
+   display: grid;
    overflow: hidden;
-   animation: open-context-menu var(--speed-slow);
+   min-width: 205px;
+   border: 0.25px solid var(--color-zinc-500);
+   border-radius: 16px;
+   box-shadow: 0 1px 10px 0px var(--color-canvas-shadow);
+   grid-template-rows: repeat(var(--context-menu-item-count), auto);
+   -webkit-backdrop-filter: blur(5px);
+   backdrop-filter: blur(5px);
+
+   &:not(.submenu) {
+      animation: open-context-menu var(--speed-default);
+   }
 
    &:is(.contextMenu) {
       /* increasing the specificity overrides whatever is set externally. */
@@ -25,7 +24,7 @@ body:has(.contextMenu) {
    }
 
    &:has(> .item > .checkItem > .checkItemInput:checked) {
-      /* styles other items to have space for the checkmark if any item is checked. */
+      /* styles other items to have space for the check mark if any item is checked. */
       .item:not(:has(> .checkItem > .checkItemInput:checked), :has(> .separator)) {
          padding-left: calc((var(--spacing) * 0.25) + 0.75rem + 0.25rem); /* initial left space + space for icon + .itemContent gap */
       }
@@ -33,16 +32,20 @@ body:has(.contextMenu) {
 
    &::before {
       top: 0;
+      top: 0;
       left: 0;
       display: block;
-      opacity: 0.5;
-      content: "";
       width: 100%;
       height: 100%;
-      top: 0;
-      grid-area: 1 / 1 / calc(var(--context-menu-item-count) + 1) / 1;
-      border-radius: 8px;
+      border-radius: 16px;
+      opacity: 0.85;
       background-color: var(--color-canvas-deep);
+      content: "";
+      grid-area: 1 / 1 / calc(var(--context-menu-item-count) + 1) / 1;
+   }
+   @media only screen and (pointer: coarse) and (max-width: 768px) {
+      min-width: min(80dvw, 225px);
+      border-radius: 13px;
    }
 }
 
@@ -50,10 +53,6 @@ body:has(.contextMenu) {
    from {
       opacity: 0;
       scale: 0.75;
-   }
-
-   60% {
-      scale: 1.03;
    }
 }
 
@@ -67,15 +66,11 @@ body:has(.contextMenu) {
 .item {
    position: relative;
    display: grid;
-   place-items: center;
    min-height: 2rem;
+   font-size: var(--text-sm);
+   place-items: center;
    margin-inline: 8px;
    grid-area: calc(var(--context-menu-item-index) + 1) / 1;
-   @media (pointer: coarse) {
-      font-size: var(--text-base);
-      min-height: 2.6rem;
-   }
-   font-size: var(--text-sm);
 
    &:first-child {
       margin-top: 8px;
@@ -90,28 +85,32 @@ body:has(.contextMenu) {
    }
 
    &[data-selected]::before {
-      display: block;
-      content: "";
       position: absolute;
-      opacity: 0.1;
-      background-color: var(--color-canvas-text);
+      display: block;
       width: 100%;
       height: 100%;
+      border-radius: 10px;
+      opacity: 0.1;
+      background-color: var(--color-canvas-text);
+      content: "";
       pointer-events: none;
-      border-radius: 8px;
+   }
+   @media (pointer: coarse) {
+      min-height: 2.6rem;
+      font-size: var(--text-base);
    }
 }
 
 .itemContent {
    display: grid;
-   gap: 0.25rem;
-   min-width: 100%;
-   place-items: start;
    justify-content: start;
-   align-items: center;
+   min-width: 100%;
    border-radius: 0px;
+   gap: 0.25rem;
+   place-items: center start;
    padding-inline: calc(var(--spacing) * 0.25);
    padding-block: calc(var(--spacing) * 0.15);
+   content-visibility: auto;
 
    &:has(.caretContainer) {
       grid-template-columns: 1fr auto;
@@ -132,9 +131,10 @@ body:has(.contextMenu) {
 }
 
 .contextMenuActionBtn {
-   background-color: unset;
-   color: inherit;
    border: 0;
+   color: inherit;
+   background-color: unset;
+   font-size: inherit;
 
    &:disabled {
       visibility: visible;
@@ -144,14 +144,15 @@ body:has(.contextMenu) {
 
 .iconContainer {
    display: grid;
-   place-content: center;
-   height: 1.3rem;
    width: 1.3rem;
+   height: 1.3rem;
+   place-content: center;
 }
 
 .icon {
-   height: 1.25rem;
    width: 1.25rem;
+   height: 1.25rem;
+   pointer-events: none;
 }
 
 .checkItem {
@@ -173,16 +174,16 @@ body:has(.contextMenu) {
 
 .checkItemInput {
    all: revert;
-   appearance: none;
    position: absolute;
+   appearance: none;
 }
 
 .check {
    align-self: center;
+   width: 1.35rem;
+   height: 1.35rem;
    justify-self: center;
-   height: 0.75rem;
-   width: 0.75rem;
-   scale: 1.4;
+   scale: 0.9;
 
    path {
       stroke-width: 3px;
@@ -191,16 +192,16 @@ body:has(.contextMenu) {
 
 .separator {
    display: block;
-   content: "";
-   height: 1px;
    width: 100%;
-   background-color: var(--color-canvas-text);
+   height: 1px;
    opacity: 0.3;
+   background-color: var(--color-canvas-text);
+   content: "";
    margin-block: 7.5px;
 
    .item:has(> &) {
-      padding: 0;
       min-height: fit-content;
+      padding: 0;
 
       &[data-selected]::before {
          display: none;
@@ -209,9 +210,9 @@ body:has(.contextMenu) {
 }
 
 .caret {
+   align-self: center;
    width: 0.85rem;
    height: 0.85rem;
-   align-self: center;
    rotate: -90deg;
 
    path {

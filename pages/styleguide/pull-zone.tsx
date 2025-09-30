@@ -1,5 +1,5 @@
 import { DynamicIcon } from '@/components/icons'
-import { type PullState, PullToRefreshView } from '@/components/views'
+import { type PullState, PullToRefreshView } from '@/components/views/pull-to-refresh-view'
 import { Cell } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 
@@ -50,9 +50,9 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
    }
 
    const handleActionTriggered = async () => {
-      const WAIT_TIME = 3500
+      const waitTime = 3500
       await new Promise((resolve) => {
-         setTimeout(resolve, WAIT_TIME)
+         setTimeout(resolve, waitTime)
       })
    }
 

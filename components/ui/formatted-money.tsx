@@ -5,12 +5,12 @@ import type { JSX } from 'retend/jsx-runtime'
 type OutputProps = JSX.IntrinsicElements['output']
 
 interface FormattedMoneyProps extends OutputProps {
-   value: JSX.ValueOrCell<number>
+   children: JSX.ValueOrCell<number | string>
    currency: JSX.ValueOrCell<string>
 }
 
 export function FormattedMoney(props: FormattedMoneyProps) {
-   const { value: valueProp, currency: currencyProp, ...rest } = props
+   const { children: valueProp, currency: currencyProp, ...rest } = props
    const value = useDerivedValue(valueProp)
    const currency = useDerivedValue(currencyProp)
 
@@ -24,7 +24,7 @@ export function FormattedMoney(props: FormattedMoneyProps) {
    )
 
    const formattedValue = Cell.derived(() => {
-      return formatter.get().format(value.get())
+      return formatter.get().format(Number(value.get()))
    })
 
    return <output {...rest}>{formattedValue}</output>

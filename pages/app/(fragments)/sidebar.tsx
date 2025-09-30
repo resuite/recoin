@@ -1,11 +1,14 @@
 import type { IconName } from '@/components/icons'
 import { Icon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { createPartitions } from '@/utilities/animations'
 import { Cell, For } from 'retend'
 import { useRouter } from 'retend/router'
 
 export interface LinkInfo {
    name: string
+   href: string
    icon: IconName
 }
 
@@ -13,15 +16,13 @@ export interface SidebarLinkProps {
    link: LinkInfo
    progressValue: string
    height?: string
-   isActive?: boolean
    href?: string
 }
 
 export interface AnimatedLinkGroupProps {
-   links: LinkInfo[]
-   progressValues: string[]
+   links: Array<LinkInfo>
+   progressValues: Array<string>
    linkHeight?: string
-   activeIndex?: number
 }
 
 export interface SidebarHeaderProps {
@@ -35,17 +36,17 @@ export interface SidebarDividerProps {
 }
 
 const upperLinks: Array<LinkInfo> = [
-   { name: 'Home', icon: 'house' },
-   { name: 'Chat', icon: 'sparkle' },
-   { name: 'Reports', icon: 'chart' },
-   { name: 'Budgets', icon: 'pie-chart' },
-   { name: 'Categories', icon: 'grid' },
-   { name: 'Profile', icon: 'profile' }
+   { name: 'Home', icon: 'house', href: '/app' },
+   { name: 'Chat', icon: 'sparkle', href: '/app/chat' },
+   { name: 'Reports', icon: 'chart', href: '/app/reports' },
+   { name: 'Budgets', icon: 'pie-chart', href: '/app/budgets' },
+   { name: 'Categories', icon: 'grid', href: '/app/categories' },
+   { name: 'Profile', icon: 'profile', href: '/app/profile' }
 ]
 
 const lowerLinks: Array<LinkInfo> = [
-   { name: 'Feedback', icon: 'chat-bubble' },
-   { name: 'Settings', icon: 'settings' }
+   { name: 'Feedback', icon: 'chat-bubble', href: '/app/feedback' },
+   { name: 'Settings', icon: 'settings', href: '/app/settings' }
 ]
 
 export function createLinkAnimationValues(progressValue: string) {
@@ -61,41 +62,55 @@ export function createLinkAnimationValues(progressValue: string) {
 }
 
 function SidebarLink(props: SidebarLinkProps) {
-   const { link, progressValue, height = '8dvh', isActive = false, href = '#' } = props
-   const { Link } = useRouter()
+   const { link, progressValue, height = '8dvh' } = props
+   const { navigate, getCurrentRoute } = useRouter()
+   const currentRoute = getCurrentRoute()
+   const sidebarCtx = useSidebarContext()
    const { translate, opacity } = createLinkAnimationValues(progressValue)
 
+   const handleClick = () => {
+      navigate(link.href)
+      sidebarCtx.toggleSidebar()
+   }
+
+   const isActive = Cell.derived(() => {
+      if (link.href === '/app') {
+         return currentRoute.get().path === '/app'
+      }
+      return currentRoute.get().path.startsWith(link.href)
+   })
+
    return (
-      <Link
-         href={href}
-         class={[
-            'border-none py-0.5 px-1 ease-out duration-slow transition-[translate,opacity] gap-[10px]',
-            'active:bg-gray-100/0.5'
-         ]}
+      <Button
+         class='btn-link border-none py-0.5 px-1 ease-out duration-slow transition-[translate,opacity]'
          style={{ translate, opacity, height }}
+         onClick={handleClick}
       >
-         <div class={['flex items-center gap-0.5', { 'opacity-70': !isActive }]}>
+         <div
+            class={[
+               'flex items-center gap-0.5 text-light-yellow/50',
+               { '[:is(*)]:text-canvas-text': isActive }
+            ]}
+         >
             <Icon name={link.icon} class='link-icon' />
             {link.name}
          </div>
-      </Link>
+      </Button>
    )
 }
 
 function AnimatedLinkGroup(props: AnimatedLinkGroupProps) {
-   const { links, progressValues, linkHeight = '8dvh', activeIndex = 0 } = props
+   const { links, progressValues, linkHeight = '8dvh' } = props
    return (
       <div class='grid' style={{ gridTemplateRows: `repeat(${links.length}, auto) 1fr` }}>
          {For(links, (link, index) => {
             const progressIndex = index.get()
-            const isActive = progressIndex === activeIndex
 
             return (
                <SidebarLink
                   link={link}
                   progressValue={progressValues[progressIndex]}
                   height={linkHeight}
-                  isActive={isActive}
                   href='#'
                />
             )
@@ -163,7 +178,6 @@ export function Sidebar() {
             links={upperLinks}
             progressValues={upperLinksSwipeProgressValues}
             linkHeight='8dvh'
-            activeIndex={0}
          />
          <SidebarDivider scaleValue={lineScale} />
          <div
@@ -176,7 +190,6 @@ export function Sidebar() {
                links={lowerLinks}
                progressValues={lowerLinksSwipeProgressValues}
                linkHeight='7.5dvh'
-               activeIndex={-1}
             />
          </div>
       </div>

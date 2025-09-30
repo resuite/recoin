@@ -154,7 +154,9 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       // between horizontal (for opening/closing the sidebar) and vertical
       // (for triggering pull-to-refresh).
       const browser = currentBrowser()
-      if (browser.getBrowserName() !== Browsers.Safari) {
+      const browserName = browser.getBrowserName()
+      const platformType = browser.getPlatformType()
+      if (!(browserName === Browsers.Safari && platformType === 'mobile')) {
          return
       }
       provider.addEventListener('pointerdown', interceptPointerDown)

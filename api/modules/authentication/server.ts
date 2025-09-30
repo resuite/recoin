@@ -35,7 +35,8 @@ authenticationRoute.post(
                family_name: lastName
             } = payload
             let user = await db.query.users.findFirst({
-               where: and(eq(schema.users.googleId, googleId), eq(schema.users.email, email))
+               where: and(eq(schema.users.googleId, googleId), eq(schema.users.email, email)),
+               with: { workspaces: { limit: 1 } }
             })
 
             const userId = user?.id ?? crypto.randomUUID()
@@ -43,7 +44,7 @@ authenticationRoute.post(
                const workspaceId = crypto.randomUUID()
                const createdAt = new Date()
                // todo: wrap in transaction when drizzle supports it for D1.
-               const [[newUser]] = await Promise.all([
+               const [[newUser], [newWorkspace]] = await Promise.all([
                   db
                      .insert(schema.users)
                      .values({
@@ -59,8 +60,9 @@ authenticationRoute.post(
                   db
                      .insert(schema.workspaces)
                      .values({ id: workspaceId, name: DEFAULT_WORKSPACE, userId, createdAt })
+                     .returning()
                ])
-               user = newUser
+               user = { ...newUser, workspaces: [newWorkspace] }
             }
             await setAuthCookie(context, userId)
             const { googleId: _, createdAt: __, ...userData } = user

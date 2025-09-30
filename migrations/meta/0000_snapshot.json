@@ -28,8 +28,29 @@
                "notNull": true,
                "autoincrement": false
             },
-            "name": {
-               "name": "name",
+            "first_name": {
+               "name": "first_name",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "last_name": {
+               "name": "last_name",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "full_name": {
+               "name": "full_name",
+               "type": "text",
+               "primaryKey": false,
+               "notNull": false,
+               "autoincrement": false
+            },
+            "avatar_url": {
+               "name": "avatar_url",
                "type": "text",
                "primaryKey": false,
                "notNull": false,

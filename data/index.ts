@@ -1,27 +1,37 @@
-import type { IconName } from '@/components/icons'
+import type { Currency } from '@/api/database/types'
+import {
+   DbWorkerMessages,
+   type DbWorkerResponseMap,
+   type Sender,
+   type WorkerChannel
+} from '@/data/shared'
+import { createChannel } from 'bidc'
+import DbWorker from './data.worker?worker'
 
-export interface Category {
-   name: string
-   icon: IconName
-   key: string
+let send: Sender<DbWorkerResponseMap>
+export function initializeDbWorker() {
+   const worker = new DbWorker()
+   const channel = createChannel(worker) as WorkerChannel<DbWorkerResponseMap>
+   send = channel.send
 }
 
-export const defaultExpenseCategories: Category[] = [
-   { name: 'Utilities', icon: 'house', key: 'utilities' },
-   { name: 'Food and Drinks', icon: 'cutlery', key: 'food-and-drinks' },
-   { name: 'Transportation', icon: 'car', key: 'transportation' },
-   { name: 'Health and Personal Care', icon: 'healthcare', key: 'health-and-personal-care' },
-   { name: 'Financial Obligation', icon: 'credit-card', key: 'financial-obligation' },
-   { name: 'Shopping and Entertainment', icon: 'purse', key: 'shopping-and-entertainment' }
-]
+export async function getIncomeCategories() {
+   return await send({ key: DbWorkerMessages.GetIncomeCategories })
+}
 
-export const defaultIncomeCategories: Category[] = [
-   { name: 'Salary and Wages', icon: 'suitcase', key: 'salary-and-wages' },
-   { name: 'Freelance and Contracts', icon: 'paper', key: 'freelance-and-contracts' },
-   { name: 'Dividends', icon: 'dollar', key: 'dividends' },
-   { name: 'Gifts', icon: 'gift', key: 'gifts' },
-   { name: 'Benefits', icon: 'diamond', key: 'benefits' },
-   { name: 'Sales', icon: 'cart', key: 'sales' }
-]
+export async function getExpenseCategories() {
+   return await send({ key: DbWorkerMessages.GetExpenseCategories })
+}
 
-export const defaultCurrency = 'NGN'
+export async function getCategoryById(id: string) {
+   return await send({ key: DbWorkerMessages.GetCategoryById, payload: id })
+}
+
+export async function getHomeStats() {
+   return await send({ key: DbWorkerMessages.GetHomeStats })
+}
+
+export const defaultCurrency: Currency = {
+   id: 'currency_ngn',
+   value: 'NGN'
+}
