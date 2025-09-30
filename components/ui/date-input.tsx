@@ -29,12 +29,21 @@ export function DateInput(props: DateInputProps) {
       ref.get()?.focus()
    }
 
+   const handlePlaceholderKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+         e.preventDefault()
+         ref.get()?.focus()
+      }
+   }
+
    return (
       <div data-unfilled={inputIsUnfilled} class={styles.dateInputContainer}>
          <div
             class={styles.datePlaceholder}
             onClick={handlePlaceholderClick}
-            onKeyDown={handlePlaceholderClick}
+            onKeyDown={handlePlaceholderKeyDown}
+            role='button'
+            tabIndex={0}
          >
             {value}
             <Calendar class={styles.dateInputCalendarIcon} />
