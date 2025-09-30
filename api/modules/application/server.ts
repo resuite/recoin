@@ -55,12 +55,12 @@ applicationRoute.post(
          const workspace = user?.workspaces?.at(0)
 
          if (!user) {
-            c.status(StatusCodes.InternalServerError)
+            c.status(StatusCodes.Unauthorized)
             return errorOccurred(c, Errors.UnAuthorized, 'User not found.')
          }
 
          if (!workspace) {
-            c.status(StatusCodes.InternalServerError)
+            c.status(StatusCodes.Unauthorized)
             return errorOccurred(c, Errors.UnAuthorized, 'User workspace not found.')
          }
 
