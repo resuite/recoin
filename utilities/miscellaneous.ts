@@ -124,3 +124,17 @@ export function groupByCount<T>(arr: Array<T>, groupSize?: number) {
    }
    return result
 }
+
+function getCurrencyDecimals(currency: string) {
+   return (
+      new Intl.NumberFormat('en-US', {
+         style: 'currency',
+         currency,
+         minimumFractionDigits: 0
+      }).resolvedOptions().maximumFractionDigits || 2
+   )
+}
+
+export function normalizeAmount(amount: number, currency: string) {
+   return Math.round(amount * 10 ** getCurrencyDecimals(currency))
+}
