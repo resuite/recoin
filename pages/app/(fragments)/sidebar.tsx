@@ -88,8 +88,8 @@ function SidebarLink(props: SidebarLinkProps) {
       >
          <div
             class={[
-               'flex items-center gap-0.5 opacity-70',
-               { '[:nth-child(n)]:opacity-100': isActive }
+               'flex items-center gap-0.5 text-light-yellow/50',
+               { '[:is(*)]:text-canvas-text': isActive }
             ]}
          >
             <Icon name={link.icon} class='link-icon' />

@@ -64,7 +64,7 @@ const ChooseCategory = () => {
 
    return (
       <div class='grid place-items-center place-content-center grid-cols-1 relative px-1'>
-         <BackButton />
+         <BackButton class='absolute top-2 left-1' />
          {Switch.OnProperty(categories, 'state', {
             error: () => <>Could not load categories.</>,
             pending: () => <Loader class='h-2' />,

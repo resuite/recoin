@@ -1,12 +1,18 @@
 import Arrows from '@/components/icons/svg/arrows'
+import type { JSX } from 'retend/jsx-runtime'
 import { useRouter } from 'retend/router'
 
-export function BackButton() {
+type ButtonProps = JSX.IntrinsicElements['button']
+interface BackButtonProps extends ButtonProps {}
+
+export function BackButton(props: BackButtonProps) {
+   const { type = 'button', class: className, ...rest } = props
    const router = useRouter()
    return (
       <button
-         type='button'
-         class='button-bare text-big gap-0.25 absolute top-2 left-1'
+         {...rest}
+         type={type}
+         class={['button-bare text-big gap-0.25', className]}
          onClick={() => router.back()}
       >
          <Arrows class='h-1 rotate-45' />
