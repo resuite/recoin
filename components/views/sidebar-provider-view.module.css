@@ -34,10 +34,19 @@
 }
 
 .content {
+   position: relative;
    scroll-snap-align: start;
 
    &[data-opened] {
       pointer-events: none;
       touch-action: none;
    }
+}
+
+.contentEdge {
+   position: absolute;
+   top: 0;
+   right: 0;
+   height: 100%;
+   width: 2px;
 }

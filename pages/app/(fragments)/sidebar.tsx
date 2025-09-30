@@ -68,9 +68,9 @@ function SidebarLink(props: SidebarLinkProps) {
    const sidebarCtx = useSidebarContext()
    const { translate, opacity } = createLinkAnimationValues(progressValue)
 
-   const handleClick = () => {
+   const handleClick = async () => {
+      await sidebarCtx.toggleSidebar()
       navigate(link.href)
-      sidebarCtx.toggleSidebar()
    }
 
    const isActive = Cell.derived(() => {

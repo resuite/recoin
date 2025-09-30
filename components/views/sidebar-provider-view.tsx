@@ -11,7 +11,7 @@ type DivProps = JSX.IntrinsicElements['div']
 
 interface SidebarCtx {
    sidebarState: Cell<'open' | 'closed'>
-   toggleSidebar: () => void
+   toggleSidebar: () => Promise<void>
    toggleSidebarEnabled: (value?: boolean) => void
 }
 const SidebarScope = createScope<SidebarCtx>()
@@ -69,6 +69,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    const observer = useObserver()
    const allowReveal = Cell.source(true)
    const contentRef = Cell.source<HTMLElement | null>(null)
+   const contentEdgeRef = Cell.source<HTMLElement | null>(null)
    const sidebarRef = Cell.source<HTMLElement | null>(null)
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
 
@@ -79,8 +80,30 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       return allowReveal.get() === false
    })
 
-   const toggleSidebar = () => {
-      sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open')
+   let pendingClosePromiseResolver: (() => void) | null = null
+   const toggleSidebar = async () => {
+      // Things start to go haywire around here. I need to know when **exactly**
+      // the sidebar closes, so it has to be structured as an awaitiable promise.
+      //
+      // But i dont really know when the sidebar closes because it is a scroll based gesture,
+      // and we are not doing any scroll timeout hacks. This is another place where scrollend
+      // would be perfect, but Safari sha. So instead we need to do some viewport observer magic
+      // on the right edge of the content. If it is fully in view, it means the sidebar is fully out,
+      // and we can do some hot potato-ing to orchestrate a useful (and hopefully consistent) promise.
+      const waitingTillClose = new Promise<void>((resolve) => {
+         pendingClosePromiseResolver = resolve
+         sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open')
+      })
+      // In case (idk if this will happen) the sequence is missed, we wait some time before
+      // definitively closing, so we dont end up with hanging promises.
+      const timeout = new Promise<void>((resolve) => {
+         setTimeout(() => {
+            pendingClosePromiseResolver?.()
+            pendingClosePromiseResolver = null
+            resolve()
+         }, 1200)
+      })
+      return await Promise.race([waitingTillClose, timeout])
    }
 
    const toggleSidebarEnabled = (value?: boolean) => {
@@ -113,14 +136,25 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    useIntersectionObserver(
       sidebarRef,
       ([entry]) => {
-         if (entry === undefined) {
-            return
-         }
          isAlreadyRevealedFlag = entry.isIntersecting
          sidebarState.set(isAlreadyRevealedFlag ? 'open' : 'closed')
       },
       () => {
          return { root: providerRef.peek(), threshold: 0.9 }
+      }
+   )
+
+   useIntersectionObserver(
+      contentEdgeRef,
+      ([entry]) => {
+         if (!entry.isIntersecting) {
+            return
+         }
+         pendingClosePromiseResolver?.()
+         pendingClosePromiseResolver = null
+      },
+      () => {
+         return { root: providerRef.peek(), threshold: 1 }
       }
    )
 
@@ -181,6 +215,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                   </div>
                   <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
                      {children?.()}
+                     <div ref={contentEdgeRef} class={styles.contentEdge} />
                   </div>
                </div>
             )

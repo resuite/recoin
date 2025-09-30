@@ -42,8 +42,6 @@ export function DateInput(props: DateInputProps) {
             class={styles.datePlaceholder}
             onClick={handlePlaceholderClick}
             onKeyDown={handlePlaceholderKeyDown}
-            role='button'
-            tabIndex={0}
          >
             {value}
             <Calendar class={styles.dateInputCalendarIcon} />

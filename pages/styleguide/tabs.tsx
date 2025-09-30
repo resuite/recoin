@@ -4,7 +4,12 @@ const Tabs = () => {
    return (
       <div class='py-1 w-full h-screen grid grid-rows-[auto_1fr] light-scheme rounded-t-3xl'>
          <h2 class='text-title px-1'>Tabs</h2>
-         <TabSwitcherView class='tab-container' header:class='px-1' tabs={tabs} />
+         <TabSwitcherView
+            class='tab-container'
+            header:class='px-1'
+            minTabHeaderWidth='70px'
+            tabs={tabs}
+         />
       </div>
    )
 }

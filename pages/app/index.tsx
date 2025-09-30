@@ -27,7 +27,7 @@ const AppContent = () => {
 
    return (
       <PullToRefreshView
-         class='dark-scheme'
+         class='dark-scheme select-none'
          feedback={() => <PullToRefreshFeedback state={pullToRefreshState} />}
          onStateChange={handlePullToRefreshStateChange}
          onActionTriggered={handlePullToRefreshAction}
@@ -38,7 +38,7 @@ const AppContent = () => {
                   <Outlet
                      id={ROOT_APP_OUTLET}
                      style={{ display: 'grid' }}
-                     class='h-full select-none translate-0'
+                     class='h-full translate-0'
                   />
                )}
             </SidebarProviderView>
