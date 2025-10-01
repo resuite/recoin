@@ -7,10 +7,10 @@ import { createStorePromise } from '@livestore/livestore'
 
 export type RecoinStore = Store<typeof schema>
 
-export function createRecoinStore(authToken: string): Promise<RecoinStore> {
+export function createRecoinStore(userId: string): Promise<RecoinStore> {
    return createStorePromise({
-      storeId: 'recoin',
-      syncPayload: { authToken },
+      storeId: `userStore_${userId}`,
+      syncPayload: { authToken: userId },
       adapter: makePersistedAdapter({
          storage: { type: 'opfs' },
          worker: LiveStoreWorker,
