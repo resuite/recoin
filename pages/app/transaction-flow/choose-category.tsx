@@ -1,15 +1,14 @@
-import type { Category, TransactionType } from '@/api/database/types'
+import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
-import Loader from '@/components/icons/svg/loader'
 import { Button } from '@/components/ui/button'
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
-import { getExpenseCategories, getIncomeCategories } from '@/data'
+import type { Category } from '@/data/livestore/models/category'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
-import { usePromise } from '@/utilities/composables/use-promise'
+import { useCategories } from '@/utilities/composables/use-categories'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { For, Switch } from 'retend'
+import { type Cell, For, Switch } from 'retend'
 import { useRouteQuery } from 'retend/router'
 
 const CategoryLink = (props: Category) => {
@@ -31,7 +30,7 @@ const CategoryLink = (props: Category) => {
 
 interface CategoryListingProps {
    type: TransactionType
-   categories: Array<Category>
+   categories: Cell<Array<Category>>
 }
 
 const CategoriesListing = (props: CategoryListingProps) => {
@@ -58,20 +57,13 @@ const CategoriesListing = (props: CategoryListingProps) => {
 
 const ChooseCategory = () => {
    const query = useRouteQuery()
-   const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
-   const getCategories = type === 'income' ? getIncomeCategories : getExpenseCategories
-   const categories = usePromise(getCategories)
+   const type = query.get(QueryKeys.TransactionFlow.Type).get() as TransactionType
+   const categories = useCategories(type)
 
    return (
       <div class='grid place-items-center place-content-center grid-cols-1 relative px-1'>
          <BackButton class='absolute top-2 left-1' />
-         {Switch.OnProperty(categories, 'state', {
-            error: () => <>Could not load categories.</>,
-            pending: () => <Loader class='h-2' />,
-            complete: ({ data: categories }) => (
-               <CategoriesListing type={type} categories={categories} />
-            )
-         })}
+         <CategoriesListing type={type} categories={categories} />
       </div>
    )
 }

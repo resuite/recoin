@@ -2,12 +2,15 @@ import { FullScreenTransitionView } from '@/components/views/full-screen-transit
 import { type PullState, PullToRefreshView } from '@/components/views/pull-to-refresh-view'
 import { SidebarProviderView } from '@/components/views/sidebar-provider-view'
 import { ROOT_APP_OUTLET } from '@/constants'
+import { createRecoinStore } from '@/data/livestore/store'
 import { GoogleIdentityProvider } from '@/integrations/google'
 import { PullToRefreshFeedback } from '@/pages/app/(fragments)/pull-to-refresh-feedback'
 import { Sidebar } from '@/pages/app/(fragments)/sidebar'
+import Loading from '@/pages/app/auth/loading'
 import Onboarding from '@/pages/app/auth/onboarding'
 import StartPage from '@/pages/app/auth/start-page'
 import { AuthenticationProvider } from '@/scopes/auth'
+import { LiveStoreProvider } from '@/scopes/livestore'
 import { useApplicationSetup } from '@/utilities/composables/use-application-setup'
 import { Cell } from 'retend'
 import { useRouter } from 'retend/router'
@@ -21,7 +24,6 @@ const AppContent = () => {
    }
 
    const handlePullToRefreshAction = async () => {
-      // Simulate refreshing data
       await new Promise((resolve) => setTimeout(resolve, 3500))
    }
 
@@ -74,7 +76,15 @@ const AppRoot = () => {
 const App = () => {
    return (
       <GoogleIdentityProvider>
-         {() => <AuthenticationProvider>{AppRoot}</AuthenticationProvider>}
+         {() => (
+            <AuthenticationProvider>
+               {() => (
+                  <LiveStoreProvider initStore={createRecoinStore} fallback={Loading}>
+                     {AppRoot}
+                  </LiveStoreProvider>
+               )}
+            </AuthenticationProvider>
+         )}
       </GoogleIdentityProvider>
    )
 }

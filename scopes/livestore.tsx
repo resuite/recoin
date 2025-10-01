@@ -1,3 +1,4 @@
+import type { RecoinStore } from '@/data/livestore/store'
 import {
    type LiveStoreSchema,
    type QueryBuilder,
@@ -43,8 +44,23 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
    })
 }
 
+type ExtractQueryType<
+   ResultSchema,
+   Table extends State.SQLite.TableDef,
+   Result
+> = // biome-ignore lint/suspicious/noExplicitAny: Types are too complex
+| QueryBuilder<ResultSchema, Table, any>
+| Extract<
+     Parameters<typeof queryDb<ResultSchema, Result>>[0] extends infer V
+        ? V extends (...args: infer _) => infer X
+           ? X
+           : never
+        : never,
+     { query: string }
+  >
+
 /**
- * A hook that subscribes to a live database query and returns the results in a Retend Cell.
+ * A hook that subscribes to a live database query and returns the results in a Cell.
  * The Cell updates automatically whenever the underlying query results change.
  *
  * @template TResultSchema The expected schema of the query results before mapping.
@@ -54,18 +70,12 @@ export function useLiveQuery<
    ResultSchema,
    Table extends State.SQLite.TableDef,
    Result = ResultSchema
->(
-   // biome-ignore lint/suspicious/noExplicitAny: Types are too complex
-   queryInput: QueryBuilder<ResultSchema, Table, any>,
-   options?: {
-      map?: (rows: ResultSchema) => Result
-   }
-): Cell<Result> {
+>(query: ExtractQueryType<ResultSchema, Table, Result>): Cell<ResultSchema> {
    const store = useScopeContext<Store>(LiveStoreScope)
-   const cell = Cell.source<Result | []>([])
+   const liveQuery$ = queryDb(query)
+   const cell = Cell.source<ResultSchema>(store.query(liveQuery$))
 
    useSetupEffect(() => {
-      const liveQuery$ = queryDb(queryInput, options)
       return store.subscribe(liveQuery$, {
          onUpdate(value) {
             cell.set(value)
@@ -73,12 +83,12 @@ export function useLiveQuery<
       })
    })
 
-   return cell as Cell<Result>
+   return cell
 }
 
 /**
  * A hook that provides access to the LiveStore instance from the nearest `LiveStoreScope.Provider`.
  */
 export function useStore() {
-   return useScopeContext<Store>(LiveStoreScope)
+   return useScopeContext<RecoinStore>(LiveStoreScope)
 }

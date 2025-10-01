@@ -20,6 +20,9 @@ export default defineConfig({
          origin: true
       }
    },
+   optimizeDeps: {
+      exclude: ['@livestore/adapter-web']
+   },
    plugins: [
       tailwindcss(),
       patchCssModules(),
