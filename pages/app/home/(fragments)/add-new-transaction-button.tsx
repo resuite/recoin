@@ -30,13 +30,13 @@ export function AddNewTransactionButton() {
    } = useRouteQueryControl(QueryKeys.TransactionFlow)
    const { hasKey: isOnSuccessPage } = useRouteQueryControl(QueryKeys.TransactionFlow.Success)
 
-   const defaultValues: TransactionDetailsForm = {
+   const defaultValues = (): TransactionDetailsForm => ({
       amount: 0,
       label: '',
       date: new Date(),
       time: new Date().toTimeString().slice(0, 5),
       location: ''
-   }
+   })
 
    const details = createForm(defaultValues, {
       onSubmit: (values) => {
@@ -95,7 +95,7 @@ export function AddNewTransactionButton() {
          <ExpandingView
             isOpen={transactionFlowIsOpen}
             class='dark-scheme'
-            expandOrigin='auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)'
+            expandOrigin='calc(100dvh - var(--fab-size) - var(--spacing) * 3) auto auto  calc(50% - var(--fab-size) / 2)'
             expandColor='var(--color-base)'
          >
             {() => (

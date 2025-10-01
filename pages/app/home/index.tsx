@@ -12,7 +12,7 @@ const Home = () => {
    return (
       <Stage class='grid grid-rows-[auto_1fr]'>
          <Header />
-         <main class='grid grid-rows-[auto_auto_1fr] px-1 grid-cols-1 justify-center'>
+         <main class='grid grid-rows-[auto_auto_1fr] px-1 grid-cols-1 justify-center overflow-y-scroll h-[2000px]'>
             <div class='text-center w-full'>
                <h3 class='text-header'>Hello, {firstName}.</h3>
                <p class='text-sm opacity-60'>Add a new transaction to get started.</p>

@@ -15,11 +15,11 @@ interface FormOptions<Values extends object> {
 }
 
 export function createForm<Values extends object>(
-   defaultValues: Values,
+   defaultValues: () => Values,
    options?: FormOptions<Values>
 ): Form<Values> {
    const values = Object.fromEntries(
-      Object.entries(defaultValues).map(([key, value]) => {
+      Object.entries(defaultValues()).map(([key, value]) => {
          return [key, Cell.source(value)]
       })
    ) as MakeReactiveKeys<Values>
@@ -38,8 +38,9 @@ export function createForm<Values extends object>(
          this.submitted = true
       },
       reset() {
+         const defaults = defaultValues()
          for (const key in values) {
-            values[key].set(defaultValues[key])
+            values[key].set(defaults[key])
          }
       }
    }

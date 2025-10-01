@@ -14,10 +14,6 @@
       rotate var(--speed-slower) var(--timing-bounce-slower);
    place-items: center;
 
-   &[data-fixed] {
-      position: fixed;
-   }
-
    &:active {
       scale: 1;
    }
@@ -27,14 +23,16 @@
       visibility: unset;
    }
 
+   &[data-fixed] {
+      position: fixed;
+   }
+
    &.block.top {
       top: calc(var(--spacing) * 3);
-      bottom: unset;
    }
 
    &.block.bottom {
-      top: unset;
-      bottom: calc(var(--spacing) * 3);
+      top: calc(100dvh - var(--fab-size) - calc(var(--spacing) * 3));
    }
 
    &.block.center:not(.top, .bottom) {

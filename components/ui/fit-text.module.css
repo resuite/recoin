@@ -1,12 +1,10 @@
 .fitText {
+   display: grid;
    container-name: fit-text;
    container-type: inline-size;
-   display: grid;
    place-items: center;
 
    & > .content {
-      display: grid;
-      place-items: center;
       font-size: calc(
          min(
             (100cqw / var(--fit-text-char-count)) *
