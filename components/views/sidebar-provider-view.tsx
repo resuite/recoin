@@ -101,7 +101,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
             pendingClosePromiseResolver?.()
             pendingClosePromiseResolver = null
             resolve()
-         }, 1200)
+         }, 750)
       })
       return await Promise.race([waitingTillClose, timeout])
    }

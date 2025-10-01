@@ -1,3 +1,5 @@
+import { clamp } from '@/utilities/miscellaneous'
+
 /**
  * For time-lined animations (scroll or swipe), the animation duration
  * is 1000ms. However, on iOS, the animation resets to 0 if it reaches
@@ -20,7 +22,7 @@ export function scrollTimelineFallbackBlock(element: HTMLElement) {
    const scrollListener = () => {
       const { scrollTop, scrollHeight, clientHeight } = element
       const newTime = (scrollTop / (scrollHeight - clientHeight)) * GESTURE_ANIMATION_MS
-      scrollAnimation.currentTime = newTime
+      scrollAnimation.currentTime = clamp(newTime, 0, GESTURE_ANIMATION_MS)
    }
    element.addEventListener('scroll', scrollListener, { passive: true })
 
@@ -45,7 +47,7 @@ export function scrollTimelineFallback(element: HTMLElement) {
       requestAnimationFrame(() => {
          const { scrollLeft, scrollWidth, clientWidth } = element
          const newTime = (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS
-         scrollAnimation.currentTime = newTime
+         scrollAnimation.currentTime = clamp(newTime, 0, GESTURE_ANIMATION_MS)
       })
    }
    element.addEventListener('scroll', scrollListener, { passive: true })

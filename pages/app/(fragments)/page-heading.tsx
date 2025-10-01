@@ -9,7 +9,7 @@ export function PageHeading(props: PageHeadingProps) {
 
    return (
       <>
-         <BackButton class='mx-1 mt-1' />
+         <BackButton class='mx-1 mt-1' href='/app' />
          <h1 class='text-header mx-1 pt-1 pb-0.5'>{title}</h1>
       </>
    )

@@ -8,5 +8,9 @@ export const QueryKeys = {
       _root: 'TransactionFlow',
       Type: 'TransactionFlow.Type',
       Category: 'TransactionFlow.Category'
+   },
+   Categories: {
+      _root: 'Categories',
+      Sheet: 'Categories.Sheet'
    }
 } as const
