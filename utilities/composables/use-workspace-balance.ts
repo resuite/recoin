@@ -34,7 +34,7 @@ export function useWorkspaceBalance(): Balance {
       query: sql`
     SELECT COALESCE(SUM(amount), 0) AS total
     FROM transactions
-    WHERE type = 'expense' AND workspaceId = '${workspace.id}'
+    WHERE type = 'income' AND workspaceId = '${workspace.id}'
   `,
       schema: Schema.Array(Schema.Struct({ total: Schema.Number }))
    })

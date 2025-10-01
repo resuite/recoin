@@ -30,7 +30,7 @@ const TransactionModel = new Model({
             currency: Schema.String,
             label: Schema.String,
             date: Schema.Date,
-            location: Schema.optional(Schema.String)
+            location: Schema.NullOr(Schema.String)
          })
       })
    }

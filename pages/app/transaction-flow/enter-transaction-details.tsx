@@ -13,24 +13,24 @@ import {
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
-import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
 import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
 import { useAuthContext } from '@/scopes/auth'
 import { TransactionDetailsFormScope } from '@/scopes/forms'
 import { useCategory } from '@/utilities/composables/use-categories'
+import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { scrollIntoView } from '@/utilities/miscellaneous'
 import { Cell, If, useScopeContext } from 'retend'
 import { Input } from 'retend-utils/components'
 import { useRouteQuery } from 'retend/router'
-import { Teleport } from 'retend/teleport'
 
 const EnterTransactionDetails = () => {
    const query = useRouteQuery()
    const { currency } = useAuthContext()
    const form = useScopeContext(TransactionDetailsFormScope)
    const type = query.get(QueryKeys.TransactionFlow.Type).get() as TransactionType
+   const { add: completeTransactionFlow } = useRouteQueryControl(QueryKeys.TransactionFlow.Success)
    const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
    const scrollViewRef = Cell.source<HTMLElement | null>(null)
    const chosenCategoryId = query.get(QueryKeys.TransactionFlow.Category).get()
@@ -50,6 +50,11 @@ const EnterTransactionDetails = () => {
       if (isVisible && scrollView !== null) {
          scrollIntoView(event.relatedTarget as HTMLElement, scrollView)
       }
+   }
+
+   const handleSubmit = () => {
+      form.submit()
+      completeTransactionFlow()
    }
 
    return (
@@ -81,7 +86,7 @@ const EnterTransactionDetails = () => {
                   <form
                      style={{ paddingBottom }}
                      class='[&_input]:duration-slow [&_input]:transition-opacity'
-                     onSubmit--prevent={form.submit}
+                     onSubmit--prevent={handleSubmit}
                   >
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
                         <MoneyInput model={form.values.amount} currency={currency} required />
@@ -94,15 +99,14 @@ const EnterTransactionDetails = () => {
                         />
                      </VirtualKeyboardTriggers>
                      {If(form.values.amount, () => (
-                        <Teleport to={ROOT_APP_OUTLET_ID}>
-                           <FloatingActionButton
-                              outlined
-                              type='submit'
-                              class='bg-transparent translate-x-[60%]'
-                           >
-                              <Checkmark class='text-canvas-text' />
-                           </FloatingActionButton>
-                        </Teleport>
+                        <FloatingActionButton
+                           outlined
+                           fixed
+                           type='submit'
+                           class='bg-transparent translate-x-[60%]'
+                        >
+                           <Checkmark class='text-canvas-text' />
+                        </FloatingActionButton>
                      ))}
                   </form>
                </FadeScrollView>

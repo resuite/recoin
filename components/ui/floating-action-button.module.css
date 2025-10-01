@@ -10,9 +10,13 @@
    border-radius: 50%;
    color: var(--color-canvas-background);
    background-color: var(--color-canvas-text);
-   transition: translate var(--speed-default), rotate var(--speed-slower)
-      var(--timing-bounce-slower);
+   transition: translate var(--speed-default), scale var(--speed-slow), opacity var(--speed-slow),
+      rotate var(--speed-slower) var(--timing-bounce-slower);
    place-items: center;
+
+   &[data-fixed] {
+      position: fixed;
+   }
 
    &:active {
       scale: 1;
