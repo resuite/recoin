@@ -1,11 +1,10 @@
+import CategoryModel from '@/database/models/category'
+import TransactionModel from '@/database/models/transaction'
+import UserModel from '@/database/models/user'
+import WorkspaceModel from '@/database/models/workspace'
 import { State, makeSchema } from '@livestore/livestore'
 
-import CategoryModel from './models/category'
-import TransactionModel from './models/transaction'
-import UserModel from './models/user'
-import WorkspaceModel from './models/workspace'
-
-export const RECOIN_BASE_SCHEMA = makeSchema({
+export const schema = makeSchema({
    events: {
       ...UserModel.events,
       ...WorkspaceModel.events,

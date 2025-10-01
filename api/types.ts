@@ -1,5 +1,5 @@
 import type { ErrorCode } from '@/api/error'
-import type { D1Database, KVNamespace } from '@cloudflare/workers-types'
+import type { D1Database, DurableObjectNamespace, KVNamespace } from '@cloudflare/workers-types'
 
 export interface SuccessResponse<T = never> {
    success: true
@@ -18,7 +18,9 @@ export interface RecoinApiEnv {
    Bindings: {
       RECOIN_WAITING_LIST: KVNamespace
       RECOIN_SESSIONS: KVNamespace
+      ADMIN_SECRET: string
       DB: D1Database
+      LIVESTORE_SYNC: DurableObjectNamespace
 
       CF_GOOGLE_CLIENT_ID: string
       CF_GOOGLE_CLIENT_SECRET: string

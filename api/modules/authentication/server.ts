@@ -1,15 +1,16 @@
+import * as schema from '@/api/database/schema'
+import type { UserData } from '@/api/database/types'
+import { Errors, RecoinError, errorOccurred, success } from '@/api/error'
+import { route } from '@/api/route-helper'
+import type { RecoinApiEnv } from '@/api/types'
+import { clearAuthCookie, setAuthCookie, verifyGoogleIdToken } from '@/api/utils'
+import { DEFAULT_WORKSPACE, LIVESTORE_SYNC_DO_NAME, StatusCodes } from '@/constants/server'
+import type { ExecutionContext } from '@cloudflare/workers-types'
+import { handleWebSocket } from '@livestore/sync-cf/cf-worker'
 import { and, eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
 import { Hono } from 'hono'
 import { z } from 'zod'
-
-import * as schema from '@/api/database/schema'
-import type { UserData } from '@/api/database/types'
-import { Errors, errorOccurred, success } from '@/api/error'
-import { route } from '@/api/route-helper'
-import type { RecoinApiEnv } from '@/api/types'
-import { clearAuthCookie, setAuthCookie, verifyGoogleIdToken } from '@/api/utils'
-import { DEFAULT_WORKSPACE, StatusCodes } from '@/constants/server'
 
 const authenticationRoute = new Hono<RecoinApiEnv>()
 
@@ -86,6 +87,30 @@ authenticationRoute.post(
       controller: async (context) => {
          await clearAuthCookie(context)
          return context.json({ success: true })
+      }
+   })
+)
+
+authenticationRoute.get(
+   '/livestore/websocket',
+   ...route({
+      isProtected: true,
+      controller: (context) => {
+         const userId = context.get('userId')
+         const { raw: request } = context.req
+         const { env, executionCtx } = context
+
+         return handleWebSocket(request, env, executionCtx as ExecutionContext, {
+            durableObject: {
+               name: LIVESTORE_SYNC_DO_NAME
+            },
+            validatePayload: (payload) => {
+               const { authToken } = payload as unknown as { authToken: string }
+               if (authToken !== userId) {
+                  throw new RecoinError(Errors.UnAuthorized)
+               }
+            }
+         })
       }
    })
 )

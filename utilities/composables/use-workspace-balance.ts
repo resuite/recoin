@@ -22,19 +22,31 @@ export function useWorkspaceBalance(): Balance {
    const startingBalance = workspace?.startingBalance ?? 0
 
    const totalExpenseResult = useLiveQuery({
-      query: sql`SELECT SUM(amount) FROM transactions WHERE type = 'expense' AND workspaceId = ${workspace.id}`,
-      schema: Schema.Array(Schema.Number)
+      query: sql`
+    SELECT COALESCE(SUM(amount), 0) AS total
+    FROM transactions
+    WHERE type = 'expense' AND workspaceId = '${workspace.id}'
+  `,
+      schema: Schema.Array(Schema.Struct({ total: Schema.Number }))
    })
-   const totalExpense = Cell.derived(() => {
-      return totalExpenseResult.get().at(0) ?? 0
-   })
+
    const totalIncomeResult = useLiveQuery({
-      query: sql`SELECT SUM(amount) FROM transactions WHERE type = 'income' AND workspaceId = ${workspace.id}`,
-      schema: Schema.Array(Schema.Number)
+      query: sql`
+    SELECT COALESCE(SUM(amount), 0) AS total
+    FROM transactions
+    WHERE type = 'expense' AND workspaceId = '${workspace.id}'
+  `,
+      schema: Schema.Array(Schema.Struct({ total: Schema.Number }))
    })
+
+   const totalExpense = Cell.derived(() => {
+      return totalExpenseResult.get().at(0)?.total ?? 0
+   })
+
    const totalIncome = Cell.derived(() => {
-      return totalIncomeResult.get().at(0) ?? 0
+      return totalIncomeResult.get().at(0)?.total ?? 0
    })
+
    const balance = Cell.derived(() => {
       return totalIncome.get() - totalExpense.get() + startingBalance
    })

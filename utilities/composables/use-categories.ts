@@ -1,5 +1,5 @@
 import type { TransactionType } from '@/api/database/types'
-import CategoryModel, { type Category } from '@/data/livestore/models/category'
+import CategoryModel, { type Category } from '@/database/models/category'
 import { useAuthContext } from '@/scopes/auth'
 import { useLiveQuery } from '@/scopes/livestore'
 import { Cell } from 'retend'
@@ -15,14 +15,16 @@ export function useCategories(type: TransactionType): Cell<Array<Category>> {
 }
 
 export function useCategory(id: string | null): Cell<Category | null> {
+   const { userData } = useAuthContext()
+   const workspaceId = userData.get()?.workspaces[0]?.id
    if (!id) {
       return Cell.source(null)
    }
-   const getCategoryQuery = CategoryModel.table.where({ id })
+   const getCategoryQuery = CategoryModel.table.where({ id, workspaceId })
    const results = useLiveQuery(getCategoryQuery)
 
    return Cell.derived(() => {
-      return results.get().at(1) ?? null
+      return results.get().at(0) ?? null
    })
 }
 

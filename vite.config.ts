@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { cloudflare } from '@cloudflare/vite-plugin'
+import { livestoreDevtoolsPlugin } from '@livestore/devtools-vite'
 import tailwindcss from '@tailwindcss/vite'
 import { retendSSG } from 'retend-server/plugin'
 import { retend } from 'retend/plugin'
@@ -29,6 +30,7 @@ export default defineConfig({
       retend(),
       retendSSG({ pages, routerModulePath }),
       cloudflare(),
+      livestoreDevtoolsPlugin({ schemaPath: './database/schema.ts' }),
       VitePWA({
          scope: '/app',
          registerType: 'autoUpdate',

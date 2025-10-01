@@ -2,6 +2,7 @@ import type { UserData } from '@/api/database/types'
 import { completeOnboarding, getMe } from '@/api/modules/application/client'
 import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/client'
 import type { ErrorResponse, SuccessResponse } from '@/api/types'
+import { LocalStorageKeys } from '@/constants/local-storage-keys'
 import { useErrorNotifier } from '@/utilities/composables/use-error-notifier'
 import { useIsServer } from '@/utilities/composables/use-is-server'
 import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
@@ -43,7 +44,7 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    const { children } = props
    const isServer = useIsServer()
    const errorNotifier = useErrorNotifier()
-   const cachedUser = useLocalStorage<UserData | null>('userData', null)
+   const cachedUser = useLocalStorage<UserData | null>(LocalStorageKeys.UserData, null)
 
    const logInWithGoogle = Cell.async(verifyGoogleSignIn)
    const completeSetup = Cell.async(completeOnboarding)

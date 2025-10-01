@@ -1,3 +1,4 @@
+import { getCurrencyDecimals } from '@/utilities/money'
 import { Cell } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -13,6 +14,9 @@ export function FormattedMoney(props: FormattedMoneyProps) {
    const { children: valueProp, currency: currencyProp, ...rest } = props
    const value = useDerivedValue(valueProp)
    const currency = useDerivedValue(currencyProp)
+   const currencyDecimals = Cell.derived(() => {
+      return getCurrencyDecimals(currency.get())
+   })
 
    const formatter = Cell.source(
       new Intl.NumberFormat('en-US', {
@@ -24,7 +28,7 @@ export function FormattedMoney(props: FormattedMoneyProps) {
    )
 
    const formattedValue = Cell.derived(() => {
-      return formatter.get().format(Number(value.get()))
+      return formatter.get().format(Number(value.get()) / 10 ** currencyDecimals.get())
    })
 
    return <output {...rest}>{formattedValue}</output>

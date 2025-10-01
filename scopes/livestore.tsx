@@ -1,4 +1,5 @@
-import type { RecoinStore } from '@/data/livestore/store'
+import type { RecoinStore } from '@/database/store'
+import { useAuthContext } from '@/scopes/auth'
 import {
    type LiveStoreSchema,
    type QueryBuilder,
@@ -12,7 +13,7 @@ import type { JSX } from 'retend/jsx-runtime'
 const LiveStoreScope = createScope()
 
 interface LiveStoreProviderProps<T extends LiveStoreSchema> {
-   initStore: () => Promise<Store<T>>
+   initStore: (authToken: string) => Promise<Store<T>>
    children: () => JSX.Template
    fallback?: () => JSX.Template
 }
@@ -27,16 +28,26 @@ interface LiveStoreProviderProps<T extends LiveStoreSchema> {
  */
 export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStoreProviderProps<T>) {
    const { initStore, children, fallback } = props
-   const resource = Cell.async(initStore)
+   const { userData } = useAuthContext()
+   const { run: startStore, data: store } = Cell.async(initStore)
 
-   useSetupEffect(() => {
-      resource.run()
+   useSetupEffect(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      const user = userData.get()
+      if (!user) {
+         return
+      }
+      startStore(user.id)
+
+      return () => {
+         store.get()?.shutdown()
+      }
    })
 
-   return If(resource.data, {
+   return If(store, {
       true: (store) => {
          if (!store) {
-            return
+            return fallback?.()
          }
          return <LiveStoreScope.Provider value={store}>{children}</LiveStoreScope.Provider>
       },

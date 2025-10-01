@@ -4,11 +4,12 @@ import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
-import type { Category } from '@/data/livestore/models/category'
+import type { Category } from '@/database/models/category'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
+import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
 import { useCategories } from '@/utilities/composables/use-categories'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { type Cell, For, Switch } from 'retend'
+import { type Cell, For } from 'retend'
 import { useRouteQuery } from 'retend/router'
 
 const CategoryLink = (props: Category) => {
@@ -41,10 +42,7 @@ const CategoriesListing = (props: CategoryListingProps) => {
          <h2 class='border-b-2 w-full grid gap-x-0.5 gap-y-0.25 grid-rows-[1fr_.5fr] grid-cols-[auto_1fr]'>
             <Arrows class='h-1.5 row-span-2 self-center' direction={arrowDirection} />
             <span class='text-title'>
-               {Switch(type, {
-                  expense: () => <>Expense</>,
-                  income: () => <>Income</>
-               })}
+               <TransactionTypeName type={type} />
             </span>
             <sub class='text-normal'>Choose an {type} category.</sub>
          </h2>
