@@ -11,7 +11,7 @@ import StartPage from '@/pages/app/auth/start-page'
 import { AuthenticationProvider } from '@/scopes/auth'
 import { LiveStoreProvider } from '@/scopes/livestore'
 import { useApplicationSetup } from '@/utilities/composables/use-application-setup'
-import { Cell, If } from 'retend'
+import { If } from 'retend'
 import { useRouter } from 'retend/router'
 
 const AppContent = () => {
@@ -58,15 +58,11 @@ const AppContent = () => {
 }
 
 const AppRoot = () => {
-   const { ready, hasFinishedOnboarding } = useApplicationSetup()
-   const initialTransition = Cell.derived(() => {
-      return hasFinishedOnboarding.get() ? 'slide-up' : 'fade-in'
-   })
-
+   const { ready } = useApplicationSetup()
    return (
       <FullScreenTransitionView
          when={ready}
-         transition={initialTransition}
+         transition='fade-in'
          from={StartPage}
          to={AppContent}
          class='grid-lines-with-fade'

@@ -1,5 +1,8 @@
+import { useFullScreenTransitionContext } from '@/components/views/full-screen-transition-view'
 import type { RecoinStore } from '@/database/store'
 import { useAuthContext } from '@/scopes/auth'
+import { animationsSettled } from '@/utilities/animations'
+import { tryFn } from '@/utilities/miscellaneous'
 import {
    type LiveStoreSchema,
    type QueryBuilder,
@@ -30,8 +33,15 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
    const { initStore, children, fallback } = props
    const { userData } = useAuthContext()
    const { run: startStore, data: store } = Cell.async(initStore)
+   const fullScreenTransitionContext = tryFn(() => useFullScreenTransitionContext())
 
    useSetupEffect(async () => {
+      if (fullScreenTransitionContext) {
+         // If the store starts loading before the animation ends,
+         // it leads to very unfortunate jank as the queries are processed,
+         // interferring with the smoothness. The little things.
+         await animationsSettled(fullScreenTransitionContext.activeViewRef)
+      }
       const user = userData.get()
       if (!user) {
          return
