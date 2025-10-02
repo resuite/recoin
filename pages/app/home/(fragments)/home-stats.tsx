@@ -9,7 +9,7 @@ export const HomeStats = () => {
    const { balance, totalIncome, totalExpense } = useWorkspaceBalance()
 
    return (
-      <div class='animate-fade grid grid-cols-2 gap-x-1'>
+      <div class='grid grid-cols-2 gap-x-1'>
          <div class='text-center py-0.75 border-b-3 col-span-2'>
             <h4 class='text-lg'>Current Balance</h4>
             <FitText scalingFactor={1.7} maxFontSize='var(--text-logo)' class='h-3.5'>
