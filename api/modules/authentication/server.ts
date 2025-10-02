@@ -33,7 +33,8 @@ authenticationRoute.post(
                email,
                name: fullName = null,
                given_name: firstName,
-               family_name: lastName
+               family_name: lastName,
+               picture: avatarUrl
             } = payload
             let user = await db.query.users.findFirst({
                where: and(eq(schema.users.googleId, googleId), eq(schema.users.email, email)),
@@ -55,6 +56,7 @@ authenticationRoute.post(
                         fullName,
                         firstName,
                         lastName,
+                        avatarUrl,
                         createdAt
                      })
                      .returning(),

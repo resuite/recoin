@@ -1,10 +1,20 @@
 import Hamburger from '@/components/icons/svg/hamburger'
-import User from '@/components/icons/svg/user'
+import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
+import { useAuthContext } from '@/scopes/auth'
+import { Cell } from 'retend'
+import { useRouter } from 'retend/router'
 
 export function Header() {
    const { toggleSidebar } = useSidebarContext()
+   const { userData } = useAuthContext()
+   const { navigate } = useRouter()
+   const avatarUrl = Cell.derived(() => userData.get()?.avatarUrl)
+
+   const handleProfileClick = () => {
+      navigate('/app/profile')
+   }
 
    return (
       <header class='grid grid-cols-[auto_1fr_auto] place-items-center p-1'>
@@ -16,9 +26,12 @@ export function Header() {
             <Hamburger class='h-1' />
          </Button>
          <div class='text-header'>recoin</div>
-         <Button class='touch-target button-bare outline-[1.8px] rounded-full  h-1.25 w-1.25 flex items-center justify-center'>
-            <User class='h-0.75 [&_path]:stroke-[1.8px]' />
-         </Button>
+         <Avatar
+            src={avatarUrl}
+            alt='Profile'
+            class='touch-target button-bare'
+            onClick={handleProfileClick}
+         />
       </header>
    )
 }
