@@ -1,4 +1,5 @@
 import type { UserData } from '@/api/database/types'
+import { Errors, RecoinError } from '@/api/error'
 import { completeOnboarding, getMe } from '@/api/modules/application/client'
 import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/client'
 import type { ErrorResponse, SuccessResponse } from '@/api/types'
@@ -106,6 +107,12 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    sessionCheck.data.listen((data) => {
       if (data?.success) {
          cachedUser.set(data.data)
+      }
+   })
+
+   sessionCheck.error.listen((error) => {
+      if (error && error instanceof RecoinError && error.errorCode === Errors.UnAuthorized) {
+         cachedUser.set(null)
       }
    })
    logInWithGoogle.error.listen(errorNotifier)

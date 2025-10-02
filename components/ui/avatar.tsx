@@ -30,10 +30,12 @@ export function Avatar(props: AvatarProps) {
 
    return (
       <Button {...rest} class={[styles.avatar, sizeClass, className]}>
-         {If(srcValue, (url) => (
-            <img src={url} alt={alt} class={styles.image} onError={handleError} />
-         ))}
-         <User class={styles.icon} />
+         {If(srcValue, {
+            true: (url) => (
+               <img src={url as string} alt={alt} class={styles.image} onError={handleError} />
+            ),
+            false: () => <User class={styles.icon} />
+         })}
       </Button>
    )
 }
