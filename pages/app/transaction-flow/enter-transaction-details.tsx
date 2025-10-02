@@ -75,7 +75,7 @@ const EnterTransactionDetails = () => {
                   {If(selectedCategory, (selectedCategory) => (
                      <sub class='text-bigger flex gap-0.25 items-center justify-center'>
                         <div class='h-1 w-1'>
-                           <Icon name={selectedCategory.icon} />
+                           <Icon name={selectedCategory.icon} class='h-1' />
                         </div>
                         <span>{selectedCategory.name}</span>
                      </sub>

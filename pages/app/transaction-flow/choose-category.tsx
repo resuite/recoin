@@ -22,7 +22,9 @@ const CategoryLink = (props: Category) => {
             onClick={setCategory}
             class='btn-link grid grid-cols-[auto_1fr] gap-0.5 items-center'
          >
-            <Icon name={icon} class='h-1.5' />
+            <div class='h-1.5 w-1.5'>
+               <Icon name={icon} class='h-1.5' />
+            </div>
             <div class='self-center justify-self-start text-big'>{name}</div>
          </Button>
       </li>
