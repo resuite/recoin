@@ -31,7 +31,7 @@ export function TransactionItem(props: TransactionItemProps) {
             direction={arrowDirection}
          />
          <div
-            class='text-normal text-left self-center overflow-ellipsis max-w-0 min-w-[200px] overflow-hidden'
+            class='text-normal text-left self-center overflow-ellipsis max-w-0 min-w-full overflow-hidden'
             title={category.name}
          >
             {category.name}

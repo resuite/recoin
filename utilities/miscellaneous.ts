@@ -127,3 +127,11 @@ export function mergeDateAndTime(date: Date, time: string): Date {
    newDate.setHours(hours, minutes, 0, 0)
    return newDate
 }
+
+export function tryFn<T>(func: () => T): T | undefined {
+   try {
+      return func()
+   } catch {
+      return undefined
+   }
+}

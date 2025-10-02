@@ -81,15 +81,10 @@ export function getScrollableY(element: HTMLElement, boundary: HTMLElement): HTM
          return null
       }
 
-      // Check if the element is vertically scrollable
-      const style = window.getComputedStyle(current)
-      const overflowY = style.getPropertyValue('overflow-y')
       const { scrollHeight, clientHeight, scrollTop } = current
-      const hasVerticalScroll =
-         SCROLLABLE_OVERFLOW.includes(overflowY) && scrollHeight > clientHeight
 
       // If the element has vertical scroll capability and room to scroll down
-      if (hasVerticalScroll && scrollTop < scrollHeight - clientHeight) {
+      if (scrollHeight > clientHeight && scrollTop < scrollHeight - clientHeight) {
          return current
       }
 
@@ -105,5 +100,3 @@ export function getScrollableY(element: HTMLElement, boundary: HTMLElement): HTM
    // No scrollable container found
    return null
 }
-
-const SCROLLABLE_OVERFLOW = ['auto', 'scroll']

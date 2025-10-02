@@ -2,7 +2,7 @@ import { TransactionListing } from '@/pages/app/home/(fragments)/transaction-lis
 
 export function RecentTransactions() {
    return (
-      <div class='py-1 w-full grid grid-rows-[auto_1fr] grid-cols-1'>
+      <div class='py-1 w-full'>
          <h4 class='text-center text-lg'>Recent Transactions</h4>
          <TransactionListing />
       </div>

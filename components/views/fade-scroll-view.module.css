@@ -1,16 +1,13 @@
 .container {
    position: relative;
+   display: grid;
    width: 100%;
    height: 100%;
-   display: grid;
 
    &::after {
       position: absolute;
-      grid-area: 1 / 1;
-      pointer-events: none;
-      height: 100%;
       width: 100%;
-      content: "";
+      height: 100%;
       background-image: linear-gradient(
          to bottom,
          transparent,
@@ -20,21 +17,28 @@
          transparent,
          transparent,
          transparent,
-         var(--color-canvas)
+         var(--color-canvas-background)
       );
+      content: "";
+      pointer-events: none;
+      grid-area: 1 / 1;
    }
 }
 
 .content {
-   grid-area: 1 / 1;
-   width: 100%;
    overflow-y: scroll;
-   overscroll-behavior: auto;
+   width: 100%;
    padding-bottom: calc(var(--spacing) * 2);
+   grid-area: 1 / 1;
+   overscroll-behavior: auto;
    scrollbar-color: initial;
    scrollbar-width: initial;
 
    &::-webkit-scrollbar {
       display: initial;
+   }
+
+   * {
+      overscroll-behavior: auto;
    }
 }
