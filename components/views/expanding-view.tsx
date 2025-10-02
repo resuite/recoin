@@ -1,4 +1,6 @@
+import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { animationsSettled } from '@/utilities/animations'
+import { tryFn } from '@/utilities/miscellaneous'
 import { Cell, If } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -73,6 +75,7 @@ export function ExpandingView(props: ExpandingViewProps) {
    const isOpen = useDerivedValue(isOpenProp)
    const contentLoaded = Cell.source(isOpen.get())
    const clipPathRef = Cell.source<HTMLElement | null>(null)
+   const sidebarContext = tryFn(() => useSidebarContext())
    const style = {
       '--expand-origin': expandOrigin,
       '--expand-size': expandSize,
@@ -81,8 +84,16 @@ export function ExpandingView(props: ExpandingViewProps) {
 
    isOpen.listen(
       async (viewIsOpen) => {
+         if (sidebarContext && viewIsOpen) {
+            sidebarContext.toggleSidebarEnabled(false)
+         }
+
          await animationsSettled(clipPathRef)
          contentLoaded.set(isOpen.get() && viewIsOpen)
+
+         if (sidebarContext && !viewIsOpen) {
+            sidebarContext.toggleSidebarEnabled(true)
+         }
       },
       { priority: -1 }
    )
