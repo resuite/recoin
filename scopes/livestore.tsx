@@ -32,7 +32,6 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
    const { run: startStore, data: store } = Cell.async(initStore)
 
    useSetupEffect(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 400))
       const user = userData.get()
       if (!user) {
          return
