@@ -1,5 +1,4 @@
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
-import { usePullToRefreshContext } from '@/components/views/pull-to-refresh-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { QueryKeys } from '@/constants/query-keys'
 import ChooseCategory from '@/pages/app/transaction-flow/choose-category'
@@ -15,7 +14,7 @@ const TransactionFlow = () => {
    const query = useRouteQuery()
    const form = useScopeContext(TransactionDetailsFormScope)
    const { toggleSidebarEnabled } = useSidebarContext()
-   const { togglePullToRefreshEnabled } = usePullToRefreshContext()
+
    const type = query.get(QueryKeys.TransactionFlow.Type)
    const category = query.get(QueryKeys.TransactionFlow.Category)
    const { hasKey: completed } = useRouteQueryControl(QueryKeys.TransactionFlow.Success)
@@ -28,10 +27,8 @@ const TransactionFlow = () => {
 
    useSetupEffect(() => {
       toggleSidebarEnabled(false)
-      togglePullToRefreshEnabled(false)
       return () => {
          toggleSidebarEnabled(true)
-         togglePullToRefreshEnabled(true)
          form.reset()
       }
    })
