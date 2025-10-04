@@ -25,9 +25,6 @@ database_id = "2a8921e1-6894-4e17-8ba0-19a38996a1a2"
 name = "LIVESTORE_SYNC"
 class_name = "LiveStoreSync"
 
-[[migrations]]
-tag = "v1"
-new_sqlite_classes = ["LiveStoreSync"]
 
 [env.production]
 [env.production.vars]
