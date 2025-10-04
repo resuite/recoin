@@ -27,7 +27,7 @@ class_name = "LiveStoreSync"
 
 [[migrations]]
 tag = "v1"
-new_classes = ["LiveStoreSync"]
+new_sqlite_classes = ["LiveStoreSync"]
 
 [env.production]
 [env.production.vars]
