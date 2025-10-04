@@ -16,7 +16,7 @@ export const createRouter = () => {
          {
             path: '/',
             component: Index,
-            // redirect: '/waiting-list',
+            redirect: '/waiting-list',
             metadata,
             children: [
                {
