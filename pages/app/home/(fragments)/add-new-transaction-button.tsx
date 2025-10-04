@@ -60,7 +60,7 @@ export function AddNewTransactionButton() {
             amount,
             categoryId
          }
-         const event = TransactionModel.events.created(newTransaction)
+         const event = TransactionModel.events.transactionCreated(newTransaction)
          store.commit(event)
       }
    })

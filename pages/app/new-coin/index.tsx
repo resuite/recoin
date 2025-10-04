@@ -3,15 +3,17 @@ import { Coin } from '@/components/ui/coin'
 import { SafeAreaView } from '@/components/views/safe-area-view'
 import { useVerticalPanContext } from '@/components/views/vertical-pan-view'
 import type { Achievement } from '@/database/models/achievement'
+import { achievementTitleAndMessage } from '@/utilities/achievement-messages'
 import { Cell } from 'retend'
 
 interface NewCoinProps {
-   coin: Achievement
+   achievement: Achievement
 }
 
 const NewCoin = (props: NewCoinProps) => {
-   const { coin } = props
+   const { achievement } = props
    const { close } = useVerticalPanContext()
+   const { title, message } = achievementTitleAndMessage(achievement.name)
    const showingOtherDetails = Cell.source(false)
    const hidingOtherDetails = Cell.derived(() => {
       return !showingOtherDetails.get()
@@ -36,10 +38,15 @@ const NewCoin = (props: NewCoinProps) => {
                '[&:not([data-show-other-details]>*)>*:not(animated-coin)]:opacity-0'
             ]}
          >
-            <Coin icon={coin.icon} spinning size='min(50dvw, 275px)' onSettled={showOtherDetails} />
+            <Coin
+               icon={achievement.icon}
+               spinning
+               size='min(50dvw, 275px)'
+               onSettled={showOtherDetails}
+            />
             <div ariaHidden={hidingOtherDetails}>
-               <h2 class='text-logo'>{coin.name}</h2>
-               <p>{coin.message}</p>
+               <h2 class='text-logo'>{title}</h2>
+               <p>{message}</p>
             </div>
          </div>
 

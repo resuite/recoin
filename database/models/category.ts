@@ -17,13 +17,13 @@ const CategoryModel = new Model({
    }),
 
    events: {
-      seeded: Events.synced({
+      categorySeeded: Events.synced({
          name: 'v1.CategorySeeded',
          schema: Schema.Struct({
             workspaceId: Schema.String
          })
       }),
-      created: Events.synced({
+      categoryCreated: Events.synced({
          name: 'v1.CategoryCreated',
          schema: Schema.Struct({
             id: Schema.String,

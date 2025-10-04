@@ -1,7 +1,10 @@
 import { useFullScreenTransitionContext } from '@/components/views/full-screen-transition-view'
+import { useVerticalPanContext } from '@/components/views/vertical-pan-view'
+import { createAchievementListener } from '@/database/seeds/achievements'
 import type { RecoinStore } from '@/database/store'
 import { useAuthContext } from '@/scopes/auth'
 import { animationsSettled } from '@/utilities/animations'
+import { useWorkspaceId } from '@/utilities/composables/use-workspace-id'
 import { tryFn } from '@/utilities/miscellaneous'
 import {
    type LiveStoreSchema,
@@ -32,21 +35,28 @@ interface LiveStoreProviderProps<T extends LiveStoreSchema> {
 export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStoreProviderProps<T>) {
    const { initStore, children, fallback } = props
    const { userData } = useAuthContext()
+   const workspaceId = useWorkspaceId()
    const { run: startStore, data: store } = Cell.async(initStore)
    const fullScreenTransitionContext = tryFn(() => useFullScreenTransitionContext())
+   const panCtx = useVerticalPanContext()
 
    useSetupEffect(async () => {
       if (fullScreenTransitionContext) {
          // If the store starts loading before the animation ends,
          // it leads to very unfortunate jank as the queries are processed,
-         // interferring with the smoothness. The little things.
+         // interfering with the smoothness. The little things.
          await animationsSettled(fullScreenTransitionContext.activeViewRef)
       }
       const user = userData.get()
       if (!user) {
          return
       }
-      startStore(user.id)
+      startStore(user.id).then(() => {
+         const store_ = store.get()
+         if (store_) {
+            createAchievementListener(store_, workspaceId, panCtx)
+         }
+      })
 
       return () => {
          store.get()?.shutdown()

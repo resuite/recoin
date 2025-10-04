@@ -9,20 +9,18 @@ const AchievementModel = new Model({
          id: State.SQLite.text({ primaryKey: true }),
          workspaceId: State.SQLite.text(),
          name: State.SQLite.text(),
-         icon: State.SQLite.text<IconName, IconName>({}),
-         message: State.SQLite.text()
+         icon: State.SQLite.text<IconName, IconName>({})
       }
    }),
 
    events: {
-      created: Events.synced({
+      achievementCreated: Events.synced({
          name: 'v1.AchievementCreated',
          schema: Schema.Struct({
             id: Schema.String,
             workspaceId: Schema.String,
             name: Schema.String,
-            icon: Schema.String as Schema.Schema<IconName>,
-            message: Schema.String
+            icon: Schema.String as Schema.Schema<IconName>
          })
       })
    }

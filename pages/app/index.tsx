@@ -35,16 +35,16 @@ const AppContent = () => {
    }
 
    return (
-      <LiveStoreProvider initStore={createRecoinStore} fallback={StoreLoadingFallback}>
+      <VerticalPanView>
          {() => (
-            <FullScreenTransitionView
-               class='dark-scheme w-5 select-none'
-               when={hasFinishedOnboarding}
-               transition='slide-up'
-               from={Onboarding}
-               to={() => (
-                  <VerticalPanView>
-                     {() => (
+            <LiveStoreProvider initStore={createRecoinStore} fallback={StoreLoadingFallback}>
+               {() => (
+                  <FullScreenTransitionView
+                     class='dark-scheme w-5 select-none'
+                     when={hasFinishedOnboarding}
+                     transition='slide-up'
+                     from={Onboarding}
+                     to={() => (
                         <SidebarProviderView sidebar={() => <Sidebar />}>
                            {() => (
                               <Outlet
@@ -55,11 +55,11 @@ const AppContent = () => {
                            )}
                         </SidebarProviderView>
                      )}
-                  </VerticalPanView>
+                  />
                )}
-            />
+            </LiveStoreProvider>
          )}
-      </LiveStoreProvider>
+      </VerticalPanView>
    )
 }
 

@@ -19,7 +19,7 @@ const TransactionModel = new Model({
    }),
 
    events: {
-      created: Events.synced({
+      transactionCreated: Events.synced({
          name: 'v1.TransactionCreated',
          schema: Schema.Struct({
             id: Schema.String,

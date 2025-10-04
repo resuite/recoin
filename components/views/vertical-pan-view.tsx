@@ -8,7 +8,7 @@ interface VerticalPanViewProps extends DivProps {
    children: () => JSX.Template
 }
 
-interface VerticalPanContext {
+export interface VerticalPanContext {
    open: (template: () => JSX.Template) => void
    close: () => void
 }

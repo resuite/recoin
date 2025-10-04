@@ -30,7 +30,7 @@ const Onboarding = () => {
       if (!workspaceId) {
          return
       }
-      store.commit(CategoryModel.events.seeded({ workspaceId }))
+      store.commit(CategoryModel.events.categorySeeded({ workspaceId }))
       completeSetup.run({ currency, startingBalance })
    }
 
