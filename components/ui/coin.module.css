@@ -1,0 +1,203 @@
+.coin {
+   --coin-breath: calc(var(--min-size) * 0.15);
+   --coin-thickness: 4px;
+   --coin-spin-duration: calc(var(--speed-slowest) * 3);
+
+   position: relative;
+   display: grid;
+   width: var(--min-size);
+   height: var(--min-size);
+   margin-bottom: calc(var(--min-size) * 0.25);
+   grid-template-columns: 1fr;
+   grid-template-rows: 1fr;
+
+   aspect-ratio: 1;
+   transform-style: preserve-3d;
+
+   &:not(.spinning) {
+      .sparkle {
+         display: none;
+      }
+   }
+
+   & > * {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      isolation: isolate;
+      pointer-events: none;
+      grid-area: 1 / 1;
+      aspect-ratio: 1;
+      will-change: transform;
+   }
+
+   &::before {
+      z-index: -1;
+      display: block;
+      align-self: center;
+      width: calc(var(--coin-breath) + var(--coin-thickness));
+      height: 100%;
+      border-width: var(--coin-thickness) 0 var(--coin-thickness) 0;
+      border-style: solid;
+      background-color: var(--color-canvas-text);
+      content: "";
+      transform: translateZ(calc(var(--coin-breath) * -0.5)) rotateY(45deg);
+      filter: brightness(0.7);
+      place-items: center;
+      justify-self: center;
+      grid-area: 1 / 1;
+   }
+}
+
+.spinning {
+   animation: spin var(--coin-spin-duration) var(--timing-bounce);
+   transform-style: preserve-3d;
+
+   /* Shadow */
+   &::after {
+      display: block;
+      width: 100%;
+      height: calc(var(--coin-thickness) * 2.5);
+      border-radius: 50%;
+      opacity: 0.75;
+      background-color: var(--color-canvas-shadow);
+      content: "";
+      transform: translateY(300%) scaleX(0.5) translateZ(calc(var(--coin-breath) * -0.5));
+   }
+}
+
+.headBackface,
+.tailsBackface {
+   display: grid;
+   width: 100%;
+   height: 100%;
+   border: 3px solid;
+   border-radius: 50%;
+   background-color: var(--color-canvas-text);
+   filter: brightness(0.7);
+}
+
+.headBackface {
+   transform: translateZ(-1px);
+}
+
+.tailsBackface {
+   transform: translateZ(calc(var(--coin-breath) * -1 + 1px));
+}
+
+.heads,
+.tails {
+   z-index: 1;
+   display: grid;
+   overflow: hidden;
+   border: var(--coin-thickness) solid;
+   border-radius: 50%;
+   background-color: var(--color-canvas-background);
+   place-items: center;
+   grid-area: 1 / 1;
+
+   &::after {
+      display: block;
+      width: 85%;
+      height: 85%;
+      border: 3px solid;
+      border-style: dashed;
+      border-radius: 50%;
+
+      content: "";
+      grid-area: 1 / 1;
+   }
+}
+
+.icon {
+   width: 50%;
+   height: 50%;
+   animation: fade-in var(--speed-slow);
+   grid-area: 1 / 1;
+}
+
+.tails {
+   transform: translateZ(calc(var(--coin-breath) * -1)) rotateY(180deg);
+}
+
+.sparkle {
+   width: 15%;
+   height: 15%;
+   animation: blink calc(var(--speed-slowest) * 2) linear infinite;
+   animation-delay: var(--coin-spin-duration); /* Starts when coin settles. */
+   grid-area: 1 / 1;
+   rotate: -25deg;
+   animation-fill-mode: backwards;
+   translate: calc(var(--coin-breath) * -0.25) calc(var(--coin-breath) * -0.25);
+}
+
+.bottomSparkle {
+   align-self: flex-end;
+   animation-delay: calc(var(--coin-spin-duration) * 1.15); /* staggers the sparkles */
+   justify-self: flex-end;
+   translate: calc(var(--coin-breath) * 0.25) calc(var(--coin-breath) * 0.25);
+}
+
+.coin.settled .shimmer {
+   z-index: 2;
+   overflow: hidden;
+   width: 100%;
+   height: 100%;
+   border-radius: 50%;
+   transform: rotate(45deg);
+
+   &::before {
+      display: block;
+      width: 20%;
+      height: 100%;
+      opacity: 0.1;
+      background-color: var(--color-canvas-text);
+      content: "";
+      transform: translateX(-100%);
+      animation: shimmer var(--speed-slower) ease-in;
+      animation-delay: var(--speed-slow);
+   }
+}
+
+@keyframes blink {
+   0% {
+      opacity: 0;
+      transform: scale(0.5);
+   }
+   50% {
+      opacity: 1;
+      transform: scale(1);
+   }
+   100% {
+      opacity: 0;
+      transform: scale(0.5);
+   }
+}
+
+@keyframes fade-in {
+   0% {
+      opacity: 0;
+   }
+   100% {
+      opacity: 1;
+   }
+}
+
+@keyframes spin {
+   0% {
+      rotate: y 0deg;
+   }
+
+   100% {
+      rotate: y 1080deg;
+   }
+}
+
+@keyframes shimmer {
+   from {
+      transform: translateX(-150%);
+   }
+   100% {
+      transform: translateX(500%);
+   }
+}

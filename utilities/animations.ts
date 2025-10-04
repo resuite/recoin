@@ -108,3 +108,13 @@ export function animationsSettled(
    })
    return promise
 }
+
+/**
+ * Creates a new promise that resolves after a specified number of milliseconds.
+ * @param ms The number of milliseconds to wait.
+ */
+export function timeout(ms: number) {
+   return new Promise((resolve) => {
+      setTimeout(resolve, ms)
+   })
+}

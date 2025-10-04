@@ -1,6 +1,7 @@
 import Loader from '@/components/icons/svg/loader'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
 import { SidebarProviderView } from '@/components/views/sidebar-provider-view'
+import { VerticalPanView } from '@/components/views/vertical-pan-view'
 import { ROOT_APP_OUTLET } from '@/constants'
 import { createRecoinStore } from '@/database/store'
 import { GoogleIdentityProvider } from '@/integrations/google'
@@ -37,19 +38,24 @@ const AppContent = () => {
       <LiveStoreProvider initStore={createRecoinStore} fallback={StoreLoadingFallback}>
          {() => (
             <FullScreenTransitionView
+               class='dark-scheme w-5 select-none'
                when={hasFinishedOnboarding}
                transition='slide-up'
                from={Onboarding}
                to={() => (
-                  <SidebarProviderView class='dark-scheme select-none' sidebar={() => <Sidebar />}>
+                  <VerticalPanView>
                      {() => (
-                        <Outlet
-                           id={ROOT_APP_OUTLET}
-                           style={{ display: 'grid' }}
-                           class='h-full translate-0'
-                        />
+                        <SidebarProviderView sidebar={() => <Sidebar />}>
+                           {() => (
+                              <Outlet
+                                 id={ROOT_APP_OUTLET}
+                                 style={{ display: 'grid' }}
+                                 class='h-full translate-0 max-w-screen'
+                              />
+                           )}
+                        </SidebarProviderView>
                      )}
-                  </SidebarProviderView>
+                  </VerticalPanView>
                )}
             />
          )}

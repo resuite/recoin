@@ -62,6 +62,10 @@ export default defineRoute({
       {
          path: 'keypad',
          component: lazy(() => import('@/pages/styleguide/keypad'))
+      },
+      {
+         path: 'coin',
+         component: lazy(() => import('@/pages/styleguide/coin'))
       }
    ]
 })

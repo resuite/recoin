@@ -1,14 +1,29 @@
+import type { Achievement } from '@/api/database/types'
+import { Button } from '@/components/ui/button'
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
+import { useVerticalPanContext } from '@/components/views/vertical-pan-view'
 import { Header } from '@/pages/app/(fragments)/header'
 import { Stage } from '@/pages/app/(fragments)/stage'
 import { AddNewTransactionButton } from '@/pages/app/home/(fragments)/add-new-transaction-button'
 import { HomeStats } from '@/pages/app/home/(fragments)/home-stats'
 import { RecentTransactions } from '@/pages/app/home/(fragments)/recent-transactions'
+import NewCoin from '@/pages/app/new-coin'
 import { useAuthContext } from '@/scopes/auth'
 
 const Home = () => {
    const { userData } = useAuthContext()
    const firstName = userData.get()?.firstName
+   const { open } = useVerticalPanContext()
+
+   const handleClick = () => {
+      const activatedCoin: Achievement = {
+         name: 'activated.',
+         icon: 'atom',
+         message: 'You earned this coin by making your first transaction. Well done and welcome!'
+      }
+
+      open(() => <NewCoin coin={activatedCoin} />)
+   }
 
    return (
       <Stage class='grid grid-rows-[auto_1fr]'>
@@ -22,6 +37,11 @@ const Home = () => {
                <HomeStats />
                <RecentTransactions />
             </FadeScrollView>
+            <div class='w-full pb-3'>
+               <Button class='btn-outline min-w-4' onClick={handleClick}>
+                  Test Pan View
+               </Button>
+            </div>
          </main>
          <AddNewTransactionButton />
       </Stage>

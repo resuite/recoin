@@ -22,7 +22,6 @@
 
    &[data-not-revealable] {
       overflow: hidden;
-      animation-name: none;
       animation-duration: 0ms;
    }
 

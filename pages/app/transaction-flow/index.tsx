@@ -1,4 +1,5 @@
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
+import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { QueryKeys } from '@/constants/query-keys'
 import ChooseCategory from '@/pages/app/transaction-flow/choose-category'
 import ChooseTransactionType from '@/pages/app/transaction-flow/choose-transaction-type'
@@ -12,6 +13,7 @@ import { useRouteQuery } from 'retend/router'
 const TransactionFlow = () => {
    const query = useRouteQuery()
    const form = useScopeContext(TransactionDetailsFormScope)
+   const sidebarCtx = useSidebarContext()
 
    const type = query.get(QueryKeys.TransactionFlow.Type)
    const category = query.get(QueryKeys.TransactionFlow.Category)
@@ -24,7 +26,9 @@ const TransactionFlow = () => {
    })
 
    useSetupEffect(() => {
+      sidebarCtx.toggleSidebarEnabled(false)
       return () => {
+         sidebarCtx.toggleSidebarEnabled(true)
          form.reset()
       }
    })
