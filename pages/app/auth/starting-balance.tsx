@@ -22,10 +22,6 @@ const StartingBalance = (props: StartingBalanceProps) => {
    const currency = query.get(QueryKeys.Onboarding.Currency).get()
    const value = Cell.source(0)
 
-   const submitButtonIsDisabled = Cell.derived(() => {
-      return value.get() <= 0
-   })
-
    if (!currency) {
       return null
    }
@@ -35,6 +31,8 @@ const StartingBalance = (props: StartingBalanceProps) => {
    }
 
    const handleSubmit = () => {
+      // biome-ignore lint/suspicious/noConsole: <explanation>
+      console.log('handleSubmit')
       onFinish(value.get())
    }
 
@@ -57,11 +55,7 @@ const StartingBalance = (props: StartingBalanceProps) => {
                   <Button class='btn-outline' onClick={goBackToCurrency}>
                      Back
                   </Button>
-                  <Button
-                     class='border-4 border-light-yellow'
-                     disabled={submitButtonIsDisabled}
-                     type='submit'
-                  >
+                  <Button class='border-4 border-light-yellow' type='submit'>
                      {If(completeSetup.pending, {
                         true: () => (
                            <>
