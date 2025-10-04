@@ -1,7 +1,7 @@
-import type { Achievement } from '@/api/database/types'
 import { Button } from '@/components/ui/button'
 import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { useVerticalPanContext } from '@/components/views/vertical-pan-view'
+import type { Achievement } from '@/database/models/achievement'
 import { Header } from '@/pages/app/(fragments)/header'
 import { Stage } from '@/pages/app/(fragments)/stage'
 import { AddNewTransactionButton } from '@/pages/app/home/(fragments)/add-new-transaction-button'
@@ -17,6 +17,8 @@ const Home = () => {
 
    const handleClick = () => {
       const activatedCoin: Achievement = {
+         id: 'test-achievement',
+         workspaceId: 'test-workspace',
          name: 'activated.',
          icon: 'atom',
          message: 'You earned this coin by making your first transaction. Well done and welcome!'

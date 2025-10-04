@@ -1,8 +1,8 @@
-import type { Achievement } from '@/api/database/types'
 import { Button } from '@/components/ui/button'
 import { Coin } from '@/components/ui/coin'
 import { SafeAreaView } from '@/components/views/safe-area-view'
 import { useVerticalPanContext } from '@/components/views/vertical-pan-view'
+import type { Achievement } from '@/database/models/achievement'
 import { Cell } from 'retend'
 
 interface NewCoinProps {
