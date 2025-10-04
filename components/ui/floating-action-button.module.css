@@ -10,8 +10,8 @@
    border-radius: 50%;
    color: var(--color-canvas-background);
    background-color: var(--color-canvas-text);
-   transition: translate var(--speed-default), rotate var(--speed-slower)
-      var(--timing-bounce-slower);
+   transition: translate var(--speed-default), scale var(--speed-slow), opacity var(--speed-slow),
+      rotate var(--speed-slower) var(--timing-bounce-slower);
    place-items: center;
 
    &:active {
@@ -23,14 +23,16 @@
       visibility: unset;
    }
 
+   &[data-fixed] {
+      position: fixed;
+   }
+
    &.block.top {
       top: calc(var(--spacing) * 3);
-      bottom: unset;
    }
 
    &.block.bottom {
-      top: unset;
-      bottom: calc(var(--spacing) * 3);
+      top: calc(100dvh - var(--fab-size) - calc(var(--spacing) * 3));
    }
 
    &.block.center:not(.top, .bottom) {

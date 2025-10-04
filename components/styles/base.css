@@ -85,6 +85,7 @@ body {
    --timing: cubic-bezier(0.3, 0.4, 0.05, 1);
    --timing-keyboard: ease-out;
    --speed-keyboard: calc(var(--default-speed) * 0.75);
+   --timing-bounce: cubic-bezier(0.3, 0.75, 0.45, 1.2);
    --timing-bounce-slower: cubic-bezier(0.3, 0.4, 0.05, 1.5);
 
    --speed-device: calc(var(--default-speed) * 3.05);

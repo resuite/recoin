@@ -1,7 +1,9 @@
 import type { UserData } from '@/api/database/types'
+import { Errors, RecoinError } from '@/api/error'
 import { completeOnboarding, getMe } from '@/api/modules/application/client'
 import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/client'
 import type { ErrorResponse, SuccessResponse } from '@/api/types'
+import { LocalStorageKeys } from '@/constants/local-storage-keys'
 import { useErrorNotifier } from '@/utilities/composables/use-error-notifier'
 import { useIsServer } from '@/utilities/composables/use-is-server'
 import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
@@ -43,7 +45,7 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    const { children } = props
    const isServer = useIsServer()
    const errorNotifier = useErrorNotifier()
-   const cachedUser = useLocalStorage<UserData | null>('userData', null)
+   const cachedUser = useLocalStorage<UserData | null>(LocalStorageKeys.UserData, null)
 
    const logInWithGoogle = Cell.async(verifyGoogleSignIn)
    const completeSetup = Cell.async(completeOnboarding)
@@ -105,6 +107,12 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    sessionCheck.data.listen((data) => {
       if (data?.success) {
          cachedUser.set(data.data)
+      }
+   })
+
+   sessionCheck.error.listen((error) => {
+      if (error && error instanceof RecoinError && error.errorCode === Errors.UnAuthorized) {
+         cachedUser.set(null)
       }
    })
    logInWithGoogle.error.listen(errorNotifier)

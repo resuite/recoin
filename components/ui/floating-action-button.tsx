@@ -16,6 +16,11 @@ export interface FloatingActionButtonMainProps {
     */
    block?: JSX.ValueOrCell<'top' | 'bottom' | 'center'>
    /**
+    * Whether to use position: fixed to position the button. By default the button is absolutely
+    * positioned.
+    */
+   fixed?: JSX.ValueOrCell<boolean>
+   /**
     * The horizontal position of the button. Can be "left", "right", or "center". Defaults to "center".
     */
    inline?: JSX.ValueOrCell<'left' | 'right' | 'center'>
@@ -62,6 +67,7 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
       block: blockProp = 'bottom',
       inline: inlineProp = 'center',
       outlined: outlinedProp = false,
+      fixed: fixedProp = false,
       ...rest
    } = props
 
@@ -82,6 +88,7 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
          <Button
             {...rest}
             data-outlined={isOutlined}
+            data-fixed={fixedProp}
             class={[styles.floatingActionButton, blockClass, inlineClass, rest.class]}
          >
             {props.children}
@@ -93,6 +100,7 @@ export function FloatingActionButton(props: FloatingActionButtonProps) {
       <Link
          {...rest}
          data-outlined={isOutlined}
+         data-fixed={fixedProp}
          class={[styles.floatingActionButton, blockClass, inlineClass, rest.class]}
       >
          {props.children}

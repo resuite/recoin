@@ -11,7 +11,27 @@ import { createRemoteJWKSet, jwtVerify } from 'jose'
 export async function setAuthCookie(context: Context<RecoinApiEnv>, userId: string) {
    const isProduction = context.env.CF_ENVIRONMENT === 'production'
    const sessionToken = crypto.randomUUID()
-   await context.env.RECOIN_SESSIONS.put(sessionToken, userId, {
+   const createdAt = Date.now()
+   await context.env.RECOIN_SESSIONS.put(sessionToken, JSON.stringify({ userId, createdAt }), {
+      expirationTtl: SESSION_EXPIRATION_SECONDS
+   })
+   setCookie(context, RECOIN_SESSION_COOKIE, sessionToken, {
+      path: '/',
+      secure: isProduction,
+      httpOnly: true,
+      sameSite: 'Lax',
+      maxAge: SESSION_EXPIRATION_SECONDS
+   })
+}
+
+export async function refreshAuthCookie(
+   context: Context<RecoinApiEnv>,
+   sessionToken: string,
+   userId: string
+) {
+   const isProduction = context.env.CF_ENVIRONMENT === 'production'
+   const createdAt = Date.now()
+   await context.env.RECOIN_SESSIONS.put(sessionToken, JSON.stringify({ userId, createdAt }), {
       expirationTtl: SESSION_EXPIRATION_SECONDS
    })
    setCookie(context, RECOIN_SESSION_COOKIE, sessionToken, {

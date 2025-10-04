@@ -11,7 +11,7 @@ export const Stage = (props: StageProps) => {
       <div
          {...props}
          class={[
-            'translate-0 h-full light-scheme rounded-t-3xl',
+            'translate-0 h-full max-w-screen light-scheme rounded-t-3xl',
             'duration-bit-slower transition-transform ease',
             { 'translate-y-3 scale-90': transactionFlowIsOpen },
             props.class

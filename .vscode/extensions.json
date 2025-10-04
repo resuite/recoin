@@ -5,6 +5,8 @@
       "ms-vscode.vscode-typescript-next",
       "clinyong.vscode-css-modules",
       "1yasa.css-better-sorting",
-      "bradlc.vscode-tailwindcss"
+      "bradlc.vscode-tailwindcss",
+      "frigus02.vscode-sql-tagged-template-literals",
+      "frigus02.vscode-sql-tagged-template-literals-syntax-only"
    ]
 }

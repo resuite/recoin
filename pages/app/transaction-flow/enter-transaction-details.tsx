@@ -1,9 +1,8 @@
+import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
 import Checkmark from '@/components/icons/svg/checkmark'
-import Loader from '@/components/icons/svg/loader'
 import { DateInput } from '@/components/ui/date-input'
-import { ErrorMessage } from '@/components/ui/error-message'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { LocationInput } from '@/components/ui/location-input'
 import { MoneyInput } from '@/components/ui/money-input'
@@ -14,34 +13,28 @@ import {
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
-import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
-import { getCategoryById } from '@/data'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
+import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
 import { useAuthContext } from '@/scopes/auth'
 import { TransactionDetailsFormScope } from '@/scopes/forms'
-import { usePromise } from '@/utilities/composables/use-promise'
+import { useCategory } from '@/utilities/composables/use-categories'
+import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { scrollIntoView } from '@/utilities/miscellaneous'
-import { Cell, If, Switch, useScopeContext } from 'retend'
+import { Cell, If, useScopeContext } from 'retend'
 import { Input } from 'retend-utils/components'
 import { useRouteQuery } from 'retend/router'
-import { Teleport } from 'retend/teleport'
 
 const EnterTransactionDetails = () => {
    const query = useRouteQuery()
    const { currency } = useAuthContext()
    const form = useScopeContext(TransactionDetailsFormScope)
-   const type = query.get(QueryKeys.TransactionFlow.Type).get() as 'income' | 'expense'
+   const type = query.get(QueryKeys.TransactionFlow.Type).get() as TransactionType
+   const { add: completeTransactionFlow } = useRouteQueryControl(QueryKeys.TransactionFlow.Success)
    const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
    const scrollViewRef = Cell.source<HTMLElement | null>(null)
-   const getCategoryDetails = async () => {
-      const chosenCategoryId = query.get(QueryKeys.TransactionFlow.Category).get()
-      if (!chosenCategoryId) {
-         return null
-      }
-      return await getCategoryById(chosenCategoryId)
-   }
-   const selectedCategory = usePromise(getCategoryDetails)
+   const chosenCategoryId = query.get(QueryKeys.TransactionFlow.Category).get()
+   const selectedCategory = useCategory(chosenCategoryId)
    const keyboardHeight = Cell.source(0)
    const keyboardIsVisible = Cell.source(false)
    const paddingBottom = Cell.derived(() => {
@@ -59,6 +52,11 @@ const EnterTransactionDetails = () => {
       }
    }
 
+   const handleSubmit = () => {
+      form.submit()
+      completeTransactionFlow()
+   }
+
    return (
       <VirtualKeyboardAwareView
          class='px-1 pb-2 grid grid-cols-1 place-items-center gap-1 place-content-center'
@@ -71,37 +69,24 @@ const EnterTransactionDetails = () => {
                   <h2 class='border-b-2 pb-0.25 w-full flex items-center justify-center'>
                      <Arrows class='h-1.25 self-center' direction={arrowDirection} />
                      <span class='text-header'>
-                        {Switch(type, {
-                           expense: () => 'Expense',
-                           income: () => 'Income'
-                        })}
+                        <TransactionTypeName type={type} />
                      </span>
                   </h2>
-                  {Switch.OnProperty(selectedCategory, 'state', {
-                     error: ({ error }) => <ErrorMessage error={error} />,
-                     pending: () => <Loader class='h-1.5' />,
-                     complete: ({ data: selectedCategory }) => {
-                        if (selectedCategory === null) {
-                           query.delete(QueryKeys.TransactionFlow.Category)
-                           return
-                        }
-                        return (
-                           <sub class='text-bigger flex gap-0.25 items-center justify-center'>
-                              <div class='h-1 w-1'>
-                                 <Icon name={selectedCategory.icon} />
-                              </div>
-                              <span>{selectedCategory.name}</span>
-                           </sub>
-                        )
-                     }
-                  })}
+                  {If(selectedCategory, (selectedCategory) => (
+                     <sub class='text-bigger flex gap-0.25 items-center justify-center'>
+                        <div class='h-1 w-1'>
+                           <Icon name={selectedCategory.icon} class='h-1' />
+                        </div>
+                        <span>{selectedCategory.name}</span>
+                     </sub>
+                  ))}
                </div>
                <p class='text-big text-center'>Share more details about this transaction.</p>
                <FadeScrollView ref={scrollViewRef} class='h-[45dvh] max-h-[45dvh]'>
                   <form
                      style={{ paddingBottom }}
                      class='[&_input]:duration-slow [&_input]:transition-opacity'
-                     onSubmit--prevent={form.submit}
+                     onSubmit--prevent={handleSubmit}
                   >
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
                         <MoneyInput model={form.values.amount} currency={currency} required />
@@ -114,15 +99,14 @@ const EnterTransactionDetails = () => {
                         />
                      </VirtualKeyboardTriggers>
                      {If(form.values.amount, () => (
-                        <Teleport to={ROOT_APP_OUTLET_ID}>
-                           <FloatingActionButton
-                              outlined
-                              type='submit'
-                              class='bg-transparent translate-x-[60%]'
-                           >
-                              <Checkmark class='text-canvas-text' />
-                           </FloatingActionButton>
-                        </Teleport>
+                        <FloatingActionButton
+                           outlined
+                           fixed
+                           type='submit'
+                           class='bg-transparent translate-x-[60%]'
+                        >
+                           <Checkmark class='text-canvas-text' />
+                        </FloatingActionButton>
                      ))}
                   </form>
                </FadeScrollView>

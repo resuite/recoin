@@ -7,47 +7,56 @@ interface PullToRefreshViewTestProps {
    children?: () => JSX.Template
 }
 
-const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
-   const state = Cell.source<PullState>('idle')
-   const pulling = Cell.derived(() => {
-      return state.get() === 'pulling' || state.get() === 'thresholdreached'
-   })
+interface PullToRefreshFeedbackProps {
+   state: Cell<PullState>
+}
+
+const PullToRefreshFeedback = (props: PullToRefreshFeedbackProps) => {
+   const { state } = props
    const idle = Cell.derived(() => {
       return state.get() === 'idle'
+   })
+   const pulling = Cell.derived(() => {
+      return state.get() === 'pulling' || state.get() === 'thresholdreached'
    })
    const actionTriggered = Cell.derived(() => {
       return state.get() === 'actiontriggered'
    })
+   const visible = Cell.derived(() => {
+      return pulling.get() || actionTriggered.get()
+   })
 
-   const FeedbackContent = () => {
-      return (
-         <div class='grid place-items-center place-content-center gap-0.5 h-full'>
-            <DynamicIcon
-               name='loader'
-               class={[
-                  'w-1.5 h-1.5 transition-[translate,scale,opacity]',
-                  {
-                     'opacity-0 duration-slower': idle,
-                     'rotate-[calc(var(--pull-progress)*0.5deg)]': pulling,
-                     'scale-[calc(var(--pull-progress)*0.01)]': pulling,
-                     'opacity-[calc((var(--pull-progress)*0.005)-0.4)]': pulling,
-                     'duration-0': pulling,
-                     'animate-spin! duration-slower': actionTriggered
-                  }
-               ]}
-               style={{ animation: 'none' }}
-            />
-            <div
-               class={[
-                  'text-center opacity-0 duration-slower transition-opacity',
-                  { 'opacity-75': actionTriggered }
-               ]}
-            >
-               Refreshing your data...
-            </div>
+   return (
+      <div class='grid place-items-center place-content-center gap-0.5 h-full'>
+         <DynamicIcon
+            name='loader'
+            class={[
+               'w-1.5 h-1.5 transition-[translate,rotate,scale,opacity]',
+               {
+                  'opacity-0 duration-slower': idle,
+                  'rotate-[calc(var(--pull-progress)*0.5deg)]': visible,
+                  'scale-[min(calc(var(--pull-progress)*0.01),1.95)]': pulling,
+                  'opacity-[calc((var(--pull-progress)*0.005)-0.4)]': pulling,
+                  'duration-0': pulling,
+                  'animate-spin! [transition-timing-function:linear]': actionTriggered
+               }
+            ]}
+            style={{ animation: 'none' }}
+         />
+         <div
+            class={[
+               'text-center opacity-0 duration-slower transition-opacity',
+               { 'opacity-75': actionTriggered }
+            ]}
+         >
+            Refreshing your data...
          </div>
-      )
-   }
+      </div>
+   )
+}
+
+const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
+   const state = Cell.source<PullState>('idle')
 
    const handleActionTriggered = async () => {
       const waitTime = 3500
@@ -63,7 +72,7 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
    return (
       <PullToRefreshView
          class='h-screen'
-         feedback={FeedbackContent}
+         feedback={() => <PullToRefreshFeedback state={state} />}
          onStateChange={handleStateChange}
          onActionTriggered={handleActionTriggered}
       >

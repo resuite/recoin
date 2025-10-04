@@ -1,4 +1,5 @@
-import { Icon } from '@/components/icons'
+import Add from '@/components/icons/svg/add'
+import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { ExpandingView } from '@/components/views/expanding-view'
@@ -58,7 +59,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }
                }
             ]}
          >
-            <Icon name='arrows' class='-rotate-135' />
+            <Arrows class='-rotate-135' />
          </FloatingActionButton>
          <FloatingActionButton
             onClick={toggleOpenState}
@@ -74,7 +75,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }
                }
             ]}
          >
-            <Icon name='add' />
+            <Add />
          </FloatingActionButton>
          <ExpandingView
             expandColor='var(--color-base)'

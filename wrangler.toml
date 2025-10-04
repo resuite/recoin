@@ -21,6 +21,11 @@ binding = "DB"
 database_name = "recoin-db"
 database_id = "2a8921e1-6894-4e17-8ba0-19a38996a1a2"
 
+[[durable_objects.bindings]]
+name = "LIVESTORE_SYNC"
+class_name = "LiveStoreSync"
+
+
 [env.production]
 [env.production.vars]
 CF_ENVIRONMENT = "production"

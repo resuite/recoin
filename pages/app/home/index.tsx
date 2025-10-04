@@ -1,3 +1,4 @@
+import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import { Header } from '@/pages/app/(fragments)/header'
 import { Stage } from '@/pages/app/(fragments)/stage'
 import { AddNewTransactionButton } from '@/pages/app/home/(fragments)/add-new-transaction-button'
@@ -12,13 +13,15 @@ const Home = () => {
    return (
       <Stage class='grid grid-rows-[auto_1fr]'>
          <Header />
-         <main class='grid grid-rows-[auto_auto_1fr] px-1 grid-cols-1 justify-center'>
-            <div class='text-center w-full'>
-               <h3 class='text-header'>Hello, {firstName}.</h3>
-               <p class='text-sm opacity-60'>Add a new transaction to get started.</p>
-            </div>
-            <HomeStats />
-            <RecentTransactions />
+         <main class='px-1 overflow-y-auto max-h-0 min-h-full'>
+            <FadeScrollView>
+               <div class='text-center w-full'>
+                  <h3 class='text-header'>Hello, {firstName}.</h3>
+                  <p class='text-sm opacity-60'>Add a new transaction to get started.</p>
+               </div>
+               <HomeStats />
+               <RecentTransactions />
+            </FadeScrollView>
          </main>
          <AddNewTransactionButton />
       </Stage>

@@ -8,7 +8,9 @@
    "cSpell.words": [
       "actiontriggered",
       "geometrychange",
+      "jank",
       "Materializer",
+      "opfs",
       "retend",
       "thresholdreached"
    ],
@@ -29,6 +31,6 @@
    },
    // "typescript.experimental.useTsgo": true,
    "editor.codeActionsOnSave": {
-      "source.organizeImports.biome": "explicit"
+      "source.organizeImports": "explicit"
    }
 }

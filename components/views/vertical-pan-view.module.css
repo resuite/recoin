@@ -1,0 +1,36 @@
+.container {
+   display: grid;
+   width: 100%;
+   height: 100%;
+   grid-template-columns: 1fr;
+   grid-template-rows: 1fr;
+}
+
+.hiddenSpace {
+   width: 100%;
+   height: 100%;
+   animation: come-up var(--speed-slower);
+   grid-area: 1 / 1;
+}
+
+.mainContent {
+   width: 100%;
+   height: 100%;
+   transition: translate var(--speed-slower) var(--timing);
+   grid-area: 1 / 1;
+
+   &.hiding {
+      translate: 0 100%;
+   }
+
+   &.mainContentHidden > * {
+      display: none;
+   }
+}
+
+@keyframes come-up {
+   from {
+      opacity: 0;
+      scale: 0.85;
+   }
+}

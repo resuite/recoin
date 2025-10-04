@@ -1,10 +1,11 @@
 import { Browsers, currentBrowser } from '@/utilities/browser'
+import { tryFn } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { NEGLIGIBLE_SCROLL_PX, scrollTimelineFallback } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import { useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
-import { PullStartEvent } from './pull-to-refresh-view'
+import { PullStartEvent, usePullToRefreshContext } from './pull-to-refresh-view'
 import styles from './sidebar-provider-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -72,6 +73,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    const contentEdgeRef = Cell.source<HTMLElement | null>(null)
    const sidebarRef = Cell.source<HTMLElement | null>(null)
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
+   const pullToRefreshContext = tryFn(() => usePullToRefreshContext())
 
    const sidebarOpened = Cell.derived(() => {
       return sidebarState.get() === 'open'
@@ -101,7 +103,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
             pendingClosePromiseResolver?.()
             pendingClosePromiseResolver = null
             resolve()
-         }, 1200)
+         }, 500)
       })
       return await Promise.race([waitingTillClose, timeout])
    }
@@ -190,7 +192,13 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       const browser = currentBrowser()
       const browserName = browser.getBrowserName()
       const platformType = browser.getPlatformType()
-      if (!(browserName === Browsers.Safari && platformType === 'mobile')) {
+      if (
+         !(
+            browserName === Browsers.Safari &&
+            platformType === 'mobile' &&
+            pullToRefreshContext !== undefined
+         )
+      ) {
          return
       }
       provider.addEventListener('pointerdown', interceptPointerDown)

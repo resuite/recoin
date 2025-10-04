@@ -22,7 +22,9 @@
 
    &[data-not-revealable] {
       overflow: hidden;
+      animation-duration: 0ms;
    }
+
    @supports not (animation-timeline: scroll(self inline)) {
       animation-duration: 1000ms;
       animation-timing-function: linear;

@@ -1,3 +1,4 @@
+import { getCurrencyDecimals } from '@/utilities/money'
 import { Cell, type SourceCell } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -12,6 +13,9 @@ interface MoneyInputProps extends InputProps {
 export function MoneyInput(props: MoneyInputProps) {
    const { model, currency: currencyProp, ...rest } = props
    const currency = useDerivedValue(currencyProp)
+   const currencyDecimals = Cell.derived(() => {
+      return getCurrencyDecimals(currency.get())
+   })
    const inputRef = Cell.source<HTMLInputElement | null>(null)
    const formatter = Cell.derived(() => {
       return new Intl.NumberFormat('en-US', {
@@ -22,7 +26,7 @@ export function MoneyInput(props: MoneyInputProps) {
       })
    })
    const outerValueFormatted = Cell.derived(() => {
-      return formatter.get().format(model.get())
+      return formatter.get().format(model.get() / 10 ** currencyDecimals.get())
    })
 
    outerValueFormatted.listen((value) => {
@@ -36,8 +40,8 @@ export function MoneyInput(props: MoneyInputProps) {
    const update = (event: Event) => {
       const target = event.target as HTMLInputElement
       const cleaned = target.value.replace(/[^0-9.-]+/g, '')
-      const numeric = Number.parseFloat(cleaned)
-      model.set(numeric || 0)
+      const numeric = Number.parseFloat(cleaned) || 0
+      model.set(numeric * 10 ** currencyDecimals.get())
    }
 
    return (

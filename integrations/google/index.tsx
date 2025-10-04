@@ -59,7 +59,7 @@ export function GoogleIdentityProvider(props: GoogleIdentityProviderProps) {
 
    useSetupEffect(() => {
       ctx.initializing = loadGoogleScript().then(() => {
-         window.google.accounts.id.initialize({
+         window.google?.accounts.id.initialize({
             client_id: GOOGLE_CLIENT_ID,
             callback: (response) => {
                for (const resolver of resolvers) {

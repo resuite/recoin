@@ -247,8 +247,8 @@ export function StackView(props: StackViewProps) {
       animation = null
    }
 
-   const triggerFocusEffect = (effect: SetupFn) => {
-      const cleanup = effect()
+   const triggerFocusEffect = async (effect: SetupFn) => {
+      const cleanup = await effect()
       if (cleanup) {
          blurCallbacks.set(effect, cleanup)
       }

@@ -1,4 +1,3 @@
-import { initializeDbWorker } from '@/data'
 import { useAuthContext } from '@/scopes/auth'
 import { Cell, useSetupEffect } from 'retend'
 
@@ -15,7 +14,6 @@ export function useApplicationSetup() {
    })
 
    useSetupEffect(() => {
-      initializeDbWorker()
       const timeout = setTimeout(() => {
          waitTimeLoaded.set(true)
       }, 200)

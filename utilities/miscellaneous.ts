@@ -113,28 +113,25 @@ export function scrollIntoView(target: HTMLElement, scrollView: HTMLElement) {
    scrollView.scrollTo({ top, behavior: 'smooth' })
 }
 
-export function groupByCount<T>(arr: Array<T>, groupSize?: number) {
-   if (!groupSize) {
-      return [arr]
-   }
-   const result = []
-   for (let i = 0; i < arr.length; i += groupSize) {
-      const group = arr.slice(i, i + groupSize)
-      result.push(group)
-   }
-   return result
+/**
+ * Merges a Date object with a time string (HH:MM) to create a new Date object.
+ * The time components (hours and minutes) from the time string are applied to the date.
+ *
+ * @param date The Date object to merge with.
+ * @param time A string representing the time in HH:MM format.
+ * @returns A new Date object with the date from the input `date` and the time from the input `time`.
+ */
+export function mergeDateAndTime(date: Date, time: string): Date {
+   const newDate = new Date(date)
+   const [hours, minutes] = time.split(':').map(Number)
+   newDate.setHours(hours, minutes, 0, 0)
+   return newDate
 }
 
-function getCurrencyDecimals(currency: string) {
-   return (
-      new Intl.NumberFormat('en-US', {
-         style: 'currency',
-         currency,
-         minimumFractionDigits: 0
-      }).resolvedOptions().maximumFractionDigits || 2
-   )
-}
-
-export function normalizeAmount(amount: number, currency: string) {
-   return Math.round(amount * 10 ** getCurrencyDecimals(currency))
+export function tryFn<T>(func: () => T): T | undefined {
+   try {
+      return func()
+   } catch {
+      return undefined
+   }
 }

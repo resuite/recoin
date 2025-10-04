@@ -1,6 +1,7 @@
 import applicationRoute from '@/api/modules/application/server'
 import authenticationRoute from '@/api/modules/authentication/server'
 import waitingListRoute from '@/api/modules/waiting-list/server'
+import { makeDurableObject } from '@livestore/sync-cf/cf-worker'
 import { Hono } from 'hono'
 
 const app = new Hono()
@@ -11,4 +12,5 @@ const app = new Hono()
    .route('/__api/auth', authenticationRoute)
    .route('/__api/app', applicationRoute)
 
+export class LiveStoreSync extends makeDurableObject({}) {}
 export default app

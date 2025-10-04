@@ -24,7 +24,9 @@ export function SidebarLink(props: SidebarLinkProps) {
          style={{ translate, opacity, height }}
       >
          <div class={['flex items-center gap-0.5', { 'opacity-70': !isActive }]}>
-            <Icon name={link.icon} class='link-icon' />
+            <div class='link-icon'>
+               <Icon name={link.icon} />
+            </div>
             {link.name}
          </div>
       </Link>

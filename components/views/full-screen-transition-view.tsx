@@ -1,5 +1,5 @@
 import { animationsSettled } from '@/utilities/animations'
-import { Cell, If } from 'retend'
+import { Cell, If, createScope, useScopeContext } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './full-screen-transition-view.module.css'
@@ -7,6 +7,12 @@ import styles from './full-screen-transition-view.module.css'
 type FullScreenTransition = 'slide-up' | 'slide-down' | 'fade-in' | 'fade-out' | 'blink'
 type TransitionSpeed = 'default' | 'fast' | 'device' | 'slow'
 type DivProps = JSX.IntrinsicElements['div']
+
+interface FullScreenTransitionCtx {
+   activeViewRef: Cell<HTMLElement | null>
+}
+
+const FullScreenTransitionScope = createScope<FullScreenTransitionCtx>()
 
 /**
  * Props for the FullScreenTransitionView component.
@@ -74,6 +80,7 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
    const previousContentShown = Cell.source(!changeWhen.get())
    const nextContentShown = Cell.source(changeWhen.get())
    const nextViewRef = Cell.source<HTMLDivElement | null>(null)
+   const previousViewRef = Cell.source<HTMLDivElement | null>(null)
 
    const transitionSpeed = Cell.derived(() => {
       return `var(--speed-${speed.get()})`
@@ -94,18 +101,40 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
       { priority: -1 } // run after DOM updates.
    )
 
+   const activeViewRef = Cell.derived(() => {
+      return changeWhen.get() ? nextViewRef.peek() : previousViewRef.peek()
+   })
+
+   const ctx = {
+      activeViewRef
+   }
+
    return (
-      <div
-         {...rest}
-         style={{ '--full-screen-transition-speed': transitionSpeed }}
-         data-transition={transition}
-         data-changed={changeWhen}
-         class={[styles.fullScreenTransition, rest.class]}
-      >
-         <div class={styles.previousView}>{If(previousContentShown, current)}</div>
-         <div ref={nextViewRef} class={styles.nextView}>
-            {If(nextContentShown, next)}
-         </div>
-      </div>
+      <FullScreenTransitionScope.Provider value={ctx}>
+         {() => (
+            <div
+               {...rest}
+               style={{ '--full-screen-transition-speed': transitionSpeed }}
+               data-transition={transition}
+               data-changed={changeWhen}
+               class={[styles.fullScreenTransition, rest.class]}
+            >
+               <div ref={previousViewRef} class={styles.previousView}>
+                  {If(previousContentShown, current)}
+               </div>
+               <div ref={nextViewRef} class={styles.nextView}>
+                  {If(nextContentShown, next)}
+               </div>
+            </div>
+         )}
+      </FullScreenTransitionScope.Provider>
    )
+}
+
+/**
+ * Provides access to the nearest `FullScreenTransition` context.
+ * Use this hook within components nested inside `FullScreenTransitionView` to access transition-related state.
+ */
+export function useFullScreenTransitionContext() {
+   return useScopeContext(FullScreenTransitionScope)
 }
