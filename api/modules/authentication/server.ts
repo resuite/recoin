@@ -7,7 +7,7 @@ import { clearAuthCookie, setAuthCookie, verifyGoogleIdToken } from '@/api/utils
 import { DEFAULT_WORKSPACE, LIVESTORE_SYNC_DO_NAME, StatusCodes } from '@/constants/server'
 import type { ExecutionContext } from '@cloudflare/workers-types'
 import { handleWebSocket } from '@livestore/sync-cf/cf-worker'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, sql } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
 import { Hono } from 'hono'
 import { z } from 'zod'
@@ -44,27 +44,23 @@ authenticationRoute.post(
             const userId = user?.id ?? crypto.randomUUID()
             if (!user) {
                const workspaceId = crypto.randomUUID()
-               const createdAt = new Date()
-               // todo: wrap in transaction when drizzle supports it for D1.
-               const [[newUser], [newWorkspace]] = await Promise.all([
-                  db
-                     .insert(schema.users)
-                     .values({
-                        id: userId,
-                        googleId,
-                        email,
-                        fullName,
-                        firstName,
-                        lastName,
-                        avatarUrl,
-                        createdAt
-                     })
-                     .returning(),
-                  db
-                     .insert(schema.workspaces)
-                     .values({ id: workspaceId, name: DEFAULT_WORKSPACE, userId, createdAt })
-                     .returning()
-               ])
+               const createdAt = new Date().toISOString()
+
+               // Run both inserts and return the data
+               const result = await db.all(sql`
+      INSERT INTO users (id, google_id, email, full_name, first_name, last_name, avatar_url, created_at)
+      VALUES (${userId}, ${googleId}, ${email}, ${fullName}, ${firstName}, ${lastName}, ${avatarUrl}, ${createdAt})
+      RETURNING *;
+      
+      INSERT INTO workspaces (id, name, user_id, created_at)
+      VALUES (${workspaceId}, ${DEFAULT_WORKSPACE}, ${userId}, ${createdAt})
+      RETURNING *;
+   `)
+
+               // result[0] is the user, result[1] is the workspace
+               const newUser = result[0] as typeof schema.users.$inferSelect
+               const newWorkspace = result[1] as typeof schema.workspaces.$inferSelect
+
                user = { ...newUser, workspaces: [newWorkspace] }
             }
             await setAuthCookie(context, userId)

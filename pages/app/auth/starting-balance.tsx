@@ -31,8 +31,6 @@ const StartingBalance = (props: StartingBalanceProps) => {
    }
 
    const handleSubmit = () => {
-      // biome-ignore lint/suspicious/noConsole: <explanation>
-      console.log('handleSubmit')
       onFinish(value.get())
    }
 
