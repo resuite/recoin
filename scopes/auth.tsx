@@ -2,7 +2,6 @@ import type { UserData } from '@/api/database/types'
 import { Errors, RecoinError } from '@/api/error'
 import { completeOnboarding, getMe } from '@/api/modules/application/client'
 import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/client'
-import type { ErrorResponse, SuccessResponse } from '@/api/types'
 import { LocalStorageKeys } from '@/constants/local-storage-keys'
 import { useErrorNotifier } from '@/utilities/composables/use-error-notifier'
 import { useIsServer } from '@/utilities/composables/use-is-server'
@@ -11,28 +10,14 @@ import { useLocalStorage } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 
 type AuthState = 'idle' | 'pending' | 'ready'
+
 interface AuthCtx {
    userData: Cell<UserData | null>
    currency: Cell<string>
-   logInWithGoogle: {
-      run: (...args: Parameters<typeof verifyGoogleSignIn>) => Promise<void>
-      data: Cell<ErrorResponse | SuccessResponse<UserData> | null>
-      pending: Cell<boolean>
-      error: Cell<Error | null>
-   }
-   logOut: {
-      run: (...args: Parameters<typeof logOutUser>) => Promise<void>
-      data: Cell<ErrorResponse | SuccessResponse<UserData> | null>
-      pending: Cell<boolean>
-      error: Cell<Error | null>
-   }
+   logInWithGoogle: ReturnType<typeof Cell.async<typeof verifyGoogleSignIn>>
+   logOut: ReturnType<typeof Cell.async<typeof logOutUser>>
    authState: Cell<AuthState>
-   completeSetup: {
-      run: (...args: Parameters<typeof completeOnboarding>) => Promise<void>
-      data: Cell<ErrorResponse | SuccessResponse<UserData> | null>
-      pending: Cell<boolean>
-      error: Cell<Error | null>
-   }
+   completeSetup: ReturnType<typeof Cell.async<typeof completeOnboarding>>
 }
 
 const AuthScope = createScope<AuthCtx>('Authentication')
