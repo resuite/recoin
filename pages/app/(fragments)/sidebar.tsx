@@ -82,13 +82,14 @@ function SidebarLink(props: SidebarLinkProps) {
 
    return (
       <Button
-         class='btn-link border-none py-0.5 px-1 ease-out duration-slow transition-[translate,opacity]'
+         class='btn-link border-none cursor-pointer py-0.5 px-1 ease-out duration-slow transition-[translate,opacity]'
          style={{ translate, opacity, height }}
          onClick={handleClick}
       >
          <div
             class={[
                'flex items-center gap-0.5 text-light-yellow/50',
+               'text-xl',
                { '[:is(*)]:text-canvas-text': isActive }
             ]}
          >

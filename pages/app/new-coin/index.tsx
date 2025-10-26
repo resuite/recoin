@@ -42,7 +42,7 @@ const NewCoin = (props: NewCoinProps) => {
                icon={achievement.icon}
                spinning
                size='min(50dvw, 275px)'
-               onSettled={showOtherDetails}
+               onSettle={showOtherDetails}
             />
             <div ariaHidden={hidingOtherDetails}>
                <h2 class='text-logo'>{title}</h2>
