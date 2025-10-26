@@ -13,7 +13,7 @@ interface CoinProps extends DivProps {
    /**
     * Callback to be called when the coin stops spinning.
     */
-   onSettled?: () => void
+   onSettle?: () => void
    /**
     * The ref to the coin element.
     */
@@ -27,7 +27,7 @@ export function Coin(props: CoinProps) {
       spinning,
       size = 'calc(var(--spacing) * 6)',
       ref = Cell.source<HTMLElement | null>(null),
-      onSettled,
+      onSettle,
       ...rest
    } = props
    const observer = useObserver()
@@ -39,7 +39,7 @@ export function Coin(props: CoinProps) {
    observer.onConnected(ref, async (coin) => {
       await animationsSettled(coin)
       coin.classList.add(styles.settled)
-      onSettled?.()
+      onSettle?.()
    })
 
    return (
@@ -50,7 +50,7 @@ export function Coin(props: CoinProps) {
          style={style}
       >
          <div class={styles.shimmer} />
-         <Sparkle class={[styles.sparkle, styles.topSparkle]} />
+         <Sparkle class={[styles.sparkle]} />
          <div class={styles.heads}>
             <Icon name={icon} class={styles.icon} />
          </div>
