@@ -1,0 +1,21 @@
+.container {
+   position: sticky;
+   z-index: 10;
+   top: -1px;
+   display: grid;
+   grid-template-columns: 1fr;
+   grid-template-rows: 1fr;
+}
+
+.container > * {
+   grid-area: 1 / 1;
+}
+
+.offsetMirror {
+   width: 100%;
+   height: 100%;
+   scale: 1 2;
+   transform-origin: bottom;
+   translate: 0 -100%;
+   pointer-events: none;
+}

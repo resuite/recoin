@@ -73,6 +73,29 @@ export function createPartitions(variable: string, options?: PartitionOptions): 
    return partitions
 }
 
+/**
+ * Derives a CSS calc() expression for linear interpolation between two values.
+ * Interpolates from y1 (when x=0) to y2 (when x=1).
+ *
+ * @param x - A CSS number, between 0 and 1 (e.g., "0.5", "var(--progress)")
+ * @param y1 - The CSS value when x is 0 (e.g., "1rem", "10px")
+ * @param y2 - The CSS value when x is 1 (e.g., "1.25rem", "50px")
+ * @returns A CSS calc() expression that interpolates between y1 and y2
+ *
+ * @example
+ * // Using a CSS variable (0 to 1)
+ * lerp("var(--progress)", "1rem", "1.25rem")
+ * // Returns: calc(1rem + (1.25rem - 1rem) * var(--progress))
+ *
+ * @example
+ * // At 50% progress
+ * lerp("0.5", "10px", "50px")
+ * // Returns: calc(10px + (50px - 10px) * 0.5)
+ */
+export function interpolate(x: string, y1: string, y2: string): string {
+   return `calc((${y1}) + ((${y2}) - (${y1})) * (${x}))`
+}
+
 interface AnimationsSettledOptions {
    subtree?: boolean
 }
