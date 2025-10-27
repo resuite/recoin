@@ -21,12 +21,15 @@ export function RecentTransactions() {
             <h4
                class={[
                   'text-center pt-0.5 w-full grid grid-cols-1 *:[grid-area:1/1]',
-                  { 'border-b-2 bg-canvas-background': isStuckToTop }
+                  {
+                     'border-b-2 bg-canvas-background [box-shadow:-1px_9px_21px_0_#00000016]':
+                        isStuckToTop
+                  }
                ]}
             >
                <span
                   style={{ translate, scale }}
-                  class='origin-left inline-block py-0.5 w-fit justify-self-center text-lg'
+                  class='origin-left will-change-[translate,scale] inline-block py-0.5 w-fit justify-self-center text-lg'
                >
                   Recent Transactions
                </span>
