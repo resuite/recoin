@@ -51,15 +51,12 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
       if (!user) {
          return
       }
-      startStore(user.id).then(() => {
-         const store_ = store.get()
-         if (store_) {
-            createAchievementListener(store_, workspaceId, panCtx)
-         }
-      })
-
+      const store = await startStore(user.id)
+      if (store) {
+         createAchievementListener(store, workspaceId, panCtx)
+      }
       return () => {
-         store.get()?.shutdown()
+         store?.shutdown()
       }
    })
 

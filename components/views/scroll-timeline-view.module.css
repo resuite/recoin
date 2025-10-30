@@ -1,0 +1,14 @@
+.container {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   overscroll-behavior: auto;
+
+   &[data-scroll-axis="inline"] {
+      overflow-inline: auto;
+   }
+
+   &[data-scroll-axis="block"] {
+      overflow-block: auto;
+   }
+}
