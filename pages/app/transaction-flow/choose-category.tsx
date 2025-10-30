@@ -44,7 +44,7 @@ const CategoriesListing = (props: CategoryListingProps) => {
          <h2 class='border-b-2 w-full grid gap-x-0.5 gap-y-0.25 grid-rows-[1fr_.5fr] grid-cols-[auto_1fr]'>
             <Arrows class='h-1.5 row-span-2 self-center' direction={arrowDirection} />
             <span class='text-title'>
-               <TransactionTypeName type={type} />
+               <TransactionTypeName type={type} />.
             </span>
             <sub class='text-normal'>Choose an {type} category.</sub>
          </h2>

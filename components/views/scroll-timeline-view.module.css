@@ -3,12 +3,15 @@
    width: 100%;
    height: 100%;
    overscroll-behavior: auto;
+   scroll-behavior: smooth;
 
    &[data-scroll-axis="inline"] {
+      overflow-x: auto;
       overflow-inline: auto;
    }
 
    &[data-scroll-axis="block"] {
+      overflow-y: auto;
       overflow-block: auto;
    }
 }

@@ -3,7 +3,8 @@ import { Header } from '@/pages/app/(fragments)/header'
 import { Stage } from '@/pages/app/(fragments)/stage'
 import { AddNewTransactionButton } from '@/pages/app/home/(fragments)/add-new-transaction-button'
 import { HomeStats } from '@/pages/app/home/(fragments)/home-stats'
-import { RecentTransactions } from '@/pages/app/home/(fragments)/recent-transactions'
+import { RecentTransactionsHeader } from '@/pages/app/home/(fragments)/recent-transactions-header'
+import { TransactionListing } from '@/pages/app/home/(fragments)/transaction-listing'
 import { useAuthContext } from '@/scopes/auth'
 
 const Home = () => {
@@ -28,7 +29,8 @@ const Home = () => {
                   <>
                      <Greeting />
                      <HomeStats />
-                     <RecentTransactions />
+                     <RecentTransactionsHeader />
+                     <TransactionListing />
                   </>
                )}
             </ScrollTimelineView>

@@ -1,3 +1,4 @@
+import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
 import { Browsers, currentBrowser } from '@/utilities/browser'
 import { tryFn } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
@@ -210,24 +211,27 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
 
    return (
       <SidebarScope.Provider value={sidebarScopeData}>
-         {() => {
-            return (
-               <div
-                  {...rest}
-                  ref={providerRef}
-                  data-not-revealable={sidebarNotRevealable}
-                  class={[styles.provider, rest.class]}
-               >
-                  <div class={styles.sidebar} ref={sidebarRef}>
-                     {sidebar()}
-                  </div>
-                  <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
-                     {children?.()}
-                     <div ref={contentEdgeRef} class={styles.contentEdge} />
-                  </div>
-               </div>
-            )
-         }}
+         {() => (
+            <ScrollTimelineView
+               {...rest}
+               axis='inline'
+               ref={providerRef}
+               data-not-revealable={sidebarNotRevealable}
+               class={[styles.provider, rest.class]}
+            >
+               {() => (
+                  <>
+                     <div class={styles.sidebar} ref={sidebarRef}>
+                        {sidebar()}
+                     </div>
+                     <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
+                        {children?.()}
+                        <div ref={contentEdgeRef} class={styles.contentEdge} />
+                     </div>
+                  </>
+               )}
+            </ScrollTimelineView>
+         )}
       </SidebarScope.Provider>
    )
 }

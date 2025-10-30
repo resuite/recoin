@@ -4,6 +4,9 @@ export const QueryKeys = {
       Currency: 'Onboarding.Currency',
       StartingBalance: 'Onboarding.StartingBalance'
    },
+   RecentTransactions: {
+      SearchIsOpen: 'RecentTransactions.SearchIsOpen'
+   },
    TransactionFlow: {
       _root: 'TransactionFlow',
       Type: 'TransactionFlow.Type',

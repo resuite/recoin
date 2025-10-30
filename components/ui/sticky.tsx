@@ -12,7 +12,7 @@ interface StickyProps extends DivProps {
    /**
     * A `Cell` reference to the container `div` element.
     */
-   ref?: Cell<HTMLDivElement | null>
+   ref?: Cell<HTMLElement | null>
    /**
     * A callback function that is triggered when the sticky state changes.
     * @param event - The StickChangeEvent object.

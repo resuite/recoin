@@ -30,7 +30,7 @@ export function BackButton(props: BackButtonProps) {
          onClick={handleClick}
       >
          <Arrows class='h-1 rotate-45' />
-         Back
+         back
       </button>
    )
 }

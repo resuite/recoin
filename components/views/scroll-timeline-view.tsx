@@ -1,3 +1,4 @@
+import { clamp } from '@/utilities/miscellaneous'
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
@@ -38,6 +39,8 @@ interface ScrollLinkedAnimationOptions {
 interface ScrollTimelineContext {
    source: Cell<HTMLElement | null>
    add: (animation: ScrollLinkedAnimationOptions) => void
+   lock: () => void
+   unlock: () => void
 }
 const ScrollTimelineScope = createScope<ScrollTimelineContext>('ScrollTimelineView')
 
@@ -45,7 +48,7 @@ type DivProps = JSX.IntrinsicElements['div']
 interface ScrollTimelineViewProps extends DivProps {
    axis: ScrollTimelineAxis
    children: () => JSX.Template
-   ref?: Cell<HTMLDivElement | null>
+   ref?: Cell<HTMLElement | null>
 }
 
 /**
@@ -82,7 +85,7 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
             : element.animate(keyframes, {
                  fill: 'both',
                  easing: 'linear',
-                 duration: GESTURE_ANIMATION_MS + 1
+                 duration: GESTURE_ANIMATION_MS
               })
 
          if (!hasScrollTimelineSupport) {
@@ -112,29 +115,41 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
 
    function scrollFallbackListenerBlock(this: HTMLElement) {
       const { scrollTop, scrollHeight, clientHeight } = this
-      const newTime = (scrollTop / (scrollHeight - clientHeight)) * GESTURE_ANIMATION_MS
+      const scrollProgress = scrollTop / (scrollHeight - clientHeight)
+
       for (const { animation, start, end } of scrollAnimations) {
-         if (newTime >= start && newTime <= end) {
-            const progress = (newTime - start) / (end - start)
-            animation.currentTime = progress * GESTURE_ANIMATION_MS
-         }
+         const rangeStart = start / GESTURE_ANIMATION_MS
+         const rangeEnd = end / GESTURE_ANIMATION_MS
+
+         const progress = clamp((scrollProgress - rangeStart) / (rangeEnd - rangeStart), 0, 1)
+
+         animation.currentTime = progress * GESTURE_ANIMATION_MS
       }
    }
 
    function scrollFallbackListenerInline(this: HTMLElement) {
       const { scrollLeft, scrollWidth, clientWidth } = this
-      const newTime = (scrollLeft / (scrollWidth - clientWidth)) * GESTURE_ANIMATION_MS
+      const scrollProgress = scrollLeft / (scrollWidth - clientWidth)
+
       for (const { animation, start, end } of scrollAnimations) {
-         if (newTime >= start && newTime <= end) {
-            const progress = (newTime - start) / (end - start)
-            animation.currentTime = progress * GESTURE_ANIMATION_MS
-         }
+         const rangeStart = start / GESTURE_ANIMATION_MS
+         const rangeEnd = end / GESTURE_ANIMATION_MS
+
+         const progress = clamp((scrollProgress - rangeStart) / (rangeEnd - rangeStart), 0, 1)
+
+         animation.currentTime = progress * GESTURE_ANIMATION_MS
       }
    }
 
    const ctx: ScrollTimelineContext = {
       source: containerRef,
-      add: addLinkedAnimation
+      add: addLinkedAnimation,
+      lock() {
+         containerRef.peek()?.style.setProperty('overflow', 'hidden')
+      },
+      unlock() {
+         containerRef.peek()?.style.removeProperty('overflow')
+      }
    }
 
    observer.onConnected(containerRef, (container) => {
