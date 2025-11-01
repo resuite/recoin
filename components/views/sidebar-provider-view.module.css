@@ -1,20 +1,15 @@
 .provider {
-   --sidebar-reveal: calc(1 - var(--scroll-unit));
-
    display: grid;
    overflow-x: scroll;
    width: 100%;
    height: 100%;
 
-   animation-name: var(--animation-scrolling);
-   animation-timing-function: linear;
    touch-action: pan-x;
    grid-template-columns: auto 100%;
    grid-template-rows: 1fr;
    scroll-snap-type: x mandatory;
 
    scrollbar-width: none;
-   animation-timeline: scroll(self inline);
 
    &::-webkit-scrollbar {
       display: none;
@@ -23,11 +18,6 @@
    &[data-not-revealable] {
       overflow: hidden;
       animation-duration: 0ms;
-   }
-
-   @supports not (animation-timeline: scroll(self inline)) {
-      animation-duration: 1000ms;
-      animation-timing-function: linear;
    }
 }
 

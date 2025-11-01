@@ -2,7 +2,7 @@ import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
 import { Browsers, currentBrowser } from '@/utilities/browser'
 import { tryFn } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
-import { NEGLIGIBLE_SCROLL_PX, scrollTimelineFallback } from '@/utilities/scrolling'
+import { NEGLIGIBLE_SCROLL_PX } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import { useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -160,8 +160,6 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
          return { root: providerRef.peek(), threshold: 1 }
       }
    )
-
-   observer.onConnected(providerRef, scrollTimelineFallback)
 
    observer.onConnected(providerRef, (provider) => {
       provider.scrollTo({ left: provider.scrollWidth, behavior: 'instant' })

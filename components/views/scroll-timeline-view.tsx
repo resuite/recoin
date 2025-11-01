@@ -19,8 +19,8 @@ declare global {
 }
 
 interface ScrollLinkedAnimationRange {
-   start: number
-   end: number
+   start?: number
+   end?: number
 }
 
 interface AnimationData {

@@ -1,8 +1,8 @@
 import type { IconName } from '@/components/icons'
 import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
-import { createPartitions } from '@/utilities/animations'
 import { Cell, For } from 'retend'
 import { useRouter } from 'retend/router'
 
@@ -14,25 +14,16 @@ export interface LinkInfo {
 
 export interface SidebarLinkProps {
    link: LinkInfo
-   progressValue: string
-   height?: string
-   href?: string
+   index: number
 }
 
-export interface AnimatedLinkGroupProps {
+export interface LinkGroupProps {
    links: Array<LinkInfo>
-   progressValues: Array<string>
-   linkHeight?: string
 }
 
 export interface SidebarHeaderProps {
    title?: string
    className?: string
-   progressValue?: string
-}
-
-export interface SidebarDividerProps {
-   scaleValue: string
 }
 
 const upperLinks: Array<LinkInfo> = [
@@ -49,24 +40,13 @@ const lowerLinks: Array<LinkInfo> = [
    { name: 'Settings', icon: 'settings', href: '/app/settings' }
 ]
 
-export function createLinkAnimationValues(progressValue: string) {
-   const translate = Cell.derived(() => {
-      return `calc(-15% + ${progressValue} * 15%)`
-   })
-
-   const opacity = Cell.derived(() => {
-      return progressValue
-   })
-
-   return { translate, opacity }
-}
-
 function SidebarLink(props: SidebarLinkProps) {
-   const { link, progressValue, height = '8dvh' } = props
+   const { link, index } = props
    const { navigate, getCurrentRoute } = useRouter()
    const currentRoute = getCurrentRoute()
    const sidebarCtx = useSidebarContext()
-   const { translate, opacity } = createLinkAnimationValues(progressValue)
+   const scrollTimeline = useScrollTimelineContext()
+   const buttonRef = Cell.source<HTMLElement | null>(null)
 
    const handleClick = async () => {
       await sidebarCtx.toggleSidebar()
@@ -80,10 +60,15 @@ function SidebarLink(props: SidebarLinkProps) {
       return currentRoute.get().path.startsWith(link.href)
    })
 
+   scrollTimeline.add({
+      target: buttonRef,
+      keyframes: { translate: ['0%', `-${(index + 1) * 20}%`] }
+   })
+
    return (
       <Button
-         class='btn-link border-none cursor-pointer py-0.5 px-1 ease-out duration-slow transition-[translate,opacity]'
-         style={{ translate, opacity, height }}
+         ref={buttonRef}
+         class='btn-link border-none cursor-pointer py-0.5 px-1 h-[8dvh]'
          onClick={handleClick}
       >
          <div
@@ -100,98 +85,47 @@ function SidebarLink(props: SidebarLinkProps) {
    )
 }
 
-function AnimatedLinkGroup(props: AnimatedLinkGroupProps) {
-   const { links, progressValues, linkHeight = '8dvh' } = props
+function LinkGroup(props: LinkGroupProps) {
+   const { links } = props
    return (
       <div class='grid' style={{ gridTemplateRows: `repeat(${links.length}, auto) 1fr` }}>
          {For(links, (link, index) => {
-            const progressIndex = index.get()
-
-            return (
-               <SidebarLink
-                  link={link}
-                  progressValue={progressValues[progressIndex]}
-                  height={linkHeight}
-                  href='#'
-               />
-            )
+            return <SidebarLink link={link} index={index.get()} />
          })}
       </div>
    )
 }
 
-function SidebarDivider(props: SidebarDividerProps) {
-   const { scaleValue } = props
-   return (
-      <div
-         class='h-[2.5dvh] border-b-[3px] opacity-[0.5] ml-1 mx-2'
-         style={{ scale: `${scaleValue} 1`, transformOrigin: '0 0' }}
-      />
-   )
+function SidebarDivider() {
+   const scrollTimeline = useScrollTimelineContext()
+   const ref = Cell.source<HTMLHRElement | null>(null)
+
+   scrollTimeline.add({
+      target: ref,
+      keyframes: { scale: ['1 1', '0 1'] },
+      range: { start: 0, end: 0.5 }
+   })
+
+   return <div ref={ref} class='h-[2.5dvh] border-b-[3px] opacity-[0.5] ml-1 mx-2' />
 }
 
 function SidebarHeader(props: SidebarHeaderProps) {
-   const { title = 'recoin.', className = 'pl-1 pb-1', progressValue } = props
-   const { translate, opacity } = progressValue
-      ? createLinkAnimationValues(progressValue)
-      : { translate: undefined, opacity: undefined }
+   const { title = 'recoin.', className = 'pl-1 pb-1' } = props
 
-   return (
-      <h2
-         class={[className, 'ease-out duration-slow transition-[translate,opacity]']}
-         style={{ translate, opacity }}
-      >
-         {title}
-      </h2>
-   )
+   return <h2 class={className}>{title}</h2>
 }
 
 export function Sidebar() {
-   const sidebarRevealCssVar = 'var(--sidebar-reveal)'
-
-   const upperLinksSwipeProgressValuesOptions = {
-      from: 0.6,
-      overlap: 0.2,
-      count: upperLinks.length
-   }
-   const lowerLinksSwipeProgressValuesOptions = {
-      from: 0.6,
-      overlap: 0.2,
-      count: lowerLinks.length
-   }
-   const lineScaleOptions = { from: 0.7 }
-   const headerAnimationOptions = { from: 0.7, to: 0.9 }
-   const upperLinksSwipeProgressValues = createPartitions(
-      sidebarRevealCssVar,
-      upperLinksSwipeProgressValuesOptions
-   )
-   const lowerLinksSwipeProgressValues = createPartitions(
-      sidebarRevealCssVar,
-      lowerLinksSwipeProgressValuesOptions
-   )
-   const [lineScale] = createPartitions(sidebarRevealCssVar, lineScaleOptions)
-   const [headerProgressValue] = createPartitions(sidebarRevealCssVar, headerAnimationOptions)
-
    return (
       <div class='w-[65dvw] dark-scheme h-full py-2 text-header grid grid-rows-[auto_auto_auto_1fr]'>
-         <SidebarHeader progressValue={headerProgressValue} />
-         <AnimatedLinkGroup
-            links={upperLinks}
-            progressValues={upperLinksSwipeProgressValues}
-            linkHeight='8dvh'
-         />
-         <SidebarDivider scaleValue={lineScale} />
+         <SidebarHeader />
+         <LinkGroup links={upperLinks} />
+         <SidebarDivider />
          <div
             class='grid pt-auto before:[grid-area:1/1]'
-            style={{
-               gridTemplateRows: `1fr repeat(${lowerLinks.length}, auto)`
-            }}
+            style={{ gridTemplateRows: `1fr repeat(${lowerLinks.length}, auto)` }}
          >
-            <AnimatedLinkGroup
-               links={lowerLinks}
-               progressValues={lowerLinksSwipeProgressValues}
-               linkHeight='7.5dvh'
-            />
+            <LinkGroup links={lowerLinks} />
          </div>
       </div>
    )
