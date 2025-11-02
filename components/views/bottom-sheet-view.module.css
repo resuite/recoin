@@ -1,5 +1,4 @@
 .dialog {
-   --sheet-content-height: 70dvh;
    position: fixed;
    z-index: var(--z-index-bottom-sheet);
    top: 0;
@@ -19,7 +18,7 @@
       display: block;
       width: 100dvw;
       height: 100dvh;
-      background-color: #00000035;
+      background-color: #00000045;
       content: "";
       animation-name: fade-in;
       animation-duration: var(--speed-device);
@@ -71,7 +70,9 @@
 
 .sheetContentContainer {
    position: relative;
-   height: var(--sheet-content-height);
+   .dialog:not([data-dynamic-sizing]) > & {
+      height: var(--sheet-content-height);
+   }
    border-radius: 3dvh 3dvh 0 0;
    box-shadow: 0 -2px 8px 0 #00000015;
    animation-name: slide-up-from-under;

@@ -14,6 +14,7 @@ interface BottomSheetProps extends DivProps {
    onClose?: () => void
    children: () => JSX.Template
    ref?: SourceCell<HTMLElement | null>
+   dynamicSizing?: boolean
 }
 
 interface QueryControlledBottomSheetProps extends Omit<BottomSheetProps, 'isOpen'> {
@@ -63,12 +64,36 @@ export function BottomSheet(props: BottomSheetProps) {
       ref: contentRef = Cell.source<HTMLElement | null>(null),
       children,
       onClose,
+      dynamicSizing,
       ...rest
    } = props
    const observer = useObserver()
    const isOpen = useDerivedValue(isOpenProp)
    const dialogOpen = Cell.source(isOpen.get())
    const dialogRef = Cell.source<HTMLDialogElement | null>(null)
+   const sheetContentHeight = Cell.source('auto')
+
+   if (dynamicSizing) {
+      contentRef.listen(() => {
+         // The mechanics of the bottom sheet rely heavily on the content height.
+         // This is not always possible to know ahead of time,
+         // so we use a ResizeObserver to observe the content's height
+         // and update accordingly.
+         observer.onConnected(contentRef, (content) => {
+            sheetContentHeight.set(`${content.clientHeight}px`)
+
+            const resizeObserver = new ResizeObserver(([entry]) => {
+               sheetContentHeight.set(`${entry.contentRect.height}px`)
+            })
+            resizeObserver.observe(content)
+            return () => {
+               resizeObserver.disconnect()
+            }
+         })
+      })
+   } else {
+      sheetContentHeight.set('70dvh')
+   }
 
    async function startCloseSequence() {
       dialogRef.peek()?.classList.add(styles.closing)
@@ -159,6 +184,8 @@ export function BottomSheet(props: BottomSheetProps) {
                data-content-open={isOpen}
                class={styles.dialog}
                onClick--self={handleClickOutside}
+               data-dynamic-sizing={dynamicSizing}
+               style={{ '--sheet-content-height': sheetContentHeight }}
             >
                <div {...rest} ref={contentRef} class={[styles.sheetContentContainer, rest.class]}>
                   {children()}

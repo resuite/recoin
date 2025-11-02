@@ -1,4 +1,5 @@
 import Arrows from '@/components/icons/svg/arrows'
+import { Button } from '@/components/ui/button'
 import { FitText } from '@/components/ui/fit-text'
 import { FormattedMoney } from '@/components/ui/formatted-money'
 import { RelativeTime } from '@/components/ui/relative-time'
@@ -32,13 +33,14 @@ export function TransactionItem(props: TransactionItemProps) {
    }
 
    return (
-      <button
+      <Button
          type='button'
          class={[
-            'grid grid-cols-[auto_auto_1fr_auto] grid-rows-2 px-1 w-full whitespace-nowrap button-bare',
-            'rounded-none my-0.25 py-0.75 duration-default transition-transform',
-            'active:bg-gray-100 active:scale-95'
+            'grid grid-cols-[auto_auto_1fr_auto] grid-rows-2 px-1 w-full whitespace-nowrap',
+            'rounded-none my-0.25 py-0.75',
+            'button-bare button-click-effect'
          ]}
+         trackClickedState
          onClick={openDrawer}
       >
          <CategoryIcon icon={category.icon} class='h-2 w-2 row-span-2 mr-0.5' />
@@ -76,6 +78,6 @@ export function TransactionItem(props: TransactionItemProps) {
             •
             <RelativeTime date={item.date} />
          </span>
-      </button>
+      </Button>
    )
 }

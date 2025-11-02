@@ -55,8 +55,8 @@ export class PointerTracker extends EventTarget {
       this.dispatchEvent(moveEvent)
    }
 
-   end() {
-      this.dispatchEvent(new Event('end'))
+   end(lastPointerEvent?: PointerEvent) {
+      this.dispatchEvent(new TrackedEndedEvent(lastPointerEvent))
       this.removeListeners()
    }
 
@@ -71,7 +71,7 @@ export class PointerTracker extends EventTarget {
 
 interface GestureTrackerEventMap {
    move: TrackedMoveEvent
-   end: Event
+   end: TrackedEndedEvent
    cancel: Event
 }
 
@@ -87,5 +87,14 @@ export class TrackedMoveEvent extends Event {
       this.deltaX = deltaX
       this.deltaY = deltaY
       this.originEvent = originEvent
+   }
+}
+
+export class TrackedEndedEvent extends Event {
+   pointerCancelled: boolean
+
+   constructor(public lastPointerEvent?: PointerEvent) {
+      super('end')
+      this.pointerCancelled = lastPointerEvent?.type === 'pointercancel'
    }
 }

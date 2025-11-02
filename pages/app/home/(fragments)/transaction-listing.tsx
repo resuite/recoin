@@ -2,7 +2,6 @@ import { QueryControlledBottomSheet } from '@/components/views/bottom-sheet-view
 import { QueryKeys } from '@/constants/query-keys'
 import { TransactionItem } from '@/pages/app/home/(fragments)/transaction-item'
 import { TransactionItemBottomSheet } from '@/pages/app/home/(fragments)/transaction-item-bottom-sheet'
-
 import { useTransactions } from '@/utilities/composables/use-transactions'
 import { FluidList } from 'retend-utils/components'
 
@@ -14,6 +13,7 @@ export function TransactionListing() {
          <QueryControlledBottomSheet
             class='light-scheme'
             queryKey={QueryKeys.RecentTransactions.OpenItemId}
+            dynamicSizing
          >
             {() => <TransactionItemBottomSheet />}
          </QueryControlledBottomSheet>

@@ -1,10 +1,15 @@
 .container {
-   height: 100dvh;
-   width: 100dvw;
+   --safe-area-padding-top: max(env(safe-area-inset-top, 1rem), var(--spacing));
+   --safe-area-padding-left: max(env(safe-area-inset-left, 1rem), var(--spacing));
+   --safe-area-padding-right: max(env(safe-area-inset-right, 1rem), var(--spacing));
+   --safe-area-padding-bottom: max(env(safe-area-inset-bottom, 1rem), var(--spacing));
+
+   height: 100%;
+   width: 100%;
    display: grid;
    grid: 1fr / 1fr;
-   padding-top: env(safe-area-inset-top);
-   padding-left: env(safe-area-inset-left);
-   padding-right: env(safe-area-inset-right);
-   padding-bottom: env(safe-area-inset-bottom);
+   padding-top: var(--safe-area-padding-top);
+   padding-left: var(--safe-area-padding-left);
+   padding-right: var(--safe-area-padding-right);
+   padding-bottom: var(--safe-area-padding-bottom);
 }

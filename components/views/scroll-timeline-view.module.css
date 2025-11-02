@@ -7,11 +7,13 @@
 
    &[data-scroll-axis="inline"] {
       overflow-x: auto;
+      overflow-y: hidden;
       overflow-inline: auto;
    }
 
    &[data-scroll-axis="block"] {
       overflow-y: auto;
+      overflow-x: hidden;
       overflow-block: auto;
    }
 }
