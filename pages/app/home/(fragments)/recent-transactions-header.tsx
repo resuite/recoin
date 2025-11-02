@@ -119,7 +119,7 @@ export const RecentTransactionsHeader = () => {
          >
             <h4
                class={[
-                  'text-center pt-0.5 w-full grid grid-cols-1 *:[grid-area:1/1]',
+                  'text-center pt-0.5 mx-1 grid grid-cols-1 *:[grid-area:1/1]',
                   'before:content before:[grid-area:1/1] before:self-end before:h-[2px] before:bg-canvas-text',
                   'before:scale-x-0 before:transition-transform before:duration-default before:origin-left',
                   {

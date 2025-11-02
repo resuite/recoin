@@ -10,3 +10,9 @@ export function useTransactions() {
    )
    return transactions as Cell<Array<Transaction>>
 }
+
+export function useTransaction(id: string) {
+   const workspaceId = useWorkspaceId()
+   const transactions = useLiveQuery(TransactionModel.table.where({ workspaceId, id }).first())
+   return transactions as Cell<Transaction | null>
+}

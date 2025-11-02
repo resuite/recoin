@@ -13,7 +13,7 @@ const Home = () => {
 
    const Greeting = () => {
       return (
-         <div class='text-center w-full'>
+         <div class='px-1 text-center'>
             <h3 class='text-header'>Hello, {firstName}.</h3>
             <p class='text-sm opacity-60'>Add a new transaction to get started.</p>
          </div>
@@ -23,7 +23,7 @@ const Home = () => {
    return (
       <Stage class='grid grid-rows-[auto_1fr]'>
          <Header />
-         <main class='px-1 max-h-0 min-h-full'>
+         <main class='max-h-0 min-h-full'>
             <ScrollTimelineView axis='block'>
                {() => (
                   <>

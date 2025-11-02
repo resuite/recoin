@@ -5,7 +5,8 @@ export const QueryKeys = {
       StartingBalance: 'Onboarding.StartingBalance'
    },
    RecentTransactions: {
-      SearchIsOpen: 'RecentTransactions.SearchIsOpen'
+      SearchIsOpen: 'RecentTransactions.SearchIsOpen',
+      OpenItemId: 'RecentTransactions.OpenItemId'
    },
    TransactionFlow: {
       _root: 'TransactionFlow',
