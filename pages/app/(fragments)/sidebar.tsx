@@ -46,7 +46,7 @@ function SidebarLink(props: SidebarLinkProps) {
    const currentRoute = getCurrentRoute()
    const sidebarCtx = useSidebarContext()
    const scrollTimeline = useScrollTimelineContext()
-   const buttonRef = Cell.source<HTMLElement | null>(null)
+   const buttonRef = Cell.source<HTMLButtonElement | null>(null)
 
    const handleClick = async () => {
       await sidebarCtx.toggleSidebar()

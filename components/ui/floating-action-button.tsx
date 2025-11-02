@@ -36,6 +36,10 @@ interface FloatingActionButtonAsButtonProps extends ButtonProps, FloatingActionB
     * instead of a button.
     */
    asLink?: false
+   /**
+    * The ref to the button element.
+    */
+   ref?: Cell<HTMLButtonElement | null>
 }
 interface FloatingActionButtonAsLinkProps extends RouterLinkProps, FloatingActionButtonMainProps {
    /**

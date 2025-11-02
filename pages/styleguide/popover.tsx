@@ -5,7 +5,7 @@ import { Input } from 'retend-utils/components'
 
 function PopoverTest() {
    const popoverIsOpen = Cell.source(false)
-   const anchorRef = Cell.source<HTMLElement | null>(null)
+   const anchorRef = Cell.source<HTMLButtonElement | null>(null)
    const positionArea = Cell.source<PositionArea>('bottom center')
    const justifySelf = Cell.source<Alignment | undefined>(undefined)
    const alignSelf = Cell.source<Alignment | undefined>(undefined)

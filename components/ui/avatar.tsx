@@ -11,6 +11,7 @@ interface AvatarProps extends IntrinsicButtonProps {
    src?: JSX.ValueOrCell<string | null | undefined>
    alt?: string
    size?: JSX.ValueOrCell<'small' | 'medium' | 'large'>
+   ref?: Cell<HTMLButtonElement | null>
 }
 
 export function Avatar(props: AvatarProps) {
