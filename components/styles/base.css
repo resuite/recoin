@@ -281,9 +281,9 @@ body {
 @utility button-click-effect {
    @apply relative;
    @apply before:pointer-events-none before:block before:absolute before:h-full before:w-full;
-   @apply data-clicked:scale-95 data-clicked:duration-fast;
-   @apply before:opacity-0 before:bg-black/10 before:transition-[opacity,scale] data-clicked:before:duration-fast;
-   @apply data-clicked:before:opacity-100 before:duration-bit-slower data-clicked:before:scale-105;
+   @apply data-clicked:scale-95 data-clicked:duration-default;
+   @apply before:opacity-0 before:bg-black/10 before:transition-[opacity,scale] data-clicked:before:duration-default;
+   @apply data-clicked:before:opacity-100 before:duration-bit-slower data-clicked:before:scale-[calc(1/.95)];
 }
 
 @utility btn-danger {

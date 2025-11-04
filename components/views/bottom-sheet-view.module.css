@@ -63,10 +63,11 @@
 
    position: relative;
    pointer-events: auto;
-   will-change: translate;
+   will-change: translate, opacity;
    grid-area: 1 / 1;
    animation: slide-up-from-under var(--speed-device) var(--timing) backwards;
-   transition: translate var(--speed-device) var(--timing);
+   transition: translate var(--speed-device) var(--timing), opacity var(--speed-device)
+      var(--timing);
 
    --sheet-sizing-speed: 350ms;
 }
@@ -118,7 +119,8 @@
 
 @keyframes slide-up-from-under {
    from {
-      translate: 0 var(--sheet-content-height);
+      translate: 0 70%;
+      opacity: 0;
    }
 }
 
