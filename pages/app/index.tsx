@@ -68,7 +68,7 @@ const AppRoot = () => {
    return (
       <FullScreenTransitionView
          when={ready}
-         transition='fade-in'
+         transition='slide-up'
          from={StartPage}
          to={AppContent}
          class='grid-lines-with-fade'

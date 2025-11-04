@@ -20,7 +20,7 @@ export const TransactionSheetHeader = (props: HeaderProps) => {
 
    return (
       <UniqueTransition
-         name='transaction-sheet-header'
+         name={`transaction-sheet-header-${transaction.id}`}
          transitionDuration='var(--sheet-sizing-speed)'
          transitionTimingFunction='ease'
          class='w-full flex! flex-col items-center gap-y-0.25 border-b-2 border-b-gray-500/50 mb-1'
