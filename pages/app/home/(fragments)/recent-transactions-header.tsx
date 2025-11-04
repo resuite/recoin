@@ -119,12 +119,13 @@ export const RecentTransactionsHeader = () => {
          >
             <h4
                class={[
-                  'text-center pt-0.5 grid grid-cols-1 *:[grid-area:1/1]',
-                  'before:content before:mx-1 before:[grid-area:1/1] before:self-end before:h-[2px] before:bg-canvas-text',
-                  'before:scale-x-0 before:transition-transform before:duration-default before:origin-left',
+                  'text-center px-1 grid grid-cols-1 *:[grid-area:1/1]',
+                  'before:content before:h-full before:scale-y-[1.6] before:[grid-area:1/1] before:self-end',
+                  'before:origin-top-left',
+                  'before:bg-linear-to-b before:from-canvas-background before:from-70% before:to-transparent',
+                  'before:opacity-0',
                   {
-                     'bg-canvas-background [box-shadow:-1px_9px_21px_0_#00000012]': stuck,
-                     'before:scale-x-100!': stuck,
+                     'before:opacity-100!': stuck,
                      'before:hidden': searchIsOpen
                   }
                ]}
@@ -148,8 +149,8 @@ export const RecentTransactionsHeader = () => {
                   onClick={toggleSearch}
                >
                   {If(searchIsOpen, {
-                     true: () => <Add class='h-1 w-1 mr-1 [&_path]:stroke-3 rotate-45' />,
-                     false: () => <Search class='h-1 w-1 mr-1 [&_path]:stroke-2' />
+                     true: () => <Add class='h-1 w-1 [&_path]:stroke-3 rotate-45' />,
+                     false: () => <Search class='h-1 w-1 [&_path]:stroke-2' />
                   })}
                </Button>
                {If(searchIsOpen, () => (

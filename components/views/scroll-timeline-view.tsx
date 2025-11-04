@@ -100,6 +100,10 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
 
          const cleanup = () => {
             animation.finish()
+            try {
+               animation.timeline = null
+               // may fail on firefox
+            } catch {}
             if (!hasScrollTimelineSupport) {
                const index = scrollAnimations.findIndex((animationData) => {
                   return animationData.animation === animation

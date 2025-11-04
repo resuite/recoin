@@ -8,9 +8,14 @@ export const HomeStats = () => {
    const { currency } = useAuthContext()
    const { balance, totalIncome, totalExpense } = useWorkspaceBalance()
 
+   const underlineClasses = [
+      'after:content after:absolute after:left-0 after:bottom-0 after:w-full after:h-[3px] after:bg-canvas-text',
+      'after:origin-left after:animate-lining after:[animation-delay:var(--speed-bit-slower)]'
+   ]
+
    return (
       <div class='px-1 grid grid-cols-2 gap-x-1'>
-         <div class='text-center py-0.75 border-b-3 col-span-2'>
+         <div class={['relative text-center py-0.75 col-span-2', ...underlineClasses]}>
             <h4 class='text-lg'>Current Balance</h4>
             <FitText scalingFactor={1.7} maxFontSize='var(--text-logo)' class='h-3.5'>
                <FormattedMoney currency={currency}>{balance}</FormattedMoney>
@@ -18,7 +23,9 @@ export const HomeStats = () => {
          </div>
 
          {/* Income */}
-         <div class='border-b-3 py-0.75 grid grid-cols-[auto_auto] gap-x-0.25'>
+         <div
+            class={['relative py-0.75 grid grid-cols-[auto_auto] gap-x-0.25', ...underlineClasses]}
+         >
             <Arrows class='h-0.75 justify-self-end' />
             <h4 class='text-sm justify-self-start'>Income</h4>
             <FitText
@@ -31,7 +38,12 @@ export const HomeStats = () => {
          </div>
 
          {/* Expense */}
-         <div class='border-b-3 py-0.75 grid grid-rows-[auto_1fr] grid-cols-[auto_auto] gap-x-0.25'>
+         <div
+            class={[
+               'relative py-0.75 grid grid-rows-[auto_1fr] grid-cols-[auto_auto] gap-x-0.25',
+               ...underlineClasses
+            ]}
+         >
             <Arrows class='h-0.75 justify-self-end' direction='top-right' />
             <h4 class='text-sm justify-self-start'>Expense</h4>
             <FitText
