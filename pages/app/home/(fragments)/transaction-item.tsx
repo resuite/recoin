@@ -4,12 +4,10 @@ import { FitText } from '@/components/ui/fit-text'
 import { FormattedMoney } from '@/components/ui/formatted-money'
 import { RelativeTime } from '@/components/ui/relative-time'
 import { QueryKeys } from '@/constants/query-keys'
-import { VibrationPatterns } from '@/constants/vibration'
 import type { Transaction } from '@/database/models/transaction'
 import { CategoryIcon } from '@/pages/app/home/(fragments)/category-icon'
 import { useAuthContext } from '@/scopes/auth'
 import { useCategory } from '@/utilities/composables/use-categories'
-import { vibrate } from '@/utilities/miscellaneous'
 import type { ListTemplateProps } from 'retend-utils/components'
 import { useRouteQuery } from 'retend/router'
 
@@ -24,7 +22,6 @@ export function TransactionItem(props: TransactionItemProps) {
    const sign = item.type === 'expense' ? '-' : '+'
 
    const openDrawer = () => {
-      vibrate(VibrationPatterns.ButtonPress)
       query.set(QueryKeys.TransactionSheet.OpenItemId, item.id)
    }
 

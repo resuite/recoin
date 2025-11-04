@@ -50,7 +50,7 @@ function addClickTracker(ref: Cell<HTMLElement | null>, shouldTrack: Cell<boolea
                { once: true }
             )
          }
-      }, 100)
+      }, 30)
       tracker.addEventListener('end', handleTrackingEnd)
    }
 
