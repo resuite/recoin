@@ -11,11 +11,7 @@ const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', ye
 
 export function DateInput(props: DateInputProps) {
    const { ref = Cell.source(null), model, ...rest } = props
-   const max = new Date().toLocaleDateString('en-CA', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-   })
+   const max = new Date().toLocaleDateString(navigator.languages[0])
 
    const inputIsUnfilled = Cell.derived(() => {
       return !model?.get()

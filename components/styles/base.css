@@ -88,7 +88,7 @@ body {
    --timing-bounce: cubic-bezier(0.3, 0.75, 0.45, 1.2);
    --timing-bounce-slower: cubic-bezier(0.3, 0.4, 0.05, 1.5);
 
-   --speed-device: calc(var(--default-speed) * 2.75);
+   --speed-device: calc(var(--default-speed) * 2.9);
    --speed-default: var(--default-speed);
    --speed-faster: calc(var(--default-speed) * 0.5);
    --speed-fast: calc(var(--default-speed) * 0.75);
@@ -107,9 +107,10 @@ body {
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
    --fab-size: max(12dvh, 50px);
 
-   --floating-button-layer: 97;
-   --popover-layer: 98;
-   --z-index-bottom-sheet: 99;
+   --floating-button-layer: 96;
+   --popover-layer: 97;
+   --z-index-bottom-sheet: 98;
+   --z-index-transition: 99;
 }
 
 @layer base {
@@ -381,4 +382,14 @@ input,
 select,
 a {
    touch-action: manipulation;
+}
+
+retend-unique-instance {
+   position: relative;
+   will-change: transform;
+   transform: translateZ(0);
+
+   & > * {
+      isolation: isolate;
+   }
 }

@@ -1,6 +1,7 @@
 export class PointerTracker extends EventTarget {
    startingEvent!: PointerEvent
    initialTarget!: HTMLElement
+   #hasMoved = false
 
    constructor() {
       super()
@@ -36,7 +37,12 @@ export class PointerTracker extends EventTarget {
       super.removeEventListener(type, listener, options)
    }
 
+   get hasMoved() {
+      return this.#hasMoved
+   }
+
    private move(event: PointerEvent) {
+      this.#hasMoved = true
       if (event.getCoalescedEvents !== undefined) {
          const events = event.getCoalescedEvents()
          for (const _event of events) {

@@ -25,7 +25,7 @@ export function TransactionItem(props: TransactionItemProps) {
 
    const openDrawer = () => {
       vibrate(VibrationPatterns.ButtonPress)
-      query.set(QueryKeys.RecentTransactions.OpenItemId, item.id)
+      query.set(QueryKeys.TransactionSheet.OpenItemId, item.id)
    }
 
    if (!category) {

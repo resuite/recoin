@@ -5,8 +5,12 @@ export const QueryKeys = {
       StartingBalance: 'Onboarding.StartingBalance'
    },
    RecentTransactions: {
-      SearchIsOpen: 'RecentTransactions.SearchIsOpen',
-      OpenItemId: 'RecentTransactions.OpenItemId'
+      SearchIsOpen: 'RecentTransactions.SearchIsOpen'
+   },
+   TransactionSheet: {
+      _root: 'TransactionSheet',
+      OpenItemId: 'TransactionSheet.OpenItemId',
+      IsInEditMode: 'TransactionSheet.IsEditMode'
    },
    TransactionFlow: {
       _root: 'TransactionFlow',

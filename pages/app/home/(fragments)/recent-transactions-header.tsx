@@ -111,16 +111,16 @@ export const RecentTransactionsHeader = () => {
 
    return (
       <>
-         {/* Can;t explain the logic behind the zero-height and translation. It just works. */}
-         <div ref={relativeTopOfStickyAreaRef} class='h-0 bg-red-300 translate-y-[10px]' />
+         {/* Can't explain the logic behind the zero-height and translation. It just works. */}
+         <div ref={relativeTopOfStickyAreaRef} class='h-0 scroll-mt-px translate-y-[10px]' />
          <Sticky
             onStickStateChange={handleStickStateChange}
             onStickTimelineRangeSet={handleStickTimelineRangeSet}
          >
             <h4
                class={[
-                  'text-center pt-0.5 mx-1 grid grid-cols-1 *:[grid-area:1/1]',
-                  'before:content before:[grid-area:1/1] before:self-end before:h-[2px] before:bg-canvas-text',
+                  'text-center pt-0.5 grid grid-cols-1 *:[grid-area:1/1]',
+                  'before:content before:mx-1 before:[grid-area:1/1] before:self-end before:h-[2px] before:bg-canvas-text',
                   'before:scale-x-0 before:transition-transform before:duration-default before:origin-left',
                   {
                      'bg-canvas-background [box-shadow:-1px_9px_21px_0_#00000012]': stuck,
@@ -148,8 +148,8 @@ export const RecentTransactionsHeader = () => {
                   onClick={toggleSearch}
                >
                   {If(searchIsOpen, {
-                     true: () => <Add class='h-1 w-1 [&_path]:stroke-3 rotate-45' />,
-                     false: () => <Search class='h-1 w-1 [&_path]:stroke-2' />
+                     true: () => <Add class='h-1 w-1 mr-1 [&_path]:stroke-3 rotate-45' />,
+                     false: () => <Search class='h-1 w-1 mr-1 [&_path]:stroke-2' />
                   })}
                </Button>
                {If(searchIsOpen, () => (

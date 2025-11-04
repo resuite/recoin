@@ -1,7 +1,7 @@
 import { animationsSettled } from '@/utilities/animations'
 import { defer } from '@/utilities/miscellaneous'
 import { Cell, If, type SourceCell, useObserver } from 'retend'
-import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
+import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
 import { Teleport } from 'retend/teleport'
@@ -71,7 +71,11 @@ export function BottomSheet(props: BottomSheetProps) {
    const isOpen = useDerivedValue(isOpenProp)
    const dialogOpen = Cell.source(isOpen.get())
    const dialogRef = Cell.source<HTMLDialogElement | null>(null)
-   const sheetContentHeight = Cell.source('auto')
+   const sheetContentHeight = Cell.source(0)
+   const sheetContentHeightStr = Cell.derived(() => {
+      const height = sheetContentHeight.get()
+      return height ? `${height}px` : '70dvh'
+   })
 
    if (dynamicSizing) {
       contentRef.listen(() => {
@@ -80,10 +84,9 @@ export function BottomSheet(props: BottomSheetProps) {
          // so we use a ResizeObserver to observe the content's height
          // and update accordingly.
          observer.onConnected(contentRef, (content) => {
-            sheetContentHeight.set(`${content.clientHeight}px`)
-
+            sheetContentHeight.set(content.clientHeight)
             const resizeObserver = new ResizeObserver(([entry]) => {
-               sheetContentHeight.set(`${entry.contentRect.height}px`)
+               sheetContentHeight.set(entry.contentRect.height)
             })
             resizeObserver.observe(content)
             return () => {
@@ -91,10 +94,7 @@ export function BottomSheet(props: BottomSheetProps) {
             }
          })
       })
-   } else {
-      sheetContentHeight.set('70dvh')
    }
-
    async function startCloseSequence() {
       dialogRef.peek()?.classList.add(styles.closing)
       await animationsSettled(contentRef)
@@ -111,89 +111,111 @@ export function BottomSheet(props: BottomSheetProps) {
          // opening the sheet
          dialogOpen.set(isOpen)
          dialogElement?.show()
-      } else if (!isOpen && dialogElement?.open) {
+      } else if (!isOpen) {
          // closing the sheet
-         await startCloseSequence()
-         dialogOpen.set(isOpen)
+         if (!dialogElement?.classList.contains(styles.closing)) {
+            await startCloseSequence()
+         }
          dialogElement?.close()
+         dialogOpen.set(isOpen)
       }
    }
 
    dialogRef.listen(() => {
-      // The 'pull' behavior is created using scroll snaps, and the intersection
-      // observer checks that the user has pulled down a reasonable amount
-      // before closing.
-      useIntersectionObserver(
-         contentRef,
-         ([entry]) => {
-            const dialog = dialogRef.peek()
-            const shouldClose =
-               !entry.isIntersecting &&
-               entry.intersectionRatio !== 0 &&
-               dialog?.classList.contains(styles.snapped)
-
-            if (shouldClose) {
-               const content = contentRef.get()
-               if (!content) {
-                  return
-               }
-               // The sheet's "pull" is CSS scroll, not translation.
-               // To avoid a visual jump before animating out, this sets the content's `translateY`
-               // to its current scrolled position, ensuring a smooth transition.
-               const contentRectBeforeClose = content.getBoundingClientRect()
-               const initialDistanceFromViewportTop =
-                  window.innerHeight - contentRectBeforeClose.height
-               const currentDistanceFromViewportTop = contentRectBeforeClose.y
-               const distanceToTranslate =
-                  currentDistanceFromViewportTop - initialDistanceFromViewportTop
-
-               content.style.translate = `0px ${distanceToTranslate}px`
-
-               onClose?.()
-            }
-         },
-         () => {
-            return {
-               root: dialogRef.peek(),
-               threshold: 0.3
-            }
-         }
-      )
-
-      observer.onConnected(dialogRef, async (dialog) => {
-         handleIsOpenChange(isOpen.get())
-         await animationsSettled(contentRef)
-         dialog.classList.add(styles.snapped)
-         dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
-         defer(() => {
-            // Omo idk. If either of the scrollTo() calls is
-            // removed, the sheet content either glitches or doesn't scroll to the bottom.
-            // Sometimes in Firefox, sometimes in Chromium (gasp), sometimes in Safari.
-            dialog.scrollTo({ top: dialog.scrollHeight, behavior: 'instant' })
-         })
-      })
+      // // The 'pull' behavior is created using scroll snaps, and the intersection
+      // // observer checks that the user has pulled down a reasonable amount
+      // // before closing.
+      // useIntersectionObserver(
+      //    contentRef,
+      //    ([entry]) => {
+      //       const shouldClose = !entry.isIntersecting && entry.intersectionRatio !== 0
+      //       if (shouldClose) {
+      //          const content = contentRef.get()
+      //          if (!content) {
+      //             return
+      //          }
+      //          // The sheet's "pull" is CSS scroll, not translation.
+      //          // To avoid a visual jump before animating out, this sets the content's `translateY`
+      //          // to its current scrolled position, ensuring a smooth transition.
+      //          const contentRectBeforeClose = content.getBoundingClientRect()
+      //          const initialDistanceFromViewportTop =
+      //             window.innerHeight - contentRectBeforeClose.height
+      //          const currentDistanceFromViewportTop = contentRectBeforeClose.y
+      //          const distanceToTranslate =
+      //             currentDistanceFromViewportTop - initialDistanceFromViewportTop
+      //          content.style.translate = `0px ${distanceToTranslate}px`
+      //          onClose?.()
+      //       }
+      //    },
+      //    () => {
+      //       return { root: dialogRef.peek(), threshold: 0.3 }
+      //    }
+      // )
    })
 
    isOpen.listen(handleIsOpenChange)
 
-   return If(dialogOpen, () => {
-      return (
-         <Teleport to='body'>
+   return (
+      <Teleport to='body'>
+         {If(dialogOpen, () => (
             <dialog
                ref={dialogRef}
                data-content-open={isOpen}
                class={styles.dialog}
                onClick--self={handleClickOutside}
                data-dynamic-sizing={dynamicSizing}
-               style={{ '--sheet-content-height': sheetContentHeight }}
+               onClose={onClose}
+               style={{ '--sheet-content-height': sheetContentHeightStr }}
             >
                <div {...rest} ref={contentRef} class={[styles.sheetContentContainer, rest.class]}>
+                  {If(dynamicSizing, () => (
+                     <AnimatedBackground
+                        class={styles.sheetContentContainerBackground}
+                        height={sheetContentHeight}
+                     />
+                  ))}
                   {children()}
                </div>
             </dialog>
-         </Teleport>
-      )
+         ))}
+      </Teleport>
+   )
+}
+
+interface AnimatedBackgroundProps extends DivProps {
+   height?: JSX.ValueOrCell<number>
+   ref?: Cell<HTMLElement | null>
+}
+
+function AnimatedBackground(props: AnimatedBackgroundProps) {
+   const { height: heightProp, ref = Cell.source(null), ...rest } = props
+   const height = useDerivedValue(heightProp)
+   const observer = useObserver()
+
+   observer.onConnected(ref, (div) => {
+      let initialHeight = 0
+
+      const updateHeight = (nextHeight?: number) => {
+         if (div && nextHeight && initialHeight) {
+            div.style.setProperty('--nextHeight', nextHeight.toString())
+         }
+      }
+
+      defer(() => {
+         div.style.height = `${height.get()}px`
+         initialHeight = height.get() || 0
+         div.style.setProperty('--initialHeight', initialHeight.toString())
+         div.style.setProperty('--nextHeight', initialHeight.toString())
+      })
+
+      height.listen(updateHeight)
+
+      return () => {
+         height.ignore(updateHeight)
+      }
    })
+
+   return <div {...rest} ref={ref} />
 }
 
 /**

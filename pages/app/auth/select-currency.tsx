@@ -22,7 +22,7 @@ const CurrencySelection = () => {
    }
 
    return (
-      <SafeAreaView class='px-1 pt-2 pb-1 grid-lines-with-fade grid grid-rows-[auto_auto_1fr_auto] gap-0.5 animate-stagger-load'>
+      <SafeAreaView class='grid-lines-with-fade grid grid-rows-[auto_auto_1fr_auto] gap-0.5 animate-stagger-load'>
          <form onSubmit--prevent={goToInitialBalancePage} class='contents'>
             <h1 class='text-logo relative'>
                Welcome <br /> to recoin.

@@ -1,11 +1,14 @@
 import { Button } from '@/components/ui/button'
-import { scrollTimelineFallback } from '@/utilities/scrolling'
+import {
+   ScrollTimelineView,
+   useScrollTimelineContext
+} from '@/components/views/scroll-timeline-view'
 import { Cell, For, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './tab-switcher-view.module.css'
 
-type SectionProps = JSX.IntrinsicElements['section']
+type DivProps = JSX.IntrinsicElements['div']
 export interface Tab {
    heading: () => JSX.Template
    body: () => JSX.Template
@@ -19,7 +22,7 @@ interface TabScopeData {
 }
 const TabScope = createScope<TabScopeData>()
 
-export interface TabSwitcherViewProps<T extends Tab> extends SectionProps {
+export interface TabSwitcherViewProps<T extends Tab> extends DivProps {
    /**
     * Specifies the tabs to be displayed. Can be a static array or a reactive cell.
     */
@@ -86,6 +89,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
       return tabs.get().length
    })
    const headerRef = Cell.source<HTMLElement | null>(null)
+   const underlineRef = Cell.source<HTMLElement | null>(null)
    const activeTab = Cell.source(0)
    /**
     * If the scroll to a tab is triggered by a click
@@ -165,23 +169,34 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
       }
    })
 
-   // Polyfill animation-timeline: scroll() on unsupported browsers.
-   observer.onConnected(tabContainerRef, scrollTimelineFallback)
-
    return (
       <TabScope.Provider value={tabSwitcherData}>
          {() => (
-            <section
+            <ScrollTimelineView
                {...rest}
+               axis='inline'
                ref={tabContainerRef}
                style={{ '--tabs': tabCount, '--min-tab-header-width': minTabHeaderWidth }}
                class={[styles.tabSwitcherContainer, rest.class]}
             >
-               <header ref={headerRef} class={[styles.header, headerClasses]}>
-                  {For(tabs, TabHeader)}
-               </header>
-               <div class={styles.tabContentContainer}>{For(tabs, TabBody)}</div>
-            </section>
+               {() => {
+                  const timeline = useScrollTimelineContext()
+                  timeline.add({
+                     target: underlineRef,
+                     keyframes: { translate: ['0', `${(tabs.get().length - 1) * 100}%`] }
+                  })
+
+                  return (
+                     <>
+                        <header ref={headerRef} class={[styles.header, headerClasses]}>
+                           {For(tabs, TabHeader)}
+                           <div class={styles.underline} ref={underlineRef} />
+                        </header>
+                        <div class={styles.tabContentContainer}>{For(tabs, TabBody)}</div>
+                     </>
+                  )
+               }}
+            </ScrollTimelineView>
          )}
       </TabScope.Provider>
    )
