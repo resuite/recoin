@@ -38,6 +38,7 @@
    background-color: var(--expand-color);
    pointer-events: none;
    inset: var(--expand-origin);
+   isolation: isolate;
    will-change: opacity, scale;
    transition-property: scale;
 
