@@ -50,9 +50,9 @@
       "google-auth-library": "^10.3.0",
       "hono": "^4.7.11",
       "jose": "^6.1.0",
-      "retend": "https://pkg.pr.new/resuite/retend@664a7f2",
-      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@664a7f2",
-      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@664a7f2",
+      "retend": "^0.0.22",
+      "retend-server": "^0.0.22",
+      "retend-utils": "^0.0.22",
       "zod": "^3.25.46"
    },
    "lint-staged": {
