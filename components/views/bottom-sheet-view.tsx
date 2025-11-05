@@ -1,5 +1,4 @@
 import { animationsSettled } from '@/utilities/animations'
-import { defer } from '@/utilities/miscellaneous'
 import { Cell, If, type SourceCell, useObserver } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -83,7 +82,8 @@ export function BottomSheet(props: BottomSheetProps) {
          // This is not always possible to know ahead of time,
          // so we use a ResizeObserver to observe the content's height
          // and update accordingly.
-         observer.onConnected(contentRef, (content) => {
+         observer.onConnected(contentRef, async (content) => {
+            await animationsSettled(content)
             sheetContentHeight.set(content.clientHeight)
             const resizeObserver = new ResizeObserver(([entry]) => {
                sheetContentHeight.set(entry.contentRect.height)
@@ -183,7 +183,7 @@ export function BottomSheet(props: BottomSheetProps) {
 }
 
 interface AnimatedBackgroundProps extends DivProps {
-   height?: JSX.ValueOrCell<number>
+   height: JSX.ValueOrCell<number>
    ref?: Cell<HTMLElement | null>
 }
 
@@ -193,20 +193,17 @@ function AnimatedBackground(props: AnimatedBackgroundProps) {
    const observer = useObserver()
 
    observer.onConnected(ref, (div) => {
-      let initialHeight = 0
+      let initialHeightSet = false
 
-      const updateHeight = (nextHeight?: number) => {
-         if (div && nextHeight && initialHeight) {
+      const updateHeight = (nextHeight: number) => {
+         if (!initialHeightSet) {
+            initialHeightSet = true
+            div.setAttribute('data-tracking', 'true')
+            div.style.setProperty('--initialHeight', nextHeight.toString())
+         } else {
             div.style.setProperty('--nextHeight', nextHeight.toString())
          }
       }
-
-      defer(() => {
-         div.style.height = `${height.get()}px`
-         initialHeight = height.get() || 0
-         div.style.setProperty('--initialHeight', initialHeight.toString())
-         div.style.setProperty('--nextHeight', initialHeight.toString())
-      })
 
       height.listen(updateHeight)
 

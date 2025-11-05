@@ -1,3 +1,4 @@
+import { TRANSACTION_ITEM_HEIGHT } from '@/constants'
 import { TransactionItem } from '@/pages/app/home/(fragments)/transaction-item'
 import TransactionItemBottomSheet from '@/pages/app/home/transaction-sheet'
 import { useTransactions } from '@/utilities/composables/use-transactions'
@@ -7,11 +8,11 @@ export function TransactionListing() {
    const transactions = useTransactions()
 
    return (
-      <div class='pb-3 w-full h-full'>
+      <div class='mb-3 w-full h-full'>
          <FluidList
             items={transactions}
             itemKey='id'
-            itemHeight='70px'
+            itemHeight={TRANSACTION_ITEM_HEIGHT}
             itemWidth='100%'
             gap='5px'
             direction='block'

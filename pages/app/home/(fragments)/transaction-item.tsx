@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { FitText } from '@/components/ui/fit-text'
 import { FormattedMoney } from '@/components/ui/formatted-money'
 import { RelativeTime } from '@/components/ui/relative-time'
+import { TRANSACTION_ITEM_HEIGHT } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import type { Transaction } from '@/database/models/transaction'
 import { CategoryIcon } from '@/pages/app/home/(fragments)/category-icon'
@@ -32,27 +33,34 @@ export function TransactionItem(props: TransactionItemProps) {
    return (
       <Button
          type='button'
+         style={{
+            contain: 'strict',
+            containIntrinsicHeight: TRANSACTION_ITEM_HEIGHT,
+            width: 'calc(100dvw - var(--spacing) * 2)',
+            containIntrinsicWidth: 'calc(100dvw - var(--spacing) * 2)',
+            height: TRANSACTION_ITEM_HEIGHT
+         }}
          class={[
             'grid grid-cols-[auto_auto_1fr_auto] grid-rows-2 px-1 w-full whitespace-nowrap',
-            'rounded-none my-0.25 py-0.75',
+            'rounded-none',
             'button-bare button-click-effect'
          ]}
          trackClickedState
          onClick={openDrawer}
       >
-         <CategoryIcon icon={category.icon} class='h-2 w-2 row-span-2 mr-0.5' />
+         <CategoryIcon icon={category.icon} class='h-2 w-2 row-span-2 mr-0.5 self-center' />
          <Arrows
-            class='h-(--text-normal) w-(--text-normal) mr-[calc(var(--spacing)*0.15)] self-center'
+            class='h-(--text-normal) w-(--text-normal) mr-[calc(var(--spacing)*0.15)] mb-[15%] self-end'
             direction={arrowDirection}
          />
          <div
-            class='text-normal text-left self-center overflow-ellipsis max-w-full overflow-hidden'
+            class='text-normal text-left self-end overflow-ellipsis max-w-full overflow-hidden'
             title={category.name}
          >
             {category.name}
          </div>
          <FitText
-            class='w-full min-w-4 text-right justify-end row-span-2 pl-0.5'
+            class='w-full min-w-4 text-right self-center justify-end row-span-2 pl-0.5'
             scalingFactor={1.7}
             maxFontSize='var(--text-bigger)'
          >
@@ -65,7 +73,7 @@ export function TransactionItem(props: TransactionItemProps) {
                {item.amount}
             </FormattedMoney>
          </FitText>
-         <span class='col-span-2 inline-flex items-center gap-0.125 text-canvas-text/70'>
+         <span class='col-span-2 inline-flex items-start gap-0.125 text-canvas-text/70'>
             <span
                class='text-canvas-text/70 max-w-3 overflow-ellipsis overflow-hidden'
                title={item.label}

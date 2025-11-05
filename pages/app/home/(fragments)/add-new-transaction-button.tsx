@@ -82,7 +82,7 @@ export function AddNewTransactionButton() {
       <Teleport to={ROOT_APP_OUTLET_ID} class='light-scheme'>
          <FloatingActionButton
             class={[
-               { 'rotate-135 dark-scheme': transactionFlowIsOpen },
+               { 'rotate-135 scale-90 dark-scheme': transactionFlowIsOpen },
                { '-translate-x-[60%]': shouldDisplaceButton },
                { 'scale-0': isOnSuccessPage }
             ]}

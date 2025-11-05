@@ -5,3 +5,5 @@ export const GOOGLE_SCRIPT_SRC = 'https://accounts.google.com/gsi/client'
 export const ROOT_APP_OUTLET = 'appOutlet'
 export const ROOT_APP_OUTLET_ID = '#appOutlet'
 export const SEARCH_BUFFER_TIMEOUT_MS = 400
+export const TRANSACTION_ITEM_HEIGHT =
+   'calc(max(var(--text-normal) * 2, var(--spacing) * 2) + var(--spacing) * .75)'

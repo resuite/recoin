@@ -78,7 +78,7 @@
    bottom: 0;
    left: 0;
    width: 100%;
-   height: var(--current-height);
+   height: 100%;
    pointer-events: none;
 
    &::before {
@@ -87,9 +87,6 @@
       height: 3dvh;
       border-radius: 3dvh 3dvh 0 0;
       background-color: var(--color-canvas-background);
-      transition: translate var(--sheet-sizing-speed) ease;
-      /* The extra - 1px accounts for visual artifacts caused by browser approximation. */
-      translate: 0 calc(((var(--nextHeight) - var(--initialHeight)) * -1px) + 1px);
    }
 
    &::after {
@@ -98,10 +95,23 @@
       height: 100%;
       width: 100%;
       background-color: var(--color-canvas-background);
-      transition: scale var(--sheet-sizing-speed) ease;
-      scale: 1 calc(var(--nextHeight) / var(--initialHeight));
-      transform-origin: bottom;
       box-shadow: 0 -2px -8px 0 #00000095;
+   }
+
+   &[data-tracking] {
+      height: calc(var(--initialHeight) * 1px);
+
+      &::before {
+         transition: translate var(--sheet-sizing-speed) ease;
+         /* The extra - 1px accounts for visual artifacts caused by browser approximation. */
+         translate: 0 calc(((var(--nextHeight) - var(--initialHeight)) * -1px) + 1px);
+      }
+
+      &::after {
+         transition: scale var(--sheet-sizing-speed) ease;
+         scale: 1 calc(var(--nextHeight) / var(--initialHeight));
+         transform-origin: bottom;
+      }
    }
 }
 

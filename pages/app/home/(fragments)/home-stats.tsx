@@ -10,7 +10,7 @@ export const HomeStats = () => {
 
    const underlineClasses = [
       'after:content after:absolute after:left-0 after:bottom-0 after:w-full after:h-[3px] after:bg-canvas-text',
-      'after:origin-left after:animate-lining after:[animation-delay:var(--speed-slow)]'
+      'after:origin-left after:animate-lining'
    ]
 
    return (

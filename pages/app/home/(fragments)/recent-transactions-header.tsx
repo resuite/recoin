@@ -123,7 +123,7 @@ export const RecentTransactionsHeader = () => {
                   'before:content before:h-full before:scale-y-[1.6] before:[grid-area:1/1] before:self-end',
                   'before:origin-top-left',
                   'before:bg-linear-to-b before:from-canvas-background before:from-70% before:to-transparent',
-                  'before:opacity-0',
+                  'before:opacity-0 before:pointer-events-none',
                   {
                      'before:opacity-100!': stuck,
                      'before:hidden': searchIsOpen
