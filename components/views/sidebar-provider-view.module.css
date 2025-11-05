@@ -52,6 +52,7 @@
       border-top-left-radius: var(--radius-3xl);
       border-top-right-radius: var(--radius-3xl);
       z-index: var(--overlay-layer);
+      will-change: opacity;
    }
 }
 
