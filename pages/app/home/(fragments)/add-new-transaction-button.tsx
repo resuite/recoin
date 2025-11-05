@@ -13,7 +13,7 @@ import { useStore } from '@/scopes/livestore'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { useWorkspaceId } from '@/utilities/composables/use-workspace-id'
 import { createForm } from '@/utilities/form'
-import { createPointerOrClickHander, mergeDateAndTime, vibrate } from '@/utilities/miscellaneous'
+import { createPointerOrClickHandler, mergeDateAndTime, vibrate } from '@/utilities/miscellaneous'
 import { Cell } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import { Teleport } from 'retend/teleport'
@@ -69,7 +69,7 @@ export function AddNewTransactionButton() {
       return details.values.amount.get() > 0 && !isOnSuccessPage.get()
    })
 
-   const toggleState = createPointerOrClickHander(() => {
+   const toggleState = createPointerOrClickHandler(() => {
       vibrate(VibrationPatterns.ButtonPress)
       if (transactionFlowIsOpen.get()) {
          closeNewTransactionFlow()

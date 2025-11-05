@@ -64,7 +64,7 @@ export function getFocusableElementInItem(parent: Element) {
  * @param handler - The action to execute immediately.
  * @returns An event handler that triggers the action on the first pointer interaction.
  */
-export function createPointerOrClickHander(handler: () => void) {
+export function createPointerOrClickHandler(handler: () => void) {
    return (event: Event) => {
       const target = event.currentTarget as HTMLButtonElement
       if (event.type.startsWith('pointer')) {

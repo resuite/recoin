@@ -1,7 +1,7 @@
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
 import { VibrationPatterns } from '@/constants/vibration'
-import { createPointerOrClickHander, vibrate } from '@/utilities/miscellaneous'
+import { createPointerOrClickHandler, vibrate } from '@/utilities/miscellaneous'
 import { Cell, For, type SourceCell, useSetupEffect } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -74,7 +74,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
    return (
       <div {...rest} class={[styles.keypad, rest.class]}>
          {For(keys, (row) => {
-            const selectChar = createPointerOrClickHander(() => {
+            const selectChar = createPointerOrClickHandler(() => {
                vibrate(VibrationPatterns.ButtonPress)
                const newValue = model?.get() ?? ''
                model?.set(newValue + row.toString())

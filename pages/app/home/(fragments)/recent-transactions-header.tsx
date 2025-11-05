@@ -9,7 +9,7 @@ import {
 import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { defer } from '@/utilities/miscellaneous'
+import { createPointerOrClickHandler, defer } from '@/utilities/miscellaneous'
 import { Cell, If, useSetupEffect } from 'retend'
 import { Input } from 'retend-utils/components'
 import { useIntersectionObserver } from 'retend-utils/hooks'
@@ -30,13 +30,13 @@ export const RecentTransactionsHeader = () => {
    let relativeTopIsIntersecting = false
    let scheduleEffectsForNextRelativeTopIntersection = false
 
-   const toggleSearch = () => {
+   const toggleSearch = createPointerOrClickHandler(() => {
       if (searchIsOpen.get()) {
          closeSearch()
       } else {
          openSearch()
       }
-   }
+   })
 
    const handleStickStateChange = (event: StickStateChangeEvent) => {
       stuck.set(event.wasStuck)
@@ -50,8 +50,8 @@ export const RecentTransactionsHeader = () => {
       timeline.add({
          target: spanRef,
          keyframes: {
-            scale: ['1', '1.25'],
-            translate: ['0px 20%', 'calc(-50dvw + 50% + var(--spacing))']
+            scale: ['1', '1.3'],
+            translate: ['0px 20%', '0px 0px']
          },
          range: { start: event.start, end: event.end },
          signal: spanAnimationController.signal
@@ -65,7 +65,7 @@ export const RecentTransactionsHeader = () => {
          // use scrollContainer.scrollTo(sticky.offsetTop), because
          // it is absolutely positioned.
          const relativeTopOfStickyArea = relativeTopOfStickyAreaRef.peek()
-         relativeTopOfStickyArea?.scrollIntoView({ block: 'start' })
+         relativeTopOfStickyArea?.scrollIntoView({ block: 'start', behavior: 'smooth' })
          // We want to lock the outer scroll view when search is open,
          // but Safari fails yet again, because:
          // - If we lock before scrolling finishes, it cancels out, so
@@ -88,7 +88,9 @@ export const RecentTransactionsHeader = () => {
 
    const handleSearchOpenSideEffects = () => {
       timeline.lock()
-      defer(() => searchInputRef.peek()?.focus())
+      defer(() => {
+         searchInputRef.peek()?.focus()
+      })
    }
 
    searchIsOpen.listen(focusSearchStateIfOpen)
@@ -133,7 +135,7 @@ export const RecentTransactionsHeader = () => {
                <span
                   ref={spanRef}
                   class={[
-                     'origin-left will-change-[translate,scale] duration-slow transition-opacity',
+                     'will-change-[translate,scale] duration-slow transition-opacity',
                      'inline-block py-0.5 w-fit justify-self-center text-lg',
                      { 'opacity-0': searchIsOpen }
                   ]}
@@ -147,6 +149,7 @@ export const RecentTransactionsHeader = () => {
                      { 'opacity-100 translate-y-0!': stuck }
                   ]}
                   onClick={toggleSearch}
+                  onPointerDown={toggleSearch}
                >
                   {If(searchIsOpen, {
                      true: () => <Add class='h-1 w-1 [&_path]:stroke-3 rotate-45' />,
