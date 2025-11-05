@@ -117,7 +117,17 @@ function SidebarHeader(props: SidebarHeaderProps) {
 
 export function Sidebar() {
    return (
-      <div class='w-[65dvw] dark-scheme h-full py-2 text-header grid grid-rows-[auto_auto_auto_1fr]'>
+      <div
+         style={{
+            contain: 'strict',
+            containIntrinsicHeight: '100dvh',
+            containIntrinsicWidth: '65dvw'
+         }}
+         class={[
+            'w-[65dvw] h-screen',
+            'dark-scheme h-full py-2 text-header grid grid-rows-[auto_auto_auto_1fr]'
+         ]}
+      >
          <SidebarHeader />
          <LinkGroup links={upperLinks} />
          <SidebarDivider />

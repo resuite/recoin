@@ -1,4 +1,7 @@
-import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
+import {
+   ScrollTimelineView,
+   useScrollTimelineContext
+} from '@/components/views/scroll-timeline-view'
 import { Browsers, currentBrowser } from '@/utilities/browser'
 import { tryFn } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
@@ -217,17 +220,31 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                data-not-revealable={sidebarNotRevealable}
                class={[styles.provider, rest.class]}
             >
-               {() => (
-                  <>
-                     <div class={styles.sidebar} ref={sidebarRef}>
-                        {sidebar()}
-                     </div>
-                     <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
-                        {children?.()}
-                        <div ref={contentEdgeRef} class={styles.contentEdge} />
-                     </div>
-                  </>
-               )}
+               {() => {
+                  const timeline = useScrollTimelineContext()
+                  timeline.add({
+                     target: contentRef,
+                     keyframes: {
+                        opacity: ['0.65', '0']
+                     },
+                     pseudoElement: ':before',
+                     range: {
+                        start: 0,
+                        end: 0.7
+                     }
+                  })
+                  return (
+                     <>
+                        <div class={styles.sidebar} ref={sidebarRef}>
+                           {sidebar()}
+                        </div>
+                        <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
+                           {children?.()}
+                           <div ref={contentEdgeRef} class={styles.contentEdge} />
+                        </div>
+                     </>
+                  )
+               }}
             </ScrollTimelineView>
          )}
       </SidebarScope.Provider>

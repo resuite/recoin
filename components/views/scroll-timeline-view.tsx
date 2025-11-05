@@ -33,6 +33,7 @@ interface ScrollLinkedAnimationOptions {
    target: Cell<HTMLElement | null>
    keyframes: Array<Keyframe> | PropertyIndexedKeyframes
    range?: ScrollLinkedAnimationRange
+   pseudoElement?: ':before' | ':after'
    signal?: AbortSignal
 }
 
@@ -68,7 +69,7 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
    let timeline: ScrollTimeline | null = null
 
    const addLinkedAnimation = (animation: ScrollLinkedAnimationOptions) => {
-      const { target, keyframes, range, signal } = animation
+      const { target, keyframes, range, signal, pseudoElement = null } = animation
 
       observer.onConnected(target, (element) => {
          const start = range?.start ?? 0
@@ -80,12 +81,14 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
                  rangeStart: `${start * 100}%`,
                  rangeEnd: `${end * 100}%`,
                  fill: 'both',
-                 easing: 'linear'
+                 easing: 'linear',
+                 pseudoElement
               })
             : element.animate(keyframes, {
                  fill: 'both',
                  easing: 'linear',
-                 duration: GESTURE_ANIMATION_MS
+                 duration: GESTURE_ANIMATION_MS,
+                 pseudoElement
               })
 
          if (!hasScrollTimelineSupport) {

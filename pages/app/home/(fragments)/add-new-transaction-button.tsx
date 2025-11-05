@@ -2,6 +2,7 @@ import type { TransactionType } from '@/api/database/types'
 import Add from '@/components/icons/svg/add'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { ExpandingView } from '@/components/views/expanding-view'
+import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { VibrationPatterns } from '@/constants/vibration'
@@ -21,6 +22,7 @@ import { Teleport } from 'retend/teleport'
 export function AddNewTransactionButton() {
    const workspaceId = useWorkspaceId()
    const { currency: currencyRef } = useAuthContext()
+   const sidebarCtx = useSidebarContext()
    const store = useStore()
    const query = useRouteQuery()
    const {
@@ -72,8 +74,10 @@ export function AddNewTransactionButton() {
    const toggleState = createPointerOrClickHandler(() => {
       vibrate(VibrationPatterns.ButtonPress)
       if (transactionFlowIsOpen.get()) {
+         sidebarCtx.toggleSidebarEnabled(true)
          closeNewTransactionFlow()
       } else {
+         sidebarCtx.toggleSidebarEnabled(false)
          startNewTransactionFlow()
       }
    })
