@@ -121,7 +121,8 @@ export function Sidebar() {
          style={{
             contain: 'strict',
             containIntrinsicHeight: '100dvh',
-            containIntrinsicWidth: '65dvw'
+            containIntrinsicWidth: '65dvw',
+            contentVisibility: 'auto'
          }}
          class={[
             'w-[65dvw] h-screen',
