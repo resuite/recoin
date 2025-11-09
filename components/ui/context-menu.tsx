@@ -27,6 +27,7 @@ import { Teleport } from 'retend/teleport'
 import { DynamicIcon, type IconName } from '../icons'
 import Checkmark from '../icons/svg/checkmark'
 import styles from './context-menu.module.css'
+import { Input } from './input'
 
 export const ItemTypes = {
    Check: 'check',
@@ -519,7 +520,8 @@ function ContextMenuCheck(props: ContextMenuCheckItemProps) {
             <Checkmark class={styles.check} />
          ))}
          <ContextMenuOptionalIcon icon={icon} />
-         <input
+         <Input
+            label=''
             id={name}
             name={name}
             class={styles.checkItemInput}

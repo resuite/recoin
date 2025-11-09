@@ -1,3 +1,4 @@
+import { Input } from '@/components/ui/input'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
@@ -28,8 +29,8 @@ const KeyboardAvoidanceTest = () => {
                   Keyboard Height: {keyboardHeight}
                </p>
                <VirtualKeyboardTriggers>
-                  <input
-                     placeholder='Write something here...'
+                  <Input
+                     label='Write something here...'
                      class='w-full h-fit pl-0.25 mb-1 duration-slow will-change-transform'
                      style={{ translate }}
                   />

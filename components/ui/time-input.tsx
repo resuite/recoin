@@ -1,6 +1,6 @@
 import Clock from '@/components/icons/svg/clock'
 import { Cell, type SourceCell } from 'retend'
-import { Input, type InputProps } from 'retend-utils/components'
+import { Input, type InputProps } from './input'
 import styles from './time-input.module.css'
 
 interface TimeInputProps extends InputProps<'time'> {

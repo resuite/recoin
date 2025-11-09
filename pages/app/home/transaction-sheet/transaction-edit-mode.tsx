@@ -2,6 +2,7 @@ import Add from '@/components/icons/svg/add'
 import Checkmark from '@/components/icons/svg/checkmark'
 import { Button } from '@/components/ui/button'
 import { DateInput } from '@/components/ui/date-input'
+import { Input } from '@/components/ui/input'
 import { LocationInput } from '@/components/ui/location-input'
 import { TimeInput } from '@/components/ui/time-input'
 import {
@@ -14,7 +15,6 @@ import type { Transaction } from '@/database/models/transaction'
 import { TransactionSheetHeader } from '@/pages/app/home/transaction-sheet/(fragments)/transaction-sheet-header'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { createForm } from '@/utilities/form'
-import { Input } from 'retend-utils/components'
 
 interface TransactionEditModeProps {
    transaction: Transaction
@@ -49,13 +49,10 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
                         'animate-fade-in [--starting-translate:0_40%] [--starting-opacity:0]'
                      ]}
                   >
-                     <label>
-                        <span class='text-sm'>Label</span>
-                        <Input model={form.values.label} placeholder='Label' />
-                     </label>
-                     <DateInput model={form.values.date} placeholder='Date' />
-                     <TimeInput model={form.values.time} placeholder='Time' />
-                     <LocationInput model={form.values.location} placeholder='Location' />
+                     <Input label='Label' model={form.values.label} />
+                     <DateInput model={form.values.date} label='Date' />
+                     <TimeInput model={form.values.time} label='Time' />
+                     <LocationInput model={form.values.location} label='Location' />
                   </VirtualKeyboardTriggers>
                )}
             </VirtualKeyboardAwareView>

@@ -4,6 +4,7 @@ import Arrows from '@/components/icons/svg/arrows'
 import Checkmark from '@/components/icons/svg/checkmark'
 import { DateInput } from '@/components/ui/date-input'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
+import { Input } from '@/components/ui/input'
 import { LocationInput } from '@/components/ui/location-input'
 import { MoneyInput } from '@/components/ui/money-input'
 import { TimeInput } from '@/components/ui/time-input'
@@ -22,7 +23,6 @@ import { useCategory } from '@/utilities/composables/use-categories'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { scrollIntoView } from '@/utilities/miscellaneous'
 import { Cell, If, useScopeContext } from 'retend'
-import { Input } from 'retend-utils/components'
 import { useRouteQuery } from 'retend/router'
 
 const EnterTransactionDetails = () => {
@@ -90,13 +90,10 @@ const EnterTransactionDetails = () => {
                   >
                      <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
                         <MoneyInput model={form.values.amount} currency={currency} required />
-                        <Input model={form.values.label} type='text' required placeholder='Label' />
-                        <DateInput model={form.values.date} placeholder='Date' />
-                        <TimeInput model={form.values.time} placeholder='Time' />
-                        <LocationInput
-                           model={form.values.location}
-                           placeholder='Location (Optional)'
-                        />
+                        <Input label='Label' model={form.values.label} type='text' required />
+                        <DateInput model={form.values.date} label='Date' />
+                        <TimeInput model={form.values.time} label='Time' />
+                        <LocationInput model={form.values.location} label='Location (Optional)' />
                      </VirtualKeyboardTriggers>
                      {If(form.values.amount, () => (
                         <FloatingActionButton

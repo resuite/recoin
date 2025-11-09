@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { type Alignment, PopoverView, type PositionArea } from '@/components/views/popover-view'
 import { Cell, type SourceCell } from 'retend'
-import { Input } from 'retend-utils/components'
 
 function PopoverTest() {
    const popoverIsOpen = Cell.source(false)
@@ -20,18 +20,9 @@ function PopoverTest() {
             Open Popover
          </Button>
          <div class='grid grid-cols-3 gap-2'>
-            <label for='positionArea'>
-               <span>Position Area:</span>
-               <Input type='text' model={positionArea as SourceCell<string>} />
-            </label>
-            <label for='justifySelf'>
-               <span>Justify Self:</span>
-               <Input type='text' model={justifySelf as SourceCell<string>} />
-            </label>
-            <label for='alignSelf'>
-               <span>Align Self:</span>
-               <Input type='text' model={alignSelf as SourceCell<string>} />
-            </label>
+            <Input label='Position Area:' type='text' model={positionArea as SourceCell<string>} />
+            <Input label='Justify Self:' type='text' model={justifySelf as SourceCell<string>} />
+            <Input label='Align Self:' type='text' model={alignSelf as SourceCell<string>} />
          </div>
 
          <PopoverView

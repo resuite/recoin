@@ -1,6 +1,7 @@
 import Add from '@/components/icons/svg/add'
 import Search from '@/components/icons/svg/search'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
    type StickStateChangeEvent,
    type StickTimelineRangeSetEvent,
@@ -11,7 +12,6 @@ import { QueryKeys } from '@/constants/query-keys'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { createPointerOrClickHandler, defer } from '@/utilities/miscellaneous'
 import { Cell, If, useSetupEffect } from 'retend'
-import { Input } from 'retend-utils/components'
 import { useIntersectionObserver } from 'retend-utils/hooks'
 
 export const RecentTransactionsHeader = () => {

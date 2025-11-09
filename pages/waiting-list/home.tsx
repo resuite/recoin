@@ -3,10 +3,10 @@ import Arrows from '@/components/icons/svg/arrows'
 import Loader from '@/components/icons/svg/loader'
 import { Coins } from '@/components/illustrations/coins'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { WaitingListStateScope } from '@/scopes'
 import { useErrorNotifier } from '@/utilities/composables/use-error-notifier'
 import { Cell, If, useScopeContext } from 'retend'
-import { Input } from 'retend-utils/components'
 import { useRouter } from 'retend/router'
 
 function WaitingListHome() {
@@ -56,7 +56,7 @@ function WaitingListHome() {
                   class={['grid gap-y-0.5 max-w-17', 'max-md:place-items-center max-md:max-w-full']}
                   onSubmit--prevent={handleSubmit}
                >
-                  <Input model={email} type='email' placeholder='Enter your email' required />
+                  <Input label='Enter your email' model={email} type='email' required />
                   <Button
                      class={[
                         'grid grid-cols-[auto_auto] gap-x-0.25 place-items-center place-content-center',

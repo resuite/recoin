@@ -1,5 +1,6 @@
 import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { StackView, StackViewGroup } from '@/components/views/stack-view-group'
 import {
@@ -92,10 +93,10 @@ function SecondPage() {
                         </Button>
                      </div>
                      <VirtualKeyboardTriggers class='w-full text-big place-self-end'>
-                        <input
+                        <Input
                            class='duration-slow will-change-transform px-0.25'
                            type='text'
-                           placeholder='Enter text'
+                           label='Enter text'
                            style={{ translate }}
                         />
                      </VirtualKeyboardTriggers>

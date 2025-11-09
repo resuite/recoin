@@ -1,5 +1,6 @@
 import { AllIcons, Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useRouter } from 'retend/router'
 
 const Styleguide = () => {
@@ -92,19 +93,16 @@ function Inputs() {
       <div class='py-1 px-1 w-full'>
          <h2 class='text-header'>Inputs</h2>
          <div class='grid grid-cols-1 gap-0.5 py-1'>
-            <input type='text' placeholder='Text input' />
-            <input type='date' />
-            <input type='time' />
+            <Input type='text' label='Text input' />
+            <Input type='date' />
+            <Input type='time' />
             <select>
                <option>Option 1</option>
                <option>Option 2</option>
                <option>Option 3</option>
             </select>
-            <input type='range' />
-            <label>
-               Toggle
-               <input type='checkbox' />
-            </label>
+            <Input type='range' />
+            <Input type='checkbox' label='Toggle' />
          </div>
       </div>
    )

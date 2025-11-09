@@ -180,6 +180,7 @@ body {
    --caret: url("./svg/caret-light.svg");
 
    --canvas-text: var(--color-base);
+   --canvas-text-lighter: rgb(39, 39, 39, 0.75);
    --canvas: var(--color-light-yellow);
    --canvas-background: white;
    --canvas-shadow: var(--color-gray-200);
@@ -192,6 +193,7 @@ body {
    --color-canvas: var(--canvas);
    --color-canvas-background: var(--canvas-background);
    --color-canvas-text: var(--canvas-text);
+   --color-canvas-text-lighter: var(--canvas-text-lighter);
    --color-canvas-shadow: var(--canvas-shadow);
    --color-canvas-deep: #ffffff75;
 
@@ -213,6 +215,7 @@ body {
 
    --canvas-text: var(--color-light-yellow);
    --canvas: var(--color-base);
+   --canvas-text-lighter: rgb(250, 255, 237, 0.75);
    --canvas-background: var(--color-base);
    --canvas-shadow: #151515;
    --canvas-deep: #232323;
@@ -221,6 +224,7 @@ body {
    --color-canvas: var(--canvas);
    --color-canvas-background: var(--canvas-background);
    --color-canvas-text: var(--canvas-text);
+   --color-canvas-text-lighter: var(--canvas-text-lighter);
    --color-canvas-shadow: var(--canvas-shadow);
    --color-canvas-deep: var(--canvas-deep);
 

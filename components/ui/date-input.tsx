@@ -1,7 +1,7 @@
 import Calendar from '@/components/icons/svg/calendar'
 import { Cell, type SourceCell } from 'retend'
-import { Input, type InputProps } from 'retend-utils/components'
 import styles from './date-input.module.css'
+import { Input, type InputProps } from './input'
 
 interface DateInputProps extends InputProps<'date'> {
    ref?: SourceCell<HTMLInputElement | null>

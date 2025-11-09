@@ -2,6 +2,7 @@ import { getCurrencyDecimals } from '@/utilities/money'
 import { Cell, type SourceCell } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { Input } from './input'
 import styles from './money-input.module.css'
 
 type InputProps = JSX.IntrinsicElements['input']
@@ -46,7 +47,8 @@ export function MoneyInput(props: MoneyInputProps) {
 
    return (
       <div class={styles.moneyInputContainer}>
-         <input
+         <Input
+            label='Amount'
             {...rest}
             class={[styles.input, rest.class]}
             ref={inputRef}
@@ -54,7 +56,6 @@ export function MoneyInput(props: MoneyInputProps) {
             onInput={update}
             value={outerValueFormatted}
             inputmode='decimal'
-            placeholder='Amount'
          />
       </div>
    )

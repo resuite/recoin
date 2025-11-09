@@ -4,21 +4,29 @@
    grid-template-columns: 1fr;
    grid-template-rows: 1fr;
 
+   label {
+      grid-area: 1 / 1;
+      width: 100%;
+      min-height: calc(var(--spacing) * 2 + var(--text-sm));
+   }
+
    input {
+      all: unset;
       width: 100%;
       height: 100%;
+      appearance: none;
+      opacity: 0;
       min-height: calc(var(--spacing) * 2);
-      grid-area: 1 / 1;
    }
 }
 
 .locationPlaceholder {
    display: grid;
    align-content: center;
+   padding-top: calc(var(--text-sm) + var(--spacing) * 0.5);
    border-bottom: 3px solid var(--color-canvas-text);
-   grid-template-columns: 1fr;
+   grid-template-columns: 1fr auto;
    grid-area: 1 / 1;
-   width: 100%;
 }
 
 .locationInputLocationIcon {

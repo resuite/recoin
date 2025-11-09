@@ -47,6 +47,15 @@
             "noUnusedFunctionParameters": "error",
             "noUnusedImports": "error",
             "noUndeclaredVariables": "error"
+         },
+         "a11y": {
+            "noLabelWithoutControl": {
+               "level": "error",
+               "options": {
+                  "inputComponents": ["Input", "_Input"],
+                  "labelAttributes": ["label"]
+               }
+            }
          }
       }
    }
