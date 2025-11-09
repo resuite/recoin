@@ -24,7 +24,7 @@
 .sidebar {
    scroll-snap-align: start;
 
-   .provider:not([data-is-opening]) & {
+   body[data-has-expanded-content] & {
       visibility: hidden;
    }
 }

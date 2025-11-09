@@ -24,7 +24,10 @@ const Home = () => {
       <Stage class='grid grid-rows-[auto_1fr]'>
          <Header />
          <main class='max-h-0 min-h-full'>
-            <ScrollTimelineView axis='block'>
+            <ScrollTimelineView
+               axis='block'
+               class='[body[data-has-expanded-content]_&]:overflow-y-hidden!'
+            >
                {() => (
                   <>
                      <Greeting />

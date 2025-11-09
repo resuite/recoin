@@ -2,22 +2,32 @@
    --expand-origin: calc(50% - 10px) calc(50% - 10px);
    --expand-color: var(--color-canvas-text);
    --expand-size: var(--fab-size);
-   display: contents;
+   position: fixed;
+   z-index: var(--epxanding-view-layer);
+   display: none;
+   grid: 1fr / 1fr;
    isolation: isolate;
    overflow: hidden;
+   height: 100dvh;
+   width: 100dvw;
    max-height: 100dvh;
    max-width: 100dvw;
+   contain: strict;
+
+   &[data-open],
+   &[data-content-loaded] {
+      display: grid;
+   }
 }
 
 .content {
-   position: fixed;
    top: 0;
    width: 100dvw;
    height: 100dvh;
-   isolation: isolate;
+   grid-area: 1 / 1;
 
    &:empty,
-   &:not(.container[data-open] > &) {
+   .container:not([data-open]) > & {
       display: none;
    }
 }
@@ -31,25 +41,42 @@
    visible.
 */
 .clipPath {
-   position: fixed;
    width: var(--expand-size);
    height: var(--expand-size);
    border-radius: 50%;
    background-color: var(--expand-color);
    pointer-events: none;
    inset: var(--expand-origin);
+   animation-duration: var(--speed-slow);
+   animation-fill-mode: backwards;
+   animation-timing-function: ease-in-out;
+   grid-area: 1 / 1;
+   align-self: end;
+   justify-self: center;
    isolation: isolate;
-   will-change: opacity, scale;
-   transition-property: scale;
+   z-index: var(--epxanding-view-layer);
+   margin-bottom: calc(var(--spacing) * 3);
 
    .container[data-open] > & {
-      transition-duration: var(--speed-slow);
-      transition-timing-function: ease-in-out;
-      scale: 18;
+      animation-name: expanding;
    }
 
    .container:not([data-open]) > & {
-      transition-duration: var(--speed-bit-slower);
-      scale: 0;
+      animation-name: collapsing;
+   }
+}
+
+@keyframes expanding {
+   to {
+      scale: 15;
+   }
+}
+
+@keyframes collapsing {
+   from {
+      scale: 15;
+   }
+   to {
+      scale: 1;
    }
 }

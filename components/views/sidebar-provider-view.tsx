@@ -75,7 +75,6 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    const sidebarRef = Cell.source<HTMLElement | null>(null)
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
    const pullToRefreshContext = tryFn(() => usePullToRefreshContext())
-   const isOpeningSidebar = Cell.source(false)
 
    const sidebarOpened = Cell.derived(() => {
       return sidebarState.get() === 'open'
@@ -151,7 +150,6 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    useIntersectionObserver(
       contentEdgeRef,
       ([entry]) => {
-         isOpeningSidebar.set(!entry.isIntersecting)
          if (!entry.isIntersecting) {
             return
          }
@@ -217,7 +215,6 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                axis='inline'
                ref={providerRef}
                data-not-revealable={sidebarNotRevealable}
-               data-is-opening={isOpeningSidebar}
                class={[styles.provider, rest.class]}
             >
                {() => (

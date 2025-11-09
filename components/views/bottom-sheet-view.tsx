@@ -1,5 +1,5 @@
 import { animationsSettled } from '@/utilities/animations'
-import { Cell, If, type SourceCell, useObserver } from 'retend'
+import { Cell, If, type SourceCell, useObserver, useSetupEffect } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
@@ -154,6 +154,12 @@ export function BottomSheet(props: BottomSheetProps) {
    })
 
    isOpen.listen(handleIsOpenChange)
+
+   useSetupEffect(() => {
+      return dialogOpen.runAndListen((dialogIsOpen) => {
+         document.body.toggleAttribute('data-has-expanded-content', dialogIsOpen)
+      })
+   })
 
    return (
       <Teleport to='body'>

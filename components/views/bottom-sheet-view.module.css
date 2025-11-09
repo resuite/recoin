@@ -13,7 +13,6 @@
    contain: strict;
 
    &::before {
-      position: fixed;
       top: 0;
       left: 0;
       display: block;
@@ -23,7 +22,7 @@
       background-color: #00000065;
       content: "";
       pointer-events: none;
-      will-change: opacity;
+      z-index: -1;
       animation: fade-in var(--speed-device) var(--timing) backwards;
       transition: opacity var(--speed-device) var(--timing);
    }
@@ -63,7 +62,6 @@
 
    position: relative;
    pointer-events: auto;
-   will-change: translate, opacity;
    grid-area: 1 / 1;
    animation: slide-up-from-under var(--speed-device) var(--timing) backwards;
    transition: translate var(--speed-device) var(--timing), opacity var(--speed-device)

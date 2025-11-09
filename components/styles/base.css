@@ -107,6 +107,7 @@ body {
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
    --fab-size: max(12dvh, 50px);
 
+   --epxanding-view-layer: 94;
    --floating-button-layer: 95;
    --overlay-layer: 96;
    --popover-layer: 97;
@@ -386,14 +387,4 @@ input,
 select,
 a {
    touch-action: manipulation;
-}
-
-retend-unique-instance {
-   position: relative;
-   will-change: transform;
-   transform: translateZ(0);
-
-   & > * {
-      isolation: isolate;
-   }
 }
