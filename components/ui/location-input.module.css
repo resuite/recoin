@@ -15,7 +15,6 @@
       width: 100%;
       height: 100%;
       appearance: none;
-      margin-top: calc(var(--spacing) * -0.65);
       min-height: calc(var(--spacing) * 2);
    }
 }

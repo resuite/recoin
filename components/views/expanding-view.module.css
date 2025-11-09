@@ -47,14 +47,13 @@
    background-color: var(--expand-color);
    pointer-events: none;
    inset: var(--expand-origin);
-   animation-duration: var(--speed-slow);
+   animation-duration: calc(var(--speed-default) * 1.75);
    animation-fill-mode: backwards;
-   animation-timing-function: ease-in-out;
+   animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
    grid-area: 1 / 1;
    align-self: end;
    justify-self: center;
    isolation: isolate;
-   z-index: var(--epxanding-view-layer);
    margin-bottom: calc(var(--spacing) * 3);
 
    .container[data-open] > & {
