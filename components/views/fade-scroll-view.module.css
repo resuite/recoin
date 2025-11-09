@@ -23,6 +23,10 @@
       pointer-events: none;
       grid-area: 1 / 1;
    }
+
+   &[data-no-fade]::after {
+      display: none;
+   }
 }
 
 .content {

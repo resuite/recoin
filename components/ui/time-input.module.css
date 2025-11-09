@@ -13,7 +13,7 @@
    label {
       grid-area: 1 / 1;
       width: 100%;
-      min-height: calc(var(--spacing) * 2 + var(--text-sm));
+      min-height: calc(var(--spacing) * 2.5 + var(--text-sm));
    }
 
    input {
@@ -22,6 +22,7 @@
       height: 100%;
       appearance: none;
       opacity: 0;
+      color: var(--color-canvas-background);
       min-height: calc(var(--spacing) * 2);
    }
 }

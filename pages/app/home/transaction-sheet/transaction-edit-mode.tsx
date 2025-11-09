@@ -5,6 +5,7 @@ import { DateInput } from '@/components/ui/date-input'
 import { Input } from '@/components/ui/input'
 import { LocationInput } from '@/components/ui/location-input'
 import { TimeInput } from '@/components/ui/time-input'
+import { FadeScrollView } from '@/components/views/fade-scroll-view'
 import {
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
@@ -39,21 +40,23 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
             <TransactionSheetHeader transaction={transaction} category={category} />
             <VirtualKeyboardAwareView>
                {() => (
-                  <VirtualKeyboardTriggers
-                     style={{
-                        animationTimingFunction: 'ease',
-                        animationDuration: 'var(--sheet-sizing-speed)'
-                     }}
-                     class={[
-                        'grid grid-rows-4 gap-y-1 mb-1.5',
-                        'animate-fade-in [--starting-translate:0_40%] [--starting-opacity:0]'
-                     ]}
-                  >
-                     <Input label='Label' model={form.values.label} />
-                     <DateInput model={form.values.date} label='Date' />
-                     <TimeInput model={form.values.time} label='Time' />
-                     <LocationInput model={form.values.location} label='Location' />
-                  </VirtualKeyboardTriggers>
+                  <FadeScrollView noFade class='min-h-0 max-h-[45dvh]'>
+                     <VirtualKeyboardTriggers
+                        style={{
+                           animationTimingFunction: 'ease',
+                           animationDuration: 'var(--sheet-sizing-speed)'
+                        }}
+                        class={[
+                           'grid grid-rows-4 gap-y-1 mb-1.5',
+                           'animate-fade-in [--starting-translate:0_40%] [--starting-opacity:0]'
+                        ]}
+                     >
+                        <Input label='Label' model={form.values.label} />
+                        <DateInput model={form.values.date} label='Date' />
+                        <TimeInput model={form.values.time} label='Time' />
+                        <LocationInput model={form.values.location} label='Location' />
+                     </VirtualKeyboardTriggers>
+                  </FadeScrollView>
                )}
             </VirtualKeyboardAwareView>
          </div>

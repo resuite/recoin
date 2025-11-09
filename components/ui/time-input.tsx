@@ -26,7 +26,7 @@ export function TimeInput(props: TimeInputProps) {
             hour12: true
          })
       }
-      return props.placeholder
+      return props.placeholder ?? ''
    })
 
    const handlePlaceholderClick = () => {
@@ -35,16 +35,15 @@ export function TimeInput(props: TimeInputProps) {
 
    return (
       <div data-unfilled={inputIsUnfilled} class={styles.timeInputContainer}>
+         <Input ref={ref} type='time' {...rest} />
          <div
             class={styles.timePlaceholder}
             onClick={handlePlaceholderClick}
             onKeyDown={handlePlaceholderClick}
          >
-            {value}
+            <span>{value}</span>
             <Clock class={styles.timeInputClockIcon} />
          </div>
-
-         <Input ref={ref} type='time' {...rest} />
       </div>
    )
 }

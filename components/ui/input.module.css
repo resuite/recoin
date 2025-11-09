@@ -1,4 +1,12 @@
 .label {
    font-size: var(--text-sm);
    color: var(--color-canvas-text-lighter);
+
+   &:has(.input:focus-within) {
+      color: var(--color-canvas-text);
+   }
+}
+
+.input:focus-within {
+   outline: none;
 }

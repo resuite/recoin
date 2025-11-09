@@ -86,7 +86,7 @@ export function createPointerOrClickHandler(handler: () => void) {
    }
 }
 
-const OFFSET_FROM_KEYBOARD = 30
+const OFFSET_FROM_KEYBOARD = 25
 
 function getOffsetFromScrollTop(element: HTMLElement, scrollContainer: HTMLElement): number {
    const elementRect = element.getBoundingClientRect()

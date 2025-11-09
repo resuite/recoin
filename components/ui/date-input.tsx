@@ -18,7 +18,7 @@ export function DateInput(props: DateInputProps) {
    })
 
    const value = Cell.derived(() => {
-      return model?.get().toLocaleDateString('en-GB', options) || props.placeholder
+      return (model?.get().toLocaleDateString('en-GB', options) || props.placeholder) ?? ''
    })
 
    const handlePlaceholderClick = () => {
@@ -34,16 +34,15 @@ export function DateInput(props: DateInputProps) {
 
    return (
       <div data-unfilled={inputIsUnfilled} class={styles.dateInputContainer}>
+         <Input model={model} ref={ref} max={max} type='date' {...rest} />
          <div
             class={styles.datePlaceholder}
             onClick={handlePlaceholderClick}
             onKeyDown={handlePlaceholderKeyDown}
          >
-            {value}
+            <span>{value}</span>
             <Calendar class={styles.dateInputCalendarIcon} />
          </div>
-
-         <Input model={model} ref={ref} max={max} type='date' {...rest} />
       </div>
    )
 }

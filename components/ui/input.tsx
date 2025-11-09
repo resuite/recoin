@@ -14,7 +14,7 @@ export function Input<T extends JSX.InputTypeHTMLAttribute>(props: InputProps<T>
          {If(label, (label) => (
             <span class={styles.label}>{label}</span>
          ))}
-         <_Input {...rest} />
+         <_Input {...rest} class={[styles.input, rest.class]} />
       </label>
    )
 }
