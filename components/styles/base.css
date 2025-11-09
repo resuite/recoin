@@ -381,10 +381,3 @@ body {
       @slot;
    }
 }
-
-button,
-input,
-select,
-a {
-   touch-action: manipulation;
-}

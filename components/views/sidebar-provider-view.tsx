@@ -1,12 +1,12 @@
 import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
-import { Browsers, currentBrowser } from '@/utilities/browser'
-import { tryFn } from '@/utilities/miscellaneous'
-import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
-import { NEGLIGIBLE_SCROLL_PX } from '@/utilities/scrolling'
+// import { Browsers, currentBrowser } from '@/utilities/browser'
+// import { tryFn } from '@/utilities/miscellaneous'
+// import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
+// import { NEGLIGIBLE_SCROLL_PX } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import { useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
-import { PullStartEvent, usePullToRefreshContext } from './pull-to-refresh-view'
+// import { PullStartEvent, usePullToRefreshContext } from './pull-to-refresh-view'
 import styles from './sidebar-provider-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -74,7 +74,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    const contentEdgeRef = Cell.source<HTMLElement | null>(null)
    const sidebarRef = Cell.source<HTMLElement | null>(null)
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
-   const pullToRefreshContext = tryFn(() => usePullToRefreshContext())
+   // const pullToRefreshContext = tryFn(() => usePullToRefreshContext())
 
    const sidebarOpened = Cell.derived(() => {
       return sidebarState.get() === 'open'
@@ -113,21 +113,21 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       allowReveal.set(value ?? !allowReveal.get())
    }
 
-   const interceptPointerDown = (event: PointerEvent) => {
-      event.stopPropagation()
-      const tracker = new PointerTracker()
-      tracker.start(event)
+   // const interceptPointerDown = (event: PointerEvent) => {
+   //    event.stopPropagation()
+   //    const tracker = new PointerTracker()
+   //    tracker.start(event)
 
-      const checkForPullStart = (event: TrackedMoveEvent) => {
-         if (event.deltaY > NEGLIGIBLE_SCROLL_PX) {
-            const provider = providerRef.get()
-            tracker.removeEventListener('move', checkForPullStart)
-            provider?.dispatchEvent(new PullStartEvent(tracker))
-         }
-      }
+   //    const checkForPullStart = (event: TrackedMoveEvent) => {
+   //       if (event.deltaY > NEGLIGIBLE_SCROLL_PX) {
+   //          const provider = providerRef.get()
+   //          tracker.removeEventListener('move', checkForPullStart)
+   //          provider?.dispatchEvent(new PullStartEvent(tracker))
+   //       }
+   //    }
 
-      tracker.addEventListener('move', checkForPullStart)
-   }
+   //    tracker.addEventListener('move', checkForPullStart)
+   // }
 
    const sidebarScopeData: SidebarCtx = {
       sidebarState,
@@ -178,34 +178,34 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       })
    })
 
-   observer.onConnected(providerRef, async (provider) => {
-      // Safari is a rubbish browser, and in it `touch-action: pan-x`
-      // does not properly prevent vertical pointermoves. Thus,
-      // x-axis swipe-scrolls intended for SidebarProviderView are not
-      // properly differentiated from y-axis pulls (handled by PullToRefreshView).
-      //
-      // To work around this, we intercept the `pointerdown` event, and
-      // by analyzing the initial gesture direction, we can manually distinguish
-      // between horizontal (for opening/closing the sidebar) and vertical
-      // (for triggering pull-to-refresh).
-      const browser = currentBrowser()
-      const browserName = browser.getBrowserName()
-      const platformType = browser.getPlatformType()
-      if (
-         !(
-            browserName === Browsers.Safari &&
-            platformType === 'mobile' &&
-            pullToRefreshContext !== undefined
-         )
-      ) {
-         return
-      }
-      provider.addEventListener('pointerdown', interceptPointerDown)
+   // observer.onConnected(providerRef, async (provider) => {
+   //    // Safari is a rubbish browser, and in it `touch-action: pan-x`
+   //    // does not properly prevent vertical pointermoves. Thus,
+   //    // x-axis swipe-scrolls intended for SidebarProviderView are not
+   //    // properly differentiated from y-axis pulls (handled by PullToRefreshView).
+   //    //
+   //    // To work around this, we intercept the `pointerdown` event, and
+   //    // by analyzing the initial gesture direction, we can manually distinguish
+   //    // between horizontal (for opening/closing the sidebar) and vertical
+   //    // (for triggering pull-to-refresh).
+   //    const browser = currentBrowser()
+   //    const browserName = browser.getBrowserName()
+   //    const platformType = browser.getPlatformType()
+   //    if (
+   //       !(
+   //          browserName === Browsers.Safari &&
+   //          platformType === 'mobile' &&
+   //          pullToRefreshContext !== undefined
+   //       )
+   //    ) {
+   //       return
+   //    }
+   //    provider.addEventListener('pointerdown', interceptPointerDown)
 
-      return () => {
-         provider.removeEventListener('pointerdown', interceptPointerDown)
-      }
-   })
+   //    return () => {
+   //       provider.removeEventListener('pointerdown', interceptPointerDown)
+   //    }
+   // })
 
    return (
       <SidebarScope.Provider value={sidebarScopeData}>
