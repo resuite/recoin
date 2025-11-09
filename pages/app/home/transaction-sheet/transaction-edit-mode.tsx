@@ -49,7 +49,10 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
                         'animate-fade-in [--starting-translate:0_40%] [--starting-opacity:0]'
                      ]}
                   >
-                     <Input model={form.values.label} placeholder='Label' />
+                     <label>
+                        <span class='text-sm'>Label</span>
+                        <Input model={form.values.label} placeholder='Label' />
+                     </label>
                      <DateInput model={form.values.date} placeholder='Date' />
                      <TimeInput model={form.values.time} placeholder='Time' />
                      <LocationInput model={form.values.location} placeholder='Location' />

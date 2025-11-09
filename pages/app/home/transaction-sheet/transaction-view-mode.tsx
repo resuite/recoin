@@ -29,13 +29,7 @@ const TransactionViewMode = (props: TransactionViewModeProps) => {
 
    return (
       <>
-         <div
-            class={[
-               'w-full',
-               // Only animate info list if header is animating
-               'has-data-unique-element-transition:[&_dl]:animate-fade-in'
-            ]}
-         >
+         <div class={['w-full', 'has-[:state(--transitioning)]:[&_dl]:animate-fade-in']}>
             <TransactionSheetHeader transaction={transaction} category={category} />
             <InfoList
                class={[
