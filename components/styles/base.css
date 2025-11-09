@@ -70,16 +70,19 @@ body {
    --color-canvas-text: var(--canvas-text);
    --color-canvas-shadow: var(--canvas-shadow);
 
-   --text-smallest: 0.5rem;
-   --text-smaller: 0.625rem;
-   --text-small: 0.75rem;
-   --text-normal: 0.9375rem;
-   --text-big: 1.0625rem;
-   --text-bigger: 1.5rem;
-   --text-header: 1.35625rem;
-   --text-title: 1.875rem;
-   --text-large: 3.125rem;
-   --text-logo: 4.0625rem;
+   --text-smallest: min(0.5rem, 1.979dvh);
+   --text-smaller: min(0.625rem, 2.223dvh);
+   --text-small: min(0.75rem, 2.469dvh);
+   --text-sm: min(0.875rem, 2.714dvh);
+   --text-normal: min(0.9375rem, 2.836dvh);
+   --text-big: min(1.0625rem, 3.081dvh);
+   --text-lg: min(1.125rem, 3.203dvh);
+   --text-xl: min(1.25rem, 3.448dvh);
+   --text-bigger: min(1.5rem, 3.93dvh);
+   --text-header: min(1.35625rem, 3.656dvh);
+   --text-title: min(1.875rem, 4.672dvh);
+   --text-large: min(3.125rem, 7.11dvh);
+   --text-logo: min(4.0625rem, 8.956dvh);
 
    --default-speed: 150ms;
    --timing: cubic-bezier(0.3, 0.4, 0.05, 1);
@@ -170,8 +173,9 @@ body {
 
    a,
    .btn-link {
-      @apply grid py-0.75 border-b-2 w-full bg-transparent text-canvas-text;
+      @apply grid border-b-2 w-full bg-transparent text-canvas-text;
       @apply has-[.link-icon,.link-icon-large]:flex has-[.link-icon,.link-icon-large]:items-center has-[.link-icon,.link-icon-large]:gap-0.125;
+      padding-block: min(calc(var(--spacing) * 0.75), 3dvh);
    }
 }
 
