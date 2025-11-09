@@ -1,106 +1,96 @@
 .fullScreenTransition {
-   position: fixed;
    top: 0;
    display: grid;
    height: 100dvh;
    width: 100dvw;
    grid-template-columns: 100% 100%;
+   /*--full-screen-transition-speed: 10000ms !important;*/
 
-   &[data-changed] {
-      & > .nextView {
-         transition-delay: var(--speed-default);
+   &[data-modified] {
+      &[data-changed] > .nextView,
+      &:not([data-changed]) > .previousView {
+         animation-delay: var(--speed-default);
       }
 
-      & > .previousView {
+      &[data-changed] > .previousView,
+      &:not([data-changed]) > .nextView {
          pointer-events: none;
       }
-   }
 
-   &:not([data-changed]) {
-      & > .previousView {
-         transition-delay: var(--speed-default);
-      }
-   }
+      &[data-transition="slide-up"] {
+         &[data-changed] > .nextView,
+         &:not([data-changed]) > .previousView {
+            animation-delay: var(--speed-slow);
+         }
 
-   &[data-transition="slide-up"] {
-      &:not([data-changed]) {
-         & > .nextView {
-            translate: 0 100dvh;
-            opacity: 30%;
+         &[data-changed] > .nextView {
+            animation-name: slide-up-entering;
+         }
+
+         &[data-changed] > .previousView {
+            animation-name: slide-up-exiting;
          }
       }
 
-      &[data-changed] {
-         & > .previousView {
-            opacity: 30%;
-            scale: 0.4;
+      /*&[data-transition='slide-down'] {
+         &:not([data-changed]) {
+            & > .nextView {
+               translate: 0 -100dvh;
+               opacity: 30%;
+            }
          }
-      }
-   }
 
-   &[data-transition="slide-down"] {
-      &:not([data-changed]) {
-         & > .nextView {
-            translate: 0 -100dvh;
-            opacity: 30%;
-         }
-      }
-
-      &[data-changed] {
-         & > .previousView {
-            opacity: 30%;
-            scale: 0.4;
-         }
-      }
-   }
-
-   &[data-transition="fade-in"] {
-      &:not([data-changed]) {
-         & > .nextView {
-            pointer-events: none;
-            opacity: 0%;
-            scale: 1.05;
+         &[data-changed] {
+            & > .previousView {
+               opacity: 30%;
+               scale: 0.4;
+            }
          }
       }
 
-      &[data-changed] {
-         & > .previousView {
-            opacity: 0%;
-            scale: 0.75;
+      &[data-transition='fade-in'] {
+         &:not([data-changed]) {
+            & > .nextView {
+               pointer-events: none;
+               opacity: 0%;
+               scale: 1.05;
+            }
          }
-      }
-   }
 
-   &[data-transition="fade-out"] {
-      &:not([data-changed]) {
-         & > .nextView {
-            pointer-events: none;
-            opacity: 0%;
-            scale: 0.75;
-         }
-      }
-
-      &[data-changed] {
-         & > .previousView {
-            opacity: 30%;
-            scale: 1.75;
-         }
-      }
-   }
-
-   &[data-transition="blink"] {
-      &:not([data-changed]) {
-         & > .nextView {
-            pointer-events: none;
-            opacity: 0%;
-            scale: 0.97;
+         &[data-changed] {
+            & > .previousView {
+               opacity: 0%;
+               scale: 0.75;
+            }
          }
       }
 
-      &[data-changed] {
-         & > .previousView {
-            opacity: 0%;
-            scale: 0.97;
+      &[data-transition='fade-out'] {
+         &:not([data-changed]) {
+            & > .nextView {
+               pointer-events: none;
+               opacity: 0%;
+               scale: 0.75;
+            }
+         }
+
+         &[data-changed] {
+            & > .previousView {
+               opacity: 30%;
+               scale: 1.75;
+            }
+         }
+      }*/
+
+      &[data-transition="blink"] {
+         &[data-changed] > .previousView,
+         &:not([data-changed]) > .nextView {
+            animation-name: blink-leaving;
+         }
+
+         & > .nextView,
+         &:not([data-changed]) > .previousView {
+            animation-name: blink-entering;
          }
       }
    }
@@ -112,7 +102,46 @@
    grid-template-columns: 1fr;
    grid-area: 1 / 1;
 
-   transition-duration: var(--full-screen-transition-speed);
-   transition-property: opacity, translate, scale;
-   transition-timing-function: var(--timing);
+   animation-duration: var(--full-screen-transition-speed);
+   animation-timing-function: var(--timing);
+
+   &:empty {
+      display: none;
+   }
+}
+
+.previousView {
+   animation-fill-mode: both;
+}
+
+.nextView {
+   animation-fill-mode: backwards;
+}
+
+@keyframes slide-up-entering {
+   from {
+      translate: 0 100dvh;
+      opacity: 30%;
+   }
+}
+
+@keyframes slide-up-exiting {
+   to {
+      opacity: 30%;
+      scale: 0.4;
+   }
+}
+
+@keyframes blink-entering {
+   from {
+      opacity: 0;
+      scale: 0.97;
+   }
+}
+
+@keyframes blink-leaving {
+   to {
+      opacity: 0;
+      scale: 0.97;
+   }
 }

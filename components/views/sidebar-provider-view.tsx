@@ -1,7 +1,4 @@
-import {
-   ScrollTimelineView,
-   useScrollTimelineContext
-} from '@/components/views/scroll-timeline-view'
+import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
 import { Browsers, currentBrowser } from '@/utilities/browser'
 import { tryFn } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
@@ -78,6 +75,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    const sidebarRef = Cell.source<HTMLElement | null>(null)
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
    const pullToRefreshContext = tryFn(() => usePullToRefreshContext())
+   const isOpeningSidebar = Cell.source(false)
 
    const sidebarOpened = Cell.derived(() => {
       return sidebarState.get() === 'open'
@@ -153,6 +151,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    useIntersectionObserver(
       contentEdgeRef,
       ([entry]) => {
+         isOpeningSidebar.set(!entry.isIntersecting)
          if (!entry.isIntersecting) {
             return
          }
@@ -218,33 +217,20 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                axis='inline'
                ref={providerRef}
                data-not-revealable={sidebarNotRevealable}
+               data-is-opening={isOpeningSidebar}
                class={[styles.provider, rest.class]}
             >
-               {() => {
-                  const timeline = useScrollTimelineContext()
-                  timeline.add({
-                     target: contentRef,
-                     keyframes: {
-                        opacity: ['0.65', '0']
-                     },
-                     pseudoElement: ':before',
-                     range: {
-                        start: 0,
-                        end: 0.7
-                     }
-                  })
-                  return (
-                     <>
-                        <div class={styles.sidebar} ref={sidebarRef}>
-                           {sidebar()}
-                        </div>
-                        <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
-                           {children?.()}
-                           <div ref={contentEdgeRef} class={styles.contentEdge} />
-                        </div>
-                     </>
-                  )
-               }}
+               {() => (
+                  <>
+                     <div class={styles.sidebar} ref={sidebarRef}>
+                        {sidebar()}
+                     </div>
+                     <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
+                        {children?.()}
+                        <div ref={contentEdgeRef} class={styles.contentEdge} />
+                     </div>
+                  </>
+               )}
             </ScrollTimelineView>
          )}
       </SidebarScope.Provider>

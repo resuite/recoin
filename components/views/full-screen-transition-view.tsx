@@ -81,6 +81,7 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
    const nextContentShown = Cell.source(changeWhen.get())
    const nextViewRef = Cell.source<HTMLDivElement | null>(null)
    const previousViewRef = Cell.source<HTMLDivElement | null>(null)
+   const wasModified = Cell.source(false)
 
    const transitionSpeed = Cell.derived(() => {
       return `var(--speed-${speed.get()})`
@@ -101,6 +102,10 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
       { priority: -1 } // run after DOM updates.
    )
 
+   changeWhen.listen(() => {
+      wasModified.set(true)
+   })
+
    const activeViewRef = Cell.derived(() => {
       return changeWhen.get() ? nextViewRef.peek() : previousViewRef.peek()
    })
@@ -117,6 +122,7 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
                style={{ '--full-screen-transition-speed': transitionSpeed }}
                data-transition={transition}
                data-changed={changeWhen}
+               data-modified={wasModified}
                class={[styles.fullScreenTransition, rest.class]}
             >
                <div ref={previousViewRef} class={styles.previousView}>
