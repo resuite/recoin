@@ -2,7 +2,7 @@ import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
-import { FadeScrollView } from '@/components/views/fade-scroll-view'
+import { ScrollableView } from '@/components/views/scrollable-view'
 import { QueryKeys } from '@/constants/query-keys'
 import type { Category } from '@/database/models/category'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
@@ -48,9 +48,9 @@ const CategoriesListing = (props: CategoryListingProps) => {
             </span>
             <sub class='text-normal'>Choose an {type} category.</sub>
          </h2>
-         <FadeScrollView class='pt-0.5 max-h-[55dvh]'>
+         <ScrollableView class='pt-0.5 max-h-[55dvh]'>
             <ul>{For(categories, CategoryLink)}</ul>
-         </FadeScrollView>
+         </ScrollableView>
       </>
    )
 }

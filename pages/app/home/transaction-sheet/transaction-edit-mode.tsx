@@ -7,7 +7,7 @@ import { LocationInput } from '@/components/ui/location-input'
 import { TimeInput } from '@/components/ui/time-input'
 import { useToast } from '@/components/ui/toast'
 import { useBottomSheetContext } from '@/components/views/bottom-sheet-view'
-import { FadeScrollView } from '@/components/views/fade-scroll-view'
+import { ScrollableView } from '@/components/views/scrollable-view'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
@@ -129,7 +129,7 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
             </BottomSheetHeader>
             <VirtualKeyboardAwareView onKeyboardVisibilityChange={handleKeyboardVisibilityChange}>
                {() => (
-                  <FadeScrollView
+                  <ScrollableView
                      ref={scrollViewRef}
                      noFade
                      class={[
@@ -154,7 +154,7 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
                            onFocus={handleFocus}
                         />
                      </VirtualKeyboardTriggers>
-                  </FadeScrollView>
+                  </ScrollableView>
                )}
             </VirtualKeyboardAwareView>
          </div>

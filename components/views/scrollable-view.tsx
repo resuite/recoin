@@ -1,14 +1,14 @@
 import { Cell } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
-import styles from './fade-scroll-view.module.css'
+import styles from './scrollable-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
-interface FadeScrollViewProps extends DivProps {
+interface ScrollableViewProps extends DivProps {
    ref?: Cell<HTMLElement | null>
    noFade?: JSX.ValueOrCell<boolean>
 }
 
-export function FadeScrollView(props: FadeScrollViewProps) {
+export function ScrollableView(props: ScrollableViewProps) {
    const {
       class: className,
       children,

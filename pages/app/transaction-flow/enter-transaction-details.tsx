@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { LocationInput } from '@/components/ui/location-input'
 import { MoneyInput } from '@/components/ui/money-input'
 import { TimeInput } from '@/components/ui/time-input'
-import { FadeScrollView } from '@/components/views/fade-scroll-view'
+import { ScrollableView } from '@/components/views/scrollable-view'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
@@ -82,7 +82,7 @@ const EnterTransactionDetails = () => {
                   ))}
                </div>
                <p class='text-big text-center'>Share more details about this transaction.</p>
-               <FadeScrollView ref={scrollViewRef} class='h-[45dvh] max-h-[45dvh]'>
+               <ScrollableView ref={scrollViewRef} class='h-[45dvh] max-h-[45dvh]'>
                   <form
                      style={{ paddingBottom }}
                      class='[&_input]:duration-slow [&_input]:transition-opacity'
@@ -106,7 +106,7 @@ const EnterTransactionDetails = () => {
                         </FloatingActionButton>
                      ))}
                   </form>
-               </FadeScrollView>
+               </ScrollableView>
             </>
          )}
       </VirtualKeyboardAwareView>
