@@ -7,7 +7,6 @@ import type { Category } from '@/database/models/category'
 import type { Transaction } from '@/database/models/transaction'
 import { TransactionSheetHeader } from '@/pages/app/home/transaction-sheet/(fragments)/transaction-sheet-header'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { createPointerOrClickHandler } from '@/utilities/miscellaneous'
 import { Cell } from 'retend'
 
 interface TransactionViewModeProps {
@@ -40,9 +39,9 @@ const TransactionViewMode = (props: TransactionViewModeProps) => {
       return transaction.get().location || 'Not Provided'
    })
 
-   const handleEditClick = createPointerOrClickHandler(() => {
+   const handleEditClick = () => {
       navigateToEditMode()
-   })
+   }
 
    return (
       <>
@@ -70,11 +69,7 @@ const TransactionViewMode = (props: TransactionViewModeProps) => {
                <Bin class='btn-icon' />
                Delete
             </Button>
-            <Button
-               class='w-full border-canvas-text'
-               onClick={handleEditClick}
-               onPointerUp={handleEditClick}
-            >
+            <Button class='w-full border-canvas-text' onClick={handleEditClick}>
                <Pencil class='btn-icon' />
                Edit
             </Button>
