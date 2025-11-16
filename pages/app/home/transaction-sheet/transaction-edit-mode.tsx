@@ -13,10 +13,12 @@ import {
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
+import { SHEET_SIZING_ANIMATION_STYLES, TOAST_DEFAULT_DURATION } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import type { Transaction } from '@/database/models/transaction'
 import TransactionModel from '@/database/models/transaction'
 import { BottomSheetHeader } from '@/pages/app/(fragments)/bottom-sheet-header'
+import { ToastMessage } from '@/pages/app/(fragments)/toast-message'
 import { useStore } from '@/scopes/livestore'
 import { animationsSettled } from '@/utilities/animations'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
@@ -31,7 +33,7 @@ interface TransactionEditModeProps {
 
 const TransactionEditMode = (props: TransactionEditModeProps) => {
    const { transaction, onLoad } = props
-   const { remove: closeEditMode } = useRouteQueryControl(QueryKeys.TransactionSheet.IsInEditMode)
+   const { remove: closeEditMode } = useRouteQueryControl(QueryKeys.TransactionSheet.Mode, 'Edit')
    const bottomSheetCtx = useBottomSheetContext()
    const store = useStore()
    const { showToast } = useToast()
@@ -85,16 +87,11 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
          location: values.location
       }
       store.commit(TransactionModel.events.transactionEdited(updatedTransaction))
-      showToast({ content: <ToastContent />, duration: 2000 })
+      showToast({
+         content: <ToastMessage Icon={Checkmark} message='Transaction updated.' />,
+         duration: TOAST_DEFAULT_DURATION
+      })
       closeEditMode()
-   }
-
-   const ToastContent = () => {
-      return (
-         <div class='grid grid-cols-[auto_1fr] gap-x-0.5'>
-            <Checkmark class='h-1 w-1' /> Transaction Updated.
-         </div>
-      )
    }
 
    useSetupEffect(async () => {
@@ -114,12 +111,9 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
             ref={contentRef}
             class={[
                'grid grid-rows-[auto_1fr] gap-y-1',
-               'animate-fade-in [--starting-translate:0_40%] [--starting-opacity:0]'
+               'animate-fade-in [--starting-translate:0_40%]'
             ]}
-            style={{
-               animationTimingFunction: 'ease',
-               animationDuration: 'var(--sheet-sizing-speed)'
-            }}
+            style={SHEET_SIZING_ANIMATION_STYLES}
          >
             <BottomSheetHeader
                style={{ viewTransitionName: 'bottom-sheet-header' }}

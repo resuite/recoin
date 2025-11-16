@@ -1,4 +1,5 @@
 import { defer } from '@/utilities/miscellaneous'
+import { Cell } from 'retend'
 import { useRouteQuery, useRouter } from 'retend/router'
 
 export function useRouteQueryControl(_key: string | { _root: string }, value = 'true') {
@@ -21,7 +22,9 @@ export function useRouteQueryControl(_key: string | { _root: string }, value = '
          query.delete(...subKeys)
       })
    }
-   const hasKey = query.has(key)
+   const hasKey = Cell.derived(() => {
+      return current.get().query.get(key) === value
+   })
 
    return { add, remove, hasKey }
 }
