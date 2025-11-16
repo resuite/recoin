@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { defer } from '@/utilities/miscellaneous'
 import { Cell, For, createScope, useObserver, useScopeContext } from 'retend'
-import { useIntersectionObserver } from 'retend-utils/hooks'
+import { useDerivedValue, useIntersectionObserver, useWindowSize } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { Teleport } from 'retend/teleport'
 import Add from '../icons/svg/add'
 import styles from './toast.module.css'
 
@@ -10,7 +11,7 @@ interface ToastScopeData {
    activeToasts: Cell<Array<ToastProps & { id: string }>>
    toastPromiseResolvers: Map<string, () => void>
 }
-const ToastScope = createScope<ToastScopeData>()
+const ToastScope = createScope<ToastScopeData>('Toasts')
 
 export interface ToastProps {
    /**
@@ -67,13 +68,18 @@ export interface ToastDetails {
 }
 
 export interface ToastContainerProps {
+   scheme: JSX.ValueOrCell<'light' | 'dark'>
    children: () => JSX.Template
 }
 
 export function ToastProvider(props: ToastContainerProps) {
-   const { children } = props
+   const { children, scheme: schemeProp } = props
    const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
    const toastPromiseResolvers = new Map<string, () => void>()
+   const scheme = useDerivedValue(schemeProp)
+   const schemeClass = Cell.derived(() => {
+      return scheme.get() === 'light' ? 'light-scheme' : 'dark-scheme'
+   })
 
    const toastsCount = Cell.derived(() => {
       return activeToasts.get().length
@@ -86,15 +92,17 @@ export function ToastProvider(props: ToastContainerProps) {
          {() => (
             <>
                {children()}
-               <div
-                  class={styles.toastsGroup}
-                  style={{
-                     '--toasts-count': toastsCount,
-                     '--toast-gap': 'calc(var(--spacing) * 0.5)'
-                  }}
-               >
-                  {For(activeToasts, Toast)}
-               </div>
+               <Teleport to='body'>
+                  <div
+                     class={[styles.toastsGroup, schemeClass]}
+                     style={{
+                        '--toasts-count': toastsCount,
+                        '--toast-gap': 'calc(var(--spacing) * 0.5)'
+                     }}
+                  >
+                     {For(activeToasts, Toast)}
+                  </div>
+               </Teleport>
             </>
          )}
       </ToastScope.Provider>
@@ -104,6 +112,7 @@ export function ToastProvider(props: ToastContainerProps) {
 function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
    const { content, duration, onClick } = props
    const { activeToasts, toastPromiseResolvers } = useScopeContext(ToastScope)
+   const { width: windowWidth } = useWindowSize()
    const observer = useObserver()
    let timeout: ReturnType<typeof setTimeout> | null = null
    const toastElementRef = Cell.source<HTMLDialogElement | null>(null)
@@ -148,10 +157,14 @@ function Toast(props: ToastProps & { id: string }, index: Cell<number>) {
       // [left-marker, toast-content, right-marker] with large gaps,
       // making markers initially off-screen.
       toastElement.scrollIntoView({ inline: 'center' })
+      const dropListener = windowWidth.listen(() => {
+         toastElement.scrollIntoView({ inline: 'center' })
+      })
       if (duration !== undefined) {
          timeout = setTimeout(closeToast, duration)
       }
       return () => {
+         dropListener()
          if (timeout !== null) {
             clearTimeout(timeout)
          }

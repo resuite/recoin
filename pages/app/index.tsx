@@ -1,4 +1,5 @@
 import Loader from '@/components/icons/svg/loader'
+import { ToastProvider } from '@/components/ui/toast'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
 import { SidebarProviderView } from '@/components/views/sidebar-provider-view'
 import { VerticalPanView } from '@/components/views/vertical-pan-view'
@@ -78,9 +79,13 @@ const AppRoot = () => {
 
 const App = () => {
    return (
-      <GoogleIdentityProvider>
-         {() => <AuthenticationProvider>{AppRoot}</AuthenticationProvider>}
-      </GoogleIdentityProvider>
+      <ToastProvider scheme='light'>
+         {() => (
+            <GoogleIdentityProvider>
+               {() => <AuthenticationProvider>{AppRoot}</AuthenticationProvider>}
+            </GoogleIdentityProvider>
+         )}
+      </ToastProvider>
    )
 }
 

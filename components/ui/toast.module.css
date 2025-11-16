@@ -10,8 +10,11 @@
    width: 100dvw;
    height: 100dvh;
    padding-top: var(--spacing);
+   z-index: var(--toasts-layer);
    pointer-events: none;
    grid-template-rows: auto 1fr;
+   contain: strict;
+   background: transparent;
 
    &:empty {
       display: none;
@@ -29,7 +32,6 @@
    --inverse: calc(var(--toasts-count) - var(--toast-index));
    --clamped-inverse: min(var(--inverse), 3);
    --translate-y: calc((var(--clamped-inverse) - 1) * (100% + var(--toast-gap)));
-   z-index: 50;
    display: grid;
    overflow: hidden;
    align-self: end;

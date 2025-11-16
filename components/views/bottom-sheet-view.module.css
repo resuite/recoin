@@ -67,7 +67,7 @@
    transition: translate var(--speed-device) var(--timing), opacity var(--speed-device)
       var(--timing);
 
-   --sheet-sizing-speed: 350ms;
+   --sheet-sizing-speed: 300ms;
 }
 
 .sheetContentContainerBackground {

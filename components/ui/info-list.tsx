@@ -15,7 +15,7 @@ export const InfoList = (props: InfoListProps) => {
 
 interface InfoListItemProps {
    label: string
-   value: string
+   value: JSX.ValueOrCell<string>
 }
 
 export const InfoListItem = (props: InfoListItemProps) => {

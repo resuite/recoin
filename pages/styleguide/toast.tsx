@@ -3,7 +3,7 @@ import { ToastProvider, useToast } from '@/components/ui/toast'
 
 const Toast = () => {
    return (
-      <ToastProvider>
+      <ToastProvider scheme='light'>
          {() => {
             const { showToast } = useToast()
 

@@ -32,12 +32,30 @@ const TransactionModel = new Model({
             date: Schema.Date,
             location: Schema.NullOr(Schema.String)
          })
+      }),
+      transactionEdited: Events.synced({
+         name: 'v1.TransactionEdited',
+         schema: Schema.Struct({
+            id: Schema.String,
+            workspaceId: Schema.String,
+            categoryId: Schema.String,
+            type: Schema.String as Schema.Schema<TransactionType>,
+            amount: Schema.Number,
+            currency: Schema.String,
+            label: Schema.String,
+            date: Schema.Date,
+            location: Schema.NullOr(Schema.String)
+         })
       })
    }
 })
 
 TransactionModel.addMaterializers((table) => ({
-   'v1.TransactionCreated': (payload) => table.insert(payload)
+   'v1.TransactionCreated': (payload) => table.insert(payload),
+   'v1.TransactionEdited': (payload) => {
+      const { id, ...rest } = payload
+      return table.update(rest).where({ id })
+   }
 }))
 
 export type Transaction = Doc<typeof TransactionModel>

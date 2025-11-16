@@ -8,6 +8,7 @@
       grid-area: 1 / 1;
       width: 100%;
       min-height: calc(var(--spacing) * 2.5 + var(--text-sm));
+      padding-bottom: calc(var(--text-sm));
    }
 
    input {
@@ -22,7 +23,7 @@
 .locationPlaceholder {
    display: grid;
    align-content: center;
-   padding-top: calc(var(--text-sm) + var(--spacing) * 0.5);
+   padding-top: calc(var(--text-sm) + var(--spacing));
    border-bottom: 3px solid var(--color-canvas-text);
    grid-template-columns: 1fr auto;
    grid-area: 1 / 1;

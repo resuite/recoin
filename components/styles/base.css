@@ -110,11 +110,12 @@ body {
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
    --fab-size: max(12dvh, 50px);
 
-   --epxanding-view-layer: 94;
-   --floating-button-layer: 95;
-   --overlay-layer: 96;
-   --popover-layer: 97;
-   --z-index-bottom-sheet: 98;
+   --epxanding-view-layer: 93;
+   --floating-button-layer: 94;
+   --overlay-layer: 95;
+   --popover-layer: 96;
+   --z-index-bottom-sheet: 97;
+   --toasts-layer: 98;
    --z-index-transition: 99;
 }
 

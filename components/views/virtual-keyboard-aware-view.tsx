@@ -190,6 +190,7 @@ export function VirtualKeyboardTriggers(props: VirtualKeyboardTriggerProps) {
       // into thinking the element is not focused, so it doesn't force the
       // scrolling behavior.
       redirectingFocus.set(true)
+      event.stopImmediatePropagation()
       target.blur()
       target.focus({ preventScroll: true })
       redirectingFocus.set(false)

@@ -1,5 +1,13 @@
 import { animationsSettled } from '@/utilities/animations'
-import { Cell, If, type SourceCell, useObserver, useSetupEffect } from 'retend'
+import {
+   Cell,
+   If,
+   type SourceCell,
+   createScope,
+   useObserver,
+   useScopeContext,
+   useSetupEffect
+} from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
@@ -20,6 +28,15 @@ interface QueryControlledBottomSheetProps extends Omit<BottomSheetProps, 'isOpen
    queryKey: string
    value?: JSX.ValueOrCell<string>
 }
+
+interface BottomSheetContext {
+   resize(height: string): void
+   resizeToContent(): void
+   resizeToScreen(): void
+   close(): void
+}
+
+const BottomSheetScope = createScope<BottomSheetContext>()
 
 /**
  * A bottom-aligned sheet component that can be opened and closed.
@@ -121,6 +138,34 @@ export function BottomSheet(props: BottomSheetProps) {
       }
    }
 
+   function resize(height: string) {
+      const content = contentRef.get()
+      if (!content) {
+         return
+      }
+      content.style.height = height
+   }
+
+   function resizeToContent() {
+      const content = contentRef.get()
+      if (!content) {
+         return
+      }
+      content.style.removeProperty('height')
+   }
+
+   function resizeToScreen() {
+      resize('100dvh')
+   }
+
+   function close() {
+      const dialogElement = dialogRef.get()
+      if (!dialogElement) {
+         return
+      }
+      dialogElement.close()
+   }
+
    dialogRef.listen(() => {
       // // The 'pull' behavior is created using scroll snaps, and the intersection
       // // observer checks that the user has pulled down a reasonable amount
@@ -161,30 +206,45 @@ export function BottomSheet(props: BottomSheetProps) {
       })
    })
 
+   const ctx: BottomSheetContext = {
+      resize,
+      close,
+      resizeToContent,
+      resizeToScreen
+   }
+
    return (
-      <Teleport to='body'>
-         {If(dialogOpen, () => (
-            <dialog
-               ref={dialogRef}
-               data-content-open={isOpen}
-               class={styles.dialog}
-               onClick--self={handleClickOutside}
-               data-dynamic-sizing={dynamicSizing}
-               onClose={onClose}
-               style={{ '--sheet-content-height': sheetContentHeightStr }}
-            >
-               <div {...rest} ref={contentRef} class={[styles.sheetContentContainer, rest.class]}>
-                  {If(dynamicSizing, () => (
-                     <AnimatedBackground
-                        class={styles.sheetContentContainerBackground}
-                        height={sheetContentHeight}
-                     />
-                  ))}
-                  {children()}
-               </div>
-            </dialog>
-         ))}
-      </Teleport>
+      <BottomSheetScope.Provider value={ctx}>
+         {() => (
+            <Teleport to='body'>
+               {If(dialogOpen, () => (
+                  <dialog
+                     ref={dialogRef}
+                     data-content-open={isOpen}
+                     class={styles.dialog}
+                     onClick--self={handleClickOutside}
+                     data-dynamic-sizing={dynamicSizing}
+                     onClose={onClose}
+                     style={{ '--sheet-content-height': sheetContentHeightStr }}
+                  >
+                     <div
+                        {...rest}
+                        ref={contentRef}
+                        class={[styles.sheetContentContainer, rest.class]}
+                     >
+                        {If(dynamicSizing, () => (
+                           <AnimatedBackground
+                              class={styles.sheetContentContainerBackground}
+                              height={sheetContentHeight}
+                           />
+                        ))}
+                        {children()}
+                     </div>
+                  </dialog>
+               ))}
+            </Teleport>
+         )}
+      </BottomSheetScope.Provider>
    )
 }
 
@@ -296,4 +356,8 @@ export function QueryControlledBottomSheet(props: QueryControlledBottomSheetProp
          {children}
       </BottomSheet>
    )
+}
+
+export function useBottomSheetContext() {
+   return useScopeContext(BottomSheetScope)
 }

@@ -7,44 +7,62 @@ import type { Category } from '@/database/models/category'
 import type { Transaction } from '@/database/models/transaction'
 import { TransactionSheetHeader } from '@/pages/app/home/transaction-sheet/(fragments)/transaction-sheet-header'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
+import { createPointerOrClickHandler } from '@/utilities/miscellaneous'
+import { Cell } from 'retend'
 
 interface TransactionViewModeProps {
-   transaction: Transaction
+   transaction: Cell<Transaction>
    category: Category
+   editModeLoadedPrior: Cell<boolean>
 }
 
 const TransactionViewMode = (props: TransactionViewModeProps) => {
-   const { transaction, category } = props
-   const { add: openEditMode } = useRouteQueryControl(QueryKeys.TransactionSheet.IsInEditMode)
-   const date = transaction.date.toLocaleDateString('en-GB', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
+   const { transaction, category, editModeLoadedPrior } = props
+   const { add: navigateToEditMode } = useRouteQueryControl(QueryKeys.TransactionSheet.IsInEditMode)
+   const label = Cell.derived(() => {
+      return transaction.get().label
    })
-   const time = transaction.date.toLocaleTimeString('en-GB', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
+   const date = Cell.derived(() => {
+      return transaction.get().date.toLocaleDateString('en-GB', {
+         month: 'long',
+         day: 'numeric',
+         year: 'numeric'
+      })
+   })
+   const time = Cell.derived(() => {
+      return transaction.get().date.toLocaleTimeString('en-GB', {
+         hour: 'numeric',
+         minute: 'numeric',
+         hour12: true
+      })
+   })
+   const location = Cell.derived(() => {
+      return transaction.get().location || 'Not Provided'
+   })
+
+   const handleEditClick = createPointerOrClickHandler(() => {
+      navigateToEditMode()
    })
 
    return (
       <>
-         <div class={['w-full', 'has-[:state(--transitioning)]:[&_dl]:animate-fade-in']}>
+         <div
+            class={[
+               'w-full',
+               '[--starting-translate:0_-70%] [--starting-opacity:0]',
+               { 'animate-fade-in': editModeLoadedPrior }
+            ]}
+            style={{
+               animationTimingFunction: 'ease',
+               animationDuration: 'var(--sheet-sizing-speed)'
+            }}
+         >
             <TransactionSheetHeader transaction={transaction} category={category} />
-            <InfoList
-               class={[
-                  'col-span-2 mb-1.25',
-                  '[--starting-translate:0_-60%] [--starting-opacity:0]'
-               ]}
-               style={{
-                  animationTimingFunction: 'ease',
-                  animationDuration: 'var(--sheet-sizing-speed)'
-               }}
-            >
-               <InfoListItem label='Label' value={transaction.label} />
+            <InfoList class='col-span-2 mb-1.25'>
+               <InfoListItem label='Label' value={label} />
                <InfoListItem label='Date' value={date} />
                <InfoListItem label='Time' value={time} />
-               <InfoListItem label='Location' value={transaction.location || 'Not Provided'} />
+               <InfoListItem label='Location' value={location} />
             </InfoList>
          </div>
          <div class='w-full gap-1 grid grid-cols-2'>
@@ -52,7 +70,11 @@ const TransactionViewMode = (props: TransactionViewModeProps) => {
                <Bin class='btn-icon' />
                Delete
             </Button>
-            <Button class='w-full border-canvas-text' onClick={openEditMode}>
+            <Button
+               class='w-full border-canvas-text'
+               onClick={handleEditClick}
+               onPointerUp={handleEditClick}
+            >
                <Pencil class='btn-icon' />
                Edit
             </Button>

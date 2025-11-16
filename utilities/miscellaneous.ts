@@ -102,14 +102,15 @@ function getOffsetFromScrollTop(element: HTMLElement, scrollContainer: HTMLEleme
  * @param target The HTMLElement to scroll into view.
  * @param scrollView The HTMLElement that is scrollable.
  */
-export function scrollIntoView(target: HTMLElement, scrollView: HTMLElement) {
+export function scrollIntoView(target: HTMLElement, scrollView: HTMLElement, offset = 0) {
    const { clientHeight: scrollViewClientHeight } = scrollView
    const { clientHeight } = target
    const top =
       getOffsetFromScrollTop(target, scrollView) +
       clientHeight -
       scrollViewClientHeight / 2 +
-      OFFSET_FROM_KEYBOARD
+      OFFSET_FROM_KEYBOARD -
+      offset
    scrollView.scrollTo({ top, behavior: 'smooth' })
 }
 
