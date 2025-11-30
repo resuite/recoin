@@ -67,6 +67,7 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
    const scrollAnimations: Array<AnimationData> = []
    let hasScrollTimelineSupport = false
    let timeline: ScrollTimeline | null = null
+   let supportsCSSTypedOM = false
 
    const addLinkedAnimation = (animation: ScrollLinkedAnimationOptions) => {
       const { target, keyframes, range, signal, pseudoElement = null } = animation
@@ -152,15 +153,24 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
       source: containerRef,
       add: addLinkedAnimation,
       lock() {
-         containerRef.peek()?.style.setProperty('overflow', 'hidden')
+         if (supportsCSSTypedOM) {
+            containerRef.peek()?.attributeStyleMap.set('overflow', new CSSKeywordValue('hidden'))
+         } else {
+            containerRef.peek()?.style.setProperty('overflow', 'hidden')
+         }
       },
       unlock() {
-         containerRef.peek()?.style.removeProperty('overflow')
+         if (supportsCSSTypedOM) {
+            containerRef.peek()?.attributeStyleMap.delete('overflow')
+         } else {
+            containerRef.peek()?.style.removeProperty('overflow')
+         }
       }
    }
 
    observer.onConnected(containerRef, (container) => {
       hasScrollTimelineSupport = 'ScrollTimeline' in window
+      supportsCSSTypedOM = window.CSS && 'number' in CSS
       if (hasScrollTimelineSupport) {
          timeline = new ScrollTimeline({ source: container, axis })
          return

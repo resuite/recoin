@@ -16,6 +16,7 @@ export function TransactionListing() {
             itemWidth='100%'
             gap='5px'
             direction='block'
+            speed='var(--speed-slow)'
             Template={TransactionItem}
          />
          <TransactionItemBottomSheet />

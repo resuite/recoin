@@ -11,16 +11,18 @@ export function useRouteQueryControl(_key: string | { _root: string }, value = '
    const add = () => {
       query.set(key, value)
    }
-   const remove = () => {
+   const remove = (options: { subKeys?: boolean } = { subKeys: true }) => {
       const subKeys = [...current.get().query.keys()].filter((_key) => {
          return _key.startsWith(`${key}.`)
       })
       query.delete(key)
-      defer(() => {
-         // This tries to prevent any subtle timing/rendering issues
-         // that can come from trying to remove all the keys at once.
-         query.delete(...subKeys)
-      })
+      if (options.subKeys) {
+         defer(() => {
+            // This tries to prevent any subtle timing/rendering issues
+            // that can come from trying to remove all the keys at once.
+            query.delete(...subKeys)
+         })
+      }
    }
    const hasKey = Cell.derived(() => {
       return current.get().query.get(key) === value

@@ -1,8 +1,7 @@
-import { useRouter } from 'retend/router'
+import { Outlet } from 'retend/router'
 
 const Index = () => {
-   const router = useRouter()
-   return <router.Outlet />
+   return <Outlet />
 }
 
 export default Index

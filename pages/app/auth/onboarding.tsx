@@ -7,7 +7,7 @@ import StartingBalance from '@/pages/app/auth/starting-balance'
 import { useAuthContext } from '@/scopes/auth'
 import { useStore } from '@/scopes/livestore'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { useSetupEffect } from 'retend'
+import { Cell, useSetupEffect } from 'retend'
 import { useRouteQuery, useRouter } from 'retend/router'
 
 const Onboarding = () => {
@@ -18,7 +18,10 @@ const Onboarding = () => {
    const workspaceId = userData.get()?.workspaces[0]?.id
    const { showToast } = useToast()
    const { remove: clearOnBoarding } = useRouteQueryControl(QueryKeys.Onboarding)
-   const { hasKey: currencyIsSet } = useRouteQueryControl(QueryKeys.Onboarding.Currency)
+   const currency = query.get(QueryKeys.Onboarding.Currency)
+   const currencyIsSet = Cell.derived(() => {
+      return currency.get() !== null
+   })
    const currencyRef = query.get(QueryKeys.Onboarding.Currency)
 
    const handleFinish = (startingBalance: number) => {

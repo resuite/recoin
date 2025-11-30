@@ -1,5 +1,5 @@
 import { animationsSettled } from '@/utilities/animations'
-import { Cell, If, useSetupEffect } from 'retend'
+import { Cell, If } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './expanding-view.module.css'
@@ -78,24 +78,16 @@ export function ExpandingView(props: ExpandingViewProps) {
       '--expand-size': expandSize,
       '--expand-color': expandColor
    }
+   isOpen.listen(
+      async (viewIsOpen) => {
+         await animationsSettled(clipPathRef)
+         contentLoaded.set(isOpen.get() && viewIsOpen)
+      },
+      { priority: -1 }
+   )
 
-   useSetupEffect(() => {
-      const ignoreIsOpen = isOpen.listen(
-         async (viewIsOpen) => {
-            await animationsSettled(clipPathRef)
-            contentLoaded.set(isOpen.get() && viewIsOpen)
-         },
-         { priority: -1 }
-      )
-
-      const ignoreContentLoaded = contentLoaded.runAndListen((isLoaded) => {
-         document.body.toggleAttribute('data-has-expanded-content', isLoaded)
-      })
-
-      return () => {
-         ignoreIsOpen()
-         ignoreContentLoaded()
-      }
+   contentLoaded.runAndListen((isLoaded) => {
+      document.body.toggleAttribute('data-has-expanded-content', isLoaded)
    })
 
    return (

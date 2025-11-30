@@ -1,4 +1,7 @@
-import { useFullScreenTransitionContext } from '@/components/views/full-screen-transition-view'
+import {
+   FullScreenTransitionView,
+   useFullScreenTransitionContext
+} from '@/components/views/full-screen-transition-view'
 import { useVerticalPanContext } from '@/components/views/vertical-pan-view'
 import { createAchievementListener } from '@/database/seeds/achievements'
 import type { RecoinStore } from '@/database/store'
@@ -13,15 +16,15 @@ import {
    type Store,
    queryDb
 } from '@livestore/livestore'
-import { Cell, If, createScope, useScopeContext, useSetupEffect } from 'retend'
+import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 
-const LiveStoreScope = createScope()
+const LiveStoreScope = createScope('LiveStoreContext')
 
 interface LiveStoreProviderProps<T extends LiveStoreSchema> {
    initStore: (authToken: string) => Promise<Store<T>>
    children: () => JSX.Template
-   fallback?: () => JSX.Template
+   fallback: () => JSX.Template
 }
 
 /**
@@ -37,6 +40,9 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
    const { userData } = useAuthContext()
    const workspaceId = useWorkspaceId()
    const { run: startStore, data: store } = Cell.async(initStore)
+   const storeIsDefined = Cell.derived(() => {
+      return store.get() !== null
+   })
    const fullScreenTransitionContext = tryFn(() => useFullScreenTransitionContext())
    const panCtx = useVerticalPanContext()
 
@@ -60,15 +66,14 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
       }
    })
 
-   return If(store, {
-      true: (store) => {
-         if (!store) {
-            return fallback?.()
-         }
-         return <LiveStoreScope.Provider value={store}>{children}</LiveStoreScope.Provider>
-      },
-      false: fallback
-   })
+   return (
+      <FullScreenTransitionView
+         transition='fade-in'
+         when={storeIsDefined}
+         from={fallback}
+         to={() => <LiveStoreScope.Provider value={store.get()} content={children} />}
+      />
+   )
 }
 
 type ExtractQueryType<

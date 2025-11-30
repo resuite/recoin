@@ -16,7 +16,7 @@ const TRANSACTION_SUCCESS_SCREEN_DELAY = 700
 const TransactionSuccessful = () => {
    const query = useRouteQuery()
    const { currency } = useAuthContext()
-   const { remove: closeTranctionFlow } = useRouteQueryControl(QueryKeys.TransactionFlow)
+   const { remove: closeTransactionFlow } = useRouteQueryControl(QueryKeys.TransactionFlow)
    const { values } = useScopeContext(TransactionDetailsFormScope)
    const { activeViewRef } = useFullScreenTransitionContext()
    const transactionType = query.get(QueryKeys.TransactionFlow.Type).get() as TransactionType
@@ -29,7 +29,11 @@ const TransactionSuccessful = () => {
    useSetupEffect(async () => {
       await animationsSettled(activeViewRef)
       await new Promise((resolve) => setTimeout(resolve, TRANSACTION_SUCCESS_SCREEN_DELAY))
-      closeTranctionFlow()
+      closeTransactionFlow({ subKeys: false })
+
+      return () => {
+         closeTransactionFlow()
+      }
    })
 
    return (
