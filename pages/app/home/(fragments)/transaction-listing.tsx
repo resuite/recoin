@@ -6,7 +6,7 @@ import {
    useGroupedTransactions
 } from '@/utilities/composables/use-transactions'
 import { getRelativeDateLabel } from '@/utilities/dates'
-import { For } from 'retend'
+import { Cell, For, If } from 'retend'
 import { FluidList } from 'retend-utils/components'
 
 function TransactionGroup(group: TransactionDateGroup) {
@@ -34,11 +34,21 @@ function TransactionGroup(group: TransactionDateGroup) {
 
 export function TransactionListing() {
    const groups = useGroupedTransactions()
+   const hasTransactions = Cell.derived(() => {
+      return groups.get().length > 0
+   })
 
-   return (
-      <>
-         {For(groups, TransactionGroup, { key: 'dateStoredValue' })}
-         <TransactionItemBottomSheet />
-      </>
-   )
+   return If(hasTransactions, {
+      true: () => (
+         <>
+            {For(groups, TransactionGroup, { key: 'dateStoredValue' })}
+            <TransactionItemBottomSheet />
+         </>
+      ),
+      false: () => (
+         <div class='text-center pt-[15dvh] min-h-[50dvh] text-canvas-text/60'>
+            No transactions yet.
+         </div>
+      )
+   })
 }
