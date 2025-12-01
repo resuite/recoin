@@ -15,7 +15,7 @@ export const HomeStats = () => {
 
    return (
       <div class='px-1 grid grid-cols-2 gap-x-1'>
-         <div class={['relative text-center py-0.75 col-span-2', ...underlineClasses]}>
+         <div class={['relative text-center pt-0.75 py-0.25 col-span-2', ...underlineClasses]}>
             <h4 class='text-lg'>Current Balance</h4>
             <FitText scalingFactor={1.7} maxFontSize='var(--text-logo)' class='h-3.5'>
                <FormattedMoney currency={currency}>{balance}</FormattedMoney>
@@ -24,7 +24,10 @@ export const HomeStats = () => {
 
          {/* Income */}
          <div
-            class={['relative py-0.75 grid grid-cols-[auto_auto] gap-x-0.25', ...underlineClasses]}
+            class={[
+               'relative pt-0.75 py-0.25 grid grid-cols-[auto_auto] gap-x-0.25',
+               ...underlineClasses
+            ]}
          >
             <Arrows class='h-0.75 justify-self-end' />
             <h4 class='text-sm justify-self-start'>Income</h4>
@@ -40,7 +43,7 @@ export const HomeStats = () => {
          {/* Expense */}
          <div
             class={[
-               'relative py-0.75 grid grid-rows-[auto_1fr] grid-cols-[auto_auto] gap-x-0.25',
+               'relative pt-0.75 py-0.25 grid grid-rows-[auto_1fr] grid-cols-[auto_auto] gap-x-0.25',
                ...underlineClasses
             ]}
          >

@@ -51,7 +51,7 @@ export const RecentTransactionsHeader = () => {
          target: spanRef,
          keyframes: {
             scale: ['1', '1.3'],
-            translate: ['0px 35%', '0px 0px']
+            translate: ['0px min(2.75dvh,50px)', '0px 0px']
          },
          range: { start: event.start, end: event.end },
          signal: spanAnimationController.signal
@@ -137,6 +137,7 @@ export const RecentTransactionsHeader = () => {
                   class={[
                      'will-change-[translate,scale] duration-slow transition-opacity',
                      'inline-block py-0.5 w-fit justify-self-center text-lg',
+                     'translate-y-[min(2.75dvh,50px)]',
                      { 'opacity-0': searchIsOpen }
                   ]}
                >
