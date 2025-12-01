@@ -51,7 +51,7 @@ export const RecentTransactionsHeader = () => {
          target: spanRef,
          keyframes: {
             scale: ['1', '1.3'],
-            translate: ['0px 5dvh', '0px 0px']
+            translate: ['0px 40%', '0px 0px']
          },
          range: { start: event.start, end: event.end },
          signal: spanAnimationController.signal
