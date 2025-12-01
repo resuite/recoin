@@ -47,7 +47,7 @@ const ScrollTimelineScope = createScope<ScrollTimelineContext>('ScrollTimelineVi
 
 type DivProps = JSX.IntrinsicElements['div']
 interface ScrollTimelineViewProps extends DivProps {
-   axis: ScrollTimelineAxis
+   axis?: ScrollTimelineAxis
    children: () => JSX.Template
    ref?: Cell<HTMLElement | null>
 }
@@ -61,7 +61,7 @@ interface ScrollTimelineViewProps extends DivProps {
  * @returns The rendered `ScrollTimelineView` component.
  */
 export function ScrollTimelineView(props: ScrollTimelineViewProps) {
-   const { axis, children, ref: containerRef = Cell.source(null), ...rest } = props
+   const { axis = 'block', children, ref: containerRef = Cell.source(null), ...rest } = props
    const observer = useObserver()
 
    const scrollAnimations: Array<AnimationData> = []
