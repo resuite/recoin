@@ -109,6 +109,7 @@ body {
 
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
    --fab-size: max(12dvh, 50px);
+   --recent-transactions-header-height: calc((var(--spacing) * 1.5) + var(--text-lg));
 
    --epxanding-view-layer: 93;
    --floating-button-layer: 94;
@@ -379,6 +380,17 @@ body {
    @apply after:absolute after:-z-1;
    @apply after:block after:min-h-[47px] after:min-w-[47px];
    @apply after:-top-[calc(var(--spacing)*0.45)] after:-left-[calc(var(--spacing)*0.45)];
+}
+
+@utility sticky-header {
+   @apply before:h-full before:scale-y-[1.6] before:[grid-area:1/1] before:self-end;
+   @apply before:origin-top-left;
+   @apply before:bg-linear-to-b before:from-canvas-background before:from-60% before:to-transparent;
+   @apply before:opacity-0 before:pointer-events-none;
+}
+
+@utility stuck {
+   @apply before:opacity-100;
 }
 
 @custom-variant expanded-ctx {

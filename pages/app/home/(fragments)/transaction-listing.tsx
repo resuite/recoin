@@ -1,3 +1,4 @@
+import { type StickStateChangeEvent, Sticky } from '@/components/ui/sticky'
 import { TRANSACTION_ITEM_HEIGHT } from '@/constants'
 import { TransactionItem } from '@/pages/app/home/(fragments)/transaction-item'
 import TransactionItemBottomSheet from '@/pages/app/home/transaction-sheet'
@@ -12,13 +13,25 @@ import { FluidList } from 'retend-utils/components'
 function TransactionGroup(group: TransactionDateGroup) {
    const { dateStoredValue, transactions } = group
    const date = new Date(dateStoredValue)
+   const stuck = Cell.source(false)
+
+   const handleStickStateChange = (event: StickStateChangeEvent) => {
+      stuck.set(event.wasStuck)
+   }
 
    return (
       <>
-         <h5 class='sticky top-0 text-xl px-1 first-of-type:pt-0.5 pt-1 py-0.5'>
-            {getRelativeDateLabel(date)}
-         </h5>
+         <Sticky
+            topOffset='var(--recent-transactions-header-height)'
+            class={['sticky-header', { stuck }]}
+            onStickStateChange={handleStickStateChange}
+         >
+            <h5 class='text-xl px-1 bg-canvas-background first-of-type:pt-0.5 pt-1 py-0.5 isolate'>
+               {getRelativeDateLabel(date)}
+            </h5>
+         </Sticky>
          <FluidList
+            class='last-of-type:mb-20!'
             items={transactions}
             itemKey='id'
             itemHeight={TRANSACTION_ITEM_HEIGHT}

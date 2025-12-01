@@ -116,20 +116,14 @@ export const RecentTransactionsHeader = () => {
          {/* Can't explain the logic behind the zero-height and translation. It just works. */}
          <div ref={relativeTopOfStickyAreaRef} class='h-0 scroll-mt-px translate-y-[10px]' />
          <Sticky
+            animated
             onStickStateChange={handleStickStateChange}
             onStickTimelineRangeSet={handleStickTimelineRangeSet}
          >
             <h4
                class={[
-                  'text-center px-1 mb-0.5 grid grid-cols-1 *:[grid-area:1/1]',
-                  'before:content before:h-full before:scale-y-[1.6] before:[grid-area:1/1] before:self-end',
-                  'before:origin-top-left',
-                  'before:bg-linear-to-b before:from-canvas-background before:from-60% before:to-transparent',
-                  'before:opacity-0 before:pointer-events-none',
-                  {
-                     'before:opacity-100!': stuck,
-                     'before:hidden': searchIsOpen
-                  }
+                  'text-center px-1 pb-0.5 grid grid-cols-1 *:[grid-area:1/1]',
+                  { 'bg-canvas-background': stuck }
                ]}
             >
                <span

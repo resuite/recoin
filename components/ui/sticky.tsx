@@ -14,10 +14,18 @@ interface StickyProps extends DivProps {
     */
    ref?: Cell<HTMLElement | null>
    /**
+    * Affordance for an offset from the top of the scrolling area.
+    */
+   topOffset?: JSX.ValueOrCell<string>
+   /**
+    * Whether the sticking will be animated.
+    */
+   animated?: boolean
+   /**
     * A callback function that is triggered when the sticky state changes.
     * @param event - The StickChangeEvent object.
     */
-   onStickStateChange: (event: StickStateChangeEvent) => void
+   onStickStateChange?: (event: StickStateChangeEvent) => void
    /**
     * This is fired when the bounds for implementing a sticking animation
     * are set. They are defined as ranges within the parent scrolling area.
@@ -52,7 +60,13 @@ interface StickyProps extends DivProps {
  * @returns A JSX element that acts as a sticky container.
  */
 export function Sticky(props: StickyProps) {
-   const { children, ref: containerRef = Cell.source(null), ...rest } = props
+   const {
+      children,
+      ref: containerRef = Cell.source(null),
+      animated,
+      topOffset = '0px',
+      ...rest
+   } = props
    const offsetMirror = Cell.source<HTMLElement | null>(null)
    const timeline = useScrollTimelineContext()
 
@@ -96,6 +110,9 @@ export function Sticky(props: StickyProps) {
    )
 
    useSetupEffect(() => {
+      if (!animated) {
+         return
+      }
       computeDistance()
       window.addEventListener('resize', computeDistance)
       return () => {
@@ -103,8 +120,14 @@ export function Sticky(props: StickyProps) {
       }
    })
 
+   const style = { '--sticky-top': topOffset }
+
+   if (typeof rest.style === 'object') {
+      Object.assign(style, rest.style)
+   }
+
    return (
-      <div ref={containerRef} class={[styles.container, rest.class]} {...rest}>
+      <div ref={containerRef} {...rest} class={[styles.container, rest.class]} style={style}>
          <div ref={offsetMirror} class={styles.offsetMirror} />
          <div>{children}</div>
       </div>

@@ -1,7 +1,7 @@
 .container {
    position: sticky;
    z-index: 10;
-   top: -1px;
+   top: calc(var(--sticky-top) - 1px);
    display: grid;
    grid-template-columns: 1fr;
    grid-template-rows: 1fr;
@@ -16,6 +16,6 @@
    height: 100%;
    scale: 1 2;
    transform-origin: bottom;
-   translate: 0 -100%;
+   translate: 0 calc(-100% - var(--sticky-top) - 1px);
    pointer-events: none;
 }
