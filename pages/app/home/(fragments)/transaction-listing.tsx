@@ -15,7 +15,7 @@ function TransactionGroup(group: TransactionDateGroup) {
 
    return (
       <>
-         <h5 class='sticky top-0 text-xl px-1 first-of-type:pt-0.5 pt-1 py-0.5 font-bold'>
+         <h5 class='sticky top-0 text-xl px-1 first-of-type:pt-0.5 pt-1 py-0.5'>
             {getRelativeDateLabel(date)}
          </h5>
          <FluidList
