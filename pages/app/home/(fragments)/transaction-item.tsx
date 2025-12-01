@@ -9,8 +9,16 @@ import type { Transaction } from '@/database/models/transaction'
 import { CategoryIcon } from '@/pages/app/home/(fragments)/category-icon'
 import { useAuthContext } from '@/scopes/auth'
 import { useCategory } from '@/utilities/composables/use-categories'
+import { formatTime } from '@/utilities/dates'
+import { If } from 'retend'
 import type { ListTemplateProps } from 'retend-utils/components'
 import { useRouteQuery } from 'retend/router'
+
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
+   year: '2-digit',
+   month: '2-digit',
+   day: '2-digit'
+})
 
 interface TransactionItemProps extends ListTemplateProps<Transaction> {}
 
@@ -21,6 +29,7 @@ export function TransactionItem(props: TransactionItemProps) {
    const { currency } = useAuthContext()
    const arrowDirection = item.type === 'expense' ? 'top-right' : 'bottom-left'
    const sign = item.type === 'expense' ? '-' : '+'
+   const isToday = dateFormatter.format(item.date) === dateFormatter.format(new Date())
 
    const openDrawer = () => {
       query.set(QueryKeys.TransactionSheet.OpenItemId, item.id)
@@ -81,7 +90,10 @@ export function TransactionItem(props: TransactionItemProps) {
                {item.label}
             </span>
             •
-            <RelativeTime date={item.date} />
+            {If(isToday, {
+               true: () => <RelativeTime date={item.date} />,
+               false: () => formatTime(item.date)
+            })}
          </span>
       </Button>
    )

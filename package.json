@@ -46,6 +46,7 @@
       "@okikio/sharedworker": "^1.1.0",
       "@types/google.accounts": "^0.0.18",
       "bowser": "^2.11.0",
+      "date-fns": "^4.1.0",
       "drizzle-orm": "^0.44.5",
       "google-auth-library": "^10.3.0",
       "hono": "^4.7.11",

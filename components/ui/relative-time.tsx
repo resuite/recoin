@@ -1,4 +1,4 @@
-import { formatRelativeDate } from '@/utilities/dates'
+import { formatRelativeTime } from '@/utilities/dates'
 import { Cell } from 'retend'
 import { useDerivedValue, useLiveDate } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
@@ -16,14 +16,14 @@ export function RelativeTime(props: RelativeTimeProps) {
    })
    const liveDate = useLiveDate(30000) // Update every 30 seconds
 
-   const formattedDate = Cell.derived(() => {
+   const formattedDateTime = Cell.derived(() => {
       liveDate.get() // register a dependency on the liveDate
-      return formatRelativeDate(date.get())
+      return formatRelativeTime(date.get())
    })
 
    return (
       <time {...rest} dateTime={dateInISOString}>
-         {formattedDate}
+         {formattedDateTime}
       </time>
    )
 }

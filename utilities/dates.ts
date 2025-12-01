@@ -1,3 +1,4 @@
+import { differenceInDays, startOfToday } from 'date-fns'
 const pr = new Intl.PluralRules('en-US', { type: 'ordinal' })
 
 const suffixes = new Map([
@@ -21,7 +22,7 @@ export function formatTime(date: Date) {
    })
 }
 
-export function formatRelativeDate(date: Date) {
+export function formatRelativeTime(date: Date) {
    const now = new Date()
    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
    const diffInDays = Math.floor(diffInSeconds / 86400)
@@ -57,4 +58,24 @@ export function formatRelativeDate(date: Date) {
    const time = formatTime(date)
 
    return `${day} ${month}, ${year}, ${time}`
+}
+
+export function getRelativeDateLabel(target: Date): string {
+   const today = startOfToday()
+   const diffDays = differenceInDays(today, target)
+
+   if (diffDays === 0) {
+      return 'Today'
+   }
+   if (diffDays === 1) {
+      return 'Yesterday'
+   }
+   if (diffDays < 7) {
+      return target.toLocaleDateString('en-US', { weekday: 'long' })
+   }
+   if (today.getFullYear() === target.getFullYear()) {
+      return target.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+   }
+
+   return target.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
