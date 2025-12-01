@@ -13,7 +13,7 @@ import StartPage from '@/pages/app/auth/start-page'
 import { AuthenticationProvider } from '@/scopes/auth'
 import { LiveStoreProvider } from '@/scopes/livestore'
 import { useApplicationSetup } from '@/utilities/composables/use-application-setup'
-import { If } from 'retend'
+import { Cell, If } from 'retend'
 import { useRouter } from 'retend/router'
 
 const AppContent = () => {
@@ -43,7 +43,7 @@ const AppContent = () => {
                   <FullScreenTransitionView
                      class='dark-scheme w-5 select-none'
                      when={hasFinishedOnboarding}
-                     transition='slide-up'
+                     transition='fade-in'
                      from={Onboarding}
                      to={() => (
                         <SidebarProviderView sidebar={() => <Sidebar />}>
@@ -65,11 +65,14 @@ const AppContent = () => {
 }
 
 const AppRoot = () => {
-   const { ready } = useApplicationSetup()
+   const { ready, hasFinishedOnboarding } = useApplicationSetup()
+   const transition = Cell.derived(() => {
+      return hasFinishedOnboarding.get() ? 'slide-up' : 'fade-in'
+   })
    return (
       <FullScreenTransitionView
          when={ready}
-         transition='slide-up'
+         transition={transition}
          from={StartPage}
          to={AppContent}
          class='grid-lines-with-fade'

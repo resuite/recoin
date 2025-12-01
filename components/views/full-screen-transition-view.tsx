@@ -1,5 +1,5 @@
 import { animationsSettled } from '@/utilities/animations'
-import { Cell, If, createScope, useScopeContext, useSetupEffect } from 'retend'
+import { Cell, If, createScope, useScopeContext } from 'retend'
 import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './full-screen-transition-view.module.css'
@@ -87,23 +87,21 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
       return `var(--speed-${speed.get()})`
    })
 
-   useSetupEffect(() => {
-      return changeWhen.listen(
-         async (hasTransitioned) => {
-            wasModified.set(true)
-            if (hasTransitioned) {
-               nextContentShown.set(true)
-               await animationsSettled(nextViewRef)
-               previousContentShown.set(false)
-            } else {
-               previousContentShown.set(true)
-               await animationsSettled(nextViewRef)
-               nextContentShown.set(false)
-            }
-         },
-         { priority: -1 } // run after DOM updates.
-      )
-   })
+   changeWhen.listen(
+      async (hasTransitioned) => {
+         wasModified.set(true)
+         if (hasTransitioned) {
+            nextContentShown.set(true)
+            await animationsSettled(nextViewRef)
+            previousContentShown.set(false)
+         } else {
+            previousContentShown.set(true)
+            await animationsSettled(nextViewRef)
+            nextContentShown.set(false)
+         }
+      },
+      { priority: -1 } // run after DOM updates.
+   )
 
    const activeViewRef = Cell.derived(() => {
       return changeWhen.get() ? nextViewRef.peek() : previousViewRef.peek()

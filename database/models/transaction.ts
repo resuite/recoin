@@ -46,6 +46,12 @@ const TransactionModel = new Model({
             date: Schema.Date,
             location: Schema.NullOr(Schema.String)
          })
+      }),
+      transactionDeleted: Events.synced({
+         name: 'v1.TransactionDeleted',
+         schema: Schema.Struct({
+            id: Schema.String
+         })
       })
    }
 })
@@ -55,6 +61,10 @@ TransactionModel.addMaterializers((table) => ({
    'v1.TransactionEdited': (payload) => {
       const { id, ...rest } = payload
       return table.update(rest).where({ id })
+   },
+   'v1.TransactionDeleted': (payload) => {
+      const { id } = payload
+      return table.delete().where({ id })
    }
 }))
 

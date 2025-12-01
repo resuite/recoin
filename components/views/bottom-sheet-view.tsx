@@ -30,6 +30,7 @@ interface QueryControlledBottomSheetProps extends Omit<BottomSheetProps, 'isOpen
 }
 
 interface BottomSheetContext {
+   contentRef: Cell<HTMLElement | null>
    resize(height: string): void
    resizeToContent(): void
    resizeToScreen(): void
@@ -107,6 +108,7 @@ export function BottomSheet(props: BottomSheetProps) {
             })
             resizeObserver.observe(content)
             return () => {
+               sheetContentHeight.set(0)
                resizeObserver.disconnect()
             }
          })
@@ -207,6 +209,7 @@ export function BottomSheet(props: BottomSheetProps) {
    })
 
    const ctx: BottomSheetContext = {
+      contentRef,
       resize,
       close,
       resizeToContent,
@@ -256,27 +259,43 @@ interface AnimatedBackgroundProps extends DivProps {
 function AnimatedBackground(props: AnimatedBackgroundProps) {
    const { height: heightProp, ref = Cell.source(null), ...rest } = props
    const height = useDerivedValue(heightProp)
-   const observer = useObserver()
+   let initialHeight: number | undefined = undefined
 
-   observer.onConnected(ref, (div) => {
-      let initialHeightSet = false
+   let lastAfterPseudoElementTranslation = '1'
+   let lastBeforePseudoTranslation = '0px'
 
-      const updateHeight = (nextHeight: number) => {
-         if (!initialHeightSet) {
-            initialHeightSet = true
-            div.setAttribute('data-tracking', 'true')
-            div.style.setProperty('--initialHeight', nextHeight.toString())
+   const updateHeight = (nextHeight: number) => {
+      const div = ref.get()
+      if (div === null) {
+         return
+      }
+
+      if (initialHeight === undefined) {
+         initialHeight = nextHeight
+         if (div.attributeStyleMap) {
+            div.attributeStyleMap.set('height', CSS.px(initialHeight))
          } else {
-            div.style.setProperty('--nextHeight', nextHeight.toString())
+            div.style.height = `${initialHeight}`
          }
+      } else {
+         lastBeforePseudoTranslation = `0 ${initialHeight - nextHeight + 1}px`
+         lastAfterPseudoElementTranslation = `1 ${nextHeight / initialHeight}`
+         div.animate([{ translate: lastBeforePseudoTranslation }], {
+            pseudoElement: ':before',
+            duration: 300,
+            easing: 'cubic-bezier(0.3, 0.4, 0.05, 1)',
+            fill: 'forwards'
+         })
+         div.animate([{ scale: lastAfterPseudoElementTranslation }], {
+            pseudoElement: ':after',
+            duration: 300,
+            easing: 'cubic-bezier(0.3, 0.4, 0.05, 1)',
+            fill: 'forwards'
+         })
       }
+   }
 
-      height.listen(updateHeight)
-
-      return () => {
-         height.ignore(updateHeight)
-      }
-   })
+   height.listen(updateHeight)
 
    return <div {...rest} ref={ref} />
 }

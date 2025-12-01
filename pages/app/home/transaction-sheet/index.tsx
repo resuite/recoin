@@ -2,6 +2,7 @@ import { QueryControlledBottomSheet } from '@/components/views/bottom-sheet-view
 import { SafeAreaView } from '@/components/views/safe-area-view'
 import { QueryKeys } from '@/constants/query-keys'
 import type { Transaction } from '@/database/models/transaction'
+import TransactionDeleteMode from '@/pages/app/home/transaction-sheet/transaction-delete-mode'
 import TransactionEditMode from '@/pages/app/home/transaction-sheet/transaction-edit-mode'
 import TransactionViewMode from '@/pages/app/home/transaction-sheet/transaction-view-mode'
 import { useCategory } from '@/utilities/composables/use-categories'
@@ -13,12 +14,30 @@ import { useRouteQuery } from 'retend/router'
 const TransactionItemBottomSheetContent = () => {
    const query = useRouteQuery()
    const transactionId = query.get(QueryKeys.TransactionSheet.OpenItemId).get()
-   const editModeLoaded = Cell.source(false)
+   const lastLoadedMode = Cell.source<'delete' | 'edit' | null>(null)
+   const animateDirection = Cell.derived(() => {
+      if (lastLoadedMode.get() === 'edit') {
+         return 'down'
+      }
+      if (lastLoadedMode.get() === 'delete') {
+         return 'up'
+      }
+      return null
+   })
+
    const { remove: cleanUpBottomSheetKeys } = useRouteQueryControl(QueryKeys.TransactionSheet)
-   const { hasKey: isInEditMode } = useRouteQueryControl(QueryKeys.TransactionSheet.IsInEditMode)
+   const { hasKey: isInEditMode } = useRouteQueryControl(QueryKeys.TransactionSheet.Mode, 'Edit')
+   const { hasKey: isInDeleteMode } = useRouteQueryControl(
+      QueryKeys.TransactionSheet.Mode,
+      'Delete'
+   )
+
    const mode = Cell.derived(() => {
       if (isInEditMode.get()) {
          return 'edit'
+      }
+      if (isInDeleteMode.get()) {
+         return 'delete'
       }
       return 'details'
    })
@@ -36,8 +55,12 @@ const TransactionItemBottomSheetContent = () => {
       return null
    }
 
-   const handleEditModeLoad = () => {
-      editModeLoaded.set(true)
+   const handleEditLoad = () => {
+      lastLoadedMode.set('edit')
+   }
+
+   const handleDeleteLoad = () => {
+      lastLoadedMode.set('delete')
    }
 
    useSetupEffect(() => {
@@ -49,13 +72,18 @@ const TransactionItemBottomSheetContent = () => {
          {Switch(mode, {
             details: () => (
                <TransactionViewMode
-                  editModeLoadedPrior={editModeLoaded}
+                  animateDirection={animateDirection}
                   transaction={transaction}
                   category={category}
                />
             ),
-            edit: () => (
-               <TransactionEditMode transaction={transaction} onLoad={handleEditModeLoad} />
+            edit: () => <TransactionEditMode transaction={transaction} onLoad={handleEditLoad} />,
+            delete: () => (
+               <TransactionDeleteMode
+                  transaction={transaction}
+                  category={category}
+                  onLoad={handleDeleteLoad}
+               />
             )
          })}
       </SafeAreaView>

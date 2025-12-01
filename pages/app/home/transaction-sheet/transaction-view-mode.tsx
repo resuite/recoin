@@ -2,6 +2,7 @@ import Bin from '@/components/icons/svg/bin'
 import Pencil from '@/components/icons/svg/pencil'
 import { Button } from '@/components/ui/button'
 import { InfoList, InfoListItem } from '@/components/ui/info-list'
+import { SHEET_SIZING_ANIMATION_STYLES } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import type { Category } from '@/database/models/category'
 import type { Transaction } from '@/database/models/transaction'
@@ -12,14 +13,21 @@ import { Cell } from 'retend'
 interface TransactionViewModeProps {
    transaction: Cell<Transaction>
    category: Category
-   editModeLoadedPrior: Cell<boolean>
+   animateDirection: Cell<'up' | 'down' | null>
 }
 
 const TransactionViewMode = (props: TransactionViewModeProps) => {
-   const { transaction, category, editModeLoadedPrior } = props
-   const { add: navigateToEditMode } = useRouteQueryControl(QueryKeys.TransactionSheet.IsInEditMode)
+   const { transaction, category, animateDirection } = props
+   const { add: goToEditMode } = useRouteQueryControl(QueryKeys.TransactionSheet.Mode, 'Edit')
+   const { add: goToDeleteMode } = useRouteQueryControl(QueryKeys.TransactionSheet.Mode, 'Delete')
    const label = Cell.derived(() => {
       return transaction.get().label
+   })
+   const animatingDown = Cell.derived(() => {
+      return animateDirection.get() === 'down'
+   })
+   const animatingUp = Cell.derived(() => {
+      return animateDirection.get() === 'up'
    })
    const date = Cell.derived(() => {
       return transaction.get().date.toLocaleDateString('en-GB', {
@@ -39,25 +47,20 @@ const TransactionViewMode = (props: TransactionViewModeProps) => {
       return transaction.get().location || 'Not Provided'
    })
 
-   const handleEditClick = () => {
-      navigateToEditMode()
-   }
-
    return (
       <>
          <div
-            class={[
-               'w-full',
-               '[--starting-translate:0_-70%] [--starting-opacity:0]',
-               { 'animate-fade-in': editModeLoadedPrior }
-            ]}
-            style={{
-               animationTimingFunction: 'ease',
-               animationDuration: 'var(--sheet-sizing-speed)'
-            }}
+            class={['w-full', { 'animate-fade-in [--starting-translate:0_-70%]': animatingDown }]}
+            style={SHEET_SIZING_ANIMATION_STYLES}
          >
             <TransactionSheetHeader transaction={transaction} category={category} />
-            <InfoList class='col-span-2 mb-1.25'>
+            <InfoList
+               class={[
+                  'col-span-2 mb-1.25',
+                  { 'animate-fade-in [--starting-translate:0_50%]': animatingUp }
+               ]}
+               style={SHEET_SIZING_ANIMATION_STYLES}
+            >
                <InfoListItem label='Label' value={label} />
                <InfoListItem label='Date' value={date} />
                <InfoListItem label='Time' value={time} />
@@ -65,11 +68,11 @@ const TransactionViewMode = (props: TransactionViewModeProps) => {
             </InfoList>
          </div>
          <div class='w-full gap-1 grid grid-cols-2'>
-            <Button class='w-full btn-outline'>
+            <Button class='w-full btn-outline' onClick={goToDeleteMode}>
                <Bin class='btn-icon' />
                Delete
             </Button>
-            <Button class='w-full border-canvas-text' onClick={handleEditClick}>
+            <Button class='w-full border-canvas-text' onClick={goToEditMode}>
                <Pencil class='btn-icon' />
                Edit
             </Button>

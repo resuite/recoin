@@ -10,7 +10,7 @@ export const QueryKeys = {
    TransactionSheet: {
       _root: 'TransactionSheet',
       OpenItemId: 'TransactionSheet.OpenItemId',
-      IsInEditMode: 'TransactionSheet.IsEditMode'
+      Mode: 'TransactionSheet.Mode'
    },
    TransactionFlow: {
       _root: 'TransactionFlow',
