@@ -14,14 +14,14 @@ export function ordinal(n: number) {
    return `${n}${suffix}`
 }
 
+const timeFormatter = new Intl.DateTimeFormat('en-US', {
+   hour: '2-digit',
+   minute: '2-digit',
+   hour12: true
+})
+
 export function formatTime(date: Date) {
-   return date
-      .toLocaleTimeString('en-US', {
-         hour: '2-digit',
-         minute: '2-digit',
-         hour12: true
-      })
-      .toLocaleLowerCase()
+   return timeFormatter.format(date).toLowerCase()
 }
 
 export function formatRelativeTime(date: Date) {
