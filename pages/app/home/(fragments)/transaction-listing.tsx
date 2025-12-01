@@ -31,7 +31,7 @@ function TransactionGroup(group: TransactionDateGroup) {
             </h5>
          </Sticky>
          <FluidList
-            class='last-of-type:mb-20!'
+            class='last-of-type:mb-5!'
             items={transactions}
             itemKey='id'
             itemHeight={TRANSACTION_ITEM_HEIGHT}

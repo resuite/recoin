@@ -42,7 +42,7 @@ export function useGroupedTransactions(): Cell<Array<TransactionDateGroup>> {
    })
 
    return Cell.derived(() => {
-      const dates = map.get().keys().toArray()
+      const dates = [...map.get().keys()]
       return dates.map((dateStoredValue) => {
          return {
             dateStoredValue,

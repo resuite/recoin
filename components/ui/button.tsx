@@ -65,7 +65,7 @@ function addClickTracker(ref: Cell<HTMLElement | null>, shouldTrack: Cell<boolea
       timeout = setTimeout(() => {
          timeout = undefined
          button?.removeAttribute('data-clicked')
-      }, 300)
+      }, 250)
    }
 
    function handleTrackingEnd(this: PointerTracker, event: TrackedEndedEvent) {
