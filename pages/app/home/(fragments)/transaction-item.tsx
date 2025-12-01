@@ -89,7 +89,7 @@ export function TransactionItem(props: TransactionItemProps) {
             >
                {item.label}
             </span>
-            •
+            •{' '}
             {If(isToday, {
                true: () => <RelativeTime date={item.date} />,
                false: () => formatTime(item.date)
