@@ -383,10 +383,12 @@ body {
 }
 
 @utility sticky-header {
-   @apply before:h-full before:scale-y-[1.6] before:[grid-area:1/1] before:self-end;
-   @apply before:origin-top-left;
-   @apply before:bg-linear-to-b before:from-canvas-background before:from-60% before:to-transparent;
-   @apply before:opacity-0 before:pointer-events-none;
+   @apply before:h-full before:scale-y-[1.3] before:[grid-area:1/1] before:self-end;
+   @apply before:origin-top-left before:bg-linear-to-b before:opacity-0 before:pointer-events-none;
+
+   &::before {
+      background-image: linear-gradient(to bottom, var(--color-canvas-background) 60%, transparent);
+   }
 }
 
 @utility stuck {

@@ -14,6 +14,9 @@ function TransactionGroup(group: TransactionDateGroup) {
    const { dateStoredValue, transactions } = group
    const date = new Date(dateStoredValue)
    const stuck = Cell.source(false)
+   const inFlow = Cell.derived(() => {
+      return !stuck.get()
+   })
 
    const handleStickStateChange = (event: StickStateChangeEvent) => {
       stuck.set(event.wasStuck)
@@ -26,7 +29,12 @@ function TransactionGroup(group: TransactionDateGroup) {
             class={['sticky-header', { stuck }]}
             onStickStateChange={handleStickStateChange}
          >
-            <h5 class='text-xl px-1 bg-canvas-background first-of-type:pt-0.5 pt-1 py-0.5 isolate'>
+            <h5
+               class={[
+                  'text-xl px-1 first-of-type:pt-0.5 pt-1 py-0.5 isolate',
+                  { 'bg-canvas-background': inFlow }
+               ]}
+            >
                {getRelativeDateLabel(date)}
             </h5>
          </Sticky>
