@@ -1,12 +1,4 @@
-import {
-   Cell,
-   createScope,
-   If,
-   type SourceCell,
-   useObserver,
-   useScopeContext,
-   useSetupEffect
-} from 'retend'
+import { Cell, createScope, If, type SourceCell, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
 import { Teleport } from 'retend/teleport'
@@ -168,7 +160,7 @@ export function BottomSheet(props: BottomSheetProps) {
       dialogElement.close()
    }
 
-   dialogRef.listen(() => {
+   dialogRef.runAndListen(() => {
       // // The 'pull' behavior is created using scroll snaps, and the intersection
       // // observer checks that the user has pulled down a reasonable amount
       // // before closing.
@@ -202,12 +194,6 @@ export function BottomSheet(props: BottomSheetProps) {
 
    isOpen.listen(handleIsOpenChange)
 
-   useSetupEffect(() => {
-      return dialogOpen.runAndListen((dialogIsOpen) => {
-         document.body.toggleAttribute('data-has-expanded-content', dialogIsOpen)
-      })
-   })
-
    const ctx: BottomSheetContext = {
       contentRef,
       resize,
@@ -223,7 +209,6 @@ export function BottomSheet(props: BottomSheetProps) {
                {If(dialogOpen, () => (
                   <dialog
                      ref={dialogRef}
-                     data-content-open={isOpen}
                      class={styles.dialog}
                      onClick--self={handleClickOutside}
                      data-dynamic-sizing={dynamicSizing}

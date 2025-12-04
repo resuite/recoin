@@ -41,7 +41,7 @@ const AppContent = () => {
             <LiveStoreProvider initStore={createRecoinStore} fallback={StoreLoadingFallback}>
                {() => (
                   <FullScreenTransitionView
-                     class='dark-scheme w-5 select-none'
+                     class='w-5 select-none'
                      when={hasFinishedOnboarding}
                      transition='fade-in'
                      from={Onboarding}

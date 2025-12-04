@@ -158,7 +158,7 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
    }
 
    observer.onConnected(containerRef, (container) => {
-      if (Flags.Runtime.Supports.ScrollTimeline) {
+      if (hasScrollTimelineSupport) {
          timeline = new ScrollTimeline({ source: container, axis })
          return
       }

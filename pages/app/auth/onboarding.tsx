@@ -44,7 +44,7 @@ const Onboarding = () => {
    })
 
    return (
-      <StackViewGroup>
+      <StackViewGroup class='dark-scheme'>
          <StackView root>{() => <CurrencySelection />}</StackView>
          <StackView isOpen={currencyIsSet} onCloseRequested={router.back}>
             {() => <StartingBalance onFinish={handleFinish} />}

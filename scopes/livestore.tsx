@@ -5,9 +5,10 @@ import {
    type State,
    type Store
 } from '@livestore/livestore'
-import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
+import { Cell, createScope, If, useScopeContext, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import {
+   type FullScreenTransitionEvent,
    FullScreenTransitionView,
    useFullScreenTransitionContext
 } from '@/components/views/full-screen-transition-view'
@@ -16,6 +17,7 @@ import { createAchievementListener } from '@/database/seeds/achievements'
 import type { RecoinStore } from '@/database/store'
 import { useAuthContext } from '@/scopes/auth'
 import { animationsSettled } from '@/utilities/animations'
+import { useApplicationSetup } from '@/utilities/composables/use-application-setup'
 import { useWorkspaceId } from '@/utilities/composables/use-workspace-id'
 import { tryFn } from '@/utilities/miscellaneous'
 
@@ -37,6 +39,7 @@ interface LiveStoreProviderProps<T extends LiveStoreSchema> {
  */
 export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStoreProviderProps<T>) {
    const { initStore, children, fallback } = props
+   const { hasFinishedOnboarding } = useApplicationSetup()
    const { userData } = useAuthContext()
    const workspaceId = useWorkspaceId()
    const { run: startStore, data: store } = Cell.async(initStore)
@@ -66,14 +69,38 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
       }
    })
 
-   return (
-      <FullScreenTransitionView
-         transition='fade-in'
-         when={storeIsDefined}
-         from={fallback}
-         to={() => <LiveStoreScope.Provider value={store.get()} content={children} />}
-      />
-   )
+   const AppContent = () => {
+      return <LiveStoreScope.Provider value={store.get()} content={children} />
+   }
+
+   const handleFullScreenTransition = function (
+      this: HTMLElement,
+      event: FullScreenTransitionEvent
+   ) {
+      if (event.direction === 'forwards') {
+         this.removeAttribute('class')
+      } else {
+         this.classList.add('light-scheme', 'rounded-t-3xl')
+      }
+   }
+
+   return If(hasFinishedOnboarding, {
+      true: () => (
+         <FullScreenTransitionView
+            class='light-scheme rounded-t-3xl overflow-hidden'
+            transition='fade-in'
+            when={storeIsDefined}
+            from={fallback}
+            to={AppContent}
+            onFullScreenTransition={handleFullScreenTransition}
+         />
+      ),
+      false: () =>
+         If(store, {
+            true: AppContent,
+            false: fallback
+         })
+   })
 }
 
 type ExtractQueryType<

@@ -53,6 +53,16 @@
          }
       }
 
+      &[data-transition='fade-in'] {
+         &[data-changed] > .nextView {
+            animation-name: fade-in-entering;
+         }
+
+         &[data-changed] > .previousView {
+            animation-name: fade-in-leaving;
+         }
+      }
+
       /*&[data-transition='slide-down'] {
          &:not([data-changed]) {
             & > .nextView {
@@ -65,23 +75,6 @@
             & > .previousView {
                opacity: 30%;
                scale: 0.4;
-            }
-         }
-      }
-
-      &[data-transition='fade-in'] {
-         &:not([data-changed]) {
-            & > .nextView {
-               pointer-events: none;
-               opacity: 0%;
-               scale: 1.05;
-            }
-         }
-
-         &[data-changed] {
-            & > .previousView {
-               opacity: 0%;
-               scale: 0.75;
             }
          }
       }
@@ -142,5 +135,19 @@
    to {
       opacity: 0;
       scale: 0.97;
+   }
+}
+
+@keyframes fade-in-leaving {
+   to {
+      opacity: 0;
+      scale: 0.75;
+   }
+}
+
+@keyframes fade-in-entering {
+   from {
+      opacity: 0;
+      scale: 1.05;
    }
 }

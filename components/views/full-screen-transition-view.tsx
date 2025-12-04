@@ -19,6 +19,10 @@ const FullScreenTransitionScope = createScope<FullScreenTransitionCtx>()
  */
 interface FullScreenTransitionViewProps extends DivProps {
    /**
+    * Reference to the underlying container element.
+    */
+   ref?: Cell<HTMLElement | null>
+   /**
     * A boolean condition. When this value changes from false to true,
     * the component transitions from the 'from' view to the 'to' view.
     */
@@ -41,6 +45,10 @@ interface FullScreenTransitionViewProps extends DivProps {
     * @default '--speed-device'
     */
    speed?: JSX.ValueOrCell<TransitionSpeed>
+   /**
+    * Fires after a transition ends.
+    */
+   onFullScreenTransition?: (event: FullScreenTransitionEvent) => void
 }
 
 /**
@@ -67,6 +75,7 @@ interface FullScreenTransitionViewProps extends DivProps {
  */
 export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
    const {
+      ref: containerRef = Cell.source(null),
       when: changeWhenProp,
       from: current,
       to: next,
@@ -99,6 +108,9 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
             await animationsSettled(nextViewRef)
             nextContentShown.set(false)
          }
+         const container = containerRef.peek()
+         const direction = hasTransitioned ? 'forwards' : 'back'
+         container?.dispatchEvent(new FullScreenTransitionEvent(direction))
       },
       { priority: -1 } // run after DOM updates.
    )
@@ -116,6 +128,7 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
          {() => (
             <div
                {...rest}
+               ref={containerRef}
                style={{ '--full-screen-transition-speed': transitionSpeed }}
                data-transition={transition}
                data-changed={changeWhen}
@@ -140,4 +153,16 @@ export function FullScreenTransitionView(props: FullScreenTransitionViewProps) {
  */
 export function useFullScreenTransitionContext() {
    return useScopeContext(FullScreenTransitionScope)
+}
+
+type TransitionDirection = 'back' | 'forwards'
+
+export class FullScreenTransitionEvent extends Event {
+   constructor(public direction: TransitionDirection) {
+      super('fullscreentransition', {
+         cancelable: false,
+         composed: false,
+         bubbles: false
+      })
+   }
 }

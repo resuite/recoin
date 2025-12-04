@@ -1,27 +1,26 @@
 .dialog {
    position: fixed;
    z-index: var(--z-index-bottom-sheet);
-   top: 0;
+   bottom: 0;
    left: 0;
    display: grid;
    align-items: end;
    width: 100dvw;
-   height: 100dvh;
    background-color: transparent;
    grid-template-rows: 1fr;
    grid-template-columns: 1fr;
-   contain: strict;
 
    &::before {
+      position: fixed;
       top: 0;
       left: 0;
       display: block;
-      width: 100%;
-      height: 100%;
+      width: 2dvw;
+      height: 2dvh;
+      scale: 120;
       grid-area: 1 / 1;
       background-color: #00000065;
       content: '';
-      pointer-events: none;
       z-index: -1;
       animation: fade-in var(--speed-device) var(--timing) backwards;
       transition: opacity var(--speed-device) var(--timing);
