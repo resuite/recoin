@@ -5,6 +5,8 @@
    display: grid;
    grid-template-columns: 1fr;
    grid-template-rows: 1fr;
+   container-type: scroll-state;
+   container-name: sticky;
 }
 
 .container > * {

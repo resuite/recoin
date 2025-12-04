@@ -391,12 +391,40 @@ body {
    }
 }
 
-@utility stuck {
+@utility sticky-bg {
    @apply before:opacity-100;
 }
 
 @custom-variant expanded-ctx {
    &:where([data-expanded-ctx] &) {
       @slot;
+   }
+}
+
+@custom-variant stuck {
+   @supports (container-type: scroll-state) {
+      @container sticky scroll-state(stuck: top) {
+         @slot;
+      }
+   }
+
+   @supports not (container-type: scroll-state) {
+      &:where([data-stuck] &, &[data-stuck]) {
+         @slot;
+      }
+   }
+}
+
+@custom-variant not-stuck {
+   @supports (container-type: scroll-state) {
+      @container sticky not scroll-state(stuck: top) {
+         @slot;
+      }
+   }
+
+   @supports not (container-type: scroll-state) {
+      &:not(:where([data-stuck] &, &[data-stuck])) {
+         @slot;
+      }
    }
 }

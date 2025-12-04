@@ -1,4 +1,6 @@
-import { type StickStateChangeEvent, Sticky } from '@/components/ui/sticky'
+import { Cell, For, If } from 'retend'
+import { FluidList } from 'retend-utils/components'
+import { Sticky } from '@/components/ui/sticky'
 import { TRANSACTION_ITEM_HEIGHT } from '@/constants'
 import { TransactionItem } from '@/pages/app/home/(fragments)/transaction-item'
 import TransactionItemBottomSheet from '@/pages/app/home/transaction-sheet'
@@ -7,34 +9,18 @@ import {
    useGroupedTransactions
 } from '@/utilities/composables/use-transactions'
 import { getRelativeDateLabel } from '@/utilities/dates'
-import { Cell, For, If } from 'retend'
-import { FluidList } from 'retend-utils/components'
 
 function TransactionGroup(group: TransactionDateGroup) {
    const { dateStoredValue, transactions } = group
    const date = new Date(dateStoredValue)
-   const stuck = Cell.source(false)
-   const inFlow = Cell.derived(() => {
-      return !stuck.get()
-   })
-
-   const handleStickStateChange = (event: StickStateChangeEvent) => {
-      stuck.set(event.wasStuck)
-   }
 
    return (
       <>
          <Sticky
             topOffset='var(--recent-transactions-header-height)'
-            class={['sticky-header', { stuck }]}
-            onStickStateChange={handleStickStateChange}
+            class='sticky-header stuck:sticky-bg'
          >
-            <h5
-               class={[
-                  'text-xl px-1 first-of-type:pt-0.5 pt-1 py-0.5 isolate',
-                  { 'bg-canvas-background': inFlow }
-               ]}
-            >
+            <h5 class='text-xl px-1 first-of-type:pt-0.5 pt-1 py-0.5 isolate not-stuck:bg-canvas-background'>
                {getRelativeDateLabel(date)}
             </h5>
          </Sticky>

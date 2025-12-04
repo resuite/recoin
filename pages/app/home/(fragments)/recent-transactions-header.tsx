@@ -1,21 +1,16 @@
+import { Cell, If, useSetupEffect } from 'retend'
+import { useIntersectionObserver } from 'retend-utils/hooks'
 import Add from '@/components/icons/svg/add'
 import Search from '@/components/icons/svg/search'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-   type StickStateChangeEvent,
-   type StickTimelineRangeSetEvent,
-   Sticky
-} from '@/components/ui/sticky'
+import { type StickTimelineRangeSetEvent, Sticky } from '@/components/ui/sticky'
 import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { createPointerOrClickHandler, defer } from '@/utilities/miscellaneous'
-import { Cell, If, useSetupEffect } from 'retend'
-import { useIntersectionObserver } from 'retend-utils/hooks'
 
 export const RecentTransactionsHeader = () => {
-   const stuck = Cell.source(false)
    const timeline = useScrollTimelineContext()
    const {
       add: openSearch,
@@ -37,10 +32,6 @@ export const RecentTransactionsHeader = () => {
          openSearch()
       }
    })
-
-   const handleStickStateChange = (event: StickStateChangeEvent) => {
-      stuck.set(event.wasStuck)
-   }
 
    const handleStickTimelineRangeSet = (event: StickTimelineRangeSetEvent) => {
       if (spanAnimationController) {
@@ -115,17 +106,8 @@ export const RecentTransactionsHeader = () => {
       <>
          {/* Can't explain the logic behind the zero-height and translation. It just works. */}
          <div ref={relativeTopOfStickyAreaRef} class='h-0 scroll-mt-px translate-y-[10px]' />
-         <Sticky
-            animated
-            onStickStateChange={handleStickStateChange}
-            onStickTimelineRangeSet={handleStickTimelineRangeSet}
-         >
-            <h4
-               class={[
-                  'text-center px-1 pb-0.5 grid grid-cols-1 *:[grid-area:1/1]',
-                  { 'bg-canvas-background': stuck }
-               ]}
-            >
+         <Sticky animated onStickTimelineRangeSet={handleStickTimelineRangeSet}>
+            <h4 class='text-center px-1 pb-0.5 grid grid-cols-1 *:[grid-area:1/1] stuck:bg-canvas-background'>
                <span
                   ref={spanRef}
                   class={[
@@ -141,7 +123,7 @@ export const RecentTransactionsHeader = () => {
                   class={[
                      'duration-bit-slower transition-[opacity,translate]',
                      'button-bare z-2 opacity-0 translate-y-0.5 ease-out justify-self-end self-center',
-                     { 'opacity-100 translate-y-0!': stuck }
+                     'stuck:opacity-100 stuck:translate-y-0!'
                   ]}
                   onClick={toggleSearch}
                   onPointerDown={toggleSearch}

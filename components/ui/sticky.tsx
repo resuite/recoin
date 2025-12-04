@@ -1,7 +1,7 @@
-import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
 import { Cell, useSetupEffect } from 'retend'
-import { useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { useIntersectionObserver } from 'retend-utils/hooks'
+import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
 import styles from './sticky.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -49,7 +49,7 @@ interface StickyProps extends DivProps {
  *
  * <div class="scroller">
  *   <Sticky onStickChange={handleStickChange}>
- *     <div class="content">
+ *     <div class="content stuck:bg-red-400">
  *       Hello World
  *     </div>
  *   </Sticky>
@@ -69,6 +69,7 @@ export function Sticky(props: StickyProps) {
    } = props
    const offsetMirror = Cell.source<HTMLElement | null>(null)
    const timeline = useScrollTimelineContext()
+   let supportsScrollStateQueries = false
 
    const computeDistance = () => {
       const container = containerRef?.get()
@@ -101,7 +102,15 @@ export function Sticky(props: StickyProps) {
          if (!scroller || !container) {
             return
          }
-         const event = new StickStateChangeEvent(!entry.isIntersecting, scroller)
+         const isStuck = !entry.isIntersecting
+         if (!supportsScrollStateQueries) {
+            if (isStuck) {
+               container.setAttribute('data-stuck', 'true')
+            } else {
+               container.removeAttribute('data-stuck')
+            }
+         }
+         const event = new StickStateChangeEvent(isStuck, scroller)
          container.dispatchEvent(event)
       },
       () => {
@@ -110,6 +119,7 @@ export function Sticky(props: StickyProps) {
    )
 
    useSetupEffect(() => {
+      supportsScrollStateQueries = CSS.supports('container-type', 'scroll-state')
       if (!animated) {
          return
       }
