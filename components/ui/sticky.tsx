@@ -23,6 +23,12 @@ interface StickyProps extends DivProps {
     */
    animated?: boolean
    /**
+    * An optional string identifier to group multiple sticky elements.
+    * Elements within the same layer can interact, for example, to determine
+    * which one is currently 'topmost' when multiple are stuck.
+    */
+   layer?: string
+   /**
     * A callback function that is triggered when the sticky state changes.
     * @param event - The StickChangeEvent object.
     */
@@ -66,6 +72,7 @@ export function Sticky(props: StickyProps) {
       ref: containerRef = Cell.source(null),
       animated,
       topOffset = '0px',
+      layer,
       ...rest
    } = props
    const offsetMirror = Cell.source<HTMLElement | null>(null)
@@ -94,11 +101,32 @@ export function Sticky(props: StickyProps) {
       container.dispatchEvent(new StickTimelineRangeSetEvent(timelineRangeStart, timelineRangeEnd))
    }
 
+   const selectElementInLayer = (isStuck: boolean) => {
+      const scrollable = timeline.source.peek() as Element
+      const container = containerRef.peek() as Element
+      const allStuckElementsInLayer = scrollable.querySelectorAll(
+         `:scope > [data-layer="${layer}"][data-stuck]`
+      )
+      if (isStuck) {
+         for (const element of allStuckElementsInLayer) {
+            element.toggleAttribute('data-topmost', element === container)
+         }
+      } else {
+         container.removeAttribute('data-topmost')
+         const lastStickyElement = allStuckElementsInLayer.item(allStuckElementsInLayer.length - 1)
+         lastStickyElement?.toggleAttribute('data-topmost', true)
+      }
+   }
+
    useIntersectionObserver(
       offsetMirror,
       ([entry]) => {
          const container = containerRef.peek()
          const scroller = timeline.source.peek()
+         const rect = entry.boundingClientRect
+         if (rect.y > innerHeight || rect.x > innerWidth) {
+            return
+         }
          if (!scroller || !container) {
             return
          }
@@ -109,6 +137,9 @@ export function Sticky(props: StickyProps) {
             } else {
                container.removeAttribute('data-stuck')
             }
+         }
+         if (layer) {
+            selectElementInLayer(isStuck)
          }
          const event = new StickStateChangeEvent(isStuck, scroller)
          container.dispatchEvent(event)
@@ -136,7 +167,13 @@ export function Sticky(props: StickyProps) {
    }
 
    return (
-      <div ref={containerRef} {...rest} class={[styles.container, rest.class]} style={style}>
+      <div
+         data-layer={layer}
+         ref={containerRef}
+         {...rest}
+         class={[styles.container, rest.class]}
+         style={style}
+      >
          <div ref={offsetMirror} class={styles.offsetMirror} />
          <div>{children}</div>
       </div>

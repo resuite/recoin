@@ -18,7 +18,8 @@ function TransactionGroup(group: TransactionDateGroup) {
       <>
          <Sticky
             topOffset='var(--recent-transactions-header-height)'
-            class='sticky-header stuck:sticky-bg'
+            layer='transaction-listing-heading'
+            class='sticky-header stuck:sticky-bg stuck:not-data-topmost:invisible'
          >
             <h5 class='text-xl px-1 first-of-type:pt-0.5 pt-1 py-0.5 isolate not-stuck:bg-canvas-background'>
                {getRelativeDateLabel(date)}
