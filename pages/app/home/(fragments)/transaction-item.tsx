@@ -82,7 +82,7 @@ export function TransactionItem(props: TransactionItemProps) {
                {item.amount}
             </FormattedMoney>
          </FitText>
-         <span class='col-span-2 inline-flex items-start gap-0.125 text-canvas-text/70'>
+         <span class='col-span-2 inline-flex items-start gap-[calc(var(--spacing)*0.125)] text-canvas-text/70'>
             <span
                class='text-canvas-text/70 max-w-[95%] overflow-ellipsis overflow-hidden'
                title={item.label}

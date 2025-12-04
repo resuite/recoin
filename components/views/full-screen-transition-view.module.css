@@ -38,7 +38,7 @@
          pointer-events: none;
       }
 
-      &[data-transition="slide-up"] {
+      &[data-transition='slide-up'] {
          &[data-changed] > .nextView,
          &:not([data-changed]) > .previousView {
             animation-delay: var(--speed-slow);
@@ -103,7 +103,7 @@
          }
       }*/
 
-      &[data-transition="blink"] {
+      &[data-transition='blink'] {
          &[data-changed] > .previousView,
          &:not([data-changed]) > .nextView {
             animation-name: blink-leaving;

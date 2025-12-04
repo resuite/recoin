@@ -1,3 +1,4 @@
+import '@/utilities/ultra-modern'
 import { hydrate } from 'retend-server/client'
 import { createRouter } from './router.client'
 

@@ -1,22 +1,9 @@
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { Flags } from '@/constants/flags'
 import { clamp } from '@/utilities/miscellaneous'
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import classes from './scroll-timeline-view.module.css'
-
-declare global {
-   // The types are not yet bundled with typescript.
-   type ScrollTimelineAxis = 'inline' | 'block'
-   class ScrollTimeline extends AnimationTimeline {
-      constructor(options: { source: Element; axis: ScrollTimelineAxis })
-      readonly source: Element
-      readonly axis: ScrollTimelineAxis
-   }
-   interface KeyframeAnimationOptions {
-      rangeStart?: string
-      rangeEnd?: string
-   }
-}
 
 interface ScrollLinkedAnimationRange {
    start?: number
@@ -65,9 +52,9 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
    const observer = useObserver()
 
    const scrollAnimations: Array<AnimationData> = []
-   let hasScrollTimelineSupport = false
+   const hasScrollTimelineSupport = Flags.Runtime.Supports.ScrollTimeline
    let timeline: ScrollTimeline | null = null
-   let supportsCSSTypedOM = false
+   const supportsCSSTypedOM = Flags.Runtime.Supports.CSSTypedOM
 
    const addLinkedAnimation = (animation: ScrollLinkedAnimationOptions) => {
       const { target, keyframes, range, signal, pseudoElement = null } = animation
@@ -153,25 +140,25 @@ export function ScrollTimelineView(props: ScrollTimelineViewProps) {
       source: containerRef,
       add: addLinkedAnimation,
       lock() {
+         const container = containerRef.peek()
          if (supportsCSSTypedOM) {
-            containerRef.peek()?.attributeStyleMap.set('overflow', new CSSKeywordValue('hidden'))
+            container?.attributeStyleMap.set('overflow', new CSSKeywordValue('hidden'))
          } else {
-            containerRef.peek()?.style.setProperty('overflow', 'hidden')
+            container?.style.setProperty('overflow', 'hidden')
          }
       },
       unlock() {
+         const container = containerRef.peek()
          if (supportsCSSTypedOM) {
-            containerRef.peek()?.attributeStyleMap.delete('overflow')
+            container?.attributeStyleMap.delete('overflow')
          } else {
-            containerRef.peek()?.style.removeProperty('overflow')
+            container?.style.removeProperty('overflow')
          }
       }
    }
 
    observer.onConnected(containerRef, (container) => {
-      hasScrollTimelineSupport = 'ScrollTimeline' in window
-      supportsCSSTypedOM = window.CSS && 'number' in CSS
-      if (hasScrollTimelineSupport) {
+      if (Flags.Runtime.Supports.ScrollTimeline) {
          timeline = new ScrollTimeline({ source: container, axis })
          return
       }

@@ -66,7 +66,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }
             class={[
                'grid place-items-center',
                'border-b-2 border-light-yellow',
-               'expanded-ctx:dark-scheme expanded-ctx:scale-[0.85] expanded-ctx:bg-canvas expanded-ctx:rotate-[225deg] expanded-ctx:border-none',
+               'expanded-ctx:dark-scheme expanded-ctx:scale-[0.85] expanded-ctx:bg-canvas expanded-ctx:rotate-225 expanded-ctx:border-none',
                '[transition:rotate_var(--speed-slower)_var(--timing-bounce-slower)_var(--rotate-delay,0ms),scale_var(--default-speed),translate_var(--default-speed)] ease-in-out',
                '[--rotate-delay:var(--speed-default)]',
                {
@@ -85,7 +85,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }
          >
             {() => (
                <>
-                  <div class='after:block after:h-0.15 after:bg-canvas-text after:animate-lining overflow-hidden'>
+                  <div class='after:block after:h-[calc(var(--spacing)*0.15)] after:bg-canvas-text after:animate-lining overflow-hidden'>
                      <div class='text-title animate-fade-in animate-delay-bit-slower'>
                         hello recoin!
                      </div>

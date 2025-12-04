@@ -1,5 +1,5 @@
 @property --stack-view-group-pull-progress {
-   syntax: "<number>";
+   syntax: '<number>';
    initial-value: 0;
    inherits: true;
 }
@@ -49,7 +49,7 @@
       display: block;
       opacity: 0;
       background-color: black;
-      content: "";
+      content: '';
       transition-timing-function: inherit;
       transition-duration: var(--speed-device);
       transition-property: opacity;

@@ -1,5 +1,5 @@
 @property --pull-zone-scroll-top {
-   syntax: "<number>";
+   syntax: '<number>';
    initial-value: 0;
    inherits: true;
 }

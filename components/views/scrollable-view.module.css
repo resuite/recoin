@@ -19,7 +19,7 @@
          transparent,
          var(--color-canvas-background)
       );
-      content: "";
+      content: '';
       pointer-events: none;
       grid-area: 1 / 1;
    }

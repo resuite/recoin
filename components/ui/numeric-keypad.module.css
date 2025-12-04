@@ -30,7 +30,7 @@
 
    &:active::before {
       display: block;
-      content: "";
+      content: '';
       position: absolute;
       width: auto;
       height: 100%;

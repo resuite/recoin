@@ -34,7 +34,7 @@
       border-width: var(--coin-thickness) 0 var(--coin-thickness) 0;
       border-style: solid;
       background-color: var(--color-canvas-text);
-      content: "";
+      content: '';
       transform: translateZ(calc(var(--coin-breath) * -0.5)) rotateY(45deg);
       filter: brightness(0.7);
       place-items: center;
@@ -55,7 +55,7 @@
       border-radius: 50%;
       opacity: 0.75;
       background-color: var(--color-canvas-shadow);
-      content: "";
+      content: '';
       transform: translateY(300%) scaleX(0.5) translateZ(calc(var(--coin-breath) * -0.5));
    }
 }
@@ -98,7 +98,7 @@
       border-style: dashed;
       border-radius: 50%;
 
-      content: "";
+      content: '';
       grid-area: 1 / 1;
    }
 }
@@ -150,7 +150,7 @@
       height: 100%;
       opacity: 0.1;
       background-color: var(--color-canvas-text);
-      content: "";
+      content: '';
       transform: translateX(-100%);
       animation: shimmer var(--speed-slower) ease-in;
       animation-delay: var(--speed-slow);

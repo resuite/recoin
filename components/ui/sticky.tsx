@@ -2,6 +2,7 @@ import { Cell, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver } from 'retend-utils/hooks'
 import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
+import { Flags } from '@/constants/flags'
 import styles from './sticky.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -69,7 +70,6 @@ export function Sticky(props: StickyProps) {
    } = props
    const offsetMirror = Cell.source<HTMLElement | null>(null)
    const timeline = useScrollTimelineContext()
-   let supportsScrollStateQueries = false
 
    const computeDistance = () => {
       const container = containerRef?.get()
@@ -103,7 +103,7 @@ export function Sticky(props: StickyProps) {
             return
          }
          const isStuck = !entry.isIntersecting
-         if (!supportsScrollStateQueries) {
+         if (!Flags.Runtime.Supports.ScrollStateQueries) {
             if (isStuck) {
                container.setAttribute('data-stuck', 'true')
             } else {
@@ -119,7 +119,6 @@ export function Sticky(props: StickyProps) {
    )
 
    useSetupEffect(() => {
-      supportsScrollStateQueries = CSS.supports('container-type', 'scroll-state')
       if (!animated) {
          return
       }

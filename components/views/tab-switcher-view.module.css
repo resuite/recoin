@@ -25,7 +25,7 @@
    width: 100%;
    height: 3px;
    background-color: var(--canvas-text);
-   content: "";
+   content: '';
    grid-area: 2 / 1;
 }
 
@@ -79,7 +79,7 @@
       display: none;
    }
 
-   &[aria-hidden="true"] {
+   &[aria-hidden='true'] {
       pointer-events: none;
    }
 }

@@ -43,7 +43,7 @@ body:has(.contextMenu) {
       border-radius: 16px;
       opacity: 0.85;
       background-color: var(--color-canvas-deep);
-      content: "";
+      content: '';
       grid-area: 1 / 1 / calc(var(--context-menu-item-count) + 1) / 1;
    }
    @media only screen and (pointer: coarse) and (max-width: 768px) {
@@ -95,7 +95,7 @@ body:has(.contextMenu) {
       border-radius: 10px;
       opacity: 0.1;
       background-color: var(--color-canvas-text);
-      content: "";
+      content: '';
       pointer-events: none;
    }
    @media (pointer: coarse) {
@@ -199,7 +199,7 @@ body:has(.contextMenu) {
    height: 1px;
    opacity: 0.3;
    background-color: var(--color-canvas-text);
-   content: "";
+   content: '';
    margin-block: 7.5px;
 
    .item:has(> &) {

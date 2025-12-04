@@ -5,13 +5,13 @@
    overscroll-behavior: auto;
    scroll-behavior: smooth;
 
-   &[data-scroll-axis="inline"] {
+   &[data-scroll-axis='inline'] {
       overflow-x: auto;
       overflow-y: hidden;
       overflow-inline: auto;
    }
 
-   &[data-scroll-axis="block"] {
+   &[data-scroll-axis='block'] {
       overflow-y: auto;
       overflow-x: hidden;
       overflow-block: auto;

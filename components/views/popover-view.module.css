@@ -1,23 +1,23 @@
 @property --anchor-width {
-   syntax: "<length> | unset";
+   syntax: '<length> | unset';
    inherits: false;
    initial-value: unset;
 }
 
 @property --anchor-height {
-   syntax: "<length> | unset";
+   syntax: '<length> | unset';
    inherits: false;
    initial-value: unset;
 }
 
 @property --popover-anchor-width {
-   syntax: "<length> | unset";
+   syntax: '<length> | unset';
    inherits: true;
    initial-value: unset;
 }
 
 @property --popover-anchor-height {
-   syntax: "<length> | unset";
+   syntax: '<length> | unset';
    inherits: true;
    initial-value: unset;
 }

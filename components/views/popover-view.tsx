@@ -1,6 +1,7 @@
 import { Cell, createScope, If, type SourceCell, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue, useElementBounding, useWindowSize } from 'retend-utils/hooks'
+import { Flags } from '@/constants/flags'
 import { clamp, type Split } from '@/utilities/miscellaneous'
 import styles from './popover-view.module.css'
 
@@ -131,8 +132,6 @@ export function PopoverView(props: PopoverProps) {
       ...rest
    } = props as AnchoredPopoverProps & UnanchoredPopoverProps
 
-   // TODO: retend-utils/hooks should have a `useCssSupports()` hook.
-   const usingAnchorPositioning = Cell.source<boolean | null>(null)
    const isOpen = useDerivedValue(isOpenProp)
    const positionArea = useDerivedValue(positionAreaProp)
    const justifySelf = useDerivedValue(justifySelfProp)
@@ -141,10 +140,10 @@ export function PopoverView(props: PopoverProps) {
    const anchorName = Cell.source('none')
    const x = useDerivedValue(xProp)
    const y = useDerivedValue(yProp)
+   const anchoringSupported = Flags.Runtime.Supports.AnchorPositioning
 
    const containerStyles: Cell<JSX.StyleValue> = Cell.derived(() => {
-      const anchoringSupported = usingAnchorPositioning.get()
-      if (anchoringSupported === null) {
+      if (!anchoringSupported) {
          return {}
       }
 
@@ -185,15 +184,10 @@ export function PopoverView(props: PopoverProps) {
 
    if (anchorRef) {
       observer.onConnected(anchorRef, (anchor) => {
-         const anchoringSupported =
-            CSS.supports?.('position-area: top left') && CSS.supports('anchor-name: --name')
          if (anchoringSupported) {
             assignAnchorName(anchor)
          }
-         usingAnchorPositioning.set(anchoringSupported)
       })
-   } else {
-      usingAnchorPositioning.set(false)
    }
 
    const popoverContext: PopoverContext = {

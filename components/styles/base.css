@@ -5,7 +5,7 @@
 */
 @import './animations.css';
 
-@source "./";
+@source './';
 
 @font-face {
    font-family: 'Instrument Sans Regular';
@@ -130,7 +130,11 @@ body {
       @apply text-canvas bg-canvas-text border-3 border-canvas;
       @apply rounded-(--half-spacing) whitespace-nowrap px-0.75 py-[calc(var(--spacing)*0.65)] text-normal min-w-[min(calc(var(--spacing)*10),30dvw)];
       @apply active:scale-[95%] duration-default transition-[scale] active:ease-out not-[active]:ease-in;
-      @apply has-[.btn-icon]:flex has-[.btn-icon]:items-center has-[.btn-icon]:justify-center has-[.btn-icon]:gap-0.125;
+      @apply has-[.btn-icon]:flex has-[.btn-icon]:items-center has-[.btn-icon]:justify-center;
+
+      &:has(.btn-icon) {
+         gap: calc(var(--spacing) * 0.125);
+      }
    }
 
    input {
@@ -142,12 +146,14 @@ body {
       @apply [&>option]:bg-canvas-background [&>option]:text-canvas-text [&>option]:hover:text-canvas;
 
       @supports (appearance: base-select) {
+         /* biome-ignore lint: not yet supported */
          &::picker-icon {
             content: var(--caret);
          }
 
          @apply flex items-center [appearance:base-select];
 
+         /* biome-ignore lint: not yet supported */
          ::picker(select) {
             border: none;
          }
@@ -176,8 +182,12 @@ body {
    a,
    .btn-link {
       @apply grid border-b-2 w-full bg-transparent text-canvas-text;
-      @apply has-[.link-icon,.link-icon-large]:flex has-[.link-icon,.link-icon-large]:items-center has-[.link-icon,.link-icon-large]:gap-0.125;
+      @apply has-[.link-icon,.link-icon-large]:flex has-[.link-icon,.link-icon-large]:items-center;
       padding-block: min(calc(var(--spacing) * 0.75), 3dvh);
+
+      &:has(.link-icon, .link-icon-large) {
+         gap: calc(var(--spacing) * 0.125);
+      }
    }
 }
 
@@ -244,14 +254,6 @@ body {
       color-scheme: dark;
       accent-color: var(--color-light-yellow);
    }
-}
-
-@utility gap-0.125 {
-   @apply gap-[calc(var(--spacing)*0.125)];
-}
-
-@utility h-0.15 {
-   @apply h-[calc(var(--spacing)*0.15)];
 }
 
 @utility h-screen {
@@ -403,29 +405,16 @@ body {
 }
 
 @custom-variant stuck {
+   /* 
    @supports (container-type: scroll-state) {
       @container sticky scroll-state(stuck: top) {
          @slot;
       }
-   }
+   } */
 
-   @supports not (container-type: scroll-state) {
-      &:where([data-stuck] &, &[data-stuck]) {
-         @slot;
-      }
+   /* @supports not (container-type: scroll-state) { */
+   &:where([data-stuck] &, &[data-stuck]) {
+      @slot;
    }
-}
-
-@custom-variant not-stuck {
-   @supports (container-type: scroll-state) {
-      @container sticky not scroll-state(stuck: top) {
-         @slot;
-      }
-   }
-
-   @supports not (container-type: scroll-state) {
-      &:not(:where([data-stuck] &, &[data-stuck])) {
-         @slot;
-      }
-   }
+   /* } */
 }

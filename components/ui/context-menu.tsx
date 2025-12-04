@@ -19,6 +19,7 @@ import {
    PopoverView,
    type PositionArea
 } from '@/components/views/popover-view'
+import { Flags } from '@/constants/flags'
 import {
    polyfillTouchContextMenuEvent,
    removeTouchContextMenuEventPolyfill
@@ -340,12 +341,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
       trigger.addEventListener(OpenSubmenuEvent.eventName, openContextMenu)
       trigger.addEventListener(CloseSubmenuEvent.eventName, close)
 
-      // Safari again. The contextmenu event never fires on iOS, even though:
-      // - it is supported on mac versions
-      // - it is defined in Element.oncontextmenu
-      // Some old bug they just never got around to, surely.
-      const isIos = 'GestureEvent' in window
-      if (isIos && strategy === 'contextmenu') {
+      if (!Flags.Runtime.Supports.ContextMenuEvent && strategy === 'contextmenu') {
          polyfillTouchContextMenuEvent(trigger)
       }
 

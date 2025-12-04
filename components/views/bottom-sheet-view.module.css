@@ -20,7 +20,7 @@
       height: 100%;
       grid-area: 1 / 1;
       background-color: #00000065;
-      content: "";
+      content: '';
       pointer-events: none;
       z-index: -1;
       animation: fade-in var(--speed-device) var(--timing) backwards;
@@ -52,7 +52,7 @@
          height: 7px;
          border-radius: 3dvh;
          background-color: #00000045;
-         content: "";
+         content: '';
       }
    }
 
@@ -83,7 +83,7 @@
 
    &::before {
       display: block;
-      content: "";
+      content: '';
       height: 3dvh;
       border-radius: 3dvh 3dvh 0 0;
       background-color: var(--color-canvas-background);
@@ -92,7 +92,7 @@
 
    &::after {
       display: block;
-      content: "";
+      content: '';
       height: 100%;
       width: 100%;
       background-color: var(--color-canvas-background);

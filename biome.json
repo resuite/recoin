@@ -31,7 +31,7 @@
    },
    "css": {
       "formatter": {
-         "quoteStyle": "double"
+         "quoteStyle": "single"
       },
       "parser": {
          "tailwindDirectives": true
@@ -39,7 +39,6 @@
    },
    "linter": {
       "enabled": true,
-      "includes": ["**", "!**/base.css"],
       "rules": {
          "nursery": {},
          "style": {

@@ -1,5 +1,5 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@import "@/components/styles/base.css";
+@import '@/components/styles/base.css';
 
-@source "./";
+@source './';

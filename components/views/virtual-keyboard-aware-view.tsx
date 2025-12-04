@@ -7,21 +7,8 @@ import {
    useSetupEffect
 } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { Flags } from '@/constants/flags'
 import styles from './virtual-keyboard-aware-view.module.css'
-
-declare global {
-   interface Navigator {
-      readonly virtualKeyboard: VirtualKeyboard
-   }
-}
-
-interface VirtualKeyboard extends EventTarget {
-   readonly boundingRect: DOMRectReadOnly
-   overlaysContent: boolean
-   show(): undefined
-   hide(): undefined
-   ongeometrychange: ((this: VirtualKeyboard, ev: Event) => void) | null
-}
 
 interface KeyboardAwarenessCtx {
    dispatchVisibilityChange: (newHeight: number) => void
@@ -123,7 +110,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       oldHeight = currentVisualHeight.get()
       updateHeight()
 
-      if (!('virtualKeyboard' in navigator)) {
+      if (!Flags.Runtime.Supports.VirtualKeyboardApi) {
          window.visualViewport?.addEventListener('resize', updateHeight)
          window.addEventListener('scroll', resetScroll, { passive: true })
          return () => {
