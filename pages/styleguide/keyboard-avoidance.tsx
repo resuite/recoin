@@ -1,10 +1,10 @@
+import { Cell } from 'retend'
 import { Input } from '@/components/ui/input'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
-import { Cell } from 'retend'
 
 const KeyboardAvoidanceTest = () => {
    const keyboardHeight = Cell.source(0)

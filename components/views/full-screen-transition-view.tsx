@@ -1,7 +1,7 @@
-import { animationsSettled } from '@/utilities/animations'
-import { Cell, If, createScope, useScopeContext } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
+import { Cell, createScope, If, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue } from 'retend-utils/hooks'
+import { animationsSettled } from '@/utilities/animations'
 import styles from './full-screen-transition-view.module.css'
 
 type FullScreenTransition = 'slide-up' | 'slide-down' | 'fade-in' | 'fade-out' | 'blink'

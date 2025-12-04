@@ -1,5 +1,5 @@
-import type { IconProps } from '@/components/icons'
 import type { JSX } from 'retend/jsx-runtime'
+import type { IconProps } from '@/components/icons'
 
 interface ToastMessageProps {
    Icon: (props: IconProps) => JSX.Template

@@ -1,6 +1,6 @@
-import { GOOGLE_CLIENT_ID, GOOGLE_SCRIPT_SRC } from '@/constants'
 import { type Cell, createScope, useObserver, useScopeContext, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { GOOGLE_CLIENT_ID, GOOGLE_SCRIPT_SRC } from '@/constants'
 
 export type GoogleCredentialResponse = google.accounts.id.CredentialResponse
 export type GoogleCredentialResponseHandler = (input: never) => Promise<GoogleCredentialResponse>

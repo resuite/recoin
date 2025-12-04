@@ -1,5 +1,5 @@
-import App from '@/pages/app'
 import { defineRoute } from 'retend/router'
+import App from '@/pages/app'
 import Budgets from './budgets'
 import Categories from './categories'
 import Chat from './chat'

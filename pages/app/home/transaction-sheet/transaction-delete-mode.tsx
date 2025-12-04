@@ -1,3 +1,4 @@
+import { type Cell, useSetupEffect } from 'retend'
 import Add from '@/components/icons/svg/add'
 import Checkmark from '@/components/icons/svg/checkmark'
 import { Button } from '@/components/ui/button'
@@ -14,7 +15,6 @@ import { useStore } from '@/scopes/livestore'
 import { animationsSettled } from '@/utilities/animations'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { defer } from '@/utilities/miscellaneous'
-import { type Cell, useSetupEffect } from 'retend'
 
 interface TransactionDeleteModeProps {
    transaction: Cell<Transaction>

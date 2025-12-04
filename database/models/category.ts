@@ -1,8 +1,8 @@
+import { Events, Schema, State } from '@livestore/livestore'
 import type { TransactionType } from '@/api/database/types'
 import type { IconName } from '@/components/icons'
 import { DEFAULT_EXPENSE_CATEGORIES, DEFAULT_INCOME_CATEGORIES } from '@/database/seeds'
 import { type Doc, Model } from '@/utilities/model'
-import { Events, Schema, State } from '@livestore/livestore'
 
 const CategoryModel = new Model({
    table: State.SQLite.table({

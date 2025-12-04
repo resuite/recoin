@@ -1,6 +1,7 @@
 /// <reference types="google.accounts" />
-import Index from '@/pages'
+
 import { createWebRouter, lazy } from 'retend/router'
+import Index from '@/pages'
 
 const metadata = {
    viewport:

@@ -1,4 +1,13 @@
 import {
+   type LiveStoreSchema,
+   type QueryBuilder,
+   queryDb,
+   type State,
+   type Store
+} from '@livestore/livestore'
+import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import {
    FullScreenTransitionView,
    useFullScreenTransitionContext
 } from '@/components/views/full-screen-transition-view'
@@ -9,15 +18,6 @@ import { useAuthContext } from '@/scopes/auth'
 import { animationsSettled } from '@/utilities/animations'
 import { useWorkspaceId } from '@/utilities/composables/use-workspace-id'
 import { tryFn } from '@/utilities/miscellaneous'
-import {
-   type LiveStoreSchema,
-   type QueryBuilder,
-   type State,
-   type Store,
-   queryDb
-} from '@livestore/livestore'
-import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
-import type { JSX } from 'retend/jsx-runtime'
 
 const LiveStoreScope = createScope('LiveStoreContext')
 

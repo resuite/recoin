@@ -1,7 +1,7 @@
+import { useRouteQuery } from 'retend/router'
 import { Button } from '@/components/ui/button'
 import { QueryControlledBottomSheet } from '@/components/views/bottom-sheet-view'
 import { Stage } from '@/pages/app/(fragments)/stage'
-import { useRouteQuery } from 'retend/router'
 
 export default function Chat() {
    const query = useRouteQuery()

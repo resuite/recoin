@@ -1,5 +1,5 @@
 {
-   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+   "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
    "vcs": {
       "enabled": true,
       "clientKind": "git",
@@ -22,13 +22,26 @@
          "semicolons": "asNeeded"
       }
    },
-   "organizeImports": { "enabled": true },
+   "assist": {
+      "actions": {
+         "source": {
+            "organizeImports": "on"
+         }
+      }
+   },
+   "css": {
+      "formatter": {
+         "quoteStyle": "double"
+      },
+      "parser": {
+         "tailwindDirectives": true
+      }
+   },
    "linter": {
       "enabled": true,
+      "includes": ["**", "!**/base.css"],
       "rules": {
-         "nursery": {
-            "noNestedTernary": "error"
-         },
+         "nursery": {},
          "style": {
             "useBlockStatements": "error",
             "useConsistentArrayType": {
@@ -36,7 +49,8 @@
                "options": {
                   "syntax": "generic"
                }
-            }
+            },
+            "noNestedTernary": "error"
          },
          "suspicious": {
             "useAwait": "error",

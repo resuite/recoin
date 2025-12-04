@@ -1,5 +1,5 @@
 import { Cell, useSetupEffect } from 'retend'
-import { Modes, getGlobalContext, matchContext } from 'retend/context'
+import { getGlobalContext, Modes, matchContext } from 'retend/context'
 
 export function useIsServer() {
    const { window } = getGlobalContext()

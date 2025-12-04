@@ -1,7 +1,7 @@
+import { Cell, type SourceCell } from 'retend'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { type Alignment, PopoverView, type PositionArea } from '@/components/views/popover-view'
-import { Cell, type SourceCell } from 'retend'
 
 function PopoverTest() {
    const popoverIsOpen = Cell.source(false)

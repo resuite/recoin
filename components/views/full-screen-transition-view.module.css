@@ -1,10 +1,31 @@
+.previousView,
+.nextView {
+   display: grid;
+   grid-template-columns: 1fr;
+   grid-area: 1 / 1;
+
+   animation-duration: var(--full-screen-transition-speed);
+   animation-timing-function: var(--timing);
+
+   &:empty {
+      display: none;
+   }
+}
+
+.previousView {
+   animation-fill-mode: both;
+}
+
+.nextView {
+   animation-fill-mode: backwards;
+}
+
 .fullScreenTransition {
    top: 0;
    display: grid;
    height: 100dvh;
    width: 100dvw;
    grid-template-columns: 100% 100%;
-   /*--full-screen-transition-speed: 10000ms !important;*/
 
    &[data-modified] {
       &[data-changed] > .nextView,
@@ -94,28 +115,6 @@
          }
       }
    }
-}
-
-.previousView,
-.nextView {
-   display: grid;
-   grid-template-columns: 1fr;
-   grid-area: 1 / 1;
-
-   animation-duration: var(--full-screen-transition-speed);
-   animation-timing-function: var(--timing);
-
-   &:empty {
-      display: none;
-   }
-}
-
-.previousView {
-   animation-fill-mode: both;
-}
-
-.nextView {
-   animation-fill-mode: backwards;
 }
 
 @keyframes slide-up-entering {

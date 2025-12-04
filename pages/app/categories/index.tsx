@@ -1,3 +1,5 @@
+import { For } from 'retend'
+import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Add from '@/components/icons/svg/add'
@@ -9,8 +11,6 @@ import { PageHeading } from '@/pages/app/(fragments)/page-heading'
 import { Stage } from '@/pages/app/(fragments)/stage'
 import AddNewCategorySheet from '@/pages/app/categories/add-new-category'
 import { useCategories } from '@/utilities/composables/use-categories'
-import { For } from 'retend'
-import { useRouteQuery } from 'retend/router'
 
 interface CategoryListProps {
    type: TransactionType

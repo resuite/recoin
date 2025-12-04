@@ -1,8 +1,8 @@
-import { sessionAuth } from '@/api/middlewares/authentication'
-import type { RecoinApiEnv } from '@/api/types'
 import { zValidator } from '@hono/zod-validator'
 import type { MiddlewareHandler, Context as RawContext, Env as RawEnv } from 'hono'
 import type { z } from 'zod'
+import { sessionAuth } from '@/api/middlewares/authentication'
+import type { RecoinApiEnv } from '@/api/types'
 
 export type CustomContext<Env, _ParamSchema, BodySchema, IsProtected> = Env extends RawEnv
    ? RawContext<Env> extends infer C

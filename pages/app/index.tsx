@@ -1,3 +1,5 @@
+import { Cell, If } from 'retend'
+import { useRouter } from 'retend/router'
 import Loader from '@/components/icons/svg/loader'
 import { ToastProvider } from '@/components/ui/toast'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
@@ -13,8 +15,6 @@ import StartPage from '@/pages/app/auth/start-page'
 import { AuthenticationProvider } from '@/scopes/auth'
 import { LiveStoreProvider } from '@/scopes/livestore'
 import { useApplicationSetup } from '@/utilities/composables/use-application-setup'
-import { Cell, If } from 'retend'
-import { useRouter } from 'retend/router'
 
 const AppContent = () => {
    const { Outlet } = useRouter()

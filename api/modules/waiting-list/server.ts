@@ -1,9 +1,9 @@
+import { Hono } from 'hono'
+import { z } from 'zod'
 import { Errors, errorOccurred, success } from '@/api/error'
 import { route } from '@/api/route-helper'
 import type { RecoinApiEnv } from '@/api/types'
 import { StatusCodes } from '@/constants/server'
-import { Hono } from 'hono'
-import { z } from 'zod'
 
 const waitingListRoute = new Hono<RecoinApiEnv>()
 

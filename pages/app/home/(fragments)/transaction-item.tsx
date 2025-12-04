@@ -1,3 +1,6 @@
+import { If } from 'retend'
+import { useRouteQuery } from 'retend/router'
+import type { ListTemplateProps } from 'retend-utils/components'
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
 import { FitText } from '@/components/ui/fit-text'
@@ -10,9 +13,6 @@ import { CategoryIcon } from '@/pages/app/home/(fragments)/category-icon'
 import { useAuthContext } from '@/scopes/auth'
 import { useCategory } from '@/utilities/composables/use-categories'
 import { formatTime } from '@/utilities/dates'
-import { If } from 'retend'
-import type { ListTemplateProps } from 'retend-utils/components'
-import { useRouteQuery } from 'retend/router'
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
    year: '2-digit',

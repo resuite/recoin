@@ -1,7 +1,7 @@
-import { DynamicIcon } from '@/components/icons'
-import { type PullState, PullToRefreshView } from '@/components/views/pull-to-refresh-view'
 import { Cell } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { DynamicIcon } from '@/components/icons'
+import { type PullState, PullToRefreshView } from '@/components/views/pull-to-refresh-view'
 
 interface PullToRefreshViewTestProps {
    children?: () => JSX.Template

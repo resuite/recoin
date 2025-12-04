@@ -16,10 +16,6 @@
 
    &.error {
       animation: shake var(--speed-slower);
-
-      .character {
-         color: var(--color-red-200);
-      }
    }
 }
 
@@ -35,6 +31,10 @@
    font-size: 1.5rem;
    line-height: 2rem;
    transition: opacity var(--speed-default);
+
+   .output.error & {
+      color: var(--color-red-200);
+   }
 
    &.empty {
       opacity: 0.5;

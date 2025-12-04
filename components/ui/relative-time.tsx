@@ -1,7 +1,7 @@
-import { formatRelativeTime } from '@/utilities/dates'
 import { Cell } from 'retend'
-import { useDerivedValue, useLiveDate } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue, useLiveDate } from 'retend-utils/hooks'
+import { formatRelativeTime } from '@/utilities/dates'
 
 type TimeProps = JSX.IntrinsicElements['time']
 interface RelativeTimeProps extends TimeProps {

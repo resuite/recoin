@@ -1,7 +1,7 @@
+import { Cell } from 'retend'
 import TransactionModel, { type Transaction } from '@/database/models/transaction'
 import { useLiveQuery } from '@/scopes/livestore'
 import { useWorkspaceId } from '@/utilities/composables/use-workspace-id'
-import { Cell } from 'retend'
 
 export interface TransactionDateGroup {
    dateStoredValue: number

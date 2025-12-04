@@ -1,3 +1,4 @@
+import { Cell, useScopeContext } from 'retend'
 import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,7 +9,6 @@ import {
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
-import { Cell, useScopeContext } from 'retend'
 import FloatingActionButtonTest from '../fab'
 import { Scope } from './scope'
 

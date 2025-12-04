@@ -1,7 +1,7 @@
+import { makeSchema, State } from '@livestore/livestore'
 import AchievementModel from '@/database/models/achievement'
 import CategoryModel from '@/database/models/category'
 import TransactionModel from '@/database/models/transaction'
-import { State, makeSchema } from '@livestore/livestore'
 
 export const schema = makeSchema({
    events: {

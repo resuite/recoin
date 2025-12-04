@@ -1,5 +1,5 @@
-import type { Form } from '@/utilities/form'
 import { createScope } from 'retend'
+import type { Form } from '@/utilities/form'
 
 export interface TransactionDetailsForm {
    amount: number

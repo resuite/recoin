@@ -1,6 +1,6 @@
+import { Events, Schema, State } from '@livestore/livestore'
 import type { IconName } from '@/components/icons'
 import { type Doc, Model } from '@/utilities/model'
-import { Events, Schema, State } from '@livestore/livestore'
 
 const AchievementModel = new Model({
    table: State.SQLite.table({

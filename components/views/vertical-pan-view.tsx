@@ -1,6 +1,6 @@
-import { animationsSettled, timeout } from '@/utilities/animations'
-import { Cell, If, createScope, useScopeContext } from 'retend'
+import { Cell, createScope, If, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { animationsSettled, timeout } from '@/utilities/animations'
 import styles from './vertical-pan-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']

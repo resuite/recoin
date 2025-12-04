@@ -1,12 +1,12 @@
+import type { Context } from 'hono'
+import { deleteCookie, getCookie, setCookie } from 'hono/cookie'
+import { createRemoteJWKSet, jwtVerify } from 'jose'
 import type { GoogleIdTokenPayload, RecoinApiEnv } from '@/api/types'
 import {
    GOOGLE_JWK_URL,
    RECOIN_SESSION_COOKIE,
    SESSION_EXPIRATION_SECONDS
 } from '@/constants/server'
-import type { Context } from 'hono'
-import { deleteCookie, getCookie, setCookie } from 'hono/cookie'
-import { createRemoteJWKSet, jwtVerify } from 'jose'
 
 export async function setAuthCookie(context: Context<RecoinApiEnv>, userId: string) {
    const isProduction = context.env.CF_ENVIRONMENT === 'production'

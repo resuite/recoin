@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/scopes/auth'
 import { Cell, useSetupEffect } from 'retend'
+import { useAuthContext } from '@/scopes/auth'
 
 export function useApplicationSetup() {
    const { userData } = useAuthContext()

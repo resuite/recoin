@@ -1,10 +1,10 @@
+import { Cell, For, If } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue } from 'retend-utils/hooks'
 import { NumericKeypad } from '@/components/ui/numeric-keypad'
 import { VibrationPatterns } from '@/constants/vibration'
 import { animationsSettled } from '@/utilities/animations'
 import { vibrate } from '@/utilities/miscellaneous'
-import { Cell, For, If } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
-import type { JSX } from 'retend/jsx-runtime'
 import styles from './pin-input.module.css'
 
 interface PinInputProps {

@@ -1,11 +1,11 @@
+import { Cell, createScope, For, type SourceCell, useObserver, useScopeContext } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue } from 'retend-utils/hooks'
 import { Button } from '@/components/ui/button'
 import {
    ScrollTimelineView,
    useScrollTimelineContext
 } from '@/components/views/scroll-timeline-view'
-import { Cell, For, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
-import type { JSX } from 'retend/jsx-runtime'
 import styles from './tab-switcher-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']

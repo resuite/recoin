@@ -1,9 +1,9 @@
+import { Cell, createScope, type SourceCell, useScopeContext } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import { useIntersectionObserver, useMatchMedia } from 'retend-utils/hooks'
 import { vibrate } from '@/utilities/miscellaneous'
 import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS, getScrollableY } from '@/utilities/scrolling'
-import { Cell, type SourceCell, createScope, useScopeContext } from 'retend'
-import { useIntersectionObserver, useMatchMedia } from 'retend-utils/hooks'
-import type { JSX } from 'retend/jsx-runtime'
 import styles from './pull-to-refresh-view.module.css'
 
 export type PullState = 'thresholdreached' | 'pulling' | 'idle' | 'actiontriggered'

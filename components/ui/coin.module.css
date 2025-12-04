@@ -14,12 +14,6 @@
    aspect-ratio: 1;
    transform-style: preserve-3d;
 
-   &:not(.spinning) {
-      .sparkle {
-         display: none;
-      }
-   }
-
    & > * {
       width: 100%;
       height: 100%;
@@ -129,6 +123,10 @@
    rotate: -25deg;
    animation-fill-mode: backwards;
    translate: calc(var(--coin-breath) * -0.25) calc(var(--coin-breath) * -0.25);
+
+   .coin:not(.spinning) & {
+      display: none;
+   }
 }
 
 .bottomSparkle {

@@ -1,6 +1,6 @@
+import { Cell } from 'retend'
 import { StackViewGroup } from '@/components/views/stack-view-group'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { Cell } from 'retend'
 import { AuthScreen } from './auth-screen'
 import { LockScreen } from './lock-screen'
 import { AuthenticationScope, type AuthenticationScopeValue } from './scope'

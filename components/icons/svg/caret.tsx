@@ -1,6 +1,6 @@
 import { Cell } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue } from 'retend-utils/hooks'
 import type { IconProps } from '../index'
 
 export interface CaretProps extends IconProps {

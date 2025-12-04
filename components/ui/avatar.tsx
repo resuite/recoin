@@ -1,8 +1,8 @@
+import { Cell, If } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue } from 'retend-utils/hooks'
 import User from '@/components/icons/svg/user'
 import { Button } from '@/components/ui/button'
-import { Cell, If } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
-import type { JSX } from 'retend/jsx-runtime'
 import styles from './avatar.module.css'
 
 type IntrinsicButtonProps = JSX.IntrinsicElements['button']

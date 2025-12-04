@@ -4,12 +4,6 @@
    grid-template-columns: 1fr;
    grid-template-rows: 1fr;
 
-   &[data-unfilled] {
-      .timePlaceholder {
-         opacity: 0.5;
-      }
-   }
-
    label {
       grid-area: 1 / 1;
       width: 100%;
@@ -34,6 +28,10 @@
    border-bottom: 3px solid var(--color-canvas-text);
    grid-template-columns: 1fr auto;
    grid-area: 1 / 1;
+
+   .timeInputContainer[data-unfilled] & {
+      opacity: 0.5;
+   }
 }
 
 .timeInputClockIcon {

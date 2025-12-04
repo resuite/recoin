@@ -1,7 +1,7 @@
-import { clamp } from '@/utilities/miscellaneous'
-import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { clamp } from '@/utilities/miscellaneous'
+import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import classes from './scroll-timeline-view.module.css'
 
 declare global {

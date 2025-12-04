@@ -1,10 +1,10 @@
+import { type LiveStoreSchema, queryDb, Schema, type Store, sql } from '@livestore/livestore'
 import type { VerticalPanContext } from '@/components/views/vertical-pan-view'
 import type { Achievement } from '@/database/models/achievement'
 import AchievementModel from '@/database/models/achievement'
 import type { RecoinStore } from '@/database/store'
 import NewCoin from '@/pages/app/new-coin'
 import { timeout } from '@/utilities/animations'
-import { type LiveStoreSchema, Schema, type Store, queryDb, sql } from '@livestore/livestore'
 
 interface AchievementTrigger {
    id: string

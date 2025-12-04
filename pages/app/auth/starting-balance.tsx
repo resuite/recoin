@@ -1,3 +1,5 @@
+import { Cell, If } from 'retend'
+import { useRouteQuery } from 'retend/router'
 import Loader from '@/components/icons/svg/loader'
 import { Button } from '@/components/ui/button'
 import { MoneyInput } from '@/components/ui/money-input'
@@ -8,8 +10,6 @@ import {
 } from '@/components/views/virtual-keyboard-aware-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { useAuthContext } from '@/scopes/auth'
-import { Cell, If } from 'retend'
-import { useRouteQuery } from 'retend/router'
 
 interface StartingBalanceProps {
    onFinish: (startingBalance: number) => void

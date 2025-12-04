@@ -1,3 +1,5 @@
+import { useScopeContext, useSetupEffect } from 'retend'
+import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
 import Checkmark from '@/components/icons/svg/checkmark'
 import { FitText } from '@/components/ui/fit-text'
@@ -8,8 +10,6 @@ import { useAuthContext } from '@/scopes/auth'
 import { TransactionDetailsFormScope } from '@/scopes/forms'
 import { animationsSettled } from '@/utilities/animations'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { useScopeContext, useSetupEffect } from 'retend'
-import { useRouteQuery } from 'retend/router'
 
 const TRANSACTION_SUCCESS_SCREEN_DELAY = 700
 

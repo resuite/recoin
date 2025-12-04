@@ -1,7 +1,7 @@
-import { type Split, clamp } from '@/utilities/miscellaneous'
-import { Cell, If, type SourceCell, createScope, useObserver, useScopeContext } from 'retend'
-import { useDerivedValue, useElementBounding, useWindowSize } from 'retend-utils/hooks'
+import { Cell, createScope, If, type SourceCell, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue, useElementBounding, useWindowSize } from 'retend-utils/hooks'
+import { clamp, type Split } from '@/utilities/miscellaneous'
 import styles from './popover-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']

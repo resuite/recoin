@@ -1,4 +1,4 @@
-import { type SourceCell, createScope } from 'retend'
+import { createScope, type SourceCell } from 'retend'
 
 interface WaitingListState {
    emailEntered: SourceCell<boolean>

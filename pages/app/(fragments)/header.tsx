@@ -1,10 +1,10 @@
+import { Cell } from 'retend'
+import { useRouter } from 'retend/router'
 import Hamburger from '@/components/icons/svg/hamburger'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { useAuthContext } from '@/scopes/auth'
-import { Cell } from 'retend'
-import { useRouter } from 'retend/router'
 
 export function Header() {
    const { toggleSidebar } = useSidebarContext()

@@ -1,8 +1,8 @@
+import { Cell } from 'retend'
 import type { TransactionType } from '@/api/database/types'
 import CategoryModel, { type Category } from '@/database/models/category'
 import { useAuthContext } from '@/scopes/auth'
 import { useLiveQuery } from '@/scopes/livestore'
-import { Cell } from 'retend'
 
 export function useCategories(type: TransactionType): Cell<Array<Category>> {
    const { userData } = useAuthContext()

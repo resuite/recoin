@@ -1,3 +1,5 @@
+import { Cell, useSetupEffect } from 'retend'
+import { useRouteQuery, useRouter } from 'retend/router'
 import { useToast } from '@/components/ui/toast'
 import { StackView, StackViewGroup } from '@/components/views/stack-view-group'
 import { QueryKeys } from '@/constants/query-keys'
@@ -7,8 +9,6 @@ import StartingBalance from '@/pages/app/auth/starting-balance'
 import { useAuthContext } from '@/scopes/auth'
 import { useStore } from '@/scopes/livestore'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { Cell, useSetupEffect } from 'retend'
-import { useRouteQuery, useRouter } from 'retend/router'
 
 const Onboarding = () => {
    const router = useRouter()

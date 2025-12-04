@@ -30,13 +30,14 @@ export type Doc<
    EventMap extends Record<string, EventDef.Any> = T['events']
 > = State.SQLite.FromTable.RowDecoded<Table>
 
-export type Materializers<EventMap> = EventMap extends Record<string, EventDef.Any>
-   ? {
-        [EventName in EventMap[keyof EventMap]['name'] as Extract<
-           EventMap[keyof EventMap],
-           { name: EventName }
-        >['options']['derived'] extends true
-           ? never
-           : EventName]: Materializer<Extract<EventMap[keyof EventMap], { name: EventName }>>
-     }
-   : never
+export type Materializers<EventMap> =
+   EventMap extends Record<string, EventDef.Any>
+      ? {
+           [EventName in EventMap[keyof EventMap]['name'] as Extract<
+              EventMap[keyof EventMap],
+              { name: EventName }
+           >['options']['derived'] extends true
+              ? never
+              : EventName]: Materializer<Extract<EventMap[keyof EventMap], { name: EventName }>>
+        }
+      : never

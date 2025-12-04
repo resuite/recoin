@@ -1,6 +1,6 @@
-import { Icon } from '@/components/icons'
 import { For } from 'retend'
 import { useRouter } from 'retend/router'
+import { Icon } from '@/components/icons'
 import { createLinkAnimationValues } from './animations'
 import type {
    AnimatedLinkGroupProps,

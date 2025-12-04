@@ -1,3 +1,4 @@
+import { Cell, useSetupEffect } from 'retend'
 import Add from '@/components/icons/svg/add'
 import Checkmark from '@/components/icons/svg/checkmark'
 import { Button } from '@/components/ui/button'
@@ -24,7 +25,6 @@ import { animationsSettled } from '@/utilities/animations'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { createForm } from '@/utilities/form'
 import { mergeDateAndTime, scrollIntoView } from '@/utilities/miscellaneous'
-import { Cell, useSetupEffect } from 'retend'
 
 interface TransactionEditModeProps {
    transaction: Cell<Transaction>

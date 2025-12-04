@@ -1,5 +1,5 @@
-import type { IconName } from '@/components/icons'
 import type { SourceCell } from 'retend'
+import type { IconName } from '@/components/icons'
 
 export interface LinkInfo {
    name: string

@@ -1,7 +1,7 @@
-import { useAuthContext } from '@/scopes/auth'
-import { useLiveQuery } from '@/scopes/livestore'
 import { Schema, sql } from '@livestore/livestore'
 import { Cell } from 'retend'
+import { useAuthContext } from '@/scopes/auth'
+import { useLiveQuery } from '@/scopes/livestore'
 
 type Balance = {
    balance: Cell<number>

@@ -1,8 +1,8 @@
+import { Cell, useObserver } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
 import { Icon, type IconName } from '@/components/icons'
 import Sparkle from '@/components/icons/svg/sparkle'
 import { animationsSettled } from '@/utilities/animations'
-import { Cell, useObserver } from 'retend'
-import type { JSX } from 'retend/jsx-runtime'
 import styles from './coin.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']

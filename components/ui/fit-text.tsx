@@ -1,6 +1,6 @@
-import { useTextContentLength } from '@/utilities/composables/use-text-content-length'
 import { Cell } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
+import { useTextContentLength } from '@/utilities/composables/use-text-content-length'
 import styles from './fit-text.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']

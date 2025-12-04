@@ -1,29 +1,29 @@
+import {
+   Cell,
+   createScope,
+   For,
+   If,
+   type SourceCell,
+   Switch,
+   useObserver,
+   useScopeContext,
+   useSetupEffect
+} from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import { Teleport } from 'retend/teleport'
+import { useCursorPosition, useDerivedValue, useDocumentVisibility } from 'retend-utils/hooks'
 import { Button } from '@/components/ui/button'
 import {
    type Alignment,
+   generateNewAnchorName,
    PopoverView,
-   type PositionArea,
-   generateNewAnchorName
+   type PositionArea
 } from '@/components/views/popover-view'
 import {
    polyfillTouchContextMenuEvent,
    removeTouchContextMenuEventPolyfill
 } from '@/utilities/contextmenu-event-ios-polyfill'
 import { clamp, defer, getFocusableElementInItem } from '@/utilities/miscellaneous'
-import {
-   Cell,
-   For,
-   If,
-   type SourceCell,
-   Switch,
-   createScope,
-   useObserver,
-   useScopeContext,
-   useSetupEffect
-} from 'retend'
-import { useCursorPosition, useDerivedValue, useDocumentVisibility } from 'retend-utils/hooks'
-import type { JSX } from 'retend/jsx-runtime'
-import { Teleport } from 'retend/teleport'
 import { DynamicIcon, type IconName } from '../icons'
 import Checkmark from '../icons/svg/checkmark'
 import styles from './context-menu.module.css'

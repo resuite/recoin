@@ -1,7 +1,7 @@
+import { useRouter } from 'retend/router'
 import { AllIcons, Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useRouter } from 'retend/router'
 
 const Styleguide = () => {
    return (

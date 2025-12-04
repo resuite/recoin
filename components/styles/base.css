@@ -3,28 +3,28 @@
    in the components themselves so that Tailwind
    can resolve the utilities.
 */
-@import "./animations.css";
+@import './animations.css';
 
 @source "./";
 
 @font-face {
-   font-family: "Instrument Sans Regular";
+   font-family: 'Instrument Sans Regular';
    font-style: normal;
    font-weight: 500;
    font-display: swap;
-   src: url(../fonts/instrument-sans.ttf) format("truetype");
+   src: url(../fonts/instrument-sans.ttf) format('truetype');
 }
 @font-face {
-   font-family: "Instrument Sans Italic O";
+   font-family: 'Instrument Sans Italic O';
    font-style: italic;
    font-weight: 500;
    font-display: swap;
-   src: url(../fonts/instrument-sans-italic.ttf) format("truetype");
+   src: url(../fonts/instrument-sans-italic.ttf) format('truetype');
    unicode-range: U+006F;
 }
 
 @property --scroll-unit {
-   syntax: "<number>";
+   syntax: '<number>';
    initial-value: 0;
    inherits: true;
 }
@@ -53,7 +53,7 @@
 }
 
 body {
-   font-family: "Instrument Sans Italic O", "Instrument Sans Regular", sans-serif;
+   font-family: 'Instrument Sans Italic O', 'Instrument Sans Regular', sans-serif;
    @apply dark-scheme;
 }
 
@@ -154,7 +154,7 @@ body {
       }
    }
 
-   label:has(input[type="checkbox" i]) {
+   label:has(input[type='checkbox' i]) {
       &:has(:checked) {
          @apply before:translate-x-[150%];
       }
@@ -168,7 +168,7 @@ body {
       @apply after:[grid-area:1/2] after:w-[calc(var(--text-normal)*2)] after:h-[calc(var(--text-normal)*1.25)] after:border-3 after:rounded-xl;
       @apply before:transition-transform after:transition-opacity before:duration-default after:duration-default before:ease-in-out after:ease-in-out;
 
-      input[type="checkbox"] {
+      input[type='checkbox'] {
          @apply appearance-none w-0 h-0 [grid-area:1/2];
       }
    }
@@ -184,7 +184,7 @@ body {
 @utility light-scheme {
    --grid-lines-color: rgb(39, 39, 39, 0.05);
    --grid-bg-color: white;
-   --caret: url("./svg/caret-light.svg");
+   --caret: url('./svg/caret-light.svg');
 
    --canvas-text: var(--color-base);
    --canvas-text-lighter: rgb(39, 39, 39, 0.75);
@@ -218,7 +218,7 @@ body {
 @utility dark-scheme {
    --grid-lines-color: rgb(250, 255, 237, 0.05);
    --grid-bg-color: var(--color-base);
-   --caret: url("./svg/caret-dark.svg");
+   --caret: url('./svg/caret-dark.svg');
 
    --canvas-text: var(--color-light-yellow);
    --canvas: var(--color-base);
@@ -247,11 +247,11 @@ body {
 }
 
 @utility gap-0.125 {
-   gap: calc(var(--spacing) * 0.125);
+   @apply gap-[calc(var(--spacing)*0.125)];
 }
 
 @utility h-0.15 {
-   height: calc(var(--spacing) * 0.15);
+   @apply h-[calc(var(--spacing)*0.15)];
 }
 
 @utility h-screen {
@@ -266,7 +266,8 @@ body {
    --grid-lines-stroke: 2px;
    background-color: var(--color-base);
    background-color: var(--grid-bg-color);
-   background-image: linear-gradient(
+   background-image:
+      linear-gradient(
          var(--grid-lines-color) var(--grid-lines-stroke),
          transparent var(--grid-lines-stroke)
       ),
@@ -280,7 +281,7 @@ body {
 }
 
 @utility grid-lines-with-fade {
-   @apply grid-lines relative [&>*]:relative;
+   @apply grid-lines relative *:relative;
    @apply before:pointer-events-none before:block before:absolute before:h-full before:w-full;
    @apply before:bg-linear-to-b before:from-canvas-background before:via-transparent before:via-30% before:to-transparent;
 }
@@ -353,7 +354,7 @@ body {
       border-radius: 12px;
       opacity: 0.25;
       background-color: var(--color-canvas-background);
-      content: "";
+      content: '';
    }
 }
 

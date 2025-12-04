@@ -1,9 +1,9 @@
+import { getCookie } from 'hono/cookie'
+import { createMiddleware } from 'hono/factory'
 import { Errors, errorOccurred } from '@/api/error'
 import type { RecoinApiEnv } from '@/api/types'
 import { refreshAuthCookie } from '@/api/utils'
 import { RECOIN_SESSION_COOKIE, SESSION_EXPIRATION_SECONDS, StatusCodes } from '@/constants/server'
-import { getCookie } from 'hono/cookie'
-import { createMiddleware } from 'hono/factory'
 
 export const sessionAuth = createMiddleware<RecoinApiEnv>(async (c, next) => {
    const sessionToken = getCookie(c, RECOIN_SESSION_COOKIE)

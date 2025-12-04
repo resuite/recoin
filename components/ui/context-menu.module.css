@@ -26,12 +26,15 @@ body:has(.contextMenu) {
    &:has(> .item > .checkItem > .checkItemInput:checked) {
       /* styles other items to have space for the check mark if any item is checked. */
       .item:not(:has(> .checkItem > .checkItemInput:checked), :has(> .separator)) {
-         padding-left: calc((var(--spacing) * 0.25) + 0.75rem + 0.25rem); /* initial left space + space for icon + .itemContent gap */
+         padding-left: calc(
+            (var(--spacing) * 0.25) +
+            0.75rem +
+            0.25rem
+         ); /* initial left space + space for icon + .itemContent gap */
       }
    }
 
    &::before {
-      top: 0;
       top: 0;
       left: 0;
       display: block;

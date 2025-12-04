@@ -1,7 +1,7 @@
 import {
    Cell,
-   type SourceCell,
    createScope,
+   type SourceCell,
    useObserver,
    useScopeContext,
    useSetupEffect

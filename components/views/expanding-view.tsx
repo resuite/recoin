@@ -1,7 +1,7 @@
-import { animationsSettled } from '@/utilities/animations'
 import { Cell, If } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue } from 'retend-utils/hooks'
+import { animationsSettled } from '@/utilities/animations'
 import styles from './expanding-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']

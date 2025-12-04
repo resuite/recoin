@@ -1,5 +1,5 @@
-import { Stage } from '@/pages/app/(fragments)/stage'
 import { useRouter } from 'retend/router'
+import { Stage } from '@/pages/app/(fragments)/stage'
 
 export default function Profile() {
    const { Link } = useRouter()

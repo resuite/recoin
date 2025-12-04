@@ -1,7 +1,7 @@
-import Checkmark from '@/components/icons/svg/checkmark'
-import { WaitingListStateScope } from '@/scopes'
 import { useScopeContext } from 'retend'
 import { useRouter } from 'retend/router'
+import Checkmark from '@/components/icons/svg/checkmark'
+import { WaitingListStateScope } from '@/scopes'
 
 const WaitingListSuccess = () => {
    const { emailEntered } = useScopeContext(WaitingListStateScope)

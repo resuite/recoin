@@ -1,7 +1,7 @@
+import { useRouteQuery } from 'retend/router'
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
 import { QueryKeys } from '@/constants/query-keys'
-import { useRouteQuery } from 'retend/router'
 
 const ChooseTransactionType = () => {
    const query = useRouteQuery()

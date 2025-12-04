@@ -1,11 +1,11 @@
-import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
 // import { Browsers, currentBrowser } from '@/utilities/browser'
 // import { tryFn } from '@/utilities/miscellaneous'
 // import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
 // import { NEGLIGIBLE_SCROLL_PX } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
-import { useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { useIntersectionObserver } from 'retend-utils/hooks'
+import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
 // import { PullStartEvent, usePullToRefreshContext } from './pull-to-refresh-view'
 import styles from './sidebar-provider-view.module.css'
 

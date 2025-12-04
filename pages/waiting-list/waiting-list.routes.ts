@@ -1,5 +1,5 @@
-import { BASE_URL } from '@/constants'
 import { defineRoute } from 'retend/router'
+import { BASE_URL } from '@/constants'
 
 import WaitingList from '@/pages/waiting-list'
 import WaitingListHome from '@/pages/waiting-list/home'

@@ -18,6 +18,18 @@
    grid-template-columns: 50% 50%;
 }
 
+.stackViewGroupViewPullHandle {
+   display: none;
+
+   .stackViewGroupView:nth-last-child(1 of [data-open]) > & {
+      display: block;
+      width: 8%;
+      touch-action: none;
+      overscroll-behavior: none;
+      user-select: none;
+   }
+}
+
 .stackViewGroupView {
    position: sticky;
    top: 0;
@@ -32,6 +44,19 @@
    transition-property: translate, opacity;
    will-change: translate, opacity;
    grid-area: 1 / 1;
+
+   &::before {
+      display: block;
+      opacity: 0;
+      background-color: black;
+      content: "";
+      transition-timing-function: inherit;
+      transition-duration: var(--speed-device);
+      transition-property: opacity;
+      pointer-events: none;
+      grid-area: 1 / 1;
+   }
+
    &:not(:first-child) {
       translate: 100%;
    }
@@ -57,6 +82,10 @@
       transition-duration: 0ms;
       pointer-events: none;
 
+      &::before {
+         opacity: 0.2;
+      }
+
       /* Select the last open view. */
       &:nth-last-child(2 of [data-open]) {
          opacity: 0.75;
@@ -76,36 +105,8 @@
             }
          }
       }
-
-      &::before {
-         opacity: 0.2;
-      }
    }
    & > * {
       grid-area: 1 / 1;
-   }
-
-   &::before {
-      display: block;
-      opacity: 0;
-      background-color: black;
-      content: "";
-      transition-timing-function: inherit;
-      transition-duration: var(--speed-device);
-      transition-property: opacity;
-      pointer-events: none;
-      grid-area: 1 / 1;
-   }
-}
-
-.stackViewGroupViewPullHandle {
-   display: none;
-
-   .stackViewGroupView:nth-last-child(1 of [data-open]) > & {
-      display: block;
-      width: 8%;
-      touch-action: none;
-      overscroll-behavior: none;
-      user-select: none;
    }
 }

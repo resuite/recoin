@@ -1,7 +1,7 @@
+import { Cell, If } from 'retend'
 import Loading from '@/pages/app/auth/loading'
 import Welcome from '@/pages/app/auth/welcome'
 import { useAuthContext } from '@/scopes/auth'
-import { Cell, If } from 'retend'
 
 const StartPage = () => {
    const { authState } = useAuthContext()

@@ -1,7 +1,7 @@
-import { PointerTracker, type TrackedEndedEvent } from '@/utilities/pointer-gesture-tracker'
 import { Cell, useObserver } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue } from 'retend-utils/hooks'
+import { PointerTracker, type TrackedEndedEvent } from '@/utilities/pointer-gesture-tracker'
 import styles from './button.module.css'
 
 type IntrinsicButtonProps = JSX.IntrinsicElements['button']

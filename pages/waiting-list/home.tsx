@@ -1,3 +1,5 @@
+import { Cell, If, useScopeContext } from 'retend'
+import { useRouter } from 'retend/router'
 import { addEmailToWaitingList } from '@/api/modules/waiting-list/client'
 import Arrows from '@/components/icons/svg/arrows'
 import Loader from '@/components/icons/svg/loader'
@@ -6,8 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { WaitingListStateScope } from '@/scopes'
 import { useErrorNotifier } from '@/utilities/composables/use-error-notifier'
-import { Cell, If, useScopeContext } from 'retend'
-import { useRouter } from 'retend/router'
 
 function WaitingListHome() {
    const { emailEntered } = useScopeContext(WaitingListStateScope)

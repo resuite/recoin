@@ -1,3 +1,5 @@
+import { Cell } from 'retend'
+import { UniqueTransition } from 'retend-utils/components'
 import Arrows from '@/components/icons/svg/arrows'
 import { FitText } from '@/components/ui/fit-text'
 import { FormattedMoney } from '@/components/ui/formatted-money'
@@ -5,8 +7,6 @@ import type { Category } from '@/database/models/category'
 import type { Transaction } from '@/database/models/transaction'
 import { CategoryIcon } from '@/pages/app/home/(fragments)/category-icon'
 import { useAuthContext } from '@/scopes/auth'
-import { Cell } from 'retend'
-import { UniqueTransition } from 'retend-utils/components'
 
 interface HeaderProps {
    category: Category

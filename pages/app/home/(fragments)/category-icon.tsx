@@ -1,5 +1,5 @@
-import { Icon, type IconName } from '@/components/icons'
 import type { JSX } from 'retend/jsx-runtime'
+import { Icon, type IconName } from '@/components/icons'
 
 type DivProps = JSX.IntrinsicElements['div']
 interface CategoryIconProps extends DivProps {

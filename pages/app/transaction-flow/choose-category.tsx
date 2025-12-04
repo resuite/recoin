@@ -1,3 +1,5 @@
+import { type Cell, For } from 'retend'
+import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
@@ -9,8 +11,6 @@ import { BackButton } from '@/pages/app/(fragments)/back-btn'
 import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
 import { useCategories } from '@/utilities/composables/use-categories'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { type Cell, For } from 'retend'
-import { useRouteQuery } from 'retend/router'
 
 const CategoryLink = (props: Category) => {
    const { name, icon, id } = props

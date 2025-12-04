@@ -1,3 +1,5 @@
+import { Cell, useScopeContext, useSetupEffect } from 'retend'
+import { useRouteQuery } from 'retend/router'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { QueryKeys } from '@/constants/query-keys'
@@ -7,8 +9,6 @@ import EnterTransactionDetails from '@/pages/app/transaction-flow/enter-transact
 import TransactionSuccessful from '@/pages/app/transaction-flow/transaction-successful'
 import { TransactionDetailsFormScope } from '@/scopes/forms'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { Cell, useScopeContext, useSetupEffect } from 'retend'
-import { useRouteQuery } from 'retend/router'
 
 const TransactionFlow = () => {
    const query = useRouteQuery()

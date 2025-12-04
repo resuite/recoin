@@ -1,3 +1,6 @@
+import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import { useLocalStorage } from 'retend-utils/hooks'
 import type { UserData } from '@/api/database/types'
 import { Errors, RecoinError } from '@/api/error'
 import { completeOnboarding, getMe } from '@/api/modules/application/client'
@@ -5,9 +8,6 @@ import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/cli
 import { LocalStorageKeys } from '@/constants/local-storage-keys'
 import { useErrorNotifier } from '@/utilities/composables/use-error-notifier'
 import { useIsServer } from '@/utilities/composables/use-is-server'
-import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
-import { useLocalStorage } from 'retend-utils/hooks'
-import type { JSX } from 'retend/jsx-runtime'
 
 type AuthState = 'idle' | 'pending' | 'ready'
 

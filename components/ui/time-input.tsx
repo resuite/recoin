@@ -1,5 +1,5 @@
-import Clock from '@/components/icons/svg/clock'
 import { Cell, type SourceCell } from 'retend'
+import Clock from '@/components/icons/svg/clock'
 import { Input, type InputProps } from './input'
 import styles from './time-input.module.css'
 
@@ -36,6 +36,7 @@ export function TimeInput(props: TimeInputProps) {
    return (
       <div data-unfilled={inputIsUnfilled} class={styles.timeInputContainer}>
          <Input ref={ref} type='time' {...rest} />
+         {/* biome-ignore lint/a11y/noStaticElementInteractions: overriding native ui. */}
          <div
             class={styles.timePlaceholder}
             onClick={handlePlaceholderClick}

@@ -83,8 +83,8 @@ export type IconName =
    | 'wallet'
    | 'warning'
 
-import { noHydrate } from 'retend-server/client'
 import type { JSX } from 'retend/jsx-runtime'
+import { noHydrate } from 'retend-server/client'
 
 type SvgProps = JSX.IntrinsicElements['svg']
 

@@ -1,6 +1,6 @@
+import { Events, Schema, State } from '@livestore/livestore'
 import type { TransactionType } from '@/api/database/types'
 import { type Doc, Model } from '@/utilities/model'
-import { Events, Schema, State } from '@livestore/livestore'
 
 const TransactionModel = new Model({
    table: State.SQLite.table({

@@ -1,5 +1,5 @@
-import Calendar from '@/components/icons/svg/calendar'
 import { Cell, type SourceCell } from 'retend'
+import Calendar from '@/components/icons/svg/calendar'
 import styles from './date-input.module.css'
 import { Input, type InputProps } from './input'
 
@@ -35,6 +35,7 @@ export function DateInput(props: DateInputProps) {
    return (
       <div data-unfilled={inputIsUnfilled} class={styles.dateInputContainer}>
          <Input model={model} ref={ref} max={max} type='date' {...rest} />
+         {/* biome-ignore lint/a11y/noStaticElementInteractions: overriding native ui. */}
          <div
             class={styles.datePlaceholder}
             onClick={handlePlaceholderClick}

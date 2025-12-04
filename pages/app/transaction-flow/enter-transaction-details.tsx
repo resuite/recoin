@@ -1,3 +1,5 @@
+import { Cell, If, useScopeContext } from 'retend'
+import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
@@ -22,8 +24,6 @@ import { TransactionDetailsFormScope } from '@/scopes/forms'
 import { useCategory } from '@/utilities/composables/use-categories'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { scrollIntoView } from '@/utilities/miscellaneous'
-import { Cell, If, useScopeContext } from 'retend'
-import { useRouteQuery } from 'retend/router'
 
 const EnterTransactionDetails = () => {
    const query = useRouteQuery()

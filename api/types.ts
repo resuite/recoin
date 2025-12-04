@@ -1,5 +1,5 @@
-import type { ErrorCode } from '@/api/error'
 import type { D1Database, DurableObjectNamespace, KVNamespace } from '@cloudflare/workers-types'
+import type { ErrorCode } from '@/api/error'
 
 export interface SuccessResponse<T = never> {
    success: true

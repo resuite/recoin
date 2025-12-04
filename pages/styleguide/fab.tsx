@@ -1,3 +1,4 @@
+import { Cell } from 'retend'
 import Add from '@/components/icons/svg/add'
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
@@ -6,7 +7,6 @@ import { ExpandingView } from '@/components/views/expanding-view'
 import { usePullToRefreshContext } from '@/components/views/pull-to-refresh-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { vibrate } from '@/utilities/miscellaneous'
-import { Cell } from 'retend'
 
 const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }) => {
    const isOpen = Cell.source(false)

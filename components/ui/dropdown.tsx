@@ -1,3 +1,6 @@
+import { Cell, For, If, type SourceCell, useObserver, useSetupEffect } from 'retend'
+import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue } from 'retend-utils/hooks'
 import Caret from '@/components/icons/svg/caret'
 import Checkmark from '@/components/icons/svg/checkmark'
 import {
@@ -8,9 +11,6 @@ import {
 } from '@/components/ui/context-menu'
 import { SEARCH_BUFFER_TIMEOUT_MS } from '@/constants'
 import { getFocusableElementInItem } from '@/utilities/miscellaneous'
-import { Cell, For, If, type SourceCell, useObserver, useSetupEffect } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
-import type { JSX } from 'retend/jsx-runtime'
 import styles from './dropdown.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']

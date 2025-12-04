@@ -1,19 +1,19 @@
-import { animationsSettled } from '@/utilities/animations'
-import { vibrate } from '@/utilities/miscellaneous'
-import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
-import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import {
    Cell,
+   createScope,
    If,
    type SetupFn,
    type SourceCell,
-   createScope,
    useObserver,
    useScopeContext,
    useSetupEffect
 } from 'retend'
-import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
+import { useDerivedValue, useIntersectionObserver } from 'retend-utils/hooks'
+import { animationsSettled } from '@/utilities/animations'
+import { vibrate } from '@/utilities/miscellaneous'
+import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
+import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import styles from './stack-view-group.module.css'
 
 // --- Constants ---

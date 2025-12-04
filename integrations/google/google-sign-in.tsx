@@ -1,6 +1,6 @@
+import { Cell } from 'retend'
 import Loader from '@/components/icons/svg/loader'
 import { type GoogleCredentialResponse, useGoogleSignInButton } from '@/integrations/google'
-import { Cell } from 'retend'
 
 interface GoogleSignInProps {
    onSuccess: (res: GoogleCredentialResponse) => void

@@ -1,6 +1,6 @@
-import { defer } from '@/utilities/miscellaneous'
 import { Cell } from 'retend'
 import { useRouteQuery, useRouter } from 'retend/router'
+import { defer } from '@/utilities/miscellaneous'
 
 export function useRouteQueryControl(_key: string | { _root: string }, value = 'true') {
    const key = typeof _key === 'string' ? _key : _key._root

@@ -1,6 +1,6 @@
 import { If } from 'retend'
-import { Input as _Input, type InputProps as _InputProps } from 'retend-utils/components'
 import type { JSX } from 'retend/jsx-runtime'
+import { Input as _Input, type InputProps as _InputProps } from 'retend-utils/components'
 import styles from './input.module.css'
 
 export interface InputProps<T extends JSX.InputTypeHTMLAttribute> extends _InputProps<T> {

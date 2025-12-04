@@ -1,17 +1,17 @@
-import { animationsSettled } from '@/utilities/animations'
 import {
    Cell,
+   createScope,
    If,
    type SourceCell,
-   createScope,
    useObserver,
    useScopeContext,
    useSetupEffect
 } from 'retend'
-import { useDerivedValue } from 'retend-utils/hooks'
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
 import { Teleport } from 'retend/teleport'
+import { useDerivedValue } from 'retend-utils/hooks'
+import { animationsSettled } from '@/utilities/animations'
 import styles from './bottom-sheet-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -259,7 +259,7 @@ interface AnimatedBackgroundProps extends DivProps {
 function AnimatedBackground(props: AnimatedBackgroundProps) {
    const { height: heightProp, ref = Cell.source(null), ...rest } = props
    const height = useDerivedValue(heightProp)
-   let initialHeight: number | undefined = undefined
+   let initialHeight: number | undefined
 
    let lastAfterPseudoElementTranslation = '1'
    let lastBeforePseudoTranslation = '0px'

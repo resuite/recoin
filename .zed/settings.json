@@ -1,6 +1,9 @@
 {
-   "code_actions_on_format": {
-      "source.organizeImports.biome": true,
-      "source.fixAll.biome": true
+   "lsp": {
+      "biome": {
+         "settings": {
+            "configuration_path": "./biome.json"
+         }
+      }
    }
 }
