@@ -123,11 +123,14 @@ export function Sticky(props: StickyProps) {
       ([entry]) => {
          const container = containerRef.peek()
          const scroller = timeline.source.peek()
-         const rect = entry.boundingClientRect
-         if (rect.y > innerHeight || rect.x > innerWidth) {
-            return
-         }
-         if (!scroller || !container) {
+         const rectOfOffsetMirror = entry.boundingClientRect
+
+         if (
+            rectOfOffsetMirror.y > innerHeight ||
+            rectOfOffsetMirror.x > innerWidth ||
+            !scroller ||
+            !container
+         ) {
             return
          }
          const isStuck = !entry.isIntersecting
@@ -194,7 +197,7 @@ export class StickStateChangeEvent extends Event {
       public wasStuck: boolean,
       public scroller: Element
    ) {
-      super('stickstatechange')
+      super('stickstatechange', { bubbles: false })
    }
 }
 

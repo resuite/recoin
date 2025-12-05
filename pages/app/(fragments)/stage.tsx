@@ -8,7 +8,7 @@ export const Stage = (props: StageProps) => {
       <div
          {...props}
          class={[
-            'translate-0 h-full max-w-screen light-scheme rounded-t-3xl',
+            'translate-0 h-full max-w-screen light-scheme',
             'duration-bit-slower transition-transform ease',
 
             props.class
