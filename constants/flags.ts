@@ -17,7 +17,7 @@ function updateFlags() {
       // - it is supported on mac versions
       // - it is defined in Element.oncontextmenu
       // Some old bug they just never got around to, surely.
-      ContextMenuEvent: 'GestureEvent' in window,
+      ContextMenuEvent: !('GestureEvent' in window),
       ScrollEndEvent: 'onscrollend' in window,
       ScrollTimeline: 'ScrollTimeline' in window,
       // Container scroll queries are supported in Chromium,

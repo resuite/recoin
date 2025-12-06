@@ -10,7 +10,7 @@ const StartPage = () => {
    })
 
    return (
-      <div class='grid place-items-center gap-1 w-full h-full place-content-center'>
+      <div class='grid place-items-center gap-1 w-full h-full pt-(--safe-area-inset-top) place-content-center'>
          {If(isIdle, {
             true: Welcome,
             false: Loading

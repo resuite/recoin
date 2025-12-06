@@ -89,7 +89,7 @@
 @keyframes toast-slide-in {
    from {
       opacity: 0.5;
-      translate: var(--toast-starting-translate, 0 -100%);
+      translate: var(--toast-starting-translate, 0 calc(-100% - var(--safe-area-inset-top)));
    }
 }
 

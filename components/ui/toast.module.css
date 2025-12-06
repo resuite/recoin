@@ -9,7 +9,7 @@
    display: grid;
    width: 100dvw;
    height: 100dvh;
-   padding-top: var(--spacing);
+   padding-top: calc(var(--spacing) + var(--safe-area-inset-top));
    z-index: var(--toasts-layer);
    pointer-events: none;
    grid-template-rows: auto 1fr;
