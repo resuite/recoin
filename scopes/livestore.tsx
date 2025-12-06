@@ -80,14 +80,14 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
       if (event.direction === 'forwards') {
          this.removeAttribute('class')
       } else {
-         this.classList.add('light-scheme', 'rounded-t-3xl')
+         this.classList.add('light-scheme')
       }
    }
 
    return If(hasFinishedOnboarding, {
       true: () => (
          <FullScreenTransitionView
-            class='light-scheme rounded-t-3xl overflow-hidden'
+            class='light-scheme overflow-hidden'
             transition='fade-in'
             when={storeIsDefined}
             from={fallback}

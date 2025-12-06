@@ -4,8 +4,8 @@ import { useDerivedValue } from 'retend-utils/hooks'
 import { animationsSettled } from '@/utilities/animations'
 import styles from './full-screen-transition-view.module.css'
 
-type FullScreenTransition = 'slide-up' | 'slide-down' | 'fade-in' | 'fade-out' | 'blink'
-type TransitionSpeed = 'default' | 'fast' | 'device' | 'slow'
+export type FullScreenTransition = 'slide-up' | 'slide-down' | 'fade-in' | 'fade-out' | 'blink'
+export type TransitionSpeed = 'default' | 'fast' | 'device' | 'slow'
 type DivProps = JSX.IntrinsicElements['div']
 
 interface FullScreenTransitionCtx {

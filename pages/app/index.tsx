@@ -1,5 +1,5 @@
-import { Cell, If } from 'retend'
-import { useRouter } from 'retend/router'
+import { If } from 'retend'
+import { Outlet } from 'retend/router'
 import Loader from '@/components/icons/svg/loader'
 import { ToastProvider } from '@/components/ui/toast'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
@@ -16,9 +16,8 @@ import { AuthenticationProvider } from '@/scopes/auth'
 import { LiveStoreProvider } from '@/scopes/livestore'
 import { useApplicationSetup } from '@/utilities/composables/use-application-setup'
 
-const AppContent = () => {
-   const { Outlet } = useRouter()
-   const { hasFinishedOnboarding } = useApplicationSetup()
+const AppRoot = () => {
+   const { ready, hasFinishedOnboarding } = useApplicationSetup()
 
    const StoreLoadingFallback = () => {
       return If(hasFinishedOnboarding, {
@@ -36,46 +35,36 @@ const AppContent = () => {
    }
 
    return (
-      <VerticalPanView>
-         {() => (
-            <LiveStoreProvider initStore={createRecoinStore} fallback={StoreLoadingFallback}>
-               {() => (
-                  <FullScreenTransitionView
-                     class='w-5 select-none'
-                     when={hasFinishedOnboarding}
-                     transition='fade-in'
-                     from={Onboarding}
-                     to={() => (
-                        <SidebarProviderView sidebar={() => <Sidebar />}>
-                           {() => (
-                              <Outlet
-                                 id={ROOT_APP_OUTLET}
-                                 style={{ display: 'grid' }}
-                                 class='h-full translate-0 max-w-screen'
-                              />
-                           )}
-                        </SidebarProviderView>
-                     )}
-                  />
-               )}
-            </LiveStoreProvider>
-         )}
-      </VerticalPanView>
-   )
-}
-
-const AppRoot = () => {
-   const { ready, hasFinishedOnboarding } = useApplicationSetup()
-   const transition = Cell.derived(() => {
-      return hasFinishedOnboarding.get() ? 'slide-up' : 'fade-in'
-   })
-   return (
       <FullScreenTransitionView
+         class='grid-lines-with-fade select-none'
          when={ready}
-         transition={transition}
+         transition='fade-in'
          from={StartPage}
-         to={AppContent}
-         class='grid-lines-with-fade'
+         to={() => (
+            <VerticalPanView>
+               {() => (
+                  <LiveStoreProvider initStore={createRecoinStore} fallback={StoreLoadingFallback}>
+                     {() => (
+                        <FullScreenTransitionView
+                           when={hasFinishedOnboarding}
+                           transition='fade-in'
+                           from={Onboarding}
+                           to={() => (
+                              <SidebarProviderView sidebar={Sidebar}>
+                                 {() => (
+                                    <Outlet
+                                       id={ROOT_APP_OUTLET}
+                                       class='h-full grid! translate-0 max-w-screen'
+                                    />
+                                 )}
+                              </SidebarProviderView>
+                           )}
+                        />
+                     )}
+                  </LiveStoreProvider>
+               )}
+            </VerticalPanView>
+         )}
       />
    )
 }

@@ -62,7 +62,7 @@ export interface SidebarProviderViewProps extends DivProps {
  */
 export function SidebarProviderView(props: SidebarProviderViewProps) {
    const {
-      sidebar,
+      sidebar: Sidebar,
       children,
       ref: providerRef = Cell.source<HTMLElement | null>(null),
       onSidebarStateChange,
@@ -220,7 +220,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                {() => (
                   <>
                      <div class={styles.sidebar} ref={sidebarRef}>
-                        {sidebar()}
+                        <Sidebar />
                      </div>
                      <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
                         {children?.()}

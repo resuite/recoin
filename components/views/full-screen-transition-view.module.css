@@ -63,38 +63,17 @@
          }
       }
 
-      /*&[data-transition='slide-down'] {
-         &:not([data-changed]) {
-            & > .nextView {
-               translate: 0 -100dvh;
-               opacity: 30%;
-            }
+      &[data-transition='fade-out'] {
+         &[data-changed] > .nextView {
+            animation-name: fade-in-leaving;
+            animation-direction: reverse;
          }
 
-         &[data-changed] {
-            & > .previousView {
-               opacity: 30%;
-               scale: 0.4;
-            }
+         &[data-changed] > .previousView {
+            animation-name: fade-out-entering;
+            animation-direction: reverse;
          }
       }
-
-      &[data-transition='fade-out'] {
-         &:not([data-changed]) {
-            & > .nextView {
-               pointer-events: none;
-               opacity: 0%;
-               scale: 0.75;
-            }
-         }
-
-         &[data-changed] {
-            & > .previousView {
-               opacity: 30%;
-               scale: 1.75;
-            }
-         }
-      }*/
 
       &[data-transition='blink'] {
          &[data-changed] > .previousView,
