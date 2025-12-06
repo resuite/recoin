@@ -37,6 +37,7 @@ export type IconName =
    | 'flying-money'
    | 'funnel'
    | 'gift'
+   | 'git'
    | 'git-fork'
    | 'google'
    | 'grid'
@@ -141,6 +142,7 @@ export function AllIcons() {
          <Icon name='flying-money' />
          <Icon name='funnel' />
          <Icon name='gift' />
+         <Icon name='git' />
          <Icon name='git-fork' />
          <Icon name='google' />
          <Icon name='grid' />
