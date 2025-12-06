@@ -60,6 +60,7 @@ body {
 @theme {
    --spacing: 25px;
    --half-spacing: calc(var(--spacing) / 2);
+   --safe-area-inset-top: env(safe-area-inset-top, 0px);
 
    --color-base: rgb(39, 39, 39);
    --color-light-yellow: rgb(250, 255, 237);
@@ -405,7 +406,7 @@ body {
 }
 
 @custom-variant stuck {
-   /* 
+   /*
    @supports (container-type: scroll-state) {
       @container sticky scroll-state(stuck: top) {
          @slot;

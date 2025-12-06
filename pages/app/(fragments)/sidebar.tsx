@@ -125,8 +125,8 @@ export function Sidebar() {
             contentVisibility: 'auto'
          }}
          class={[
-            'w-[55dvw] h-screen',
-            'dark-scheme h-full py-2 text-header grid grid-rows-[auto_auto_auto_1fr]'
+            'w-[55dvw] h-screen pt-[calc(env(safe-area-inset-top)+var(--spacing)*1.5)]',
+            'dark-scheme h-full pb-2 text-header grid grid-rows-[auto_auto_auto_1fr]'
          ]}
       >
          <SidebarHeader />

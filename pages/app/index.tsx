@@ -36,7 +36,7 @@ const AppRoot = () => {
 
    return (
       <FullScreenTransitionView
-         class='grid-lines-with-fade select-none'
+         class='grid-lines-with-fade min-h-screen select-none'
          when={ready}
          transition='fade-in'
          from={StartPage}

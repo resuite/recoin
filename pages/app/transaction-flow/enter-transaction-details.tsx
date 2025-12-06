@@ -64,7 +64,7 @@ const EnterTransactionDetails = () => {
       >
          {() => (
             <>
-               <BackButton class='absolute top-2 left-1' />
+               <BackButton class='absolute top-1 mt-(--safe-area-inset-top) left-1' />
                <div>
                   <h2 class='border-b-2 pb-0.25 w-full flex items-center justify-center'>
                      <Arrows class='h-1.25 self-center' direction={arrowDirection} />
