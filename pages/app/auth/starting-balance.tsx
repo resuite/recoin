@@ -39,13 +39,15 @@ const StartingBalance = (props: StartingBalanceProps) => {
          {() => (
             <SafeAreaView
                elementName='form'
-               class='grid grid-lines-with-fade grid-cols-1 grid-rows-[.25fr_1fr_auto] place-items-center place-content-center'
+               class='grid grid-lines-with-fade grid-cols-1 grid-rows-[1fr_auto] place-items-center place-content-center'
                onSubmit--prevent={handleSubmit}
             >
-               <h2 class='text-title'>What should be your starting balance?</h2>
-               <VirtualKeyboardTriggers class='self-start w-full py-1.5'>
-                  <MoneyInput minlength={3} currency={currency} model={value} />
-               </VirtualKeyboardTriggers>
+               <div>
+                  <h2 class='text-title'>What should be your starting balance?</h2>
+                  <VirtualKeyboardTriggers class='self-start w-full py-1.5'>
+                     <MoneyInput minlength={3} currency={currency} model={value} />
+                  </VirtualKeyboardTriggers>
+               </div>
                <div class='w-full grid grid-cols-1 grid-rows-2 gap-y-0.5'>
                   <Button class='btn-outline' onClick={goBackToCurrency}>
                      Back

@@ -22,21 +22,32 @@ const CurrencySelection = () => {
    }
 
    return (
-      <SafeAreaView class='grid-lines-with-fade grid grid-rows-[auto_auto_1fr_auto] gap-0.5 animate-stagger-load'>
-         <form onSubmit--prevent={goToInitialBalancePage} class='contents'>
-            <h1 class='text-logo relative'>
+      <SafeAreaView
+         elementName='form'
+         onSubmit--prevent={goToInitialBalancePage}
+         class={[
+            'grid place-content-center place-items-center grid-rows-[1fr_auto] gap-0.5',
+            'grid-lines-with-fade'
+         ]}
+      >
+         <div
+            class={[
+               'pb-5 relative',
+               'animate-stagger-load',
+               '[--initial-wait:calc(var(--full-screen-transition-speed)*0.5)]',
+               '[--stagger-delay:0.35]'
+            ]}
+         >
+            <h1 class='text-large mt-3'>
                Welcome <br /> to recoin.
             </h1>
-            <p class='text-bigger relative mt-0.5 mb-2'>What is your primary currency?</p>
+            <p class='text-bigger mt-0.5 mb-2'>What is your primary currency?</p>
+            <Dropdown options={currencyOptions} selectedOption={currency} />
+         </div>
 
-            <div class='relative'>
-               <Dropdown options={currencyOptions} selectedOption={currency} />
-            </div>
-
-            <Button class='relative' type='submit'>
-               Next
-            </Button>
-         </form>
+         <Button class='relative w-full' type='submit'>
+            Next
+         </Button>
       </SafeAreaView>
    )
 }

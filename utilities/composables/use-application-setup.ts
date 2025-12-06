@@ -16,7 +16,7 @@ export function useApplicationSetup() {
    useSetupEffect(() => {
       const timeout = setTimeout(() => {
          waitTimeLoaded.set(true)
-      }, 200)
+      }, 100)
 
       return () => clearTimeout(timeout)
    })

@@ -3,6 +3,17 @@
    overflow-x: scroll;
    width: 100%;
    height: 100%;
+   /* This is so that the main theme color is consistent on overscroll:
+   * You should see black if you drag the sidebar, and white if you
+   drag the content.
+   */
+   background: linear-gradient(
+      to right,
+      var(--color-base) 0%,
+      var(--color-base) 50%,
+      white 50%,
+      white 100%
+   );
 
    grid-template-columns: auto 100%;
    grid-template-rows: 1fr;

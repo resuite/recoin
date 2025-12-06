@@ -51,22 +51,28 @@
 }
 
 @utility animate-stagger-load {
-   --stagger-delay: 0.15;
+   --initial-wait: 0ms;
+   --stagger-delay: 0.25;
    --stagger-speed: calc(var(--speed-device) / 1.5);
 
    & > * {
       animation-fill-mode: backwards;
       animation-name: fade-in;
+      animation-delay: var(--initial-wait);
       animation-duration: var(--stagger-speed);
       animation-timing-function: var(--timing);
    }
 
    & > *:nth-child(2) {
-      animation-delay: calc(var(--stagger-speed) * var(--stagger-delay));
+      animation-delay: calc(var(--initial-wait) + var(--stagger-speed) * var(--stagger-delay));
    }
 
    & > *:nth-child(3) {
-      animation-delay: calc(var(--stagger-speed) * var(--stagger-delay) * 2);
+      animation-delay: calc(var(--initial-wait) + var(--stagger-speed) * var(--stagger-delay) * 2);
+   }
+
+   & > *:nth-child(4) {
+      animation-delay: calc(var(--initial-wait) + var(--stagger-speed) * var(--stagger-delay) * 3);
    }
 }
 

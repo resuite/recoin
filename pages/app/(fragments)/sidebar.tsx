@@ -5,6 +5,8 @@ import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
+import { VibrationPatterns } from '@/constants/vibration'
+import { vibrate } from '@/utilities/miscellaneous'
 
 export interface LinkInfo {
    name: string
@@ -49,6 +51,7 @@ function SidebarLink(props: SidebarLinkProps) {
    const buttonRef = Cell.source<HTMLButtonElement | null>(null)
 
    const handleClick = async () => {
+      vibrate(VibrationPatterns.ButtonPress)
       await sidebarCtx.toggleSidebar()
       navigate(link.href)
    }

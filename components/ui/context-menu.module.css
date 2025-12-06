@@ -104,8 +104,17 @@ body:has(.contextMenu) {
    }
 }
 
+.text {
+   display: flex;
+   justify-items: start;
+   flex-grow: 1;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
 .itemContent {
-   display: grid;
+   display: flex;
    justify-content: start;
    min-width: 100%;
    border-radius: 0px;
@@ -114,18 +123,6 @@ body:has(.contextMenu) {
    padding-inline: calc(var(--spacing) * 0.25);
    padding-block: calc(var(--spacing) * 0.15);
    content-visibility: auto;
-
-   &:has(.caretContainer) {
-      grid-template-columns: 1fr auto;
-   }
-
-   &:has(.iconContainer) {
-      grid-template-columns: auto 1fr;
-
-      &:has(.caretContainer) {
-         grid-template-columns: auto 1fr auto;
-      }
-   }
 
    &:focus-visible,
    & :focus-visible {
@@ -177,8 +174,11 @@ body:has(.contextMenu) {
 
 .checkItemInput {
    all: revert;
-   position: absolute;
    appearance: none;
+   width: 0;
+   height: 0;
+   opacity: 0;
+   background-color: palevioletred;
 }
 
 .check {

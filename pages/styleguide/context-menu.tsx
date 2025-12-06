@@ -16,6 +16,13 @@ const ContextMenuTest = () => {
          }
       },
       {
+         type: ItemTypes.Check,
+         name: 'grid',
+         label: 'Test Item With Very Very Very Long Label',
+         checked: Cell.source(false),
+         onCheckedChange(_value) {}
+      },
+      {
          type: ItemTypes.Action,
          label: 'Paste',
          icon: 'clipboard',

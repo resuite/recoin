@@ -5,7 +5,7 @@ import {
    type State,
    type Store
 } from '@livestore/livestore'
-import { Cell, createScope, If, useScopeContext, useSetupEffect } from 'retend'
+import { Cell, createScope, useScopeContext, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import {
    type FullScreenTransitionEvent,
@@ -84,23 +84,16 @@ export function LiveStoreProvider<T extends LiveStoreSchema>(props: LiveStorePro
       }
    }
 
-   return If(hasFinishedOnboarding, {
-      true: () => (
-         <FullScreenTransitionView
-            class='light-scheme overflow-hidden'
-            transition='fade-in'
-            when={storeIsDefined}
-            from={fallback}
-            to={AppContent}
-            onFullScreenTransition={handleFullScreenTransition}
-         />
-      ),
-      false: () =>
-         If(store, {
-            true: AppContent,
-            false: fallback
-         })
-   })
+   return (
+      <FullScreenTransitionView
+         class={['overflow-hidden', { 'light-scheme': hasFinishedOnboarding }]}
+         transition='fade-in'
+         when={storeIsDefined}
+         from={fallback}
+         to={AppContent}
+         onFullScreenTransition={handleFullScreenTransition}
+      />
+   )
 }
 
 type ExtractQueryType<

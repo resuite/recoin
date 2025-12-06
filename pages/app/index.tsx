@@ -1,4 +1,4 @@
-import { If } from 'retend'
+import { Cell, If } from 'retend'
 import { Outlet } from 'retend/router'
 import Loader from '@/components/icons/svg/loader'
 import { ToastProvider } from '@/components/ui/toast'
@@ -18,6 +18,9 @@ import { useApplicationSetup } from '@/utilities/composables/use-application-set
 
 const AppRoot = () => {
    const { ready, hasFinishedOnboarding } = useApplicationSetup()
+   const transition = Cell.derived(() => {
+      return hasFinishedOnboarding.get() ? 'slide-up' : 'fade-in'
+   })
 
    const StoreLoadingFallback = () => {
       return If(hasFinishedOnboarding, {
@@ -38,7 +41,7 @@ const AppRoot = () => {
       <FullScreenTransitionView
          class='grid-lines-with-fade min-h-screen select-none'
          when={ready}
-         transition='fade-in'
+         transition={transition}
          from={StartPage}
          to={() => (
             <VerticalPanView>

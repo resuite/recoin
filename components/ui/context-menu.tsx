@@ -28,7 +28,6 @@ import { clamp, defer, getFocusableElementInItem } from '@/utilities/miscellaneo
 import { DynamicIcon, type IconName } from '../icons'
 import Checkmark from '../icons/svg/checkmark'
 import styles from './context-menu.module.css'
-import { Input } from './input'
 
 export const ItemTypes = {
    Check: 'check',
@@ -298,7 +297,9 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
       }
       const x1 = cursorCoordinates.x.get()
       const y1 = cursorCoordinates.y.get()
-      setAnchorCoordinates(x1, y1)
+      if (!(strategy === 'click' || useTriggerAsAnchor)) {
+         setAnchorCoordinates(x1, y1)
+      }
       menuShouldBeOpen.set(true)
    }
 
@@ -486,7 +487,7 @@ function ContextMenuAction(props: ContextMenuActionItemProps) {
          onClick={handleClick}
       >
          <ContextMenuOptionalIcon icon={icon} />
-         {typeof label === 'string' ? label : label()}
+         <div class={styles.text}>{typeof label === 'string' ? label : label()}</div>
       </Button>
    )
 }
@@ -516,8 +517,8 @@ function ContextMenuCheck(props: ContextMenuCheckItemProps) {
             <Checkmark class={styles.check} />
          ))}
          <ContextMenuOptionalIcon icon={icon} />
-         <Input
-            label=''
+         <div class={styles.text}>{typeof label === 'string' ? label : label()}</div>
+         <input
             id={name}
             name={name}
             class={styles.checkItemInput}
@@ -525,8 +526,6 @@ function ContextMenuCheck(props: ContextMenuCheckItemProps) {
             checked={checked}
             onChange={handleOnChange}
          />
-
-         {typeof label === 'string' ? label : label()}
       </label>
    )
 }
@@ -563,10 +562,8 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
             disabled={disabled}
          >
             <ContextMenuOptionalIcon icon={icon} />
-            {typeof label === 'string' ? label : label()}
-            <div class={styles.caretContainer}>
-               <DynamicIcon name='caret' class={styles.caret} />
-            </div>
+            <div class={styles.text}>{typeof label === 'string' ? label : label()}</div>
+            <DynamicIcon name='caret' class={styles.caret} />
          </Button>
          <ContextMenu
             ref={contextMenu}
