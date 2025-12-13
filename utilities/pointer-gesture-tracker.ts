@@ -104,3 +104,28 @@ export class TrackedEndedEvent extends Event {
       this.pointerCancelled = lastPointerEvent?.type === 'pointercancel'
    }
 }
+
+interface TouchTrackingOptions {
+   onMove?: (deltaX: number, deltaY: number) => void
+   onEnd?: () => void
+}
+
+export function watchTouchGesture(startEvent: TouchEvent, options: TouchTrackingOptions) {
+   const { onMove, onEnd } = options
+   const moveHandler = (event: TouchEvent) => {
+      const touch = event.touches[0]
+      const deltaX = touch.clientX - startEvent.touches[0].clientX
+      const deltaY = touch.clientY - startEvent.touches[0].clientY
+      onMove?.(deltaX, deltaY)
+   }
+   const endHandler = () => {
+      onEnd?.()
+      window.document.removeEventListener('touchmove', moveHandler)
+      window.document.removeEventListener('touchend', endHandler)
+      window.document.removeEventListener('touchcancel', endHandler)
+   }
+   window.document.addEventListener('touchmove', moveHandler, { passive: true })
+   window.document.addEventListener('touchend', endHandler, { passive: true })
+   window.document.addEventListener('touchcancel', endHandler, { passive: true })
+   return endHandler
+}

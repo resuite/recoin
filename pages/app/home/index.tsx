@@ -1,4 +1,4 @@
-import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
+import { ScrollView } from '@/components/views/scroll-view'
 import { Header } from '@/pages/app/(fragments)/header'
 import { Stage } from '@/pages/app/(fragments)/stage'
 import { AddNewTransactionButton } from '@/pages/app/home/(fragments)/add-new-transaction-button'
@@ -12,7 +12,7 @@ const Home = () => {
       <Stage class='grid grid-rows-[auto_1fr]'>
          <Header />
          <main class='max-h-0 min-h-full'>
-            <ScrollTimelineView class='[body[data-has-expanded-content]_&]:overflow-y-hidden!'>
+            <ScrollView class='[body[data-has-expanded-content]_&]:overflow-y-hidden!'>
                {() => (
                   <>
                      <Greeting />
@@ -21,7 +21,7 @@ const Home = () => {
                      <TransactionListing />
                   </>
                )}
-            </ScrollTimelineView>
+            </ScrollView>
          </main>
          <AddNewTransactionButton />
       </Stage>

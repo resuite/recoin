@@ -5,13 +5,13 @@ import Search from '@/components/icons/svg/search'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { type StickTimelineRangeSetEvent, Sticky } from '@/components/ui/sticky'
-import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
+import { useScrollTimeline } from '@/components/views/scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { createPointerOrClickHandler, defer } from '@/utilities/miscellaneous'
 
 export const RecentTransactionsHeader = () => {
-   const timeline = useScrollTimelineContext()
+   const timeline = useScrollTimeline()
    const {
       add: openSearch,
       remove: closeSearch,

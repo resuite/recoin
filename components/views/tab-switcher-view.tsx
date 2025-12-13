@@ -2,10 +2,7 @@ import { Cell, createScope, For, type SourceCell, useObserver, useScopeContext }
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
 import { Button } from '@/components/ui/button'
-import {
-   ScrollTimelineView,
-   useScrollTimelineContext
-} from '@/components/views/scroll-timeline-view'
+import { ScrollView, useScrollTimeline } from '@/components/views/scroll-view'
 import styles from './tab-switcher-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
@@ -172,7 +169,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
    return (
       <TabScope.Provider value={tabSwitcherData}>
          {() => (
-            <ScrollTimelineView
+            <ScrollView
                {...rest}
                axis='inline'
                ref={tabContainerRef}
@@ -180,7 +177,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
                class={[styles.tabSwitcherContainer, rest.class]}
             >
                {() => {
-                  const timeline = useScrollTimelineContext()
+                  const timeline = useScrollTimeline()
                   timeline.add({
                      target: underlineRef,
                      keyframes: { translate: ['0', `${(tabs.get().length - 1) * 100}%`] }
@@ -196,7 +193,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
                      </>
                   )
                }}
-            </ScrollTimelineView>
+            </ScrollView>
          )}
       </TabScope.Provider>
    )

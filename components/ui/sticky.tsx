@@ -1,7 +1,7 @@
 import { Cell, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver } from 'retend-utils/hooks'
-import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
+import { useScrollTimeline } from '@/components/views/scroll-view'
 import { Flags } from '@/constants/flags'
 import styles from './sticky.module.css'
 
@@ -76,7 +76,7 @@ export function Sticky(props: StickyProps) {
       ...rest
    } = props
    const offsetMirror = Cell.source<HTMLElement | null>(null)
-   const timeline = useScrollTimelineContext()
+   const timeline = useScrollTimeline()
 
    const computeDistance = () => {
       const container = containerRef?.get()

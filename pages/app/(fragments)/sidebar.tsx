@@ -3,7 +3,7 @@ import { useRouter } from 'retend/router'
 import type { IconName } from '@/components/icons'
 import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { useScrollTimelineContext } from '@/components/views/scroll-timeline-view'
+import { useScrollTimeline } from '@/components/views/scroll-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { VibrationPatterns } from '@/constants/vibration'
 import { vibrate } from '@/utilities/miscellaneous'
@@ -47,7 +47,7 @@ function SidebarLink(props: SidebarLinkProps) {
    const { navigate, getCurrentRoute } = useRouter()
    const currentRoute = getCurrentRoute()
    const sidebarCtx = useSidebarContext()
-   const scrollTimeline = useScrollTimelineContext()
+   const scrollTimeline = useScrollTimeline()
    const buttonRef = Cell.source<HTMLButtonElement | null>(null)
 
    const handleClick = async () => {
@@ -100,7 +100,7 @@ function LinkGroup(props: LinkGroupProps) {
 }
 
 function SidebarDivider() {
-   const scrollTimeline = useScrollTimelineContext()
+   const scrollTimeline = useScrollTimeline()
    const ref = Cell.source<HTMLHRElement | null>(null)
 
    scrollTimeline.add({

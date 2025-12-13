@@ -5,7 +5,7 @@
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver } from 'retend-utils/hooks'
-import { ScrollTimelineView } from '@/components/views/scroll-timeline-view'
+import { ScrollView } from '@/components/views/scroll-view'
 // import { PullStartEvent, usePullToRefreshContext } from './pull-to-refresh-view'
 import styles from './sidebar-provider-view.module.css'
 
@@ -210,7 +210,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    return (
       <SidebarScope.Provider value={sidebarScopeData}>
          {() => (
-            <ScrollTimelineView
+            <ScrollView
                {...rest}
                axis='inline'
                ref={providerRef}
@@ -228,7 +228,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                      </div>
                   </>
                )}
-            </ScrollTimelineView>
+            </ScrollView>
          )}
       </SidebarScope.Provider>
    )
