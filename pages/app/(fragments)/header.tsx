@@ -21,7 +21,7 @@ export function Header() {
          <Button
             style={{ rotate: 'calc(var(--sidebar-reveal) * 180deg)' }}
             class='touch-target button-bare pointer-events-auto'
-            onClick={toggleSidebar}
+            onClick={() => toggleSidebar()}
          >
             <Hamburger class='h-1' />
          </Button>

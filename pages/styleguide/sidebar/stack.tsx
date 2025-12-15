@@ -25,7 +25,7 @@ function FirstPage() {
          {() => (
             <FloatingActionButtonTest class='h-full w-full relative grid place-items-center place-content-center gap-0.5'>
                <h1 class='text-header'>recoin.</h1>
-               <Button type='button' onClick={toggleSidebar}>
+               <Button type='button' onClick={() => toggleSidebar()}>
                   Toggle Sidebar
                </Button>
                <Button type='button' onClick={openSheet}>
