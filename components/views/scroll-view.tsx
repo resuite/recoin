@@ -1,12 +1,13 @@
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
-import { useIntersectionObserver } from 'retend-utils/hooks'
 import { Flags } from '@/constants/flags'
-import { currentBrowser } from '@/utilities/browser'
-import { clamp } from '@/utilities/miscellaneous'
+import { Platform } from '@/utilities/browser'
+import { clamp, defer } from '@/utilities/miscellaneous'
 import { watchTouchGesture } from '@/utilities/pointer-gesture-tracker'
 import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import classes from './scroll-view.module.css'
+
+type ContainerRef = Cell<HTMLElement | null>
 
 interface ScrollLinkedAnimationRange {
    start?: number
@@ -20,7 +21,7 @@ interface AnimationData {
 }
 
 interface ScrollLinkedAnimationOptions {
-   target: Cell<HTMLElement | null>
+   target: ContainerRef
    keyframes: Array<Keyframe> | PropertyIndexedKeyframes
    range?: ScrollLinkedAnimationRange
    pseudoElement?: ':before' | ':after'
@@ -28,18 +29,40 @@ interface ScrollLinkedAnimationOptions {
 }
 
 interface ScrollTimelineContext {
-   source: Cell<HTMLElement | null>
+   source: ContainerRef
    add: (animation: ScrollLinkedAnimationOptions) => void
    lock: () => void
    unlock: () => void
 }
+
+interface ScrollState {
+   scrolledToTop: Cell<boolean>
+   scrolledToBottom: Cell<boolean>
+   scrolledToLeft: Cell<boolean>
+   scrolledToRight: Cell<boolean>
+}
+
 const ScrollTimelineScope = createScope<ScrollTimelineContext>('ScrollView')
+const MAX_STRETCH = GESTURE_ANIMATION_MS / 2
+const OVERSCROLL_OPTIONS: KeyframeAnimationOptions = {
+   composite: 'replace',
+   duration: GESTURE_ANIMATION_MS,
+   easing: 'linear'
+}
+const STRETCH_Y = { scale: ['1 1', '1 1.075'] }
+const STRETCH_X = { scale: ['1 1', '1.075 1'] }
 
 type DivProps = JSX.IntrinsicElements['div']
 interface ScrollViewProps extends DivProps {
    axis?: ScrollTimelineAxis
    children: () => JSX.Template
    ref?: Cell<HTMLElement | null>
+}
+
+interface CustomOverScrollEffectOptions {
+   containerRef: ContainerRef
+   axis: ScrollTimelineAxis
+   isEnabled: boolean
 }
 
 /**
@@ -52,19 +75,169 @@ interface ScrollViewProps extends DivProps {
  */
 export function ScrollView(props: ScrollViewProps) {
    const { axis = 'block', children, ref: containerRef = Cell.source(null), ...rest } = props
+   const ctx = useTimelineSetup(containerRef, axis)
+   useCustomOverScrollEffect({
+      containerRef,
+      axis,
+      isEnabled: Flags.OS.Name === Platform.Android
+   })
+
+   return (
+      <ScrollTimelineScope.Provider value={ctx}>
+         {() => (
+            <div
+               {...rest}
+               ref={containerRef}
+               data-scroll-axis={axis}
+               class={[rest.class, classes.container]}
+            >
+               {children?.()}
+            </div>
+         )}
+      </ScrollTimelineScope.Provider>
+   )
+}
+
+function useScrollState(containerRef: ContainerRef): ScrollState {
+   const scrolledToTop = Cell.source(false)
+   const scrolledToBottom = Cell.source(false)
+   const scrolledToLeft = Cell.source(false)
+   const scrolledToRight = Cell.source(false)
    const observer = useObserver()
 
+   if (!Flags.Runtime.Supports.ScrollTimeline) {
+      return {
+         scrolledToTop: scrolledToTop,
+         scrolledToBottom: scrolledToBottom,
+         scrolledToLeft: scrolledToLeft,
+         scrolledToRight: scrolledToRight
+      }
+   }
+
+   function handleAnimationStart(this: HTMLElement, event: AnimationEvent) {
+      if (event.target !== this) {
+         return
+      }
+      if (event.animationName.includes('scrolled-to-top-detector')) {
+         scrolledToTop.set(true)
+      } else if (event.animationName.includes('scrolled-to-bottom-detector')) {
+         scrolledToBottom.set(true)
+      } else if (event.animationName.includes('scrolled-to-left-detector')) {
+         scrolledToLeft.set(true)
+      } else if (event.animationName.includes('scrolled-to-right-detector')) {
+         scrolledToRight.set(true)
+      }
+   }
+
+   function handleAnimationEnd(this: HTMLElement, event: AnimationEvent) {
+      if (event.target !== this) {
+         return
+      }
+      if (event.animationName.includes('scrolled-to-top-detector')) {
+         scrolledToTop.set(false)
+      } else if (event.animationName.includes('scrolled-to-bottom-detector')) {
+         scrolledToBottom.set(false)
+      } else if (event.animationName.includes('scrolled-to-left-detector')) {
+         scrolledToLeft.set(false)
+      } else if (event.animationName.includes('scrolled-to-right-detector')) {
+         scrolledToRight.set(false)
+      }
+   }
+
+   observer.onConnected(containerRef, (container) => {
+      container.addEventListener('animationstart', handleAnimationStart)
+      container.addEventListener('animationend', handleAnimationEnd)
+
+      return () => {
+         container.removeEventListener('animationstart', handleAnimationStart)
+         container.removeEventListener('animationend', handleAnimationEnd)
+      }
+   })
+
+   return { scrolledToTop, scrolledToBottom, scrolledToLeft, scrolledToRight }
+}
+
+function useCustomOverScrollEffect(options: CustomOverScrollEffectOptions) {
+   const { axis, containerRef, isEnabled } = options
+   let cancelLastOverscrollEffect: null | (() => void)
+   const isBlock = axis === 'block'
+   const state = useScrollState(containerRef)
+   const shouldEnableListener = Cell.derived(() => {
+      if (isBlock) {
+         const scrollToTop = state.scrolledToTop.get()
+         const scrolledToBottom = state.scrolledToBottom.get()
+         return scrollToTop || scrolledToBottom
+      }
+      const scrolledToLeft = state.scrolledToLeft.get()
+      const scrolledToRight = state.scrolledToRight.get()
+      return scrolledToLeft || scrolledToRight
+   })
+
+   function startEffect(this: HTMLElement, event: TouchEvent) {
+      const nearestScrollView = event.composedPath().find((target) => {
+         return target instanceof HTMLElement && target.hasAttribute('data-scroll-axis')
+      })
+      if (nearestScrollView !== this) {
+         return
+      }
+      const totalSize = isBlock ? this.clientHeight : this.clientWidth
+      const keyframe = isBlock ? STRETCH_Y : STRETCH_X
+      const overscrollAnimation = this.animate(keyframe, OVERSCROLL_OPTIONS)
+      overscrollAnimation.currentTime = 0
+      overscrollAnimation.pause()
+
+      cancelLastOverscrollEffect = watchTouchGesture(event, {
+         onMove: (deltaX, deltaY) => {
+            const delta = isBlock ? deltaY : deltaX
+            const forwards = delta > 0
+            let transformOrigin = forwards ? 'top center' : 'bottom center'
+            if (!isBlock) {
+               transformOrigin = forwards ? 'center left' : 'center right'
+            }
+            const absDelta = forwards ? delta : -delta
+            const nextFrameTime = (absDelta / totalSize) * GESTURE_ANIMATION_MS
+            this.style.transformOrigin = transformOrigin
+            this.style.willChange = 'scale'
+            if (nextFrameTime <= MAX_STRETCH) {
+               overscrollAnimation.currentTime = nextFrameTime
+            }
+         },
+         onEnd: () => {
+            overscrollAnimation.commitStyles()
+            overscrollAnimation.finish()
+            requestAnimationFrame(() => {
+               requestAnimationFrame(() => {
+                  this.style.removeProperty('scale')
+                  this.style.removeProperty('will-change')
+               })
+            })
+         }
+      })
+   }
+
+   shouldEnableListener.runAndListen((shouldEnable) => {
+      if (!isEnabled) {
+         return
+      }
+      cancelLastOverscrollEffect?.()
+      const container = containerRef.peek()
+      defer(() => {
+         if (!shouldEnable) {
+            container?.removeEventListener('touchstart', startEffect)
+         } else {
+            container?.addEventListener('touchstart', startEffect, { passive: true })
+         }
+      })
+   })
+}
+
+function useTimelineSetup(containerRef: ContainerRef, axis: ScrollTimelineAxis) {
+   const observer = useObserver()
    const scrollAnimations: Array<AnimationData> = []
    const hasScrollTimelineSupport = Flags.Runtime.Supports.ScrollTimeline
-   const topSentinel = Cell.source<HTMLElement | null>(null)
-   const bottomSentinel = Cell.source<HTMLElement | null>(null)
    let timeline: ScrollTimeline | null = null
-   const isAndroidDevice = Cell.source(false)
 
-   let atScrollTop = false
-   let atScrollBottom = false
-
-   const addLinkedAnimation = (animation: ScrollLinkedAnimationOptions) => {
+   function addLinkedAnimation(animation: ScrollLinkedAnimationOptions) {
       const { target, keyframes, range, signal, pseudoElement = null } = animation
 
       observer.onConnected(target, (element) => {
@@ -147,45 +320,6 @@ export function ScrollView(props: ScrollViewProps) {
       }
    }
 
-   let cancelLastOverscrollEffect: null | (() => void)
-   function androidOverScrollStretch(this: HTMLElement, event: TouchEvent) {
-      const max = GESTURE_ANIMATION_MS / 2
-      const { clientHeight } = this
-      const stretch = this.animate([{ scale: '1 1.05' }], {
-         duration: GESTURE_ANIMATION_MS,
-         easing: 'linear'
-      })
-      stretch.pause()
-
-      cancelLastOverscrollEffect = watchTouchGesture(event, {
-         onMove: (_, deltaY) => {
-            const forwards = deltaY > 0
-            const backwards = deltaY < 0
-
-            const absDeltaY = forwards ? deltaY : -deltaY
-            const nextFrameTime = (absDeltaY / clientHeight) * GESTURE_ANIMATION_MS
-            this.style.transformOrigin = forwards ? 'top center' : 'bottom center'
-            if ((atScrollTop && backwards) || (atScrollBottom && forwards)) {
-               return
-            }
-            if (nextFrameTime <= max) {
-               stretch.currentTime = nextFrameTime
-            }
-         },
-         onEnd: () => {
-            const currentTime = Number(stretch.currentTime)
-            const currentScale = 1 + (currentTime * 0.05) / GESTURE_ANIMATION_MS
-            this.animate(
-               { scale: [`1 ${currentScale}`, '1 1'] },
-               { duration: 200, easing: 'ease-in-out' }
-            ).finished.finally(() => {
-               stretch.cancel()
-               this.style.removeProperty('transform-origin')
-            })
-         }
-      })
-   }
-
    const ctx: ScrollTimelineContext = {
       source: containerRef,
       add: addLinkedAnimation,
@@ -200,9 +334,6 @@ export function ScrollView(props: ScrollViewProps) {
    }
 
    observer.onConnected(containerRef, (container) => {
-      const bowser = currentBrowser()
-      isAndroidDevice.set(bowser.getOS().name === 'Android')
-
       if (hasScrollTimelineSupport) {
          timeline = new ScrollTimeline({ source: container, axis })
          return
@@ -216,45 +347,7 @@ export function ScrollView(props: ScrollViewProps) {
       }
    })
 
-   useIntersectionObserver([topSentinel, bottomSentinel], (entries) => {
-      for (const entry of entries) {
-         if (entry.target === topSentinel.peek()) {
-            atScrollTop = entry.isIntersecting
-         } else if (entry.target === bottomSentinel.peek()) {
-            atScrollBottom = entry.isIntersecting
-         }
-      }
-
-      if (axis !== 'block' || !isAndroidDevice.get()) {
-         return
-      }
-
-      cancelLastOverscrollEffect?.()
-      const container = containerRef.peek()
-      if (!atScrollTop && !atScrollBottom) {
-         container?.removeEventListener('touchstart', androidOverScrollStretch)
-      } else {
-         container?.addEventListener('touchstart', androidOverScrollStretch, { passive: true })
-      }
-   })
-
-   return (
-      <ScrollTimelineScope.Provider value={ctx}>
-         {() => (
-            <div
-               {...rest}
-               ref={containerRef}
-               data-scroll-axis={axis}
-               data-android={isAndroidDevice}
-               class={[rest.class, classes.container]}
-            >
-               <div ref={topSentinel} data-sentinel class={classes.topSentinel} />
-               {children?.()}
-               <div ref={bottomSentinel} data-sentinel class={classes.bottomSentinel} />
-            </div>
-         )}
-      </ScrollTimelineScope.Provider>
-   )
+   return ctx
 }
 
 export function useScrollTimeline() {

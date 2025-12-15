@@ -15,7 +15,7 @@
       white 100%
    );
 
-   grid-template-columns: auto auto 100% auto;
+   grid-template-columns: auto 100%;
    grid-template-rows: 1fr;
    scroll-snap-type: x mandatory;
 

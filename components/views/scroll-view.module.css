@@ -1,3 +1,5 @@
+/* biome-ignore-all lint/suspicious/noEmptyBlock: This file includes animation hacks to track scroll state. */
+
 .topSentinel,
 .bottomSentinel {
    pointer-events: none;
@@ -9,6 +11,19 @@
    height: 100%;
    overscroll-behavior: auto;
    scroll-behavior: smooth;
+   animation-name:
+      scrolled-to-top-detector, scrolled-to-bottom-detector, scrolled-to-left-detector,
+      scrolled-to-right-detector;
+   animation-timing-function: linear;
+   animation-timeline:
+      scroll(self block), scroll(self block), scroll(self inline), scroll(self inline);
+   animation-range:
+      0px 1px,
+      calc(100% - 1px) 100%,
+      0px 1px,
+      calc(100% - 1px) 100%;
+   transition-property: scale;
+   transition-duration: 0.3s;
 
    &[data-scroll-axis='inline'] {
       overflow-x: auto;
@@ -16,8 +31,8 @@
       overflow-inline: auto;
 
       @media (pointer: coarse) {
-         &[data-android] {
-            overflow-inline: none;
+         body[data-android] & {
+            overscroll-behavior-inline: none;
          }
       }
 
@@ -39,8 +54,8 @@
       transform-origin: top center;
 
       @media (pointer: coarse) {
-         &[data-android] {
-            overflow-block: none;
+         body[data-android] & {
+            overscroll-behavior-block: none;
          }
       }
 
@@ -54,4 +69,13 @@
          width: 100%;
       }
    }
+}
+
+@keyframes scrolled-to-top-detector {
+}
+@keyframes scrolled-to-bottom-detector {
+}
+@keyframes scrolled-to-left-detector {
+}
+@keyframes scrolled-to-right-detector {
 }

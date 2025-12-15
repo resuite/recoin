@@ -1,3 +1,5 @@
+import { currentBrowser, Platform } from '@/utilities/browser'
+
 const Runtime = {
    Supports: {
       AnchorPositioning: false,
@@ -8,6 +10,10 @@ const Runtime = {
       CSSTypedOM: false,
       VirtualKeyboardApi: false
    }
+}
+
+const OS = {
+   Name: 'Unknown'
 }
 
 function updateFlags() {
@@ -28,6 +34,31 @@ function updateFlags() {
       CSSTypedOM: window.CSS && 'number' in CSS,
       VirtualKeyboardApi: 'virtualKeyboard' in navigator
    }
+   const browser = currentBrowser()
+   const name = browser.getOS().name
+   if (name) {
+      OS.Name = name
+   }
+   switch (name) {
+      case Platform.Android:
+         document.body.toggleAttribute('data-android', true)
+         break
+      case Platform.iOS:
+         document.body.toggleAttribute('data-ios', true)
+         break
+      case Platform.Windows:
+         document.body.toggleAttribute('data-windows', true)
+         break
+      case Platform.MacOS:
+         document.body.toggleAttribute('data-macos', true)
+         break
+      case Platform.Linux:
+         document.body.toggleAttribute('data-linux', true)
+         break
+      case Platform.Unknown:
+         document.body.toggleAttribute('data-unknown', true)
+         break
+   }
 }
 
 const isClient = typeof window !== 'undefined' && window.document
@@ -35,4 +66,4 @@ if (isClient) {
    updateFlags()
 }
 
-export const Flags = { Runtime }
+export const Flags = { Runtime, OS }
