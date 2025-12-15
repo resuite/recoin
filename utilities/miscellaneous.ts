@@ -1,3 +1,4 @@
+import type { Cell } from 'retend'
 import { VibrationPatterns } from '@/constants/vibration'
 
 /**
@@ -41,6 +42,7 @@ export type Split<S extends string, D extends string> = string extends S
      : S extends `${infer T}${D}${infer U}`
        ? [T, ...Split<U, D>]
        : [S]
+export type ContainerRef = Cell<HTMLElement | null>
 
 export function vibrate(pattern?: VibratePattern) {
    navigator.vibrate?.(pattern ?? VibrationPatterns.Default)
@@ -134,5 +136,24 @@ export function tryFn<T>(func: () => T): T | undefined {
       return func()
    } catch {
       return undefined
+   }
+}
+
+export function debouncedFlag(delay: number) {
+   let value = false
+   let timeout: ReturnType<typeof setTimeout> | null = null
+   return {
+      set value(v) {
+         value = v
+         if (timeout) {
+            clearTimeout(timeout)
+         }
+         timeout = setTimeout(() => {
+            value = false
+         }, delay)
+      },
+      get value() {
+         return value
+      }
    }
 }
