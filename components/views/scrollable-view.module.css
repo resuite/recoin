@@ -35,12 +35,6 @@
    padding-bottom: calc(var(--spacing) * 2);
    grid-area: 1 / 1;
    overscroll-behavior: auto;
-   scrollbar-color: initial;
-   scrollbar-width: thin;
-
-   &::-webkit-scrollbar {
-      display: initial;
-   }
 
    * {
       overscroll-behavior: auto;

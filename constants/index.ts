@@ -7,7 +7,7 @@ export const ROOT_APP_OUTLET_ID = '#appOutlet'
 export const SEARCH_BUFFER_TIMEOUT_MS = 400
 export const TOAST_DEFAULT_DURATION = 1500
 export const TRANSACTION_ITEM_HEIGHT =
-   'calc(max(var(--text-normal) * 2, var(--spacing) * 2) + var(--spacing) * .75)'
+   'calc(max(var(--text-normal) * 2, (var(--spacing) * 2) + var(--spacing) * 0.75))'
 export const SHEET_SIZING_ANIMATION_STYLES = {
    animationTimingFunction: 'ease',
    animationDuration: 'var(--sheet-sizing-speed)'

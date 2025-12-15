@@ -8,7 +8,7 @@ import { LocationInput } from '@/components/ui/location-input'
 import { TimeInput } from '@/components/ui/time-input'
 import { useToast } from '@/components/ui/toast'
 import { useBottomSheetContext } from '@/components/views/bottom-sheet-view'
-import { ScrollableView } from '@/components/views/scrollable-view'
+import { ScrollView } from '@/components/views/scroll-view'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
@@ -123,32 +123,33 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
             </BottomSheetHeader>
             <VirtualKeyboardAwareView onKeyboardVisibilityChange={handleKeyboardVisibilityChange}>
                {() => (
-                  <ScrollableView
+                  <ScrollView
                      ref={scrollViewRef}
-                     noFade
                      class={[
                         'min-h-0 max-h-[55dvh] snap-y snap-mandatory',
                         'after:block after:h-(--keyboard-height)'
                      ]}
                      style={{ '--keyboard-height': keyboardHeightPx }}
                   >
-                     <VirtualKeyboardTriggers class='grid grid-rows-[repeat(4,auto)_0] gap-y-1'>
-                        <Input
-                           ref={labelRef}
-                           label='Label'
-                           model={form.values.label}
-                           onFocus={handleFocus}
-                           required
-                        />
-                        <DateInput model={form.values.date} label='Date' />
-                        <TimeInput model={form.values.time} label='Time' />
-                        <LocationInput
-                           model={form.values.location}
-                           label='Location'
-                           onFocus={handleFocus}
-                        />
-                     </VirtualKeyboardTriggers>
-                  </ScrollableView>
+                     {() => (
+                        <VirtualKeyboardTriggers class='grid grid-rows-[repeat(4,auto)_0] gap-y-1'>
+                           <Input
+                              ref={labelRef}
+                              label='Label'
+                              model={form.values.label}
+                              onFocus={handleFocus}
+                              required
+                           />
+                           <DateInput model={form.values.date} label='Date' />
+                           <TimeInput model={form.values.time} label='Time' />
+                           <LocationInput
+                              model={form.values.location}
+                              label='Location'
+                              onFocus={handleFocus}
+                           />
+                        </VirtualKeyboardTriggers>
+                     )}
+                  </ScrollView>
                )}
             </VirtualKeyboardAwareView>
          </div>

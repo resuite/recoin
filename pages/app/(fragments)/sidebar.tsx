@@ -48,11 +48,11 @@ function SidebarLink(props: SidebarLinkProps) {
    const currentRoute = getCurrentRoute()
    const sidebarCtx = useSidebarContext()
    const scrollTimeline = useScrollTimeline()
-   const buttonRef = Cell.source<HTMLButtonElement | null>(null)
+   const textRef = Cell.source<HTMLButtonElement | null>(null)
 
    const handleClick = async () => {
       vibrate(VibrationPatterns.ButtonPress)
-      await sidebarCtx.toggleSidebar()
+      await sidebarCtx.toggleSidebar(false)
       navigate(link.href)
    }
 
@@ -64,17 +64,18 @@ function SidebarLink(props: SidebarLinkProps) {
    })
 
    scrollTimeline.add({
-      target: buttonRef,
-      keyframes: { translate: ['0%', `-${(index + 1) * 20}%`] }
+      target: textRef,
+      keyframes: { translate: ['0%', `-${(index + 1) * 40}%`] }
    })
 
    return (
       <Button
-         ref={buttonRef}
-         class='btn-link border-none cursor-pointer py-0.5 px-1 h-[8dvh]'
+         class='btn-link border-none cursor-pointer px-1 h-[6dvh] button-click-effect'
          onClick={handleClick}
+         trackClickedState
       >
          <div
+            ref={textRef}
             class={[
                'flex items-center gap-0.5 text-light-yellow/50',
                'text-xl',
@@ -91,7 +92,10 @@ function SidebarLink(props: SidebarLinkProps) {
 function LinkGroup(props: LinkGroupProps) {
    const { links } = props
    return (
-      <div class='grid' style={{ gridTemplateRows: `repeat(${links.length}, auto) 1fr` }}>
+      <div
+         class='grid gap-y-0.75'
+         style={{ gridTemplateRows: `repeat(${links.length}, auto) 1fr` }}
+      >
          {For(links, (link, index) => {
             return <SidebarLink link={link} index={index.get()} />
          })}
@@ -113,7 +117,7 @@ function SidebarDivider() {
 }
 
 function SidebarHeader(props: SidebarHeaderProps) {
-   const { title = 'recoin.', className = 'pl-1 pb-1' } = props
+   const { title = 'recoin.', className = 'pl-1 pb-2' } = props
 
    return <h2 class={className}>{title}</h2>
 }

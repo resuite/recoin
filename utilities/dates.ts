@@ -73,8 +73,12 @@ export function getRelativeDateLabel(target: Date): string {
    if (diffDays === 1) {
       return 'Yesterday'
    }
-   if (diffDays < 7) {
-      return target.toLocaleDateString('en-US', { weekday: 'long' })
+   if (diffDays > 0 && diffDays < 14) {
+      if (diffDays < 7) {
+         return target.toLocaleDateString('en-US', { weekday: 'long' })
+      } else {
+         return `Last ${target.toLocaleDateString('en-US', { weekday: 'long' })}`
+      }
    }
    if (today.getFullYear() === target.getFullYear()) {
       return target.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })

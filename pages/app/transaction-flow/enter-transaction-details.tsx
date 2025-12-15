@@ -1,5 +1,6 @@
 import { Cell, If, useScopeContext } from 'retend'
 import { useRouteQuery } from 'retend/router'
+import { Teleport } from 'retend/teleport'
 import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
@@ -10,12 +11,13 @@ import { Input } from '@/components/ui/input'
 import { LocationInput } from '@/components/ui/location-input'
 import { MoneyInput } from '@/components/ui/money-input'
 import { TimeInput } from '@/components/ui/time-input'
-import { ScrollableView } from '@/components/views/scrollable-view'
+import { ScrollView } from '@/components/views/scroll-view'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
+import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
 import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
@@ -52,7 +54,10 @@ const EnterTransactionDetails = () => {
       }
    }
 
-   const handleSubmit = () => {
+   const handleSubmit = (event?: Event) => {
+      if (event?.currentTarget instanceof HTMLButtonElement) {
+         event.currentTarget.style.scale = '0'
+      }
       form.submit()
       completeTransactionFlow()
    }
@@ -82,31 +87,38 @@ const EnterTransactionDetails = () => {
                   ))}
                </div>
                <p class='text-big text-center'>Share more details about this transaction.</p>
-               <ScrollableView ref={scrollViewRef} class='h-[45dvh] max-h-[45dvh]'>
-                  <form
-                     style={{ paddingBottom }}
-                     class='[&_input]:duration-slow [&_input]:transition-opacity'
-                     onSubmit--prevent={handleSubmit}
-                  >
-                     <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
-                        <MoneyInput model={form.values.amount} currency={currency} required />
-                        <Input label='Label' model={form.values.label} type='text' required />
-                        <DateInput model={form.values.date} label='Date' />
-                        <TimeInput model={form.values.time} label='Time' />
-                        <LocationInput model={form.values.location} label='Location (Optional)' />
-                     </VirtualKeyboardTriggers>
-                     {If(form.values.amount, () => (
-                        <FloatingActionButton
-                           outlined
-                           fixed
-                           type='submit'
-                           class='bg-transparent translate-x-[60%]'
-                        >
-                           <Checkmark class='text-canvas-text' />
-                        </FloatingActionButton>
-                     ))}
-                  </form>
-               </ScrollableView>
+               <ScrollView ref={scrollViewRef} class='h-[45dvh] max-h-[45dvh]'>
+                  {() => (
+                     <form
+                        style={{ paddingBottom }}
+                        class='[&_input]:duration-slow [&_input]:transition-opacity'
+                        onSubmit--prevent={handleSubmit}
+                     >
+                        <VirtualKeyboardTriggers class='w-full flex flex-col gap-1'>
+                           <MoneyInput model={form.values.amount} currency={currency} required />
+                           <Input label='Label' model={form.values.label} type='text' required />
+                           <DateInput model={form.values.date} label='Date' />
+                           <TimeInput model={form.values.time} label='Time' />
+                           <LocationInput
+                              model={form.values.location}
+                              label='Location (Optional)'
+                           />
+                        </VirtualKeyboardTriggers>
+                        {If(form.values.amount, () => (
+                           <Teleport to={ROOT_APP_OUTLET_ID}>
+                              <FloatingActionButton
+                                 outlined
+                                 fixed
+                                 onClick={handleSubmit}
+                                 class='bg-transparent translate-x-[60%]'
+                              >
+                                 <Checkmark class='text-canvas-text' />
+                              </FloatingActionButton>
+                           </Teleport>
+                        ))}
+                     </form>
+                  )}
+               </ScrollView>
             </>
          )}
       </VirtualKeyboardAwareView>

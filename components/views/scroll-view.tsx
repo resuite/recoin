@@ -11,6 +11,7 @@ interface ScrollViewProps extends DivProps {
    axis?: ScrollTimelineAxis
    children: () => JSX.Template
    ref?: Cell<HTMLElement | null>
+   showScrollBar?: JSX.ValueOrCell<boolean>
 }
 
 /**
@@ -22,7 +23,13 @@ interface ScrollViewProps extends DivProps {
  * @returns The rendered `ScrollView` component.
  */
 export function ScrollView(props: ScrollViewProps) {
-   const { axis = 'block', children, ref: containerRef = Cell.source(null), ...rest } = props
+   const {
+      axis = 'block',
+      children,
+      ref: containerRef = Cell.source(null),
+      showScrollBar = true,
+      ...rest
+   } = props
    const ctx = useTimelineSetup(containerRef, axis)
    useOverScrollEffect({
       containerRef,
@@ -37,6 +44,7 @@ export function ScrollView(props: ScrollViewProps) {
                {...rest}
                ref={containerRef}
                data-scroll-axis={axis}
+               data-show-scrollbar={showScrollBar}
                class={[rest.class, classes.container]}
             >
                {children?.()}

@@ -1,19 +1,14 @@
-// import { Browsers, currentBrowser } from '@/utilities/browser'
-// import { tryFn } from '@/utilities/miscellaneous'
-// import { PointerTracker, type TrackedMoveEvent } from '@/utilities/pointer-gesture-tracker'
-// import { NEGLIGIBLE_SCROLL_PX } from '@/utilities/scrolling'
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver } from 'retend-utils/hooks'
 import { ScrollView } from '@/components/views/scroll-view'
-// import { PullStartEvent, usePullToRefreshContext } from './pull-to-refresh-view'
 import styles from './sidebar-provider-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
 
 interface SidebarCtx {
    sidebarState: Cell<'open' | 'closed'>
-   toggleSidebar: () => Promise<void>
+   toggleSidebar: (force?: boolean) => Promise<void>
    toggleSidebarEnabled: (value?: boolean) => void
 }
 const SidebarScope = createScope<SidebarCtx>()
@@ -84,7 +79,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    })
 
    let pendingClosePromiseResolver: (() => void) | null = null
-   const toggleSidebar = async () => {
+   const toggleSidebar = async (force?: boolean) => {
       // Things start to go haywire around here. I need to know when **exactly**
       // the sidebar closes, so it has to be structured as an awaitiable promise.
       //
@@ -95,7 +90,14 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       // and we can do some hot potato-ing to orchestrate a useful (and hopefully consistent) promise.
       const waitingTillClose = new Promise<void>((resolve) => {
          pendingClosePromiseResolver = resolve
-         sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open')
+         if (force !== undefined) {
+            sidebarState.set(force ? 'open' : 'closed')
+         } else {
+            sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open')
+         }
+         const isOpen = sidebarState.get() === 'open'
+         const target = isOpen ? sidebarRef.get() : contentRef.get()
+         target?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
       })
       // In case (idk if this will happen) the sequence is missed, we wait some time before
       // definitively closing, so we dont end up with hanging promises.
@@ -104,7 +106,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
             pendingClosePromiseResolver?.()
             pendingClosePromiseResolver = null
             resolve()
-         }, 500)
+         }, 400)
       })
       return await Promise.race([waitingTillClose, timeout])
    }
@@ -161,51 +163,23 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       }
    )
 
-   observer.onConnected(providerRef, (provider) => {
-      provider.scrollTo({ left: provider.scrollWidth, behavior: 'instant' })
-      sidebarState.listen((state) => {
-         const isOpen = state === 'open'
-         const isClosed = state === 'closed'
-         if (isOpen && isAlreadyRevealedFlag) {
-            return
-         }
-         if (isClosed && !isAlreadyRevealedFlag) {
-            return
-         }
-         onSidebarStateChange?.(state)
-         const target = isOpen ? sidebarRef.get() : contentRef.get()
-         target?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-      })
+   sidebarState.listen((state) => {
+      const isOpen = state === 'open'
+      const isClosed = state === 'closed'
+      if (isOpen && isAlreadyRevealedFlag) {
+         return
+      }
+      if (isClosed && !isAlreadyRevealedFlag) {
+         return
+      }
+      onSidebarStateChange?.(state)
+      const target = isOpen ? sidebarRef.get() : contentRef.get()
+      target?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
    })
 
-   // observer.onConnected(providerRef, async (provider) => {
-   //    // Safari is a rubbish browser, and in it `touch-action: pan-x`
-   //    // does not properly prevent vertical pointermoves. Thus,
-   //    // x-axis swipe-scrolls intended for SidebarProviderView are not
-   //    // properly differentiated from y-axis pulls (handled by PullToRefreshView).
-   //    //
-   //    // To work around this, we intercept the `pointerdown` event, and
-   //    // by analyzing the initial gesture direction, we can manually distinguish
-   //    // between horizontal (for opening/closing the sidebar) and vertical
-   //    // (for triggering pull-to-refresh).
-   //    const browser = currentBrowser()
-   //    const browserName = browser.getBrowserName()
-   //    const platformType = browser.getPlatformType()
-   //    if (
-   //       !(
-   //          browserName === Browsers.Safari &&
-   //          platformType === 'mobile' &&
-   //          pullToRefreshContext !== undefined
-   //       )
-   //    ) {
-   //       return
-   //    }
-   //    provider.addEventListener('pointerdown', interceptPointerDown)
-
-   //    return () => {
-   //       provider.removeEventListener('pointerdown', interceptPointerDown)
-   //    }
-   // })
+   observer.onConnected(providerRef, (provider) => {
+      provider.scrollTo({ left: provider.scrollWidth, behavior: 'instant' })
+   })
 
    return (
       <SidebarScope.Provider value={sidebarScopeData}>
@@ -216,6 +190,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                ref={providerRef}
                data-not-revealable={sidebarNotRevealable}
                class={[styles.provider, rest.class]}
+               showScrollBar={false}
             >
                {() => (
                   <>

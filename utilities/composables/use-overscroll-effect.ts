@@ -8,7 +8,7 @@ const STRETCH_Y = { scale: ['1', `1 ${MAX_STRETCH_SCALE}`] }
 const STRETCH_X = { scale: ['1', `${MAX_STRETCH_SCALE} 1`] }
 const STRETCH_Y_RELEASE = [
    { scale: '1' },
-   { scale: `1 ${MAX_STRETCH_SCALE}`, offset: 0.1 },
+   { scale: `1 ${MAX_STRETCH_SCALE - 0.02}`, offset: 0.1 },
    { scale: '1' }
 ]
 const OVERSCROLL_EFFECT_DURATION = 300
@@ -129,6 +129,10 @@ export function useOverScrollEffect(options: OverScrollEffectOptions) {
    })
 
    observer.onConnected(containerRef, (container) => {
+      if (!isEnabled) {
+         return
+      }
+
       totalSize = isBlock ? container.clientHeight : container.clientWidth
       const resizeObserver = new ResizeObserver(([entry]) => {
          totalSize = isBlock ? entry.contentRect.height : entry.contentRect.width
