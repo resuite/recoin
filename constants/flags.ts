@@ -37,6 +37,7 @@ function updateFlags() {
    const browser = currentBrowser()
    const name = browser.getOS().name
    if (name) {
+      OS.Name = name
       document.body.toggleAttribute(`data-${name.toLowerCase()}`, true)
    }
    const runtime = browser.getBrowser().name
