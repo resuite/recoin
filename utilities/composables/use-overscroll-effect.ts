@@ -1,11 +1,16 @@
 import { Cell, useObserver } from 'retend'
 import { useScrollState } from '@/utilities/composables/use-scroll-state'
 import { watchTouchGesture } from '@/utilities/pointer-gesture-tracker'
-import { type ContainerRef, debouncedFlag } from '../miscellaneous'
+import { debouncedFlag, type ElementRef } from '../miscellaneous'
 
-const STRETCH_Y = { scale: ['1', '1 1.0375'] }
-const STRETCH_X = { scale: ['1', '1.0375 1'] }
-const STRETCH_Y_RELEASE = [{ scale: '1' }, { scale: '1 1.03', offset: 0.1 }, { scale: '1' }]
+const MAX_STRETCH_SCALE = 1.0375
+const STRETCH_Y = { scale: ['1', `1 ${MAX_STRETCH_SCALE}`] }
+const STRETCH_X = { scale: ['1', `1 ${MAX_STRETCH_SCALE} 1`] }
+const STRETCH_Y_RELEASE = [
+   { scale: '1' },
+   { scale: `1 ${MAX_STRETCH_SCALE}`, offset: 0.1 },
+   { scale: '1' }
+]
 const OVERSCROLL_EFFECT_DURATION = 300
 const OVERSCROLL_OPTIONS: KeyframeAnimationOptions = {
    composite: 'replace',
@@ -13,18 +18,20 @@ const OVERSCROLL_OPTIONS: KeyframeAnimationOptions = {
    easing: 'linear'
 }
 
-interface CustomOverScrollEffectOptions {
-   containerRef: ContainerRef
+interface OverScrollEffectOptions {
+   containerRef: ElementRef
    axis: ScrollTimelineAxis
    isEnabled?: boolean
 }
 
-export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
+export function useOverScrollEffect(options: OverScrollEffectOptions) {
    const { axis, containerRef, isEnabled = true } = options
    let cancelLastOverscrollEffect: null | (() => void)
    const observer = useObserver()
    const isBlock = axis === 'block'
    const state = useScrollState(containerRef)
+   let totalSize = 0
+
    const overScrollAreaIsActive = Cell.derived(() => {
       if (isBlock) {
          const scrollToTop = state.atTop.get()
@@ -43,11 +50,10 @@ export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
       if (nearestScrollView !== this) {
          return
       }
-      const totalSize = isBlock ? this.clientHeight : this.clientWidth
       const keyframe = isBlock ? STRETCH_Y : STRETCH_X
-      const animation = this.animate(keyframe, OVERSCROLL_OPTIONS)
-      animation.currentTime = 0
-      animation.pause()
+      const baseAnimation = this.animate(keyframe, OVERSCROLL_OPTIONS)
+      baseAnimation.currentTime = 0
+      baseAnimation.pause()
 
       cancelLastOverscrollEffect = watchTouchGesture(event, {
          onMove: (deltaX, deltaY) => {
@@ -60,13 +66,16 @@ export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
             const absDelta = forwards ? delta : -delta
             const nextFrameTime = (absDelta / totalSize) * OVERSCROLL_EFFECT_DURATION
             this.style.transformOrigin = transformOrigin
-            this.style.willChange = 'scale'
-            animation.currentTime = nextFrameTime
+            baseAnimation.currentTime = nextFrameTime
          },
          onEnd: () => {
-            animation.reverse()
             cancelLastOverscrollEffect = null
-            animation.play()
+            if (baseAnimation.currentTime === 0) {
+               baseAnimation.finish()
+               return
+            }
+            baseAnimation.reverse()
+            baseAnimation.play()
          }
       })
    }
@@ -89,7 +98,7 @@ export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
    }
 
    overScrollAreaIsActive.listen((shouldEnable) => {
-      if (!shouldEnable) {
+      if (!shouldEnable || !isEnabled) {
          return
       }
       const container = containerRef.peek()
@@ -120,10 +129,16 @@ export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
    })
 
    observer.onConnected(containerRef, (container) => {
+      totalSize = isBlock ? container.clientHeight : container.clientWidth
+      const resizeObserver = new ResizeObserver(([entry]) => {
+         totalSize = isBlock ? entry.contentRect.height : entry.contentRect.width
+      })
+      resizeObserver.observe(container)
       container.addEventListener('animationstart', checkOverscrollThreshold)
 
       return () => {
          container.removeEventListener('animationstart', checkOverscrollThreshold)
+         resizeObserver.disconnect()
       }
    })
 }

@@ -1,6 +1,6 @@
 import { Cell, useObserver } from 'retend'
 import { Flags } from '@/constants/flags'
-import type { ContainerRef } from '../miscellaneous'
+import type { ElementRef } from '../miscellaneous'
 
 interface ScrollState {
    atTop: Cell<boolean>
@@ -9,7 +9,7 @@ interface ScrollState {
    atRight: Cell<boolean>
 }
 
-export function useScrollState(containerRef: ContainerRef): ScrollState {
+export function useScrollState(containerRef: ElementRef): ScrollState {
    const atTop = Cell.source(false)
    const atBottom = Cell.source(false)
    const atLeft = Cell.source(false)

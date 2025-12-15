@@ -42,7 +42,7 @@ export type Split<S extends string, D extends string> = string extends S
      : S extends `${infer T}${D}${infer U}`
        ? [T, ...Split<U, D>]
        : [S]
-export type ContainerRef = Cell<HTMLElement | null>
+export type ElementRef = Cell<HTMLElement | null>
 
 export function vibrate(pattern?: VibratePattern) {
    navigator.vibrate?.(pattern ?? VibrationPatterns.Default)
