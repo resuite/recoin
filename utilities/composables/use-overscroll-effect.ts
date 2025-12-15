@@ -5,7 +5,7 @@ import { debouncedFlag, type ElementRef } from '../miscellaneous'
 
 const MAX_STRETCH_SCALE = 1.0375
 const STRETCH_Y = { scale: ['1', `1 ${MAX_STRETCH_SCALE}`] }
-const STRETCH_X = { scale: ['1', `1 ${MAX_STRETCH_SCALE} 1`] }
+const STRETCH_X = { scale: ['1', `${MAX_STRETCH_SCALE} 1`] }
 const STRETCH_Y_RELEASE = [
    { scale: '1' },
    { scale: `1 ${MAX_STRETCH_SCALE}`, offset: 0.1 },
