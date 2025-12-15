@@ -30,7 +30,6 @@ export function Button(props: ButtonProps) {
 
 function addClickTracker(ref: Cell<HTMLElement | null>, shouldTrack: Cell<boolean | undefined>) {
    let timeout: ReturnType<typeof setTimeout> | undefined
-   let longPressTimeout: ReturnType<typeof setTimeout> | undefined
    const observer = useObserver()
 
    // I have noticed a weird delay when it comes to the click event
@@ -39,27 +38,20 @@ function addClickTracker(ref: Cell<HTMLElement | null>, shouldTrack: Cell<boolea
    function handlePointerDown(this: HTMLElement, event: PointerEvent) {
       const tracker = new PointerTracker()
       tracker.start(event)
-      longPressTimeout = setTimeout(() => {
-         if (!tracker.hasMoved) {
-            this.setAttribute('data-clicked', 'true')
-            tracker.addEventListener(
-               'move',
-               () => {
-                  this.removeAttribute('data-clicked')
-               },
-               { once: true }
-            )
-         }
-      }, 10)
+      this.setAttribute('data-clicked', 'true')
+      tracker.addEventListener(
+         'move',
+         () => {
+            this.removeAttribute('data-clicked')
+         },
+         { once: true }
+      )
       tracker.addEventListener('end', handleTrackingEnd)
    }
 
    function setClickedState(button: HTMLElement | null) {
       if (timeout) {
          clearTimeout(timeout)
-      }
-      if (longPressTimeout) {
-         clearTimeout(longPressTimeout)
       }
       button?.setAttribute('data-clicked', 'true')
       timeout = setTimeout(() => {

@@ -19,7 +19,7 @@
       height: 2dvh;
       scale: 120;
       grid-area: 1 / 1;
-      background-color: #00000065;
+      background-color: #00000080;
       content: '';
       z-index: -1;
       animation: fade-in var(--speed-device) var(--timing) backwards;
