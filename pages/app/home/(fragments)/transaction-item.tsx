@@ -51,6 +51,7 @@ export function TransactionItem(props: TransactionItemProps) {
          }}
          class={[
             'grid grid-cols-[auto_auto_1fr_auto] grid-rows-2 px-1 w-full whitespace-nowrap',
+            '[body[data-chrome]_&]:[content-visibility:auto]',
             'rounded-none',
             'button-bare button-click-effect'
          ]}

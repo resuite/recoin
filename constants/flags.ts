@@ -1,4 +1,4 @@
-import { currentBrowser, Platform } from '@/utilities/browser'
+import { currentBrowser } from '@/utilities/browser'
 
 const Runtime = {
    Supports: {
@@ -37,27 +37,11 @@ function updateFlags() {
    const browser = currentBrowser()
    const name = browser.getOS().name
    if (name) {
-      OS.Name = name
+      document.body.toggleAttribute(`data-${name.toLowerCase()}`, true)
    }
-   switch (name) {
-      case Platform.Android:
-         document.body.toggleAttribute('data-android', true)
-         break
-      case Platform.iOS:
-         document.body.toggleAttribute('data-ios', true)
-         break
-      case Platform.Windows:
-         document.body.toggleAttribute('data-windows', true)
-         break
-      case Platform.MacOS:
-         document.body.toggleAttribute('data-macos', true)
-         break
-      case Platform.Linux:
-         document.body.toggleAttribute('data-linux', true)
-         break
-      case Platform.Unknown:
-         document.body.toggleAttribute('data-unknown', true)
-         break
+   const runtime = browser.getBrowser().name
+   if (runtime) {
+      document.body.toggleAttribute(`data-${runtime.toLowerCase()}`, true)
    }
 }
 

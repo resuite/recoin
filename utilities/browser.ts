@@ -11,7 +11,7 @@ export const Platform = {
    Android: 'Android',
    iOS: 'iOS',
    Windows: 'Windows',
-   MacOS: 'MacOS',
+   MacOS: 'macOS',
    Linux: 'Linux',
    Unknown: 'Unknown'
 }
