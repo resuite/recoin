@@ -35,8 +35,6 @@ interface ScrollTimelineContext {
 
 const ScrollTimelineScope = createScope<ScrollTimelineContext>('ScrollView')
 
-// const STRETCH_X_AND_RELEASE = [{ scale: '1' }, { scale: '1.0375' }, { scale: '1' }]
-
 type DivProps = JSX.IntrinsicElements['div']
 interface ScrollViewProps extends DivProps {
    axis?: ScrollTimelineAxis

@@ -1,26 +1,11 @@
 /* biome-ignore-all lint/suspicious/noEmptyBlock: This file includes animation hacks to track scroll state. */
 
-.topSentinel,
-.bottomSentinel {
-   pointer-events: none;
-}
-
-@property --overscroll-threshold {
-   syntax: '<length>';
-   initial-value: 0;
-   inherits: false;
-}
-
 .container {
-   --overscroll-threshold: min(200px, 10%);
    position: relative;
    width: 100%;
    height: 100%;
    overscroll-behavior: auto;
    scroll-behavior: smooth;
-   transition-property: scale;
-   transition-duration: 0.3s;
-   animation-composition: add;
    animation-range:
       0px 1px,
       calc(100% - 1px) 100%,
@@ -39,16 +24,6 @@
             overscroll-behavior-inline: none;
          }
       }
-
-      .topSentinel {
-         height: 100%;
-         width: 2px;
-      }
-
-      .bottomSentinel {
-         height: 100%;
-         width: 2px;
-      }
    }
 
    &[data-scroll-axis='block'] {
@@ -63,16 +38,6 @@
          body[data-android] & {
             overscroll-behavior-block: none;
          }
-      }
-
-      .topSentinel {
-         height: 2px;
-         width: 100%;
-      }
-
-      .bottomSentinel {
-         height: 2px;
-         width: 100%;
       }
    }
 }

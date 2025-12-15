@@ -1,17 +1,17 @@
 import { Cell, useObserver } from 'retend'
 import { useScrollState } from '@/utilities/composables/use-scroll-state'
 import { watchTouchGesture } from '@/utilities/pointer-gesture-tracker'
-import { GESTURE_ANIMATION_MS } from '@/utilities/scrolling'
 import { type ContainerRef, debouncedFlag } from '../miscellaneous'
 
-const OVERSCROLL_OPTIONS: KeyframeAnimationOptions = {
-   composite: 'replace',
-   duration: GESTURE_ANIMATION_MS,
-   easing: 'linear'
-}
 const STRETCH_Y = { scale: ['1', '1 1.0375'] }
 const STRETCH_X = { scale: ['1', '1.0375 1'] }
-const STRETCH_Y_RELEASE = [{ scale: '1 1.03' }, { scale: '1' }]
+const STRETCH_Y_RELEASE = [{ scale: '1' }, { scale: '1 1.03', offset: 0.1 }, { scale: '1' }]
+const OVERSCROLL_EFFECT_DURATION = 300
+const OVERSCROLL_OPTIONS: KeyframeAnimationOptions = {
+   composite: 'replace',
+   duration: OVERSCROLL_EFFECT_DURATION,
+   easing: 'linear'
+}
 
 interface CustomOverScrollEffectOptions {
    containerRef: ContainerRef
@@ -45,9 +45,9 @@ export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
       }
       const totalSize = isBlock ? this.clientHeight : this.clientWidth
       const keyframe = isBlock ? STRETCH_Y : STRETCH_X
-      const overscrollAnimation = this.animate(keyframe, OVERSCROLL_OPTIONS)
-      overscrollAnimation.currentTime = 0
-      overscrollAnimation.pause()
+      const animation = this.animate(keyframe, OVERSCROLL_OPTIONS)
+      animation.currentTime = 0
+      animation.pause()
 
       cancelLastOverscrollEffect = watchTouchGesture(event, {
          onMove: (deltaX, deltaY) => {
@@ -58,26 +58,20 @@ export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
                transformOrigin = forwards ? 'center left' : 'center right'
             }
             const absDelta = forwards ? delta : -delta
-            const nextFrameTime = (absDelta / totalSize) * GESTURE_ANIMATION_MS
+            const nextFrameTime = (absDelta / totalSize) * OVERSCROLL_EFFECT_DURATION
             this.style.transformOrigin = transformOrigin
             this.style.willChange = 'scale'
-            overscrollAnimation.currentTime = nextFrameTime
+            animation.currentTime = nextFrameTime
          },
          onEnd: () => {
-            overscrollAnimation.commitStyles()
-            overscrollAnimation.finish()
+            animation.reverse()
             cancelLastOverscrollEffect = null
-            requestAnimationFrame(() => {
-               requestAnimationFrame(() => {
-                  this.style.removeProperty('scale')
-                  this.style.removeProperty('will-change')
-               })
-            })
+            animation.play()
          }
       })
    }
 
-   const thresholdTrackers = {
+   const trail = {
       top: debouncedFlag(50),
       bottom: debouncedFlag(50)
    }
@@ -86,11 +80,11 @@ export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
          return
       }
       if (event.animationName.includes('top-threshold')) {
-         thresholdTrackers.top.value = true
-         thresholdTrackers.bottom.value = false
+         trail.top.value = true
+         trail.bottom.value = false
       } else if (event.animationName.includes('bottom-threshold')) {
-         thresholdTrackers.bottom.value = true
-         thresholdTrackers.top.value = false
+         trail.bottom.value = true
+         trail.top.value = false
       }
    }
 
@@ -103,9 +97,12 @@ export function useOverScrollEffect(options: CustomOverScrollEffectOptions) {
          return
       }
       if (isBlock) {
-         const momentumBounceTop = state.atTop.get() && thresholdTrackers.top.value
-         container.style.transformOrigin = momentumBounceTop ? 'top center' : 'bottom center'
-         container.animate(STRETCH_Y_RELEASE, { ...OVERSCROLL_OPTIONS, duration: 300 })
+         const topTrailingEffect = trail.top.value && state.atTop.get()
+         const bottomTrailingEffect = trail.bottom.value && state.atBottom.get()
+         if (topTrailingEffect || bottomTrailingEffect) {
+            container.style.transformOrigin = topTrailingEffect ? 'top center' : 'bottom center'
+            container.animate(STRETCH_Y_RELEASE, OVERSCROLL_OPTIONS)
+         }
       }
    })
 
