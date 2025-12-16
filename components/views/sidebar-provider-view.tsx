@@ -51,6 +51,8 @@ export interface SidebarProviderViewProps extends DivProps {
  *                <p>This is the primary content area.</p>
  *             </div>
  *          )}
+ *             </div>
+ *          )}
  *       </SidebarProviderView>
  *    );
  * }
@@ -58,7 +60,7 @@ export interface SidebarProviderViewProps extends DivProps {
 export function SidebarProviderView(props: SidebarProviderViewProps) {
    const {
       sidebar: Sidebar,
-      children,
+      children: Content,
       ref: providerRef = Cell.source<HTMLElement | null>(null),
       onSidebarStateChange,
       ...rest
@@ -199,7 +201,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                         <Sidebar />
                      </div>
                      <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
-                        {children()}
+                        <Content />
                         <div ref={contentEdgeRef} class={styles.contentEdge} />
                      </div>
                   </>

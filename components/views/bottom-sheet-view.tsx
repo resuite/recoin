@@ -71,7 +71,7 @@ export function BottomSheet(props: BottomSheetProps) {
    const {
       isOpen: isOpenProp,
       ref: contentRef = Cell.source<HTMLElement | null>(null),
-      children,
+      children: Content,
       onClose,
       dynamicSizing,
       ...rest
@@ -226,7 +226,7 @@ export function BottomSheet(props: BottomSheetProps) {
                               height={sheetContentHeight}
                            />
                         ))}
-                        {children()}
+                        <Content />
                      </div>
                   </dialog>
                ))}

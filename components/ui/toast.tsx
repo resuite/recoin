@@ -73,7 +73,7 @@ export interface ToastContainerProps {
 }
 
 export function ToastProvider(props: ToastContainerProps) {
-   const { children, scheme: schemeProp } = props
+   const { children: Content, scheme: schemeProp } = props
    const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
    const toastPromiseResolvers = new Map<string, () => void>()
    const scheme = useDerivedValue(schemeProp)
@@ -91,7 +91,7 @@ export function ToastProvider(props: ToastContainerProps) {
       <ToastScope.Provider value={value}>
          {() => (
             <>
-               {children()}
+               <Content />
                <Teleport to='body'>
                   <div
                      class={[styles.toastsGroup, schemeClass]}

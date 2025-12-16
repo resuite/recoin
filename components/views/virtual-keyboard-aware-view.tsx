@@ -26,7 +26,7 @@ export interface VirtualKeyboardAwareViewProps extends DivProps {
 }
 
 export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
-   const { children, ref: containerRef = Cell.source(null), onFocusOut, ...rest } = props
+   const { children: Content, ref: containerRef = Cell.source(null), onFocusOut, ...rest } = props
 
    const currentVisualHeight = Cell.source(0)
    const redirectingFocus = Cell.source(false)
@@ -144,7 +144,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
                onFocusOut={handleFocusOut}
                class={[styles.keyboardAwareView, rest.class]}
             >
-               {children?.()}
+               <Content />
             </div>
          )}
       </KeyboardAwarenessScope.Provider>

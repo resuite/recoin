@@ -15,7 +15,7 @@ export interface PullToRefreshViewProps extends DivProps {
    /**
     * The content to be rendered in the feedback layer behind the scrollable content.
     */
-   feedback?: () => JSX.Template
+   feedback: () => JSX.Template
    /**
     * A callback function that is invoked when the user completes a pull-down.
     * It is expected to return a Promise that resolves when a given action is complete.
@@ -113,8 +113,8 @@ export function usePullToRefreshContext() {
  */
 export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
    const {
-      children,
-      feedback,
+      children: Content,
+      feedback: FeedbackContent,
       onActionTriggered,
       onStateChange,
       ref: pullZoneRef = Cell.source(null),
@@ -333,13 +333,13 @@ export function PullToRefreshView(props: PullToRefreshViewProps): JSX.Template {
                <div ref={scrollContainerRef} class={styles.pullZoneScrollContainer}>
                   <div ref={thresholdMarkerRef} class={styles.pullZoneThreshold} />
                   <div ref={feedbackLayerRef} class={styles.pullZoneFeedbackLayer}>
-                     {feedback?.()}
+                     <FeedbackContent />
                   </div>
                   <div ref={contentRef} class={[styles.pullZoneContent, contentClasses]}>
                      {!contentTopMarkerProp ? (
                         <div ref={contentTopMarkerRef} class={styles.pullZoneContentTopMarker} />
                      ) : null}
-                     {children?.()}
+                     <Content />
                   </div>
                </div>
             </div>

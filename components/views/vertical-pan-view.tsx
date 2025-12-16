@@ -58,7 +58,7 @@ const VerticalPanScope = createScope<VerticalPanContext>()
  * @returns A JSX template that renders the vertical pan view.
  */
 export function VerticalPanView(props: VerticalPanViewProps) {
-   const { children, class: className, ...rest } = props
+   const { children: Content, class: className, ...rest } = props
    const panContent = Cell.source<null | (() => JSX.Template)>(null)
    const mainContentRef = Cell.source<HTMLElement | null>(null)
 
@@ -96,7 +96,7 @@ export function VerticalPanView(props: VerticalPanViewProps) {
                   <div class={styles.hiddenSpace}>{content()}</div>
                ))}
                <div ref={mainContentRef} class={styles.mainContent}>
-                  {children()}
+                  <Content />
                </div>
             </div>
          )}

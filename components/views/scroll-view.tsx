@@ -26,7 +26,7 @@ interface ScrollViewProps extends DivProps {
 export function ScrollView(props: ScrollViewProps) {
    const {
       axis = 'block',
-      children,
+      children: Content,
       ref: containerRef = Cell.source(null),
       showScrollBar = true,
       overscrollEffect = true,
@@ -50,7 +50,7 @@ export function ScrollView(props: ScrollViewProps) {
                data-show-scrollbar={showScrollBar}
                class={[rest.class, classes.container]}
             >
-               {children?.()}
+               <Content />
             </div>
          )}
       </ScrollTimelineScope.Provider>
