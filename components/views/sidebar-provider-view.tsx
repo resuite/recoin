@@ -28,7 +28,7 @@ export interface SidebarProviderViewProps extends DivProps {
     * Function that returns a JSX template for the main content.
     * This will be rendered inside the main content container.
     */
-   children?: () => JSX.Template
+   children: () => JSX.Template
 }
 
 /**
@@ -191,6 +191,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                data-not-revealable={sidebarNotRevealable}
                class={[styles.provider, rest.class]}
                showScrollBar={false}
+               overscrollEffect={false}
             >
                {() => (
                   <>
@@ -198,7 +199,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                         <Sidebar />
                      </div>
                      <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
-                        {children?.()}
+                        {children()}
                         <div ref={contentEdgeRef} class={styles.contentEdge} />
                      </div>
                   </>

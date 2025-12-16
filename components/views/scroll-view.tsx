@@ -12,6 +12,7 @@ interface ScrollViewProps extends DivProps {
    children: () => JSX.Template
    ref?: Cell<HTMLElement | null>
    showScrollBar?: JSX.ValueOrCell<boolean>
+   overscrollEffect?: boolean
 }
 
 /**
@@ -28,15 +29,17 @@ export function ScrollView(props: ScrollViewProps) {
       children,
       ref: containerRef = Cell.source(null),
       showScrollBar = true,
+      overscrollEffect = true,
       ...rest
    } = props
    const ctx = useTimelineSetup(containerRef, axis)
-   useOverScrollEffect({
-      containerRef,
-      axis,
-      isEnabled: Flags.OS.Name === Platform.Android
-   })
-
+   if (overscrollEffect) {
+      useOverScrollEffect({
+         containerRef,
+         axis,
+         isEnabled: Flags.OS.Name === Platform.Android
+      })
+   }
    return (
       <ScrollTimelineScope.Provider value={ctx}>
          {() => (
