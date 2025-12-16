@@ -57,7 +57,7 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
          const containerRef = Cell.source<HTMLElement | null>(null)
          observer.onConnected(containerRef, (container) => {
             if (isSelected.get()) {
-               const listParent = container.closest('menu > *') as HTMLElement
+               const listParent = container.closest('menu > * > *') as HTMLElement
                listParent?.scrollIntoView({ block: 'center', behavior: 'instant' })
             }
          })

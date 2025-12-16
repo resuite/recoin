@@ -143,10 +143,6 @@ export function PopoverView(props: PopoverProps) {
    const anchoringSupported = Flags.Runtime.Supports.AnchorPositioning
 
    const containerStyles: Cell<JSX.StyleValue> = Cell.derived(() => {
-      if (anchoringSupported) {
-         return {}
-      }
-
       if (x.get() !== undefined && y.get() !== undefined) {
          return { top: `${y.get()}px`, left: `${x.get()}px` }
       }

@@ -27,6 +27,7 @@ import {
 import { clamp, defer, getFocusableElementInItem } from '@/utilities/miscellaneous'
 import { DynamicIcon, type IconName } from '../icons'
 import Checkmark from '../icons/svg/checkmark'
+import { ScrollView } from '../views/scroll-view'
 import styles from './context-menu.module.css'
 
 export const ItemTypes = {
@@ -432,7 +433,9 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
                         onPointerOut--self={unselectItem}
                         style={{ '--context-menu-item-count': count }}
                      >
-                        {For(items, ContextMenuListItem)}
+                        <ScrollView class={styles.scrollView}>
+                           {() => For(items, ContextMenuListItem)}
+                        </ScrollView>
                      </menu>
                   )}
                </PopoverView>

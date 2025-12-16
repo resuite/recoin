@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { MoneyInput } from '@/components/ui/money-input'
 import { SafeAreaView } from '@/components/views/safe-area-view'
 import {
+   type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
@@ -21,6 +22,7 @@ const StartingBalance = (props: StartingBalanceProps) => {
    const query = useRouteQuery()
    const currency = query.get(QueryKeys.Onboarding.Currency).get()
    const value = Cell.source(0)
+   const keyboardIsOpen = Cell.source(false)
 
    if (!currency) {
       return null
@@ -34,16 +36,33 @@ const StartingBalance = (props: StartingBalanceProps) => {
       onFinish(value.get())
    }
 
+   const handleKeyboardVisibilityChange = (event: KeyboardVisibilityEvent) => {
+      keyboardIsOpen.set(event.isVisible)
+   }
+
    return (
-      <VirtualKeyboardAwareView>
+      <VirtualKeyboardAwareView onKeyboardVisibilityChange={handleKeyboardVisibilityChange}>
          {() => (
             <SafeAreaView
                elementName='form'
                class='grid grid-lines-with-fade grid-cols-1 grid-rows-[1fr_auto] place-items-center place-content-center'
                onSubmit--prevent={handleSubmit}
             >
-               <div>
-                  <h2 class='text-title'>What should be your starting balance?</h2>
+               <div
+                  class={[
+                     'duration-slow transition-transform',
+                     { '-translate-y-2': keyboardIsOpen }
+                  ]}
+               >
+                  <h2
+                     class={[
+                        'text-title',
+                        'duration-slow origin-left transition-transform',
+                        { 'scale-95': keyboardIsOpen }
+                     ]}
+                  >
+                     What should be your starting balance?
+                  </h2>
                   <VirtualKeyboardTriggers class='self-start w-full py-1.5'>
                      <MoneyInput minlength={3} currency={currency} model={value} />
                   </VirtualKeyboardTriggers>

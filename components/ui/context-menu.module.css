@@ -4,13 +4,11 @@ body:has(.contextMenu) {
 
 .contextMenu {
    position: relative;
-   display: grid;
    overflow: hidden;
    min-width: 205px;
    border: 0.25px solid var(--color-zinc-500);
    border-radius: 16px;
    box-shadow: 0 1px 10px 0px var(--color-canvas-shadow);
-   grid-template-rows: repeat(var(--context-menu-item-count), auto);
    -webkit-backdrop-filter: blur(5px);
    backdrop-filter: blur(5px);
 
@@ -34,22 +32,29 @@ body:has(.contextMenu) {
       }
    }
 
-   &::before {
-      top: 0;
-      left: 0;
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: 16px;
-      opacity: 0.85;
-      background-color: var(--color-canvas-deep);
-      content: '';
-      grid-area: 1 / 1 / calc(var(--context-menu-item-count) + 1) / 1;
-   }
    @media only screen and (pointer: coarse) and (max-width: 768px) {
       min-width: min(80dvw, 225px);
       border-radius: 13px;
    }
+}
+
+.scrollView {
+   display: grid;
+   grid-template-rows: repeat(var(--context-menu-item-count), auto);
+   max-height: inherit;
+}
+
+.scrollView::before {
+   top: 0;
+   left: 0;
+   display: block;
+   width: 100%;
+   height: 100%;
+   border-radius: 16px;
+   opacity: 0.85;
+   background-color: var(--color-canvas-deep);
+   content: '';
+   grid-area: 1 / 1 / calc(var(--context-menu-item-count) + 1) / 1;
 }
 
 @keyframes open-context-menu {
