@@ -1,13 +1,6 @@
 /* biome-ignore-all lint/suspicious/noEmptyBlock: This file includes animation hacks to track scroll state. */
 
-@property --momentum-threshold {
-   syntax: '<length>';
-   initial-value: 0px;
-   inherits: false;
-}
-
 .container {
-   --momentum-threshold: min(100px, 10%);
    position: relative;
    width: 100%;
    height: 100%;
@@ -15,9 +8,7 @@
    scroll-behavior: smooth;
    animation-range:
       0px 1px,
-      calc(100% - 1px) 100%,
-      var(--momentum-threshold) calc(var(--momentum-threshold) + 1px),
-      calc(100% - var(--momentum-threshold)) calc(100% - var(--momentum-threshold) - 1px);
+      calc(100% - 1px) 100%;
 
    &[data-show-scrollbar] {
       scrollbar-color: initial;
@@ -40,8 +31,7 @@
       overflow-y: auto;
       overflow-x: hidden;
       overflow-block: auto;
-      animation-name:
-         scrolled-to-top-detector, scrolled-to-bottom-detector, top-threshold, bottom-threshold;
+      animation-name: scrolled-to-top-detector, scrolled-to-bottom-detector;
       animation-timeline: scroll(self block);
 
       @media (pointer: coarse) {
@@ -59,8 +49,4 @@
 @keyframes scrolled-to-left-detector {
 }
 @keyframes scrolled-to-right-detector {
-}
-@keyframes top-threshold {
-}
-@keyframes bottom-threshold {
 }

@@ -80,39 +80,13 @@ export function useOverScrollEffect(options: OverScrollEffectOptions) {
       })
    }
 
-   const trail = {
-      top: debouncedFlag(50),
-      bottom: debouncedFlag(50)
-   }
-   function checkOverscrollThreshold(this: HTMLElement, event: AnimationEvent) {
-      if (event.target !== this) {
-         return
-      }
-      if (event.animationName.includes('top-threshold')) {
-         trail.top.value = true
-         trail.bottom.value = false
-      } else if (event.animationName.includes('bottom-threshold')) {
-         trail.bottom.value = true
-         trail.top.value = false
-      }
-   }
-
-   overScrollAreaIsActive.listen((shouldEnable) => {
-      if (!shouldEnable || !isEnabled) {
-         return
-      }
-      const container = containerRef.peek()
-      if (!container) {
-         return
-      }
-      if (isBlock) {
-         const topTrailingEffect = trail.top.value && state.atTop.get()
-         const bottomTrailingEffect = trail.bottom.value && state.atBottom.get()
-         if (topTrailingEffect || bottomTrailingEffect) {
-            container.style.transformOrigin = topTrailingEffect ? 'top center' : 'bottom center'
-            container.animate(STRETCH_Y_RELEASE, OVERSCROLL_OPTIONS)
-         }
-      }
+   const recentlyScrolledToElementTop = debouncedFlag(50)
+   const recentlyScrolledToElementBottom = debouncedFlag(50)
+   state.atTop.listen((scrolledToTop) => {
+      recentlyScrolledToElementTop.value = scrolledToTop
+   })
+   state.atBottom.listen((scrolledToBottom) => {
+      recentlyScrolledToElementBottom.value = scrolledToBottom
    })
 
    overScrollAreaIsActive.runAndListen((shouldEnable) => {
@@ -128,6 +102,23 @@ export function useOverScrollEffect(options: OverScrollEffectOptions) {
       }
    })
 
+   function handleScrollEnd() {
+      cancelLastOverscrollEffect?.()
+      if (!isBlock) {
+         return
+      }
+      const container = containerRef.peek()
+      if (!container) {
+         return
+      }
+      if (recentlyScrolledToElementTop.value || recentlyScrolledToElementBottom.value) {
+         container.style.transformOrigin = recentlyScrolledToElementTop.value
+            ? 'top center'
+            : 'bottom center'
+         container.animate(STRETCH_Y_RELEASE, OVERSCROLL_OPTIONS)
+      }
+   }
+
    observer.onConnected(containerRef, (container) => {
       if (!isEnabled) {
          return
@@ -138,10 +129,10 @@ export function useOverScrollEffect(options: OverScrollEffectOptions) {
          totalSize = isBlock ? entry.contentRect.height : entry.contentRect.width
       })
       resizeObserver.observe(container)
-      container.addEventListener('animationstart', checkOverscrollThreshold)
+      container.addEventListener('scrollend', handleScrollEnd)
 
       return () => {
-         container.removeEventListener('animationstart', checkOverscrollThreshold)
+         container.removeEventListener('scrollend', handleScrollEnd)
          resizeObserver.disconnect()
       }
    })
