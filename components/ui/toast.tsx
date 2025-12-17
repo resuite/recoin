@@ -1,8 +1,8 @@
 import { Cell, createScope, For, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
-import { Teleport } from 'retend/teleport'
-import { useDerivedValue, useIntersectionObserver, useWindowSize } from 'retend-utils/hooks'
+import { useIntersectionObserver, useWindowSize } from 'retend-utils/hooks'
 import { Button } from '@/components/ui/button'
+import { ThemeAwareTeleport } from '@/scopes/theme'
 import { defer } from '@/utilities/miscellaneous'
 import Add from '../icons/svg/add'
 import styles from './toast.module.css'
@@ -68,18 +68,13 @@ export interface ToastDetails {
 }
 
 export interface ToastContainerProps {
-   scheme: JSX.ValueOrCell<'light' | 'dark'>
    children: () => JSX.Template
 }
 
 export function ToastProvider(props: ToastContainerProps) {
-   const { children: Content, scheme: schemeProp } = props
+   const { children: Content } = props
    const activeToasts = Cell.source<Array<ToastProps & { id: string }>>([])
    const toastPromiseResolvers = new Map<string, () => void>()
-   const scheme = useDerivedValue(schemeProp)
-   const schemeClass = Cell.derived(() => {
-      return scheme.get() === 'light' ? 'light-scheme' : 'dark-scheme'
-   })
 
    const toastsCount = Cell.derived(() => {
       return activeToasts.get().length
@@ -92,9 +87,9 @@ export function ToastProvider(props: ToastContainerProps) {
          {() => (
             <>
                <Content />
-               <Teleport to='body'>
+               <ThemeAwareTeleport to='body'>
                   <div
-                     class={[styles.toastsGroup, schemeClass]}
+                     class={styles.toastsGroup}
                      style={{
                         '--toasts-count': toastsCount,
                         '--toast-gap': 'calc(var(--spacing) * 0.5)'
@@ -102,7 +97,7 @@ export function ToastProvider(props: ToastContainerProps) {
                   >
                      {For(activeToasts, Toast)}
                   </div>
-               </Teleport>
+               </ThemeAwareTeleport>
             </>
          )}
       </ToastScope.Provider>

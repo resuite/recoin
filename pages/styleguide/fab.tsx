@@ -6,6 +6,7 @@ import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { ExpandingView } from '@/components/views/expanding-view'
 import { usePullToRefreshContext } from '@/components/views/pull-to-refresh-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
+import { ThemeProvider } from '@/scopes/theme'
 import { vibrate } from '@/utilities/miscellaneous'
 
 const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }) => {
@@ -77,29 +78,33 @@ const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }
          >
             <Add />
          </FloatingActionButton>
-         <ExpandingView
-            expandColor='var(--color-base)'
-            expandOrigin='auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)'
-            class='dark-scheme h-screen w-screen grid place-items-center place-content-center gap-1 [grid-area:1/1]'
-            isOpen={isOpen}
-         >
+         <ThemeProvider scheme='dark'>
             {() => (
-               <>
-                  <div class='after:block after:h-[calc(var(--spacing)*0.15)] after:bg-canvas-text after:animate-lining overflow-hidden'>
-                     <div class='text-title animate-fade-in animate-delay-bit-slower'>
-                        hello recoin!
-                     </div>
-                  </div>
-                  <Button
-                     type='button'
-                     class='animate-fade-in animate-delay-bit-slower'
-                     onClick={toggleButtonState}
-                  >
-                     Toggle Button state.
-                  </Button>
-               </>
+               <ExpandingView
+                  expandColor='var(--color-base)'
+                  expandOrigin='auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)'
+                  class='dark-scheme h-screen w-screen grid place-items-center place-content-center gap-1 [grid-area:1/1]'
+                  isOpen={isOpen}
+               >
+                  {() => (
+                     <>
+                        <div class='after:block after:h-[calc(var(--spacing)*0.15)] after:bg-canvas-text after:animate-lining overflow-hidden'>
+                           <div class='text-title animate-fade-in animate-delay-bit-slower'>
+                              hello recoin!
+                           </div>
+                        </div>
+                        <Button
+                           type='button'
+                           class='animate-fade-in animate-delay-bit-slower'
+                           onClick={toggleButtonState}
+                        >
+                           Toggle Button state.
+                        </Button>
+                     </>
+                  )}
+               </ExpandingView>
             )}
-         </ExpandingView>
+         </ThemeProvider>
       </div>
    )
 }

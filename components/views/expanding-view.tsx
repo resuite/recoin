@@ -1,6 +1,7 @@
 import { Cell, If } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
+import { useThemeContext } from '@/scopes/theme'
 import { animationsSettled } from '@/utilities/animations'
 import styles from './expanding-view.module.css'
 
@@ -72,6 +73,10 @@ export function ExpandingView(props: ExpandingViewProps) {
    const { isOpen: isOpenProp, expandOrigin, expandSize, expandColor, children, ...rest } = props
    const isOpen = useDerivedValue(isOpenProp)
    const contentLoaded = Cell.source(isOpen.get())
+   const theme = useThemeContext()
+   const background = Cell.derived(() => {
+      return theme.get().canvasBackground
+   })
    const clipPathRef = Cell.source<HTMLElement | null>(null)
    const style = {
       '--expand-origin': expandOrigin,
@@ -98,7 +103,7 @@ export function ExpandingView(props: ExpandingViewProps) {
          data-content-loaded={contentLoaded}
       >
          <div ref={clipPathRef} class={styles.clipPath} />
-         <div {...rest} class={[styles.content, rest.class]}>
+         <div {...rest} style={{ background }} class={[styles.content, rest.class]}>
             {If(contentLoaded, children)}
          </div>
       </div>

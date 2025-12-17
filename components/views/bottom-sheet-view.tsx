@@ -1,8 +1,8 @@
 import { Cell, createScope, If, type SourceCell, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
-import { Teleport } from 'retend/teleport'
 import { useDerivedValue } from 'retend-utils/hooks'
+import { ThemeAwareTeleport } from '@/scopes/theme'
 import { animationsSettled } from '@/utilities/animations'
 import styles from './bottom-sheet-view.module.css'
 
@@ -205,7 +205,7 @@ export function BottomSheet(props: BottomSheetProps) {
    return (
       <BottomSheetScope.Provider value={ctx}>
          {() => (
-            <Teleport to='body'>
+            <ThemeAwareTeleport to='body'>
                {If(dialogOpen, () => (
                   <dialog
                      ref={dialogRef}
@@ -230,7 +230,7 @@ export function BottomSheet(props: BottomSheetProps) {
                      </div>
                   </dialog>
                ))}
-            </Teleport>
+            </ThemeAwareTeleport>
          )}
       </BottomSheetScope.Provider>
    )
@@ -356,7 +356,12 @@ export function QueryControlledBottomSheet(props: QueryControlledBottomSheetProp
    }
 
    return (
-      <BottomSheet isOpen={isOpen} onClose={onClose} {...rest}>
+      <BottomSheet
+         isOpen={isOpen}
+         onClose={onClose}
+         {...rest}
+         class={[rest.dynamicSizing ? 'bg-transparent' : 'bg-canvas', rest.class]}
+      >
          {children}
       </BottomSheet>
    )

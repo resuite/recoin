@@ -16,22 +16,26 @@ export default function Chat() {
 
    return (
       <Stage class='grid place-items-center'>
-         <div class='text-center'>
-            <h1 class='text-title mb-2'>Chat</h1>
-            <p class='text-body'>Coming soon...</p>
-            <Button onClick={openSheet} class='mt-2'>
-               Open Chat Options
-            </Button>
-         </div>
-         <QueryControlledBottomSheet queryKey='chatSheet' class='light-scheme'>
-            {() => (
-               <div class='h-full w-full grid place-items-center place-content-center'>
-                  <h2 class='text-header'>Chat Options</h2>
-                  <p class='mb-1'>Chat settings and options will go here.</p>
-                  <Button onClick={closeSheet}>Close</Button>
+         {() => (
+            <>
+               <div class='text-center'>
+                  <h1 class='text-title mb-2'>Chat</h1>
+                  <p class='text-body'>Coming soon...</p>
+                  <Button onClick={openSheet} class='mt-2'>
+                     Open Chat Options
+                  </Button>
                </div>
-            )}
-         </QueryControlledBottomSheet>
+               <QueryControlledBottomSheet queryKey='chatSheet'>
+                  {() => (
+                     <div class='h-full w-full grid place-items-center place-content-center'>
+                        <h2 class='text-header'>Chat Options</h2>
+                        <p class='mb-1'>Chat settings and options will go here.</p>
+                        <Button onClick={closeSheet}>Close</Button>
+                     </div>
+                  )}
+               </QueryControlledBottomSheet>
+            </>
+         )}
       </Stage>
    )
 }

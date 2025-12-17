@@ -6,7 +6,7 @@ import { WaitingListStateScope } from '@/scopes'
 function WaitingList() {
    const router = useRouter()
    return (
-      <ToastProvider scheme='dark'>
+      <ToastProvider>
          {() => (
             <WaitingListStateScope.Provider value={{ emailEntered: Cell.source(false) }}>
                {() => <router.Outlet />}

@@ -2,6 +2,7 @@ import { Cell } from 'retend'
 import { Icon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { StackView, StackViewGroup } from '@/components/views/stack-view-group'
+import { ThemeProvider } from '@/scopes/theme'
 
 const page2IsOpen = Cell.source(false)
 const page3IsOpen = Cell.source(false)
@@ -24,47 +25,51 @@ function closePage3() {
 
 function NavStack() {
    return (
-      <div class='w-full rounded-t-3xl light-scheme overflow-hidden'>
-         <StackViewGroup class='h-screen text-large'>
-            <StackView root>
-               {() => (
-                  <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
-                     <div class='mb-2'>1</div>
-                     <Button type='button' onClick={openPage2}>
-                        Next Page
-                        <Icon name='caret' direction='right' class='btn-icon' />
-                     </Button>
-                  </div>
-               )}
-            </StackView>
-            <StackView isOpen={page2IsOpen} onCloseRequested={closePage2}>
-               {() => (
-                  <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
-                     <div class='mb-2'>2</div>
-                     <Button type='button' onClick={closePage2}>
-                        <Icon name='caret' direction='left' class='btn-icon' />
-                        Go back to page 1
-                     </Button>
-                     <Button type='button' onClick={openPage3}>
-                        Next Page
-                        <Icon name='caret' direction='right' class='btn-icon' />
-                     </Button>
-                  </div>
-               )}
-            </StackView>
-            <StackView isOpen={page3IsOpen} onCloseRequested={closePage3}>
-               {() => (
-                  <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
-                     <div class='mb-2'>3</div>
-                     <Button type='button' onClick={closePage3}>
-                        <Icon name='caret' direction='left' class='btn-icon' />
-                        Go back to page 2
-                     </Button>
-                  </div>
-               )}
-            </StackView>
-         </StackViewGroup>
-      </div>
+      <ThemeProvider scheme='light'>
+         {() => (
+            <div class='w-full rounded-t-3xl overflow-hidden'>
+               <StackViewGroup class='h-screen text-large'>
+                  <StackView root>
+                     {() => (
+                        <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
+                           <div class='mb-2'>1</div>
+                           <Button type='button' onClick={openPage2}>
+                              Next Page
+                              <Icon name='caret' direction='right' class='btn-icon' />
+                           </Button>
+                        </div>
+                     )}
+                  </StackView>
+                  <StackView isOpen={page2IsOpen} onCloseRequested={closePage2}>
+                     {() => (
+                        <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
+                           <div class='mb-2'>2</div>
+                           <Button type='button' onClick={closePage2}>
+                              <Icon name='caret' direction='left' class='btn-icon' />
+                              Go back to page 1
+                           </Button>
+                           <Button type='button' onClick={openPage3}>
+                              Next Page
+                              <Icon name='caret' direction='right' class='btn-icon' />
+                           </Button>
+                        </div>
+                     )}
+                  </StackView>
+                  <StackView isOpen={page3IsOpen} onCloseRequested={closePage3}>
+                     {() => (
+                        <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
+                           <div class='mb-2'>3</div>
+                           <Button type='button' onClick={closePage3}>
+                              <Icon name='caret' direction='left' class='btn-icon' />
+                              Go back to page 2
+                           </Button>
+                        </div>
+                     )}
+                  </StackView>
+               </StackViewGroup>
+            </div>
+         )}
+      </ThemeProvider>
    )
 }
 

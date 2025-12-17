@@ -9,6 +9,7 @@ import {
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/views/virtual-keyboard-aware-view'
+import { ThemeProvider } from '@/scopes/theme'
 import FloatingActionButtonTest from '../fab'
 import { Scope } from './scope'
 
@@ -162,11 +163,15 @@ function FourthPage() {
 
 export function StackTest() {
    return (
-      <StackViewGroup class='h-full w-full light-scheme rounded-t-3xl'>
-         <FirstPage />
-         <SecondPage />
-         <ThirdPage />
-         <FourthPage />
-      </StackViewGroup>
+      <ThemeProvider scheme='light'>
+         {() => (
+            <StackViewGroup class='h-full w-full rounded-t-3xl'>
+               <FirstPage />
+               <SecondPage />
+               <ThirdPage />
+               <FourthPage />
+            </StackViewGroup>
+         )}
+      </ThemeProvider>
    )
 }

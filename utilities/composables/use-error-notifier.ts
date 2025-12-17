@@ -11,10 +11,10 @@ export function useErrorNotifier() {
       }
       if (!(error instanceof RecoinError)) {
          const content = error.message ?? defaultError()
-         showToast({ content, duration: 3000 })
+         showToast({ content })
          return
       }
       const content = errorCodeToHumanReadable(error.errorCode)
-      showToast({ content, duration: 3000 })
+      showToast({ content })
    }
 }

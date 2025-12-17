@@ -1,5 +1,6 @@
 import { Cell } from 'retend'
 import { SidebarProviderView } from '@/components/views/sidebar-provider-view'
+import { ThemeProvider } from '@/scopes/theme'
 import { createPartitions } from '@/utilities/animations'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import PullToRefreshViewTest from '../pull-zone'
@@ -80,20 +81,24 @@ function SidebarTest() {
    }
 
    return (
-      <Scope.Provider value={scopeData}>
+      <ThemeProvider scheme='light'>
          {() => (
-            <PullToRefreshViewTest>
+            <Scope.Provider value={scopeData}>
                {() => (
-                  <>
-                     <SidebarProviderView class='h-screen dark-scheme' sidebar={InnerSidebar}>
-                        {StackTest}
-                     </SidebarProviderView>
-                     <Sheet />
-                  </>
+                  <PullToRefreshViewTest>
+                     {() => (
+                        <>
+                           <SidebarProviderView class='h-screen dark-scheme' sidebar={InnerSidebar}>
+                              {StackTest}
+                           </SidebarProviderView>
+                           <Sheet />
+                        </>
+                     )}
+                  </PullToRefreshViewTest>
                )}
-            </PullToRefreshViewTest>
+            </Scope.Provider>
          )}
-      </Scope.Provider>
+      </ThemeProvider>
    )
 }
 

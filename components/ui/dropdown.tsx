@@ -115,7 +115,9 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
          return
       }
 
-      const matchingOptionElement = contextMenuElement.children[matchingOptionIdx] as HTMLLIElement
+      const matchingOptionElement = contextMenuElement.children[0].children[
+         matchingOptionIdx
+      ] as HTMLLIElement
       getFocusableElementInItem(matchingOptionElement)?.focus()
    }
 

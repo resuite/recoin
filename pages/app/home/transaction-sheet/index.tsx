@@ -1,5 +1,6 @@
 import { Cell, Switch, useSetupEffect } from 'retend'
 import { useRouteQuery } from 'retend/router'
+import { ToastProvider } from '@/components/ui/toast'
 import { QueryControlledBottomSheet } from '@/components/views/bottom-sheet-view'
 import { SafeAreaView } from '@/components/views/safe-area-view'
 import { QueryKeys } from '@/constants/query-keys'
@@ -92,13 +93,16 @@ const TransactionItemBottomSheetContent = () => {
 
 const TransactionItemBottomSheet = () => {
    return (
-      <QueryControlledBottomSheet
-         class='light-scheme bg-transparent'
-         queryKey={QueryKeys.TransactionSheet.OpenItemId}
-         dynamicSizing
-      >
-         {() => <TransactionItemBottomSheetContent />}
-      </QueryControlledBottomSheet>
+      <ToastProvider>
+         {() => (
+            <QueryControlledBottomSheet
+               queryKey={QueryKeys.TransactionSheet.OpenItemId}
+               dynamicSizing
+            >
+               {() => <TransactionItemBottomSheetContent />}
+            </QueryControlledBottomSheet>
+         )}
+      </ToastProvider>
    )
 }
 

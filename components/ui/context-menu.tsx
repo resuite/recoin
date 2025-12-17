@@ -10,7 +10,6 @@ import {
    useSetupEffect
 } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
-import { Teleport } from 'retend/teleport'
 import { useCursorPosition, useDerivedValue, useDocumentVisibility } from 'retend-utils/hooks'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,6 +19,7 @@ import {
    type PositionArea
 } from '@/components/views/popover-view'
 import { Flags } from '@/constants/flags'
+import { ThemeAwareTeleport } from '@/scopes/theme'
 import {
    polyfillTouchContextMenuEvent,
    removeTouchContextMenuEventPolyfill
@@ -188,7 +188,6 @@ interface ContextMenuContext {
    selected: SourceCell<number>
    subMenus: Set<Cell<HTMLMenuElement | null>>
    selectItem?: (event: Event) => void
-   style?: JSX.ValueOrCell<JSX.StyleValue>
    class: unknown
 }
 const ContextMenuScope = createScope<ContextMenuContext>()
@@ -334,8 +333,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
       subMenus,
       selected,
       selectItem,
-      class: rest.class,
-      style: rest.style
+      class: rest.class
    }
 
    observer.onConnected(trigger, (trigger) => {
@@ -410,7 +408,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
             // This needs to be a teleport in case of recursive submenus.
             // the anchor needs to be position:fixed to anchor with the current cursor position,
             // and the behavior of nested fixed elements in browsers is...questionable.
-            <Teleport
+            <ThemeAwareTeleport
                to='body'
                class={styles.anchor}
                data-anchor-name={anchorName}
@@ -439,7 +437,7 @@ export function ContextMenu<T extends HTMLElement>(props: ContextMenuProps<T>) {
                      </menu>
                   )}
                </PopoverView>
-            </Teleport>
+            </ThemeAwareTeleport>
          )}
       </ContextMenuScope.Provider>
    ))
@@ -543,7 +541,7 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
    const { items, label, disabled, type: _type, icon } = props
    const contextMenu = Cell.source<HTMLMenuElement | null>(null)
    const button = Cell.source<HTMLButtonElement | null>(null)
-   const { subMenus, style, class: className } = useContextMenuContext()
+   const { subMenus, class: className } = useContextMenuContext()
 
    observer.onConnected(button, (button) => {
       trigger.set(button.parentElement as HTMLLIElement)
@@ -571,7 +569,6 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
          <ContextMenu
             ref={contextMenu}
             class={[className, styles.submenu]}
-            style={style}
             trigger={trigger}
             items={items}
             useTriggerAsAnchor

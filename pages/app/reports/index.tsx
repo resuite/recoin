@@ -14,13 +14,17 @@ const tabs = ['Today', 'This Week', 'This Month', 'This Year'].map((timeFrame) =
 const Reports = () => {
    return (
       <Stage class='grid grid-rows-[auto_auto_1fr]'>
-         <PageHeading title='Reports' />
-         <TabSwitcherView
-            class='w-full'
-            header:class='px-1'
-            minTabHeaderWidth='130px'
-            tabs={tabs}
-         />
+         {() => (
+            <>
+               <PageHeading title='Reports' />
+               <TabSwitcherView
+                  class='w-full'
+                  header:class='px-1'
+                  minTabHeaderWidth='130px'
+                  tabs={tabs}
+               />
+            </>
+         )}
       </Stage>
    )
 }

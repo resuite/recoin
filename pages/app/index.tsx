@@ -14,6 +14,7 @@ import Onboarding from '@/pages/app/auth/onboarding'
 import StartPage from '@/pages/app/auth/start-page'
 import { AuthenticationProvider } from '@/scopes/auth'
 import { LiveStoreProvider } from '@/scopes/livestore'
+import { ThemeProvider } from '@/scopes/theme'
 import { useApplicationSetup } from '@/utilities/composables/use-application-setup'
 
 const AppRoot = () => {
@@ -25,9 +26,7 @@ const AppRoot = () => {
    const StoreLoadingFallback = () => {
       return If(hasFinishedOnboarding, {
          true: () => (
-            <Stage class='grid place-items-center'>
-               <Loader class='h-1.5' />
-            </Stage>
+            <Stage class='grid place-items-center'>{() => <Loader class='h-1.5' />}</Stage>
          ),
          false: () => (
             <div class='h-full w-full grid place-items-center'>
@@ -74,13 +73,17 @@ const AppRoot = () => {
 
 const App = () => {
    return (
-      <ToastProvider scheme='light'>
+      <ThemeProvider scheme='dark'>
          {() => (
-            <GoogleIdentityProvider>
-               {() => <AuthenticationProvider>{AppRoot}</AuthenticationProvider>}
-            </GoogleIdentityProvider>
+            <ToastProvider>
+               {() => (
+                  <GoogleIdentityProvider>
+                     {() => <AuthenticationProvider>{AppRoot}</AuthenticationProvider>}
+                  </GoogleIdentityProvider>
+               )}
+            </ToastProvider>
          )}
-      </ToastProvider>
+      </ThemeProvider>
    )
 }
 

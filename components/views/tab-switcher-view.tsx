@@ -173,6 +173,7 @@ export function TabSwitcherView<T extends Tab>(props: TabSwitcherViewProps<T>) {
                {...rest}
                axis='inline'
                ref={tabContainerRef}
+               showScrollBar={false}
                style={{ '--tabs': tabCount, '--min-tab-header-width': minTabHeaderWidth }}
                class={[styles.tabSwitcherContainer, rest.class]}
             >

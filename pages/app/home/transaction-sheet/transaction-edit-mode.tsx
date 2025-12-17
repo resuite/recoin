@@ -153,7 +153,7 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
                )}
             </VirtualKeyboardAwareView>
          </div>
-         <div class='w-full gap-1 grid grid-cols-2 light-scheme isolate'>
+         <div class='w-full gap-1 grid grid-cols-2 isolate'>
             <Button class='w-full btn-outline' onClick={() => closeEditMode()}>
                <Add class='btn-icon rotate-45' />
                Discard

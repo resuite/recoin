@@ -106,7 +106,7 @@ function ButtonLoadingStateContent() {
 function ButtonIdleStateContent() {
    return (
       <>
-         <Arrows class='w-0.75 h-0.75 -rotate-[135deg]' />
+         <Arrows class='w-0.75 h-0.75 -rotate-135' />
          Join the waiting list
       </>
    )

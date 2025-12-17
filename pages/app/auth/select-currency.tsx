@@ -26,11 +26,9 @@ const CurrencySelection = () => {
    return (
       <SafeAreaView
          elementName='form'
+         containerClass='grid-lines-with-fade'
          onSubmit--prevent={goToInitialBalancePage}
-         class={[
-            'grid place-items-center grid-rows-[1fr_auto] px-0.5 gap-0.5',
-            'grid-lines-with-fade'
-         ]}
+         class='grid place-items-center grid-rows-[1fr_auto] px-0.25 gap-0.5'
       >
          <div
             class={[

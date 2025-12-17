@@ -40,7 +40,7 @@
    transition-duration: var(--speed-slow);
    transition-property: translate, scale, opacity;
    animation: var(--animate-toast-slide-in);
-   pointer-events: auto;
+   pointer-events: none;
    translate: 0 var(--translate-y);
 
    grid-area: 1 / 1;
@@ -101,6 +101,7 @@
    margin-inline: auto;
    grid-template-columns: 1fr auto;
    grid-template-rows: 1fr;
+   pointer-events: auto;
    gap: calc(var(--spacing) * 0.5);
    justify-self: center;
    scroll-snap-align: center;

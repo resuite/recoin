@@ -7,7 +7,7 @@ export function Sheet() {
    const { closeSheet, sheetKey } = useScopeContext(Scope)
 
    return (
-      <QueryControlledBottomSheet class='light-scheme' queryKey={sheetKey}>
+      <QueryControlledBottomSheet queryKey={sheetKey}>
          {() => (
             <div class='h-full w-full grid place-items-center place-content-center px-2'>
                <h2 class='text-header'>Bottom Sheet Content.</h2>

@@ -6,17 +6,21 @@ import { AddNewBudget } from '@/pages/app/budgets/(fragments)/add-new-budget-but
 const NoBudgetsScreen = () => {
    return (
       <Stage class='grid grid-rows-[auto_auto_1fr]'>
-         <PageHeading title='Budgets' />
-         <div class='opacity-60 grid place-items-center place-content-center text-center pb-5'>
-            <PieChart class='h-3' />
-            <span class='max-w-[300px]'>
-               Track your spending habits. <br />
-               Create budgets for categories to stay on top of expenses.
-            </span>
-            <br />
-            <span>Tap + to create one.</span>
-         </div>
-         <AddNewBudget />
+         {() => (
+            <>
+               <PageHeading title='Budgets' />
+               <div class='opacity-60 grid place-items-center place-content-center text-center pb-5'>
+                  <PieChart class='h-3' />
+                  <span class='max-w-12'>
+                     Track your spending habits. <br />
+                     Create budgets for categories to stay on top of expenses.
+                  </span>
+                  <br />
+                  <span>Tap + to create one.</span>
+               </div>
+               <AddNewBudget />
+            </>
+         )}
       </Stage>
    )
 }

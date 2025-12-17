@@ -1,16 +1,21 @@
 import { TabSwitcherView } from '@/components/views/tab-switcher-view'
+import { ThemeProvider } from '@/scopes/theme'
 
 const Tabs = () => {
    return (
-      <div class='py-1 w-full h-screen grid grid-rows-[auto_1fr] light-scheme rounded-t-3xl'>
-         <h2 class='text-title px-1'>Tabs</h2>
-         <TabSwitcherView
-            class='tab-container'
-            header:class='px-1'
-            minTabHeaderWidth='70px'
-            tabs={tabs}
-         />
-      </div>
+      <ThemeProvider scheme='light'>
+         {() => (
+            <div class='py-1 w-full bg-canvas h-screen grid grid-rows-[auto_1fr] rounded-t-3xl'>
+               <h2 class='text-title px-1'>Tabs</h2>
+               <TabSwitcherView
+                  class='tab-container'
+                  header:class='px-1'
+                  minTabHeaderWidth='70px'
+                  tabs={tabs}
+               />
+            </div>
+         )}
+      </ThemeProvider>
    )
 }
 

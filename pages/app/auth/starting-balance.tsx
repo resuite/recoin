@@ -44,8 +44,9 @@ const StartingBalance = (props: StartingBalanceProps) => {
       <VirtualKeyboardAwareView onKeyboardVisibilityChange={handleKeyboardVisibilityChange}>
          {() => (
             <SafeAreaView
+               containerClass='grid-lines-with-fade'
                elementName='form'
-               class='grid grid-lines-with-fade grid-cols-1 grid-rows-[1fr_auto] place-items-center place-content-center'
+               class='grid grid-cols-1 grid-rows-[1fr_auto] place-items-center place-content-center'
                onSubmit--prevent={handleSubmit}
             >
                <div

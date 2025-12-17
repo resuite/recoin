@@ -82,9 +82,13 @@ const Categories = () => {
 
    return (
       <Stage class='grid grid-rows-[auto_auto_1fr]'>
-         <PageHeading title='Categories' />
-         <TabSwitcherView tabs={tabs} header:class='px-1' />
-         <AddNewCategorySheet />
+         {() => (
+            <>
+               <PageHeading title='Categories' />
+               <TabSwitcherView tabs={tabs} header:class='px-1' />
+               <AddNewCategorySheet />
+            </>
+         )}
       </Stage>
    )
 }

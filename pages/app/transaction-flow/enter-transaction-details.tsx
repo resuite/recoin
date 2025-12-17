@@ -1,6 +1,5 @@
 import { Cell, If, useScopeContext } from 'retend'
 import { useRouteQuery } from 'retend/router'
-import { Teleport } from 'retend/teleport'
 import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Arrows from '@/components/icons/svg/arrows'
@@ -23,6 +22,7 @@ import { BackButton } from '@/pages/app/(fragments)/back-btn'
 import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
 import { useAuthContext } from '@/scopes/auth'
 import { TransactionDetailsFormScope } from '@/scopes/forms'
+import { ThemeAwareTeleport } from '@/scopes/theme'
 import { useCategory } from '@/utilities/composables/use-categories'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { scrollIntoView } from '@/utilities/miscellaneous'
@@ -105,16 +105,16 @@ const EnterTransactionDetails = () => {
                            />
                         </VirtualKeyboardTriggers>
                         {If(form.values.amount, () => (
-                           <Teleport to={ROOT_APP_OUTLET_ID}>
+                           <ThemeAwareTeleport to={ROOT_APP_OUTLET_ID}>
                               <FloatingActionButton
                                  outlined
                                  fixed
                                  onClick={handleSubmit}
-                                 class='bg-transparent translate-x-[60%]'
+                                 class='bg-transparent dark-scheme translate-x-[60%]'
                               >
                                  <Checkmark class='text-canvas-text' />
                               </FloatingActionButton>
-                           </Teleport>
+                           </ThemeAwareTeleport>
                         ))}
                      </form>
                   )}

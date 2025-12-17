@@ -2,6 +2,7 @@ import { Cell } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { DynamicIcon } from '@/components/icons'
 import { type PullState, PullToRefreshView } from '@/components/views/pull-to-refresh-view'
+import { ThemeProvider } from '@/scopes/theme'
 
 interface PullToRefreshViewTestProps {
    children?: () => JSX.Template
@@ -27,31 +28,35 @@ const PullToRefreshFeedback = (props: PullToRefreshFeedbackProps) => {
    })
 
    return (
-      <div class='grid place-items-center place-content-center gap-0.5 h-full'>
-         <DynamicIcon
-            name='loader'
-            class={[
-               'w-1.5 h-1.5 transition-[translate,rotate,scale,opacity]',
-               {
-                  'opacity-0 duration-slower': idle,
-                  'rotate-[calc(var(--pull-progress)*0.5deg)]': visible,
-                  'scale-[min(calc(var(--pull-progress)*0.01),1.95)]': pulling,
-                  'opacity-[calc((var(--pull-progress)*0.005)-0.4)]': pulling,
-                  'duration-0': pulling,
-                  'animate-spin! [transition-timing-function:linear]': actionTriggered
-               }
-            ]}
-            style={{ animation: 'none' }}
-         />
-         <div
-            class={[
-               'text-center opacity-0 duration-slower transition-opacity',
-               { 'opacity-75': actionTriggered }
-            ]}
-         >
-            Refreshing your data...
-         </div>
-      </div>
+      <ThemeProvider scheme='dark'>
+         {() => (
+            <div class='grid place-items-center place-content-center gap-0.5 h-full'>
+               <DynamicIcon
+                  name='loader'
+                  class={[
+                     'w-1.5 h-1.5 transition-[translate,rotate,scale,opacity]',
+                     {
+                        'opacity-0 duration-slower': idle,
+                        'rotate-[calc(var(--pull-progress)*0.5deg)]': visible,
+                        'scale-[min(calc(var(--pull-progress)*0.01),1.95)]': pulling,
+                        'opacity-[calc((var(--pull-progress)*0.005)-0.4)]': pulling,
+                        'duration-0': pulling,
+                        'animate-spin! ease-linear': actionTriggered
+                     }
+                  ]}
+                  style={{ animation: 'none' }}
+               />
+               <div
+                  class={[
+                     'text-center opacity-0 duration-slower transition-opacity',
+                     { 'opacity-75': actionTriggered }
+                  ]}
+               >
+                  Refreshing your data...
+               </div>
+            </div>
+         )}
+      </ThemeProvider>
    )
 }
 
@@ -70,19 +75,23 @@ const PullToRefreshViewTest = (props?: PullToRefreshViewTestProps) => {
    }
 
    return (
-      <PullToRefreshView
-         class='h-screen'
-         feedback={() => <PullToRefreshFeedback state={state} />}
-         onStateChange={handleStateChange}
-         onActionTriggered={handleActionTriggered}
-      >
-         {props?.children ??
-            (() => (
-               <div class='text-big h-full light-scheme rounded-t-3xl'>
-                  <div class='grid place-items-center h-full w-full'>{state}</div>
-               </div>
-            ))}
-      </PullToRefreshView>
+      <ThemeProvider scheme='light'>
+         {() => (
+            <PullToRefreshView
+               class='h-screen'
+               feedback={() => <PullToRefreshFeedback state={state} />}
+               onStateChange={handleStateChange}
+               onActionTriggered={handleActionTriggered}
+            >
+               {props?.children ??
+                  (() => (
+                     <div class='text-big h-full rounded-t-3xl'>
+                        <div class='grid place-items-center h-full w-full'>{state}</div>
+                     </div>
+                  ))}
+            </PullToRefreshView>
+         )}
+      </ThemeProvider>
    )
 }
 

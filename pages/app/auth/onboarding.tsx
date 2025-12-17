@@ -8,6 +8,7 @@ import CurrencySelection from '@/pages/app/auth/select-currency'
 import StartingBalance from '@/pages/app/auth/starting-balance'
 import { useAuthContext } from '@/scopes/auth'
 import { useStore } from '@/scopes/livestore'
+import { ThemeProvider } from '@/scopes/theme'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 
 const Onboarding = () => {
@@ -44,12 +45,16 @@ const Onboarding = () => {
    })
 
    return (
-      <StackViewGroup class='dark-scheme'>
-         <StackView root>{() => <CurrencySelection />}</StackView>
-         <StackView isOpen={currencyIsSet} onCloseRequested={router.back}>
-            {() => <StartingBalance onFinish={handleFinish} />}
-         </StackView>
-      </StackViewGroup>
+      <ThemeProvider scheme='dark'>
+         {() => (
+            <StackViewGroup>
+               <StackView root>{() => <CurrencySelection />}</StackView>
+               <StackView isOpen={currencyIsSet} onCloseRequested={router.back}>
+                  {() => <StartingBalance onFinish={handleFinish} />}
+               </StackView>
+            </StackViewGroup>
+         )}
+      </ThemeProvider>
    )
 }
 

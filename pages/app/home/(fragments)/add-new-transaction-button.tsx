@@ -1,6 +1,5 @@
 import { Cell } from 'retend'
 import { useRouteQuery } from 'retend/router'
-import { Teleport } from 'retend/teleport'
 import type { TransactionType } from '@/api/database/types'
 import Add from '@/components/icons/svg/add'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
@@ -14,6 +13,7 @@ import TransactionFlow from '@/pages/app/transaction-flow'
 import { useAuthContext } from '@/scopes/auth'
 import { type TransactionDetailsForm, TransactionDetailsFormScope } from '@/scopes/forms'
 import { useStore } from '@/scopes/livestore'
+import { ThemeAwareTeleport, ThemeProvider } from '@/scopes/theme'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { useWorkspaceId } from '@/utilities/composables/use-workspace-id'
 import { createForm } from '@/utilities/form'
@@ -83,7 +83,7 @@ export function AddNewTransactionButton() {
    })
 
    return (
-      <Teleport to={ROOT_APP_OUTLET_ID} class='light-scheme'>
+      <ThemeAwareTeleport to={ROOT_APP_OUTLET_ID}>
          <FloatingActionButton
             class={[
                { 'rotate-135 scale-90 dark-scheme': transactionFlowIsOpen },
@@ -97,18 +97,21 @@ export function AddNewTransactionButton() {
          >
             <Add />
          </FloatingActionButton>
-         <ExpandingView
-            isOpen={transactionFlowIsOpen}
-            class='dark-scheme'
-            expandOrigin='calc(100dvh - var(--fab-size) - var(--spacing) * 3) auto auto  calc(50% - var(--fab-size) / 2)'
-            expandColor='var(--color-base)'
-         >
+         <ThemeProvider scheme='dark'>
             {() => (
-               <TransactionDetailsFormScope.Provider value={details}>
-                  {TransactionFlow}
-               </TransactionDetailsFormScope.Provider>
+               <ExpandingView
+                  isOpen={transactionFlowIsOpen}
+                  expandOrigin='calc(100dvh - var(--fab-size) - var(--spacing) * 3) auto auto  calc(50% - var(--fab-size) / 2)'
+                  expandColor='var(--color-base)'
+               >
+                  {() => (
+                     <TransactionDetailsFormScope.Provider value={details}>
+                        {TransactionFlow}
+                     </TransactionDetailsFormScope.Provider>
+                  )}
+               </ExpandingView>
             )}
-         </ExpandingView>
-      </Teleport>
+         </ThemeProvider>
+      </ThemeAwareTeleport>
    )
 }

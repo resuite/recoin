@@ -20,7 +20,7 @@ const Content = () => {
 
 const AddNewCategorySheet = () => {
    return (
-      <QueryControlledBottomSheet class='light-scheme' queryKey={QueryKeys.Categories.Sheet}>
+      <QueryControlledBottomSheet queryKey={QueryKeys.Categories.Sheet}>
          {() => <Content />}
       </QueryControlledBottomSheet>
    )
