@@ -25,8 +25,14 @@
       display: block;
       content: '';
       grid-area: 1 / 2;
-      background-color: transparent;
+      background-color: #00000080;
       scroll-snap-align: start;
+      height: 1dvh;
+      width: 1dvw;
+      scale: 100 100;
+      transform-origin: top left;
+      pointer-events: none;
+      opacity: 0;
    }
 }
 

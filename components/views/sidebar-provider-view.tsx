@@ -148,6 +148,11 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
          target: contentRef,
          keyframes: { scale: ['0.95', '1'] }
       })
+      timeline.add({
+         target: providerRef,
+         keyframes: { opacity: ['1', '0'] },
+         pseudoElement: ':after'
+      })
 
       return (
          <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
