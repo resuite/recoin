@@ -1,9 +1,9 @@
-import { Cell, useSetupEffect } from 'retend'
-import { getGlobalContext, Modes, matchContext } from 'retend/context'
+import { Cell, getActiveRenderer, useSetupEffect } from 'retend'
+import { VDOMRenderer } from 'retend-server/v-dom'
 
 export function useIsServer() {
-   const { window } = getGlobalContext()
-   const isServer = Cell.source(matchContext(window, Modes.VDom))
+   const renderer = getActiveRenderer()
+   const isServer = Cell.source(renderer instanceof VDOMRenderer)
 
    useSetupEffect(() => {
       isServer.set(false)

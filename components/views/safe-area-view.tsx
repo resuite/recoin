@@ -1,11 +1,9 @@
-import { appendChild, setAttributeFromProps } from 'retend'
-import { getGlobalContext } from 'retend/context'
+import { h } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import styles from './safe-area-view.module.css'
 
-type DivProps = JSX.IntrinsicElements['div']
-
-interface SafeAreaViewProps<ElementName extends keyof JSX.IntrinsicElements> extends DivProps {
+interface SafeAreaViewProps<ElementName extends keyof JSX.IntrinsicElements>
+   extends JSX.BaseContainerProps {
    elementName?: ElementName
    containerClass?: unknown
 }
@@ -13,14 +11,6 @@ interface SafeAreaViewProps<ElementName extends keyof JSX.IntrinsicElements> ext
 export function SafeAreaView<ElementName extends keyof JSX.IntrinsicElements>(
    props: SafeAreaViewProps<ElementName>
 ) {
-   const { window } = getGlobalContext()
-   const { containerClass, elementName = 'div', ..._rest } = props
-   const rest = _rest as unknown as Record<string, unknown>
-   const element = window.document.createElement(elementName)
-   for (const [key, value] of Object.entries(rest)) {
-      setAttributeFromProps(element, key, value)
-   }
-   appendChild(element, element.tagName.toLowerCase(), props.children)
-
-   return <div class={[styles.container, containerClass]}>{element}</div>
+   const { containerClass, elementName = 'div', ...rest } = props
+   return <div class={[styles.container, containerClass]}>{h(elementName, rest)}</div>
 }

@@ -16,7 +16,7 @@ export const Stage = (props: StageProps) => {
                {...rest}
                class={[
                   'pt-(--safe-area-inset-top)',
-                  'translate-0 h-full bg-canvas max-w-screen',
+                  'translate-0 h-full max-w-screen',
                   'duration-bit-slower transition-transform ease',
 
                   props.class

@@ -5,7 +5,7 @@ const Tabs = () => {
    return (
       <ThemeProvider scheme='light'>
          {() => (
-            <div class='py-1 w-full bg-canvas h-screen grid grid-rows-[auto_1fr] rounded-t-3xl'>
+            <div class='py-1 w-full bg-canvas-background h-screen grid grid-rows-[auto_1fr] rounded-t-3xl'>
                <h2 class='text-title px-1'>Tabs</h2>
                <TabSwitcherView
                   class='tab-container'

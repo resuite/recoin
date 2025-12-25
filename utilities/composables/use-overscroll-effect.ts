@@ -3,7 +3,7 @@ import { useScrollState } from '@/utilities/composables/use-scroll-state'
 import { watchTouchGesture } from '@/utilities/pointer-gesture-tracker'
 import { debouncedFlag, type ElementRef } from '../miscellaneous'
 
-const MAX_STRETCH_SCALE = 1.0375
+const MAX_STRETCH_SCALE = 1.04
 const STRETCH_Y = { scale: ['1', `1 ${MAX_STRETCH_SCALE}`] }
 const STRETCH_X = { scale: ['1', `${MAX_STRETCH_SCALE} 1`] }
 const STRETCH_Y_RELEASE = [

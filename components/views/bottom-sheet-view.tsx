@@ -360,7 +360,7 @@ export function QueryControlledBottomSheet(props: QueryControlledBottomSheetProp
          isOpen={isOpen}
          onClose={onClose}
          {...rest}
-         class={[rest.dynamicSizing ? 'bg-transparent' : 'bg-canvas', rest.class]}
+         class={[rest.dynamicSizing ? 'bg-transparent' : 'bg-canvas-background', rest.class]}
       >
          {children}
       </BottomSheet>

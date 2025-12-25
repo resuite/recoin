@@ -1,17 +1,17 @@
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver } from 'retend-utils/hooks'
-import { ScrollView } from '@/components/views/scroll-view'
+import { ScrollView, useScrollTimeline } from '@/components/views/scroll-view'
 import styles from './sidebar-provider-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']
 
 interface SidebarCtx {
    sidebarState: Cell<'open' | 'closed'>
-   toggleSidebar: (force?: boolean) => Promise<void>
+   toggleSidebar: (force?: boolean) => void
    toggleSidebarEnabled: (value?: boolean) => void
 }
-const SidebarScope = createScope<SidebarCtx>()
+const SidebarScope = createScope<SidebarCtx>('Sidebar')
 
 export interface SidebarProviderViewProps extends DivProps {
    /**
@@ -68,7 +68,6 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    const observer = useObserver()
    const allowReveal = Cell.source(true)
    const contentRef = Cell.source<HTMLElement | null>(null)
-   const contentEdgeRef = Cell.source<HTMLElement | null>(null)
    const sidebarRef = Cell.source<HTMLElement | null>(null)
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
    // const pullToRefreshContext = tryFn(() => usePullToRefreshContext())
@@ -80,58 +79,29 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       return allowReveal.get() === false
    })
 
-   let pendingClosePromiseResolver: (() => void) | null = null
-   const toggleSidebar = async (force?: boolean) => {
-      // Things start to go haywire around here. I need to know when **exactly**
-      // the sidebar closes, so it has to be structured as an awaitiable promise.
-      //
-      // But i dont really know when the sidebar closes because it is a scroll based gesture,
-      // and we are not doing any scroll timeout hacks. This is another place where scrollend
-      // would be perfect, but Safari sha. So instead we need to do some viewport observer magic
-      // on the right edge of the content. If it is fully in view, it means the sidebar is fully out,
-      // and we can do some hot potato-ing to orchestrate a useful (and hopefully consistent) promise.
-      const waitingTillClose = new Promise<void>((resolve) => {
-         pendingClosePromiseResolver = resolve
-         if (force !== undefined) {
-            sidebarState.set(force ? 'open' : 'closed')
-         } else {
-            sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open')
-         }
-         const isOpen = sidebarState.get() === 'open'
-         const target = isOpen ? sidebarRef.get() : contentRef.get()
-         target?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-      })
-      // In case (idk if this will happen) the sequence is missed, we wait some time before
-      // definitively closing, so we dont end up with hanging promises.
-      const timeout = new Promise<void>((resolve) => {
-         setTimeout(() => {
-            pendingClosePromiseResolver?.()
-            pendingClosePromiseResolver = null
-            resolve()
-         }, 400)
-      })
-      return await Promise.race([waitingTillClose, timeout])
+   const toggleSidebar = (force?: boolean) => {
+      if (force !== undefined) {
+         sidebarState.set(force ? 'open' : 'closed')
+      } else {
+         sidebarState.set(sidebarState.get() === 'open' ? 'closed' : 'open')
+      }
+      const isOpen = sidebarState.get() === 'open'
+      const provider = providerRef.get()
+      if (provider) {
+         const left = isOpen ? 0 : provider.scrollWidth
+         provider.scrollTo({ left, behavior: 'auto' })
+      }
    }
 
    const toggleSidebarEnabled = (value?: boolean) => {
       allowReveal.set(value ?? !allowReveal.get())
    }
 
-   // const interceptPointerDown = (event: PointerEvent) => {
-   //    event.stopPropagation()
-   //    const tracker = new PointerTracker()
-   //    tracker.start(event)
-
-   //    const checkForPullStart = (event: TrackedMoveEvent) => {
-   //       if (event.deltaY > NEGLIGIBLE_SCROLL_PX) {
-   //          const provider = providerRef.get()
-   //          tracker.removeEventListener('move', checkForPullStart)
-   //          provider?.dispatchEvent(new PullStartEvent(tracker))
-   //       }
-   //    }
-
-   //    tracker.addEventListener('move', checkForPullStart)
-   // }
+   const handleProviderClick = () => {
+      if (sidebarState.get() === 'open') {
+         sidebarState.set('closed')
+      }
+   }
 
    const sidebarScopeData: SidebarCtx = {
       sidebarState,
@@ -151,20 +121,6 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       }
    )
 
-   useIntersectionObserver(
-      contentEdgeRef,
-      ([entry]) => {
-         if (!entry.isIntersecting) {
-            return
-         }
-         pendingClosePromiseResolver?.()
-         pendingClosePromiseResolver = null
-      },
-      () => {
-         return { root: providerRef.peek(), threshold: 1 }
-      }
-   )
-
    sidebarState.listen((state) => {
       const isOpen = state === 'open'
       const isClosed = state === 'closed'
@@ -175,13 +131,30 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
          return
       }
       onSidebarStateChange?.(state)
-      const target = isOpen ? sidebarRef.get() : contentRef.get()
-      target?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
+      const provider = providerRef.peek()
+      if (provider) {
+         const left = isOpen ? 0 : provider.scrollWidth
+         provider.scrollTo({ left, behavior: 'auto' })
+      }
    })
 
    observer.onConnected(providerRef, (provider) => {
       provider.scrollTo({ left: provider.scrollWidth, behavior: 'instant' })
    })
+
+   const ContentContainer = () => {
+      const timeline = useScrollTimeline()
+      timeline.add({
+         target: contentRef,
+         keyframes: { scale: ['0.95', '1'] }
+      })
+
+      return (
+         <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
+            <Content />
+         </div>
+      )
+   }
 
    return (
       <SidebarScope.Provider value={sidebarScopeData}>
@@ -194,15 +167,13 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
                class={[styles.provider, rest.class]}
                showScrollBar={false}
                overscrollEffect={false}
+               onClick--self={handleProviderClick}
             >
                {() => (
                   <>
+                     <ContentContainer />
                      <div class={styles.sidebar} ref={sidebarRef}>
                         <Sidebar />
-                     </div>
-                     <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
-                        <Content />
-                        <div ref={contentEdgeRef} class={styles.contentEdge} />
                      </div>
                   </>
                )}

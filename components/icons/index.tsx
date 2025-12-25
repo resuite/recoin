@@ -85,7 +85,6 @@ export type IconName =
    | 'warning'
 
 import type { JSX } from 'retend/jsx-runtime'
-import { noHydrate } from 'retend-server/client'
 
 type SvgProps = JSX.IntrinsicElements['svg']
 
@@ -102,7 +101,7 @@ export async function DynamicIcon(props: AsyncIconProps) {
    return iconModule.default(rest) as JSX.Template
 }
 
-export const Icon = noHydrate(DynamicIcon)
+export const Icon = DynamicIcon
 
 export function AllIcons() {
    return (

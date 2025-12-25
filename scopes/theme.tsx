@@ -1,7 +1,7 @@
 import { Cell, createScope, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
-import { Teleport, type TeleportProps } from 'retend/teleport'
 import { useDerivedValue } from 'retend-utils/hooks'
+import { Teleport, type TeleportProps } from 'retend-web'
 
 const COLORS = {
    light: {
