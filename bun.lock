@@ -1265,7 +1265,7 @@
 
     "retend-utils": ["retend-utils@https://pkg.pr.new/resuite/retend/retend-utils@f11e157", { "peerDependencies": { "retend": "*", "retend-web": "*" } }],
 
-    "retend-web": ["retend-web@https://pkg.pr.new/resuite/retend/retend-webf11e157", { "dependencies": { "csstype": "^3.2.3" }, "peerDependencies": { "retend": "*" } }],
+    "retend-web": ["retend-web@https://pkg.pr.new/resuite/retend/retend-web@f11e157", { "dependencies": { "csstype": "^3.2.3" }, "peerDependencies": { "retend": "*" } }],
 
     "rfdc": ["rfdc@1.4.1", "", {}, "sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA=="],
 
