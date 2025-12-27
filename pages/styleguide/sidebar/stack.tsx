@@ -34,7 +34,7 @@ function FirstPage() {
                </Button>
                <Button type='button' onClick={toggleSecondPage}>
                   Next Page
-                  <Icon name='caret' direction='right' class='btn-icon' />
+                  <Icon name='caret-right' class='btn-icon' />
                </Button>
             </FloatingActionButtonTest>
          )}
@@ -85,12 +85,12 @@ function SecondPage() {
                         <p>Second page.</p>
                         <br />
                         <Button type='button' onClick={toggleSecondPage}>
-                           <Icon name='caret' direction='left' class='btn-icon' />
+                           <Icon name='caret-left' class='btn-icon' />
                            Go back to page 1
                         </Button>
                         <Button type='button' onClick={toggleThirdPage}>
                            Next Page
-                           <Icon name='caret' direction='right' class='btn-icon' />
+                           <Icon name='caret-right' class='btn-icon' />
                         </Button>
                      </div>
                      <VirtualKeyboardTriggers class='w-full text-big place-self-end'>
@@ -126,12 +126,12 @@ function ThirdPage() {
             <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                <div class='mb-2 text-large'>3</div>
                <Button type='button' onClick={toggleThirdPage}>
-                  <Icon name='caret' direction='left' class='btn-icon' />
+                  <Icon name='caret-left' class='btn-icon' />
                   Go back to page 2
                </Button>
                <Button type='button' onClick={toggleFourthPage}>
                   Next Page
-                  <Icon name='caret' direction='right' class='btn-icon' />
+                  <Icon name='caret-right' class='btn-icon' />
                </Button>
             </div>
          )}
@@ -152,7 +152,7 @@ function FourthPage() {
             <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                <div class='mb-2 text-large'>4</div>
                <Button type='button' onClick={toggleFourthPage}>
-                  <Icon name='caret' direction='left' class='btn-icon' />
+                  <Icon name='caret-left' class='btn-icon' />
                   Go back to page 3
                </Button>
             </div>

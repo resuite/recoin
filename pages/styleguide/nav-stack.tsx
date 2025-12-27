@@ -35,7 +35,7 @@ function NavStack() {
                            <div class='mb-2'>1</div>
                            <Button type='button' onClick={openPage2}>
                               Next Page
-                              <Icon name='caret' direction='right' class='btn-icon' />
+                              <Icon name='caret-right' class='btn-icon' />
                            </Button>
                         </div>
                      )}
@@ -45,12 +45,12 @@ function NavStack() {
                         <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                            <div class='mb-2'>2</div>
                            <Button type='button' onClick={closePage2}>
-                              <Icon name='caret' direction='left' class='btn-icon' />
+                              <Icon name='caret-left' class='btn-icon' />
                               Go back to page 1
                            </Button>
                            <Button type='button' onClick={openPage3}>
                               Next Page
-                              <Icon name='caret' direction='right' class='btn-icon' />
+                              <Icon name='caret-right' class='btn-icon' />
                            </Button>
                         </div>
                      )}
@@ -60,7 +60,7 @@ function NavStack() {
                         <div class='w-full h-full grid place-items-center gap-0.5 place-content-center p-0.5'>
                            <div class='mb-2'>3</div>
                            <Button type='button' onClick={closePage3}>
-                              <Icon name='caret' direction='left' class='btn-icon' />
+                              <Icon name='caret-left' class='btn-icon' />
                               Go back to page 2
                            </Button>
                         </div>

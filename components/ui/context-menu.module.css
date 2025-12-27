@@ -221,7 +221,6 @@ body:has(.contextMenu) {
    align-self: center;
    width: 0.85rem;
    height: 0.85rem;
-   rotate: -90deg;
 
    path {
       stroke-width: 3px;

@@ -1,7 +1,7 @@
 import { Cell, For, If, type SourceCell, useObserver, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
-import Caret from '@/components/icons/svg/caret'
+import CaretDown from '@/components/icons/svg/caret-down'
 import Checkmark from '@/components/icons/svg/checkmark'
 import {
    ContextMenu,
@@ -43,9 +43,6 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
    const initialSelect = selectedOption.get()
    let searchBuffer = ''
    let bufferTimeout: NodeJS.Timeout | null = null
-   const caretDirection = Cell.derived(() => {
-      return dropdownIsOpen.get() ? 'top' : 'bottom'
-   })
 
    const renderDropdownOption = (option: DropdownOption<T>): ContextMenuItemProps => {
       const isSelected = Cell.derived(() => {
@@ -161,7 +158,7 @@ export function Dropdown<T extends PropertyKey>(props: DropdownProps<T>) {
                )
             })}
          </select>
-         <Caret direction={caretDirection} class={styles.caret} />
+         <CaretDown class={[styles.caret, { [styles.caretOpen]: dropdownIsOpen }]} />
 
          <ContextMenu
             useTriggerAsAnchor

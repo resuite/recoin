@@ -564,7 +564,7 @@ function ContextMenuSubMenu(props: ContextMenuSubMenuProps) {
          >
             <ContextMenuOptionalIcon icon={icon} />
             <div class={styles.text}>{typeof label === 'string' ? label : label()}</div>
-            <DynamicIcon name='caret' class={styles.caret} />
+            <DynamicIcon name='caret-right' class={styles.caret} />
          </Button>
          <ContextMenu
             ref={contextMenu}

@@ -18,7 +18,10 @@ export type IconName =
    | 'cake'
    | 'calendar'
    | 'car'
-   | 'caret'
+   | 'caret-down'
+   | 'caret-left'
+   | 'caret-right'
+   | 'caret-up'
    | 'cart'
    | 'chart'
    | 'chat-bubble'
@@ -124,7 +127,10 @@ export function AllIcons() {
          <Icon name='cake' />
          <Icon name='calendar' />
          <Icon name='car' />
-         <Icon name='caret' />
+         <Icon name='caret-down' />
+         <Icon name='caret-left' />
+         <Icon name='caret-right' />
+         <Icon name='caret-up' />
          <Icon name='cart' />
          <Icon name='chart' />
          <Icon name='chat-bubble' />
