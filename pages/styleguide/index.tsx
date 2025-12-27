@@ -125,6 +125,7 @@ function OtherPages() {
          <Link href='/styleguide/dropdown'>Go to dropdown </Link>
          <Link href='/styleguide/keypad'>Go to keypad </Link>
          <Link href='/styleguide/coin'>Go to coin page</Link>
+         <Link href='/styleguide/mask-icon'>Go to mask icon page</Link>
       </div>
    )
 }

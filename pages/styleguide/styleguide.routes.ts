@@ -66,6 +66,10 @@ export default defineRoute({
       {
          path: 'coin',
          component: lazy(() => import('@/pages/styleguide/coin'))
+      },
+      {
+         path: 'mask-icon',
+         component: lazy(() => import('@/pages/styleguide/mask-icon'))
       }
    ]
 })
