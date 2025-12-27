@@ -15,9 +15,10 @@
       top: 0;
       left: 0;
       display: block;
-      width: 2dvw;
-      height: 2dvh;
-      scale: 120;
+      width: 1dvw;
+      height: 1dvh;
+      scale: 100;
+      transform-origin: top left;
       grid-area: 1 / 1;
       background-color: #00000080;
       content: '';

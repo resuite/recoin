@@ -172,11 +172,11 @@ class SvgToMaskRenderer implements Renderer<SvgToMaskRendererTypes> {
 // MaskIcon Component
 // ============================================================================
 
-interface MaskIconProps extends JSX.BaseContainerProps {
+interface MaskIconProps<TProps extends IconProps = IconProps> extends JSX.BaseContainerProps {
    /** The icon component to render as a mask */
-   src: (props: IconProps) => JSX.Template
+   src: (props: TProps) => JSX.Template
    /** Props to pass to the icon component */
-   iconProps?: IconProps
+   iconProps?: TProps
 }
 
 const renderer = new SvgToMaskRenderer()
@@ -195,12 +195,15 @@ function getStylesheet(): CSSStyleSheet {
    return stylesheet
 }
 
-function getMaskClass(src: (props: IconProps) => JSX.Template, iconProps: IconProps): string {
+function getMaskClass<TProps extends IconProps>(
+   src: (props: TProps) => JSX.Template,
+   iconProps: TProps
+): string {
    const key = JSON.stringify(iconProps)
-   let cache = classCache.get(src)
+   let cache = classCache.get(src as (props: IconProps) => JSX.Template)
    if (!cache) {
       cache = new Map()
-      classCache.set(src, cache)
+      classCache.set(src as (props: IconProps) => JSX.Template, cache)
    }
 
    let cls = cache.get(key)
@@ -221,8 +224,8 @@ function getMaskClass(src: (props: IconProps) => JSX.Template, iconProps: IconPr
    return cls
 }
 
-export function MaskIcon(props: MaskIconProps) {
-   const { src, style, iconProps = {}, class: existing, ...rest } = props
+export function MaskIcon<TProps extends IconProps = IconProps>(props: MaskIconProps<TProps>) {
+   const { src, style, iconProps = {} as TProps, class: existing, ...rest } = props
    const cls = getMaskClass(src, iconProps)
 
    return h('div', {
