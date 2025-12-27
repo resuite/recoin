@@ -10,25 +10,59 @@ import type { JSX } from 'retend/jsx-runtime'
 import { Flags } from '@/constants/flags'
 import styles from './virtual-keyboard-aware-view.module.css'
 
-interface KeyboardAwarenessCtx {
+interface InternalKeyboardAwarenessCtx {
    dispatchVisibilityChange: (newHeight: number) => void
    currentVisualHeight: Cell<number>
    redirectingFocus: SourceCell<boolean>
 }
 
-const KeyboardAwarenessScope = createScope<KeyboardAwarenessCtx>('KeyboardAwareness')
+export interface KeyboardAwarenessCtx {
+   approximateHeight: Cell<number>
+   isVisible: Cell<boolean>
+}
 
+const InternalKeyboardAwarenessScope =
+   createScope<InternalKeyboardAwarenessCtx>('KeyboardAwareness')
+
+const ExternalKeyboardAwarenessScope = createScope<KeyboardAwarenessCtx>(
+   'ExternalKeyboardAwareness'
+)
 type DivProps = JSX.IntrinsicElements['div']
 export interface VirtualKeyboardAwareViewProps extends DivProps {
+   /**
+    * Callback invoked when the virtual keyboard visibility changes.
+    * Receives a {@link KeyboardVisibilityEvent} with visibility state and approximate height.
+    */
    onKeyboardVisibilityChange?: JSX.ValueOrCell<(event: KeyboardVisibilityEvent) => void>
+   /** Optional ref to the container element. */
    ref?: SourceCell<HTMLElement | null>
+   /** Render function for the view's children. */
    children: () => JSX.Template
 }
 
+/**
+ * A container component that tracks virtual keyboard visibility and provides
+ * context for child components to respond to keyboard state changes.
+ *
+ * @example
+ * ```tsx
+ * <VirtualKeyboardAwareView
+ *    onKeyboardVisibilityChange={(e) => console.log(e.isVisible, e.approximateHeight)}
+ * >
+ *    {() => (
+ *       <VirtualKeyboardTriggers>
+ *          <input type="text" />
+ *       </VirtualKeyboardTriggers>
+ *    )}
+ * </VirtualKeyboardAwareView>
+ * ```
+ */
 export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
    const { children: Content, ref: containerRef = Cell.source(null), onFocusOut, ...rest } = props
 
    const currentVisualHeight = Cell.source(0)
+   const approximateHeight = Cell.source(0)
+   const isVisible = Cell.source(false)
    const redirectingFocus = Cell.source(false)
    let oldHeight = 0
 
@@ -91,12 +125,14 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       oldHeight = currentVisualHeight.get()
       currentVisualHeight.set(nextHeight)
       const activeElement = document.activeElement
-      let approximateHeight = Math.max(innerHeight, oldHeight) - nextHeight
-      const visible = container.contains(activeElement) && approximateHeight > 0
+      let approxHeight = Math.max(innerHeight, oldHeight) - nextHeight
+      const visible = container.contains(activeElement) && approxHeight > 0
       if (!visible) {
-         approximateHeight = 0
+         approxHeight = 0
       }
-      const event = new KeyboardVisibilityEvent(visible, approximateHeight, activeElement)
+      isVisible.set(visible)
+      approximateHeight.set(approxHeight)
+      const event = new KeyboardVisibilityEvent(visible, approxHeight, activeElement)
       container.dispatchEvent(event)
    }
 
@@ -129,37 +165,67 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
       }
    })
 
-   const scopeCtx: KeyboardAwarenessCtx = {
+   const scopeCtx: InternalKeyboardAwarenessCtx = {
       dispatchVisibilityChange,
       currentVisualHeight,
       redirectingFocus
    }
 
+   const externalScopeCtx: KeyboardAwarenessCtx = {
+      approximateHeight,
+      isVisible
+   }
+
    return (
-      <KeyboardAwarenessScope.Provider value={scopeCtx}>
+      <ExternalKeyboardAwarenessScope.Provider value={externalScopeCtx}>
          {() => (
-            <div
-               {...rest}
-               ref={containerRef}
-               onFocusOut={handleFocusOut}
-               class={[styles.keyboardAwareView, rest.class]}
-            >
-               <Content />
-            </div>
+            <InternalKeyboardAwarenessScope.Provider value={scopeCtx}>
+               {() => (
+                  <div
+                     {...rest}
+                     ref={containerRef}
+                     onFocusOut={handleFocusOut}
+                     class={[styles.keyboardAwareView, rest.class]}
+                  >
+                     <Content />
+                  </div>
+               )}
+            </InternalKeyboardAwarenessScope.Provider>
          )}
-      </KeyboardAwarenessScope.Provider>
+      </ExternalKeyboardAwarenessScope.Provider>
    )
 }
 
+/**
+ * Props for the {@link VirtualKeyboardTriggers} component.
+ */
 export interface VirtualKeyboardTriggerProps extends DivProps {
+   /** Optional ref to the trigger container element. */
    ref?: SourceCell<HTMLDivElement | null>
 }
 
+/**
+ * A wrapper component for input elements that should trigger virtual keyboard
+ * visibility tracking.
+ *
+ * Must be used as a descendant of {@link VirtualKeyboardAwareView}. This component
+ * handles focus management to prevent Safari's default scrolling behavior when
+ * the virtual keyboard appears.
+ *
+ * @example
+ * ```tsx
+ * <VirtualKeyboardTriggers>
+ *    <input type="text" placeholder="Type here..." />
+ *    <textarea placeholder="Or here..." />
+ * </VirtualKeyboardTriggers>
+ * ```
+ */
 export function VirtualKeyboardTriggers(props: VirtualKeyboardTriggerProps) {
    const observer = useObserver()
    const { ref = Cell.source(null), ...rest } = props
-   const { dispatchVisibilityChange, currentVisualHeight, redirectingFocus } =
-      useScopeContext(KeyboardAwarenessScope)
+   const { dispatchVisibilityChange, currentVisualHeight, redirectingFocus } = useScopeContext(
+      InternalKeyboardAwarenessScope
+   )
 
    const handleFocus = (event: Event) => {
       if (redirectingFocus.get()) {
@@ -221,4 +287,30 @@ export class KeyboardVisibilityEvent extends Event {
          composed: false
       })
    }
+}
+
+/**
+ * Hook to access the virtual keyboard awareness context.
+ *
+ * Must be used within a {@link VirtualKeyboardAwareView} component.
+ * Returns reactive cells for tracking keyboard visibility and height.
+ *
+ * @returns The {@link KeyboardAwarenessCtx} containing `isVisible` and `approximateHeight` cells.
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *    const { isVisible, approximateHeight } = useVirtualKeyboardAwareness()
+ *    const paddingBottom = Cell.derived(() => `${approximateHeight.get()}px`)
+ *
+ *    return (
+ *       <div style={{ paddingBottom }}>
+ *          {If(isVisible, () => 'Keyboard is visible')}
+ *       </div>
+ *    )
+ * }
+ * ```
+ */
+export function useVirtualKeyboardAwareness() {
+   return useScopeContext(ExternalKeyboardAwarenessScope)
 }

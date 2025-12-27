@@ -1,5 +1,7 @@
 // Contains global types that are not yet bundled with typescript.
 
+import type { KeyboardVisibilityEvent } from '@/components/views/virtual-keyboard-aware-view'
+
 declare global {
    // Scroll timeline API
    type ScrollTimelineAxis = 'inline' | 'block'
@@ -24,5 +26,9 @@ declare global {
 
    interface Navigator {
       readonly virtualKeyboard: VirtualKeyboard
+   }
+
+   interface HTMLElementEventMap {
+      keyboardvisibilitychange: KeyboardVisibilityEvent
    }
 }
