@@ -38,11 +38,11 @@ function updateFlags() {
    const name = browser.getOS().name
    if (name) {
       OS.Name = name
-      document.body.toggleAttribute(`data-${name.toLowerCase()}`, true)
+      document.body.toggleAttribute(`data-${name.toLowerCase().replace(/\s+/g, '-')}`, true)
    }
    const runtime = browser.getBrowser().name
    if (runtime) {
-      document.body.toggleAttribute(`data-${runtime.toLowerCase()}`, true)
+      document.body.toggleAttribute(`data-${runtime.toLowerCase().replace(/\s+/g, '-')}`, true)
    }
 }
 
