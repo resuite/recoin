@@ -6,9 +6,11 @@
    height: 100%;
    overscroll-behavior: auto;
    scroll-behavior: smooth;
-   animation-range:
-      0px 1px,
-      calc(100% - 1px) 100%;
+   &[data-overscroll] {
+      animation-range:
+         0px 1px,
+         calc(100% - 1px) 100%;
+   }
 
    &[data-show-scrollbar] {
       scrollbar-color: initial;
@@ -23,16 +25,22 @@
       overflow-x: auto;
       overflow-y: hidden;
       overflow-inline: auto;
-      animation-name: scrolled-to-left-detector, scrolled-to-right-detector;
-      animation-timeline: scroll(self inline);
+
+      &[data-overscroll] {
+         animation-name: scrolled-to-left-detector, scrolled-to-right-detector;
+         animation-timeline: scroll(self inline);
+      }
    }
 
    &[data-scroll-axis='block'] {
       overflow-y: auto;
       overflow-x: hidden;
       overflow-block: auto;
-      animation-name: scrolled-to-top-detector, scrolled-to-bottom-detector;
-      animation-timeline: scroll(self block);
+
+      &[data-overscroll] {
+         animation-name: scrolled-to-top-detector, scrolled-to-bottom-detector;
+         animation-timeline: scroll(self block);
+      }
 
       @media (pointer: coarse) {
          body[data-android] & {

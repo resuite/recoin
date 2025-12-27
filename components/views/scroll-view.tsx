@@ -46,6 +46,7 @@ export function ScrollView(props: ScrollViewProps) {
             <div
                {...rest}
                ref={containerRef}
+               data-overscroll={overscrollEffect}
                data-scroll-axis={axis}
                data-show-scrollbar={showScrollBar}
                class={[rest.class, classes.container]}
