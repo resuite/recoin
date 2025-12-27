@@ -51,10 +51,10 @@
       "google-auth-library": "^10.3.0",
       "hono": "^4.7.11",
       "jose": "^6.1.0",
-      "retend": "https://pkg.pr.new/resuite/retend@f11e157",
-      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@f11e157",
-      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@f11e157",
-      "retend-web": "https://pkg.pr.new/resuite/retend/retend-web@f11e157",
+      "retend": "https://pkg.pr.new/resuite/retend@f56ea3b",
+      "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@f56ea3b",
+      "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@f56ea3b",
+      "retend-web": "https://pkg.pr.new/resuite/retend/retend-web@f56ea3b",
       "zod": "^3.25.46"
    },
    "lint-staged": {

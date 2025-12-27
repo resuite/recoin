@@ -61,6 +61,7 @@ body {
    --spacing: 25px;
    --half-spacing: calc(var(--spacing) / 2);
    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 
    --color-base: rgb(39, 39, 39);
    --color-light-yellow: rgb(250, 255, 237);
@@ -391,7 +392,7 @@ body {
    @apply before:origin-top-left before:bg-linear-to-b before:opacity-0 before:pointer-events-none;
 
    &::before {
-      background-image: linear-gradient(to bottom, var(--color-canvas-background) 60%, transparent);
+      background-image: linear-gradient(to bottom, var(--color-canvas-background) 40%, transparent);
    }
 }
 
