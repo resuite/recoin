@@ -29,7 +29,12 @@ interface BottomSheetContext {
    close(): void
 }
 
+interface BottomSheetGlobalContext {
+   isOpen: Cell<boolean>
+}
+
 const BottomSheetScope = createScope<BottomSheetContext>()
+export const BottomSheetGlobalScope = createScope<BottomSheetGlobalContext>()
 
 /**
  * A bottom-aligned sheet component that can be opened and closed.
@@ -77,6 +82,7 @@ export function BottomSheet(props: BottomSheetProps) {
       ...rest
    } = props
    const observer = useObserver()
+   const globalScope = useBottomSheetGlobalContext()
    const isOpen = useDerivedValue(isOpenProp)
    const dialogOpen = Cell.source(isOpen.get())
    const dialogRef = Cell.source<HTMLDialogElement | null>(null)
@@ -108,6 +114,7 @@ export function BottomSheet(props: BottomSheetProps) {
    }
    async function startCloseSequence() {
       dialogRef.peek()?.classList.add(styles.closing)
+      ;(globalScope.isOpen as SourceCell<boolean>).set(false)
       await animationsSettled(contentRef)
    }
 
@@ -193,6 +200,9 @@ export function BottomSheet(props: BottomSheetProps) {
    })
 
    isOpen.listen(handleIsOpenChange)
+   isOpen.runAndListen((bottomSheetIsOpen) => {
+      ;(globalScope.isOpen as SourceCell<boolean>).set(bottomSheetIsOpen)
+   })
 
    const ctx: BottomSheetContext = {
       contentRef,
@@ -369,4 +379,8 @@ export function QueryControlledBottomSheet(props: QueryControlledBottomSheetProp
 
 export function useBottomSheetContext() {
    return useScopeContext(BottomSheetScope)
+}
+
+export function useBottomSheetGlobalContext() {
+   return useScopeContext(BottomSheetGlobalScope)
 }

@@ -1,6 +1,7 @@
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver } from 'retend-utils/hooks'
+import { useBottomSheetGlobalContext } from '@/components/views/bottom-sheet-view'
 import { ScrollView, useScrollTimeline } from '@/components/views/scroll-view'
 import styles from './sidebar-provider-view.module.css'
 
@@ -70,6 +71,7 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
    const contentRef = Cell.source<HTMLElement | null>(null)
    const sidebarRef = Cell.source<HTMLElement | null>(null)
    const sidebarState = Cell.source<'open' | 'closed'>('closed')
+
    // const pullToRefreshContext = tryFn(() => usePullToRefreshContext())
 
    const sidebarOpened = Cell.derived(() => {
@@ -144,6 +146,11 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
 
    const ContentContainer = () => {
       const timeline = useScrollTimeline()
+      const { isOpen: bottomSheetIsOpen } = useBottomSheetGlobalContext()
+      const transform = Cell.derived(() => {
+         return bottomSheetIsOpen.get() ? 'scale(0.95)' : 'none'
+      })
+
       timeline.add({
          target: contentRef,
          keyframes: { scale: ['0.95', '1'] }
@@ -155,7 +162,12 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       })
 
       return (
-         <div ref={contentRef} data-opened={sidebarOpened} class={styles.content}>
+         <div
+            ref={contentRef}
+            data-opened={sidebarOpened}
+            class={styles.content}
+            style={{ transform }}
+         >
             <Content />
          </div>
       )

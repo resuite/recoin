@@ -2,6 +2,7 @@ import { Cell, If } from 'retend'
 import { Outlet } from 'retend/router'
 import Loader from '@/components/icons/svg/loader'
 import { ToastProvider } from '@/components/ui/toast'
+import { BottomSheetGlobalScope } from '@/components/views/bottom-sheet-view'
 import { FullScreenTransitionView } from '@/components/views/full-screen-transition-view'
 import { SidebarProviderView } from '@/components/views/sidebar-provider-view'
 import { VerticalPanView } from '@/components/views/vertical-pan-view'
@@ -72,16 +73,23 @@ const AppRoot = () => {
 }
 
 const App = () => {
+   const bottomSheetCtx = {
+      isOpen: Cell.source(false)
+   }
    return (
       <ThemeProvider scheme='dark'>
          {() => (
-            <ToastProvider>
+            <BottomSheetGlobalScope.Provider value={bottomSheetCtx}>
                {() => (
-                  <GoogleIdentityProvider>
-                     {() => <AuthenticationProvider>{AppRoot}</AuthenticationProvider>}
-                  </GoogleIdentityProvider>
+                  <ToastProvider>
+                     {() => (
+                        <GoogleIdentityProvider>
+                           {() => <AuthenticationProvider>{AppRoot}</AuthenticationProvider>}
+                        </GoogleIdentityProvider>
+                     )}
+                  </ToastProvider>
                )}
-            </ToastProvider>
+            </BottomSheetGlobalScope.Provider>
          )}
       </ThemeProvider>
    )

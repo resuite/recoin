@@ -50,6 +50,7 @@
    right: 0;
    grid-area: 1 / 2;
    scroll-snap-align: start;
+   transition: transform var(--speed-device) var(--timing);
 
    &[data-opened] {
       pointer-events: none;
