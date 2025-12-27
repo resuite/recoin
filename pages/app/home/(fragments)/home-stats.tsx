@@ -1,3 +1,4 @@
+import { MaskIcon } from '@/components/icons/icon-mask'
 import Arrows from '@/components/icons/svg/arrows'
 import { FitText } from '@/components/ui/fit-text'
 import { FormattedMoney } from '@/components/ui/formatted-money'
@@ -29,7 +30,7 @@ export const HomeStats = () => {
                ...underlineClasses
             ]}
          >
-            <Arrows class='h-0.75 justify-self-end' />
+            <MaskIcon src={Arrows} class='h-0.75 justify-self-end bg-current' />
             <h4 class='text-sm justify-self-start'>Income</h4>
             <FitText
                scalingFactor={1.5}
@@ -47,7 +48,11 @@ export const HomeStats = () => {
                ...underlineClasses
             ]}
          >
-            <Arrows class='h-0.75 justify-self-end' direction='top-right' />
+            <MaskIcon
+               src={Arrows}
+               iconProps={{ direction: 'top-right' }}
+               class='h-0.75 justify-self-end bg-current'
+            />
             <h4 class='text-sm justify-self-start'>Expense</h4>
             <FitText
                scalingFactor={1.5}

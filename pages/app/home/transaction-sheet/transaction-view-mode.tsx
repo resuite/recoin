@@ -1,4 +1,5 @@
 import { Cell } from 'retend'
+import { MaskIcon } from '@/components/icons/icon-mask'
 import Bin from '@/components/icons/svg/bin'
 import Pencil from '@/components/icons/svg/pencil'
 import { Button } from '@/components/ui/button'
@@ -69,11 +70,11 @@ const TransactionViewMode = (props: TransactionViewModeProps) => {
          </div>
          <div class='w-full gap-1 grid grid-cols-2'>
             <Button class='w-full btn-outline' onClick={goToDeleteMode}>
-               <Bin class='btn-icon' />
+               <MaskIcon src={Bin} class='btn-icon bg-current' />
                Delete
             </Button>
             <Button class='w-full border-canvas-text' onClick={goToEditMode}>
-               <Pencil class='btn-icon' />
+               <MaskIcon src={Pencil} class='btn-icon bg-current' />
                Edit
             </Button>
          </div>

@@ -1,7 +1,7 @@
 import { Cell, For } from 'retend'
 import { useRouter } from 'retend/router'
 import type { IconName } from '@/components/icons'
-import { Icon } from '@/components/icons'
+import { AsyncMaskIcon } from '@/components/icons/icon-mask'
 import { Button } from '@/components/ui/button'
 import { useScrollTimeline } from '@/components/views/scroll-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
@@ -82,7 +82,7 @@ function SidebarLink(props: SidebarLinkProps) {
                { '[:is(*)]:text-canvas-text': isActive }
             ]}
          >
-            <Icon name={link.icon} class='link-icon' />
+            <AsyncMaskIcon name={link.icon} class='link-icon bg-current' />
             {link.name}
          </div>
       </Button>

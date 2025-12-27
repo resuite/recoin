@@ -1,6 +1,7 @@
 import { If } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import type { ListTemplateProps } from 'retend-utils/components'
+import { MaskIcon } from '@/components/icons/icon-mask'
 import Arrows from '@/components/icons/svg/arrows'
 import { Button } from '@/components/ui/button'
 import { FitText } from '@/components/ui/fit-text'
@@ -59,9 +60,10 @@ export function TransactionItem(props: TransactionItemProps) {
          onClick={openDrawer}
       >
          <CategoryIcon icon={category.icon} class='h-2 w-2 row-span-2 mr-0.5 self-center' />
-         <Arrows
-            class='h-(--text-normal) w-(--text-normal) mr-[calc(var(--spacing)*0.15)] mb-[15%] self-end'
-            direction={arrowDirection}
+         <MaskIcon
+            src={Arrows}
+            iconProps={{ direction: arrowDirection }}
+            class='h-(--text-normal) w-(--text-normal) mr-[calc(var(--spacing)*0.15)] mb-[15%] self-end bg-current'
          />
          <div
             class='text-normal text-left self-end overflow-ellipsis max-w-full overflow-hidden'
