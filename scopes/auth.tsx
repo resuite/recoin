@@ -7,7 +7,6 @@ import { completeOnboarding, getMe } from '@/api/modules/application/client'
 import { logOutUser, verifyGoogleSignIn } from '@/api/modules/authentication/client'
 import { LocalStorageKeys } from '@/constants/local-storage-keys'
 import { useErrorNotifier } from '@/utilities/composables/use-error-notifier'
-import { useIsServer } from '@/utilities/composables/use-is-server'
 
 type AuthState = 'idle' | 'pending' | 'ready'
 
@@ -28,7 +27,6 @@ interface AuthenticationProviderProps {
 
 export function AuthenticationProvider(props: AuthenticationProviderProps) {
    const { children } = props
-   const isServer = useIsServer()
    const errorNotifier = useErrorNotifier()
    const cachedUser = useLocalStorage<UserData | null>(LocalStorageKeys.UserData, null)
 
@@ -36,11 +34,12 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    const completeSetup = Cell.async(completeOnboarding)
    const logOut = Cell.async(logOutUser)
    const sessionCheck = Cell.async(getMe)
+   const isInitRun = Cell.source(true)
 
    const authState = Cell.derived(() => {
       if (
          cachedUser.get() ||
-         isServer.get() ||
+         isInitRun.get() ||
          sessionCheck.pending.get() ||
          logInWithGoogle.pending.get()
       ) {
@@ -86,6 +85,7 @@ export function AuthenticationProvider(props: AuthenticationProviderProps) {
    }
 
    useSetupEffect(() => {
+      isInitRun.set(false)
       sessionCheck.run()
    })
 

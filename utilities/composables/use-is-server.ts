@@ -1,9 +1,7 @@
-import { Cell, getActiveRenderer, useSetupEffect } from 'retend'
-import { VDOMRenderer } from 'retend-server/v-dom'
+import { Cell, useSetupEffect } from 'retend'
 
 export function useIsServer() {
-   const renderer = getActiveRenderer()
-   const isServer = Cell.source(renderer instanceof VDOMRenderer)
+   const isServer = Cell.source(import.meta.env.SSR)
 
    useSetupEffect(() => {
       isServer.set(false)
