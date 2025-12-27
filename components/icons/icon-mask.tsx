@@ -255,7 +255,7 @@ export async function AsyncMaskIcon(props: AsyncMaskIconProps) {
 
    return h('div', {
       ...rest,
-      class: existing ? `${existing} ${cls}` : cls,
+      class: [cls, existing],
       style
    })
 }
