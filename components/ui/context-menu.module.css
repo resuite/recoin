@@ -1,7 +1,3 @@
-body:has(.contextMenu) {
-   overflow: hidden;
-}
-
 .contextMenu {
    position: relative;
    overflow: hidden;

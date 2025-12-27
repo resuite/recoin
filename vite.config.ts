@@ -12,6 +12,9 @@ const routerModulePath = './router.client.ts'
 const pages = ['/', '/app', '/waiting-list', '/styleguide']
 
 export default defineConfig({
+   build: {
+      sourcemap: true
+   },
    resolve: {
       alias: { '@': path.resolve(__dirname, './') }
    },
