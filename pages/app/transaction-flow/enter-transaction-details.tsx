@@ -2,7 +2,8 @@ import { Cell, If, useScopeContext } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
+import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
 import Checkmark from '@/components/icons/svg/checkmark'
 import { DateInput } from '@/components/ui/date-input'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
@@ -33,7 +34,7 @@ const EnterTransactionDetails = () => {
    const form = useScopeContext(TransactionDetailsFormScope)
    const type = query.get(QueryKeys.TransactionFlow.Type).get() as TransactionType
    const { add: completeTransactionFlow } = useRouteQueryControl(QueryKeys.TransactionFlow.Success)
-   const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
+   const Arrow = type === 'income' ? ArrowBottomLeft : ArrowTopRight
    const scrollViewRef = Cell.source<HTMLElement | null>(null)
    const chosenCategoryId = query.get(QueryKeys.TransactionFlow.Category).get()
    const selectedCategory = useCategory(chosenCategoryId)
@@ -72,7 +73,7 @@ const EnterTransactionDetails = () => {
                <BackButton class='absolute top-1 mt-(--safe-area-inset-top) left-1' />
                <div>
                   <h2 class='border-b-2 pb-0.25 w-full flex items-center justify-center'>
-                     <Arrows class='h-1.25 self-center' direction={arrowDirection} />
+                     <Arrow class='h-1.25 self-center' />
                      <span class='text-header'>
                         <TransactionTypeName type={type} />
                      </span>

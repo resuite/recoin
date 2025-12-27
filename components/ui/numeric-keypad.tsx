@@ -1,7 +1,7 @@
 import { Cell, For, type SourceCell, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
 import { Button } from '@/components/ui/button'
 import { VibrationPatterns } from '@/constants/vibration'
 import { createPointerOrClickHandler, vibrate } from '@/utilities/miscellaneous'
@@ -99,7 +99,7 @@ export function NumericKeypad(props: NumericKeypadProps) {
             onClick={handleBackspace}
             disabled={backspaceDisabled}
          >
-            <Arrows class={styles.backspaceIcon} />
+            <ArrowBottomLeft class={styles.backspaceIcon} />
          </Button>
       </div>
    )

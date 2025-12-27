@@ -1,7 +1,7 @@
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouter } from 'retend/router'
 import { useDerivedValue } from 'retend-utils/hooks'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
 
 type ButtonProps = JSX.IntrinsicElements['button']
 interface BackButtonProps extends ButtonProps {
@@ -29,7 +29,7 @@ export function BackButton(props: BackButtonProps) {
          class={['button-bare text-big gap-0.25', className]}
          onClick={handleClick}
       >
-         <Arrows class='h-1 rotate-45' />
+         <ArrowBottomLeft class='h-1 rotate-45' />
          Back
       </button>
    )

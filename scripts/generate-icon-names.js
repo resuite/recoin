@@ -35,7 +35,6 @@ async function generateIconNames() {
       // AsyncIconProps interface definition (extracted from icon.tsx)
       const iconPropsContent = `
 import type { JSX } from "retend/jsx-runtime";
-import { noHydrate } from "retend-server/client";
 
 type SvgProps = JSX.IntrinsicElements["svg"];
 
@@ -43,7 +42,6 @@ export interface IconProps extends SvgProps {}
 
 export interface AsyncIconProps extends SvgProps {
    name: IconName;
-   direction?: unknown;
 }`
 
       // Icon component definition (extracted from icon.tsx)
@@ -54,7 +52,7 @@ export async function DynamicIcon(props: AsyncIconProps) {
    return iconModule.default(rest) as JSX.Template;
 }
 
-export const Icon = noHydrate(DynamicIcon);`
+export const Icon = DynamicIcon;`
 
       // AllIcons component definition
       const allIconsComponentContent = `

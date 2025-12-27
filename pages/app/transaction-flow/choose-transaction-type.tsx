@@ -1,5 +1,6 @@
 import { useRouteQuery } from 'retend/router'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
+import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
 import { Button } from '@/components/ui/button'
 import { QueryKeys } from '@/constants/query-keys'
 
@@ -22,11 +23,11 @@ const ChooseTransactionType = () => {
       >
          <h1>Add a new transaction.</h1>
          <Button class='btn-link' onClick={goToExpense}>
-            <Arrows class='link-icon-large' direction='top-right' />
+            <ArrowTopRight class='link-icon-large' />
             Expense
          </Button>
          <Button class='btn-link' onClick={goToIncome}>
-            <Arrows class='link-icon-large' direction='bottom-left' />
+            <ArrowBottomLeft class='link-icon-large' />
             Income
          </Button>
       </div>

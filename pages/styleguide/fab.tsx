@@ -1,6 +1,6 @@
 import { Cell } from 'retend'
 import Add from '@/components/icons/svg/add'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowTopLeft from '@/components/icons/svg/arrow-top-left'
 import { Button } from '@/components/ui/button'
 import { FloatingActionButton } from '@/components/ui/floating-action-button'
 import { ExpandingView } from '@/components/views/expanding-view'
@@ -60,7 +60,7 @@ const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }
                }
             ]}
          >
-            <Arrows class='-rotate-135' />
+            <ArrowTopLeft />
          </FloatingActionButton>
          <FloatingActionButton
             onClick={toggleOpenState}

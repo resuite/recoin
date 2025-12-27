@@ -2,7 +2,9 @@ import { If } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import type { ListTemplateProps } from 'retend-utils/components'
 import { MaskIcon } from '@/components/icons/icon-mask'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
+import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
+
 import { Button } from '@/components/ui/button'
 import { FitText } from '@/components/ui/fit-text'
 import { FormattedMoney } from '@/components/ui/formatted-money'
@@ -28,7 +30,8 @@ export function TransactionItem(props: TransactionItemProps) {
    const category = useCategory(item.categoryId).get()
    const query = useRouteQuery()
    const { currency } = useAuthContext()
-   const arrowDirection = item.type === 'expense' ? 'top-right' : 'bottom-left'
+   const Arrow = item.type === 'expense' ? ArrowTopRight : ArrowBottomLeft
+
    const sign = item.type === 'expense' ? '-' : '+'
    const isToday = dateFormatter.format(item.date) === dateFormatter.format(new Date())
 
@@ -61,8 +64,7 @@ export function TransactionItem(props: TransactionItemProps) {
       >
          <CategoryIcon icon={category.icon} class='h-2 w-2 row-span-2 mr-0.5 self-center' />
          <MaskIcon
-            src={Arrows}
-            iconProps={{ direction: arrowDirection }}
+            src={Arrow}
             class='h-(--text-normal) w-(--text-normal) mr-[calc(var(--spacing)*0.15)] mb-[15%] self-end bg-current'
          />
          <div

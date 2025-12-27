@@ -3,7 +3,8 @@ import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
 import Add from '@/components/icons/svg/add'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
+import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
 import { Button } from '@/components/ui/button'
 import { type Tab, TabSwitcherView } from '@/components/views/tab-switcher-view'
 import { QueryKeys } from '@/constants/query-keys'
@@ -63,7 +64,7 @@ const Categories = () => {
       {
          heading: () => (
             <div class='w-full flex items-center justify-center gap-x-0.25'>
-               <Arrows class='h-0.75' direction='bottom-left' />
+               <ArrowBottomLeft class='h-0.75' />
                Income
             </div>
          ),
@@ -72,7 +73,7 @@ const Categories = () => {
       {
          heading: () => (
             <div class='w-full flex items-center justify-center gap-x-0.25'>
-               <Arrows class='h-0.75' direction='top-right' />
+               <ArrowTopRight class='h-0.75' />
                Expense
             </div>
          ),

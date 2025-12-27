@@ -1,7 +1,7 @@
 import { Cell, If, useScopeContext } from 'retend'
 import { useRouter } from 'retend/router'
 import { addEmailToWaitingList } from '@/api/modules/waiting-list/client'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowTopLeft from '@/components/icons/svg/arrow-top-left'
 import Loader from '@/components/icons/svg/loader'
 import { Coins } from '@/components/illustrations/coins'
 import { Button } from '@/components/ui/button'
@@ -106,7 +106,7 @@ function ButtonLoadingStateContent() {
 function ButtonIdleStateContent() {
    return (
       <>
-         <Arrows class='w-0.75 h-0.75 -rotate-135' />
+         <ArrowTopLeft class='w-0.75 h-0.75' />
          Join the waiting list
       </>
    )

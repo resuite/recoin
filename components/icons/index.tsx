@@ -5,7 +5,10 @@ export type IconName =
    | 'add'
    | 'align-arrow-left'
    | 'alphabet'
-   | 'arrows'
+   | 'arrow-bottom-left'
+   | 'arrow-bottom-right'
+   | 'arrow-top-left'
+   | 'arrow-top-right'
    | 'atom'
    | 'battery'
    | 'bell'
@@ -92,7 +95,6 @@ export interface IconProps extends SvgProps {}
 
 export interface AsyncIconProps extends SvgProps {
    name: IconName
-   direction?: unknown
 }
 
 export async function DynamicIcon(props: AsyncIconProps) {
@@ -109,7 +111,10 @@ export function AllIcons() {
          <Icon name='add' />
          <Icon name='align-arrow-left' />
          <Icon name='alphabet' />
-         <Icon name='arrows' />
+         <Icon name='arrow-bottom-left' />
+         <Icon name='arrow-bottom-right' />
+         <Icon name='arrow-top-left' />
+         <Icon name='arrow-top-right' />
          <Icon name='atom' />
          <Icon name='battery' />
          <Icon name='bell' />

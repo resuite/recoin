@@ -2,7 +2,8 @@ import { type Cell, For } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
 import { Icon } from '@/components/icons'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
+import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
 import { Button } from '@/components/ui/button'
 import { ScrollView } from '@/components/views/scroll-view'
 import { QueryKeys } from '@/constants/query-keys'
@@ -38,11 +39,11 @@ interface CategoryListingProps {
 
 const CategoriesListing = (props: CategoryListingProps) => {
    const { type, categories } = props
-   const arrowDirection = type === 'income' ? 'bottom-left' : 'top-right'
+   const Arrow = type === 'income' ? ArrowBottomLeft : ArrowTopRight
    return (
       <>
          <h2 class='border-b-2 w-full grid gap-x-0.5 gap-y-0.25 grid-rows-[1fr_.5fr] grid-cols-[auto_1fr]'>
-            <Arrows class='h-1.5 row-span-2 self-center' direction={arrowDirection} />
+            <Arrow class='h-1.5 row-span-2 self-center' />
             <span class='text-title'>
                <TransactionTypeName type={type} />.
             </span>

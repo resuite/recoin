@@ -1,6 +1,7 @@
 import { Cell } from 'retend'
 import { UniqueTransition } from 'retend-utils/components'
-import Arrows from '@/components/icons/svg/arrows'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
+import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
 import { FitText } from '@/components/ui/fit-text'
 import { FormattedMoney } from '@/components/ui/formatted-money'
 import type { Category } from '@/database/models/category'
@@ -16,7 +17,7 @@ interface HeaderProps {
 export const TransactionSheetHeader = (props: HeaderProps) => {
    const { category, transaction } = props
    const { currency } = useAuthContext()
-   const arrowDirection = transaction.get().type === 'expense' ? 'top-right' : 'bottom-left'
+   const Arrow = transaction.get().type === 'expense' ? ArrowTopRight : ArrowBottomLeft
    const sign = transaction.get().type === 'expense' ? '-' : '+'
    const amount = Cell.derived(() => {
       return transaction.get().amount
@@ -33,7 +34,7 @@ export const TransactionSheetHeader = (props: HeaderProps) => {
             <>
                <CategoryIcon icon={category.icon} class='h-4 w-4 border-3 mt-1' />
                <div class='flex justify-center items-center w-full gap-x-0.25 translate-y-[15%]'>
-                  <Arrows direction={arrowDirection} class='h-1 w-1 justify-self-end' />
+                  <Arrow class='h-1 w-1 justify-self-end' />
                   <span class='justify-self-start'>{category.name}</span>
                </div>
                <FitText
