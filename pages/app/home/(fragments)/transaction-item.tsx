@@ -51,7 +51,8 @@ export function TransactionItem(props: TransactionItemProps) {
             containIntrinsicHeight: TRANSACTION_ITEM_HEIGHT,
             width: 'calc(100dvw - var(--spacing) * 2)',
             containIntrinsicWidth: 'calc(100dvw - var(--spacing) * 2)',
-            height: TRANSACTION_ITEM_HEIGHT
+            height: TRANSACTION_ITEM_HEIGHT,
+            scale: '1' // idk man. i go where the performance tab leads me.
          }}
          class={[
             'grid grid-cols-[auto_auto_1fr_auto] grid-rows-2 px-1 w-full whitespace-nowrap',

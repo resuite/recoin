@@ -8,7 +8,6 @@ import {
 } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { Flags } from '@/constants/flags'
-import styles from './virtual-keyboard-aware-view.module.css'
 
 interface InternalKeyboardAwarenessCtx {
    dispatchVisibilityChange: (newHeight: number) => void
@@ -181,12 +180,7 @@ export function VirtualKeyboardAwareView(props: VirtualKeyboardAwareViewProps) {
          {() => (
             <InternalKeyboardAwarenessScope.Provider value={scopeCtx}>
                {() => (
-                  <div
-                     {...rest}
-                     ref={containerRef}
-                     onFocusOut={handleFocusOut}
-                     class={[styles.keyboardAwareView, rest.class]}
-                  >
+                  <div {...rest} ref={containerRef} onFocusOut={handleFocusOut}>
                      <Content />
                   </div>
                )}

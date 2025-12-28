@@ -1,5 +1,0 @@
-:is(body, html):has(.keyboardAwareView) {
-   overflow: hidden;
-   scroll-behavior: instant;
-   height: 100lvh;
-}

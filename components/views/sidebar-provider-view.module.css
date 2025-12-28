@@ -50,6 +50,7 @@
    right: 0;
    grid-area: 1 / 2;
    scroll-snap-align: start;
+   will-change: transform; /* Do not remove: without this the bottom sheet scale transform triggers a repaint of all the content. */
    transition: transform var(--speed-device) var(--timing);
 
    &[data-opened] {

@@ -297,9 +297,11 @@ body {
 
 @utility button-click-effect {
    @apply relative;
-   @apply before:pointer-events-none before:block before:absolute before:top-0 before:left-0 before:h-full before:w-full;
-   @apply before:opacity-0 before:bg-canvas-text before:transition-[opacity,scale] data-clicked:before:duration-default;
-   @apply data-clicked:before:opacity-15 before:duration-bit-slower;
+
+   &[data-clicked] {
+      @apply before:pointer-events-none before:block before:absolute before:top-0 before:left-0 before:h-full before:w-full;
+      @apply before:bg-canvas-text before:transition-[opacity,scale] before:duration-default before:opacity-15 duration-bit-slower;
+   }
 }
 
 @utility btn-danger {
