@@ -3,15 +3,15 @@ import { useScrollState } from '@/utilities/composables/use-scroll-state'
 import { watchTouchGesture } from '@/utilities/pointer-gesture-tracker'
 import { debouncedFlag, type ElementRef } from '../miscellaneous'
 
-const MAX_STRETCH_SCALE = 1.04
+const MAX_STRETCH_SCALE = 1.045
 const STRETCH_Y = { scale: ['1', `1 ${MAX_STRETCH_SCALE}`] }
 const STRETCH_X = { scale: ['1', `${MAX_STRETCH_SCALE} 1`] }
 const STRETCH_Y_RELEASE = [
    { scale: '1' },
-   { scale: `1 ${MAX_STRETCH_SCALE - 0.02}`, offset: 0.1 },
+   { scale: `1 ${MAX_STRETCH_SCALE - 0.02}`, offset: 0.15 },
    { scale: '1' }
 ]
-const OVERSCROLL_EFFECT_DURATION = 300
+const OVERSCROLL_EFFECT_DURATION = 370
 const OVERSCROLL_OPTIONS: KeyframeAnimationOptions = {
    composite: 'replace',
    duration: OVERSCROLL_EFFECT_DURATION,
