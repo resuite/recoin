@@ -19,6 +19,7 @@ import {
 } from '@/components/views/virtual-keyboard-aware-view'
 import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
+import { VibrationPatterns } from '@/constants/vibration'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
 import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
 import { useAuthContext } from '@/scopes/auth'
@@ -26,7 +27,7 @@ import { TransactionDetailsFormScope } from '@/scopes/forms'
 import { ThemeAwareTeleport } from '@/scopes/theme'
 import { useCategory } from '@/utilities/composables/use-categories'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { scrollIntoView } from '@/utilities/miscellaneous'
+import { createPointerOrClickHandler, scrollIntoView, vibrate } from '@/utilities/miscellaneous'
 
 const EnterTransactionDetails = () => {
    const query = useRouteQuery()
@@ -55,13 +56,14 @@ const EnterTransactionDetails = () => {
       }
    }
 
-   const handleSubmit = (event?: Event) => {
+   const handleSubmit = createPointerOrClickHandler((event?: Event) => {
       if (event?.currentTarget instanceof HTMLButtonElement) {
          event.currentTarget.style.scale = '0'
+         vibrate(VibrationPatterns.ButtonPress)
       }
       form.submit()
       completeTransactionFlow()
-   }
+   })
 
    return (
       <VirtualKeyboardAwareView
@@ -110,6 +112,7 @@ const EnterTransactionDetails = () => {
                               <FloatingActionButton
                                  outlined
                                  fixed
+                                 onPointerDown={handleSubmit}
                                  onClick={handleSubmit}
                                  class='bg-transparent dark-scheme translate-x-[60%]'
                               >
