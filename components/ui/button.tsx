@@ -1,6 +1,7 @@
 import { Cell, useObserver } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
+import { PointerTracker } from '@/utilities/pointer-gesture-tracker'
 import styles from './button.module.css'
 
 type IntrinsicButtonProps = JSX.IntrinsicElements['button']
@@ -34,8 +35,16 @@ function addClickTracker(ref: Cell<HTMLElement | null>, shouldTrack: Cell<boolea
    // I have noticed a weird delay when it comes to the click event
    // on touch screens. Not sure of the cause, but tracking pointer state
    // just before the click event gives a more immediate feel.
-   function handlePointerDown(this: HTMLElement) {
+   function handlePointerDown(this: HTMLElement, event: PointerEvent) {
       setClickedState(this)
+      const tracker = new PointerTracker()
+      tracker.start(event)
+      requestAnimationFrame(() => {
+         if (tracker.hasMoved) {
+            clearTimeout(timeout)
+            this?.removeAttribute('data-clicked')
+         }
+      })
    }
 
    function setClickedState(button: HTMLElement | null) {
