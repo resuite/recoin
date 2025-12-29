@@ -70,6 +70,7 @@ body {
    --color-canvas: var(--canvas);
    --color-canvas-background: var(--canvas-background);
    --color-canvas-text: var(--canvas-text);
+   --color-canvas-text-lighter: var(--canvas-text-lighter);
    --color-canvas-shadow: var(--canvas-shadow);
 
    --text-smallest: min(0.5rem, 1.979dvh);

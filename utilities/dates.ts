@@ -21,6 +21,11 @@ const timeFormatter = new Intl.DateTimeFormat('en-US', {
    hour12: true
 })
 
+export const dateFormatter = new Intl.DateTimeFormat('en-US', {
+   month: 'long',
+   day: 'numeric'
+})
+
 export function formatTime(date: Date) {
    return timeFormatter.format(date).toLowerCase()
 }
@@ -63,26 +68,29 @@ export function formatRelativeTime(date: Date) {
    return `${day} ${month}, ${year}, ${time}`
 }
 
-export function getRelativeDateLabel(target: Date): string {
+export function getRelativeDateLabel(target: Date): [string, boolean] {
    const today = startOfToday()
    const diffDays = differenceInDays(today, target)
 
    if (diffDays === 0) {
-      return 'Today'
+      return ['Today', true]
    }
    if (diffDays === 1) {
-      return 'Yesterday'
+      return ['Yesterday', true]
    }
    if (diffDays > 0 && diffDays < 14) {
       if (diffDays < 7) {
-         return target.toLocaleDateString('en-US', { weekday: 'long' })
+         return [target.toLocaleDateString('en-US', { weekday: 'long' }), true]
       } else {
-         return `Last ${target.toLocaleDateString('en-US', { weekday: 'long' })}`
+         return [`Last ${target.toLocaleDateString('en-US', { weekday: 'long' })}`, true]
       }
    }
    if (today.getFullYear() === target.getFullYear()) {
-      return target.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+      return [target.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }), false]
    }
 
-   return target.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+   return [
+      target.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      false
+   ]
 }

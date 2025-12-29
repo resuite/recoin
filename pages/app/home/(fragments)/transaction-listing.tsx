@@ -8,11 +8,12 @@ import {
    type TransactionDateGroup,
    useGroupedTransactions
 } from '@/utilities/composables/use-transactions'
-import { getRelativeDateLabel } from '@/utilities/dates'
+import { dateFormatter, getRelativeDateLabel } from '@/utilities/dates'
 
 function TransactionGroup(group: TransactionDateGroup) {
    const { dateStoredValue, transactions } = group
    const date = new Date(dateStoredValue)
+   const [relativeDate, isRelative] = getRelativeDateLabel(date)
 
    return (
       <>
@@ -22,7 +23,10 @@ function TransactionGroup(group: TransactionDateGroup) {
             class='sticky-header stuck:sticky-bg stuck:not-data-topmost:invisible'
          >
             <h5 class='text-xl px-1 first-of-type:pt-0.5 pt-1 py-0.5 isolate not-stuck:bg-canvas-background'>
-               {getRelativeDateLabel(date)}
+               {relativeDate}{' '}
+               {If(isRelative, () => (
+                  <span class='text-canvas-text-lighter'>{`(${dateFormatter.format(date)})`}</span>
+               ))}
             </h5>
          </Sticky>
          <FluidList
