@@ -20,9 +20,6 @@ import { useApplicationSetup } from '@/utilities/composables/use-application-set
 
 const AppRoot = () => {
    const { ready, hasFinishedOnboarding } = useApplicationSetup()
-   const transition = Cell.derived(() => {
-      return hasFinishedOnboarding.get() ? 'slide-up' : 'fade-in'
-   })
 
    const StoreLoadingFallback = () => {
       return If(hasFinishedOnboarding, {
@@ -41,7 +38,7 @@ const AppRoot = () => {
       <FullScreenTransitionView
          class='grid-lines-with-fade min-h-screen select-none'
          when={ready}
-         transition={transition}
+         transition='fade-in'
          from={StartPage}
          to={() => (
             <VerticalPanView>
