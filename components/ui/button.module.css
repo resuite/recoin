@@ -1,7 +1,27 @@
 .button {
+   position: relative;
+   overflow: hidden;
+
+   & > * {
+      /* Ensures that the click event target is always the button itself. */
+      pointer-events: none;
+   }
+
    &:disabled {
       pointer-events: none;
       opacity: 0.5;
       visibility: visible;
    }
+}
+
+.ripple {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 1px;
+   height: 1px;
+   border-radius: 50%;
+   background-color: currentColor;
+   pointer-events: none;
+   will-change: transform;
 }
