@@ -23,5 +23,6 @@
    border-radius: 50%;
    background-color: currentColor;
    pointer-events: none;
-   will-change: transform;
+   will-change: transform, opacity;
+   opacity: 0;
 }

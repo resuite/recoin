@@ -28,12 +28,6 @@ interface ExpandingViewProps extends DivProps {
     */
    expandSize?: JSX.ValueOrCell<string>
    /**
-    * The origin point for the expansion animation. This value sets the CSS
-    * variable `--expand-origin` and should be compatible with the CSS `inset`
-    * property (e.g., " 20px 50px").
-    */
-   expandOrigin?: JSX.ValueOrCell<string>
-   /**
     * A Cell to hold the color of the expanding view.
     * This value sets the CSS variable controlling the expanded color.
     * It should be compatible with CSS color values (e.g., "red", "#ff0000").
@@ -70,7 +64,7 @@ interface ExpandingViewProps extends DivProps {
  * ```
  */
 export function ExpandingView(props: ExpandingViewProps) {
-   const { isOpen: isOpenProp, expandOrigin, expandSize, expandColor, children, ...rest } = props
+   const { isOpen: isOpenProp, expandSize, expandColor, children, ...rest } = props
    const isOpen = useDerivedValue(isOpenProp)
    const contentLoaded = Cell.source(isOpen.get())
    const theme = useThemeContext()
@@ -79,7 +73,6 @@ export function ExpandingView(props: ExpandingViewProps) {
    })
    const clipPathRef = Cell.source<HTMLElement | null>(null)
    const style = {
-      '--expand-origin': expandOrigin,
       '--expand-size': expandSize,
       '--expand-color': expandColor
    }

@@ -1,4 +1,3 @@
-import { Cell } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
 import Add from '@/components/icons/svg/add'
@@ -67,10 +66,6 @@ export function AddNewTransactionButton() {
       }
    })
 
-   const shouldDisplaceButton = Cell.derived(() => {
-      return details.values.amount.get() > 0 && !isOnSuccessPage.get()
-   })
-
    const toggleState = createPointerOrClickHandler(() => {
       vibrate(VibrationPatterns.ButtonPress)
       if (transactionFlowIsOpen.get()) {
@@ -86,24 +81,21 @@ export function AddNewTransactionButton() {
       <ThemeAwareTeleport to={ROOT_APP_OUTLET_ID}>
          <FloatingActionButton
             class={[
-               { 'rotate-135 scale-90 dark-scheme': transactionFlowIsOpen },
-               { '-translate-x-[60%]': shouldDisplaceButton },
+               { 'rotate-90 scale-90 dark-scheme': transactionFlowIsOpen },
                { 'scale-0': isOnSuccessPage }
             ]}
-            inline='center'
+            inline='right'
             block='bottom'
             onClick={toggleState}
             onPointerDown={toggleState}
          >
-            <Add />
+            <div class={{ 'rotate-45': transactionFlowIsOpen }}>
+               <Add />
+            </div>
          </FloatingActionButton>
          <ThemeProvider scheme='dark'>
             {() => (
-               <ExpandingView
-                  isOpen={transactionFlowIsOpen}
-                  expandOrigin='calc(100dvh - var(--fab-size) - var(--spacing) * 3) auto auto  calc(50% - var(--fab-size) / 2)'
-                  expandColor='var(--color-base)'
-               >
+               <ExpandingView isOpen={transactionFlowIsOpen} expandColor='var(--color-base)'>
                   {() => (
                      <TransactionDetailsFormScope.Provider value={details}>
                         {TransactionFlow}

@@ -7,7 +7,7 @@
    height: var(--fab-size);
    padding: 0;
    border: 2px solid var(--color-canvas);
-   border-radius: 50%;
+   border-radius: 30%;
    color: var(--color-canvas-background);
    background-color: var(--color-canvas-text);
    transition:
@@ -16,6 +16,10 @@
       opacity var(--speed-slow),
       rotate var(--speed-much-slower) var(--timing-bounce-slower);
    place-items: center;
+
+   & > * {
+      pointer-events: none;
+   }
 
    &:active {
       scale: 1;
@@ -44,13 +48,13 @@
    }
 
    &.inline.right {
-      right: calc(var(--spacing) * 2);
+      right: var(--spacing);
       left: unset;
    }
 
    &.inline.left {
       right: unset;
-      left: calc(var(--spacing) * 2);
+      left: var(--spacing);
    }
 
    &.inline.center:not(.left, .right) {
@@ -58,9 +62,9 @@
       left: unset;
    }
 
-   & > svg {
-      width: calc(var(--spacing) * 1.75);
-      height: calc(var(--spacing) * 1.75);
+   & svg {
+      width: calc(var(--spacing) * 1.25);
+      height: calc(var(--spacing) * 1.25);
    }
 
    &[data-outlined] {

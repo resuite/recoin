@@ -17,9 +17,13 @@ export const HomeStats = () => {
 
    return (
       <div class='px-1 grid grid-cols-2 gap-x-1'>
-         <div class={['relative text-center pt-0.75 py-0.25 col-span-2', ...underlineClasses]}>
+         <div class={['relative text-start pt-0.75 py-0.25 col-span-2', ...underlineClasses]}>
             <h4 class='text-lg'>Current Balance</h4>
-            <FitText scalingFactor={1.7} maxFontSize='var(--text-logo)' class='h-3.5'>
+            <FitText
+               scalingFactor={1.7}
+               maxFontSize='var(--text-logo)'
+               class='h-3.5 justify-items-start!'
+            >
                <FormattedMoney currency={currency}>{balance}</FormattedMoney>
             </FitText>
          </div>
@@ -27,7 +31,7 @@ export const HomeStats = () => {
          {/* Income */}
          <div
             class={[
-               'relative pt-0.75 py-0.25 grid grid-cols-[auto_auto] gap-x-0.25',
+               'relative pt-0.75 py-0.25 grid grid-cols-[auto_1fr] gap-x-0.25',
                ...underlineClasses
             ]}
          >
@@ -36,7 +40,7 @@ export const HomeStats = () => {
             <FitText
                scalingFactor={1.5}
                maxFontSize='var(--text-4xl)'
-               class='col-span-2 min-h-[6.98dvh]'
+               class='col-span-2 min-h-[6.98dvh] justify-items-start!'
             >
                <FormattedMoney currency={currency}>{totalIncome}</FormattedMoney>
             </FitText>
@@ -45,7 +49,7 @@ export const HomeStats = () => {
          {/* Expense */}
          <div
             class={[
-               'relative pt-0.75 py-0.25 grid grid-rows-[auto_1fr] grid-cols-[auto_auto] gap-x-0.25',
+               'relative pt-0.75 py-0.25 grid grid-rows-[auto_1fr] grid-cols-[auto_1fr] gap-x-0.25',
                ...underlineClasses
             ]}
          >
@@ -54,7 +58,7 @@ export const HomeStats = () => {
             <FitText
                scalingFactor={1.5}
                maxFontSize='var(--text-4xl)'
-               class='col-span-2 min-h-[6.98dvh]'
+               class='col-span-2 min-h-[6.98dvh] justify-items-start!'
             >
                <FormattedMoney currency={currency}>{totalExpense}</FormattedMoney>
             </FitText>

@@ -111,7 +111,7 @@ body {
    --animate-fade-y: fade-y var(--speed-default) ease-in-out backwards;
 
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
-   --fab-size: max(12dvh, 50px);
+   --fab-size: max(9dvh, 40px);
    --recent-transactions-header-height: calc((var(--spacing) * 1.5) + var(--text-lg));
 
    --epxanding-view-layer: 93;

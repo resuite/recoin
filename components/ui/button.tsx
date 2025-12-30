@@ -35,6 +35,7 @@ export function Button(props: ButtonProps) {
    if (isAndroid) {
       let currentAnimation: Animation | null = null
       let rippleState: { x: number; y: number; diameter: number } | null = null
+      let activeTracker: PointerTracker | null = null
 
       const handlePointerDown = (event: PointerEvent) => {
          const ripple = spanRef.get()
@@ -52,6 +53,12 @@ export function Button(props: ButtonProps) {
 
          rippleState = { x, y, diameter }
          currentAnimation?.cancel()
+
+         // Track pointer movement to cancel ripple on scroll
+         const tracker = new PointerTracker()
+         tracker.start(event)
+         activeTracker = tracker
+
          currentAnimation = ripple.animate(
             [
                { transform: `translate(${x}px, ${y}px) scale(${diameter * 0.4})`, opacity: 0 },
@@ -66,7 +73,17 @@ export function Button(props: ButtonProps) {
          )
       }
 
+      const handlePointerMove = () => {
+         // Cancel ripple if user has scrolled
+         if (activeTracker?.hasMoved) {
+            currentAnimation?.cancel()
+            rippleState = null
+            activeTracker = null
+         }
+      }
+
       const handlePointerUp = async () => {
+         activeTracker = null
          const ripple = spanRef.get()
          const expandAnimation = currentAnimation
          const state = rippleState
@@ -90,6 +107,7 @@ export function Button(props: ButtonProps) {
 
       observer.onConnected(ref, (button) => {
          button.addEventListener('pointerdown', handlePointerDown, { passive: true })
+         button.addEventListener('pointermove', handlePointerMove, { passive: true })
          button.addEventListener('pointerup', handlePointerUp, { passive: true })
          button.addEventListener('pointerleave', handlePointerUp, { passive: true })
          button.addEventListener('pointercancel', handlePointerUp, { passive: true })
