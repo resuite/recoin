@@ -53,7 +53,7 @@
    justify-self: end;
    isolation: isolate;
    margin-right: var(--spacing);
-   margin-bottom: calc(var(--spacing) * 3);
+   margin-bottom: calc(var(--spacing) * 2);
 
    .container[data-open] > & {
       animation-name: expanding;

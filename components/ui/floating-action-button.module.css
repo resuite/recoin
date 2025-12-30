@@ -35,11 +35,11 @@
    }
 
    &.block.top {
-      top: calc(var(--spacing) * 3);
+      top: calc(var(--spacing) * 2);
    }
 
    &.block.bottom {
-      top: calc(100dvh - var(--fab-size) - calc(var(--spacing) * 3));
+      top: calc(100dvh - var(--fab-size) - calc(var(--spacing) * 2));
    }
 
    &.block.center:not(.top, .bottom) {
