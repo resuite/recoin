@@ -9,6 +9,9 @@
    background-color: transparent;
    grid-template-rows: 1fr;
    grid-template-columns: 1fr;
+   contain: strict;
+   contain-intrinsic-width: 100dvw;
+   contain-intrinsic-height: 100dvh;
 
    &::before {
       position: fixed;
@@ -27,9 +30,15 @@
       transition: opacity var(--speed-device) var(--timing);
    }
 
-   &.closing {
+   &:not([open]) {
       pointer-events: none;
 
+      &::before {
+         display: none;
+      }
+   }
+
+   &.closing {
       &::before {
          opacity: 0;
       }

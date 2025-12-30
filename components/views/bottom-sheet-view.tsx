@@ -116,6 +116,7 @@ export function BottomSheet(props: BottomSheetProps) {
       dialogRef.peek()?.classList.add(styles.closing)
       ;(globalScope.isOpen as SourceCell<boolean>).set(false)
       await animationsSettled(contentRef)
+      dialogRef.peek()?.classList.remove(styles.closing)
    }
 
    async function handleClickOutside() {
@@ -216,15 +217,15 @@ export function BottomSheet(props: BottomSheetProps) {
       <BottomSheetScope.Provider value={ctx}>
          {() => (
             <ThemeAwareTeleport to='body'>
-               {If(dialogOpen, () => (
-                  <dialog
-                     ref={dialogRef}
-                     class={styles.dialog}
-                     onClick--self={handleClickOutside}
-                     data-dynamic-sizing={dynamicSizing}
-                     onClose={onClose}
-                     style={{ '--sheet-content-height': sheetContentHeightStr }}
-                  >
+               <dialog
+                  ref={dialogRef}
+                  class={styles.dialog}
+                  onClick--self={handleClickOutside}
+                  data-dynamic-sizing={dynamicSizing}
+                  onClose={onClose}
+                  style={{ '--sheet-content-height': sheetContentHeightStr }}
+               >
+                  {If(dialogOpen, () => (
                      <div
                         {...rest}
                         ref={contentRef}
@@ -238,8 +239,8 @@ export function BottomSheet(props: BottomSheetProps) {
                         ))}
                         <Content />
                      </div>
-                  </dialog>
-               ))}
+                  ))}
+               </dialog>
             </ThemeAwareTeleport>
          )}
       </BottomSheetScope.Provider>
