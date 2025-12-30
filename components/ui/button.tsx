@@ -33,6 +33,9 @@ export function Button(props: ButtonProps) {
    }
 
    if (isAndroid) {
+      let currentAnimation: Animation | null = null
+      let rippleState: { x: number; y: number; diameter: number } | null = null
+
       const handlePointerDown = (event: PointerEvent) => {
          const ripple = spanRef.get()
          const button = ref.get()
@@ -47,17 +50,49 @@ export function Button(props: ButtonProps) {
          const maxDistY = Math.max(y, rect.height - y)
          const diameter = Math.sqrt(maxDistX ** 2 + maxDistY ** 2) * 2
 
-         ripple.animate(
+         rippleState = { x, y, diameter }
+         currentAnimation?.cancel()
+         currentAnimation = ripple.animate(
             [
-               { transform: `translate(${x}px, ${y}px) scale(0)`, opacity: 0.3 },
+               { transform: `translate(${x}px, ${y}px) scale(${diameter * 0.4})`, opacity: 0 },
+               {
+                  transform: `translate(${x}px, ${y}px) scale(${diameter * 0.6})`,
+                  opacity: 0.16,
+                  offset: 0.15
+               },
+               { transform: `translate(${x}px, ${y}px) scale(${diameter})`, opacity: 0.16 }
+            ],
+            { duration: 300, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'forwards' }
+         )
+      }
+
+      const handlePointerUp = async () => {
+         const ripple = spanRef.get()
+         const expandAnimation = currentAnimation
+         const state = rippleState
+         if (!ripple || !state) {
+            return
+         }
+
+         rippleState = null
+         if (expandAnimation) {
+            await expandAnimation.finished
+         }
+         const { x, y, diameter } = state
+         currentAnimation = ripple.animate(
+            [
+               { transform: `translate(${x}px, ${y}px) scale(${diameter})`, opacity: 0.16 },
                { transform: `translate(${x}px, ${y}px) scale(${diameter})`, opacity: 0 }
             ],
-            { duration: 400, easing: 'ease-out' }
+            { duration: 300, easing: 'ease-out', fill: 'forwards' }
          )
       }
 
       observer.onConnected(ref, (button) => {
          button.addEventListener('pointerdown', handlePointerDown, { passive: true })
+         button.addEventListener('pointerup', handlePointerUp, { passive: true })
+         button.addEventListener('pointerleave', handlePointerUp, { passive: true })
+         button.addEventListener('pointercancel', handlePointerUp, { passive: true })
       })
    }
 
