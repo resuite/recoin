@@ -82,7 +82,6 @@ const FloatingActionButtonTest = (props?: { children?: unknown; class?: string }
             {() => (
                <ExpandingView
                   expandColor='var(--color-base)'
-                  expandOrigin='auto auto calc(var(--spacing) * 3) calc(50% - var(--fab-size) / 2)'
                   class='dark-scheme h-screen w-screen grid place-items-center place-content-center gap-1 [grid-area:1/1]'
                   isOpen={isOpen}
                >
