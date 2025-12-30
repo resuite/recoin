@@ -31,7 +31,7 @@ export const HomeStats = () => {
                ...underlineClasses
             ]}
          >
-            <MaskIcon src={ArrowBottomLeft} class='h-0.75 justify-self-end bg-current' />
+            <MaskIcon src={ArrowBottomLeft} class='h-0.75 w-0.75 justify-self-end bg-current' />
             <h4 class='text-sm justify-self-start'>Income</h4>
             <FitText
                scalingFactor={1.5}
@@ -49,7 +49,7 @@ export const HomeStats = () => {
                ...underlineClasses
             ]}
          >
-            <MaskIcon src={ArrowTopRight} class='h-0.75 justify-self-end bg-current' />
+            <MaskIcon src={ArrowTopRight} class='h-0.75 w-0.75 justify-self-end bg-current' />
             <h4 class='text-sm justify-self-start'>Expense</h4>
             <FitText
                scalingFactor={1.5}

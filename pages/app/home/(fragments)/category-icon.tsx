@@ -12,7 +12,7 @@ export const CategoryIcon = (props: CategoryIconProps) => {
 
    return (
       <div {...rest} class={['rounded-full border-2 grid place-items-center', rest.class]}>
-         <AsyncMaskIcon name={icon} class='h-[50%] w-[50%] bg-current' />
+         <AsyncMaskIcon name={icon} class='h-[60%] w-[60%] bg-current' />
       </div>
    )
 }

@@ -45,6 +45,19 @@
 }
 
 .sheetContentContainer {
+   &::before {
+      --width: 45px;
+      position: absolute;
+      top: calc(var(--spacing) / 1.5);
+      left: calc(50% - var(--width) / 2);
+      display: block;
+      width: var(--width);
+      height: 7px;
+      border-radius: 3dvh;
+      background-color: #00000045;
+      content: '';
+   }
+
    .dialog:not([data-dynamic-sizing]) > & {
       height: var(--sheet-content-height);
       box-shadow: 0 -2px 8px 0 #00000015;
@@ -52,19 +65,6 @@
 
       body[data-android] & {
          border-radius: 0;
-      }
-
-      &::before {
-         --width: 45px;
-         position: absolute;
-         top: calc(var(--spacing) / 2.5);
-         left: calc(50% - var(--width) / 2);
-         display: block;
-         width: var(--width);
-         height: 7px;
-         border-radius: 3dvh;
-         background-color: #00000045;
-         content: '';
       }
    }
 
