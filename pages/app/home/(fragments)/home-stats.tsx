@@ -19,7 +19,7 @@ export const HomeStats = () => {
       <div class='px-1 grid grid-cols-2 gap-x-1'>
          <div class={['relative text-center pt-0.75 py-0.25 col-span-2', ...underlineClasses]}>
             <h4 class='text-lg'>Current Balance</h4>
-            <FitText scalingFactor={1.7} maxFontSize='var(--text-logo)' class='h-3.5 font-medium'>
+            <FitText scalingFactor={1.7} maxFontSize='var(--text-logo)' class='h-3.5'>
                <FormattedMoney currency={currency}>{balance}</FormattedMoney>
             </FitText>
          </div>
@@ -36,7 +36,7 @@ export const HomeStats = () => {
             <FitText
                scalingFactor={1.5}
                maxFontSize='var(--text-4xl)'
-               class='col-span-2 min-h-[6.98dvh] font-medium'
+               class='col-span-2 min-h-[6.98dvh]'
             >
                <FormattedMoney currency={currency}>{totalIncome}</FormattedMoney>
             </FitText>
@@ -54,7 +54,7 @@ export const HomeStats = () => {
             <FitText
                scalingFactor={1.5}
                maxFontSize='var(--text-4xl)'
-               class='col-span-2 min-h-[6.98dvh] font-medium'
+               class='col-span-2 min-h-[6.98dvh]'
             >
                <FormattedMoney currency={currency}>{totalExpense}</FormattedMoney>
             </FitText>
