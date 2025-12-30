@@ -112,7 +112,7 @@ export const RecentTransactionsHeader = () => {
                   ref={spanRef}
                   class={[
                      'will-change-[translate,scale] duration-slow transition-opacity',
-                     'inline-block py-0.5 w-fit justify-self-start text-xl font-[450]',
+                     'inline-block py-0.5 w-fit justify-self-start text-xl',
                      'translate-y-[min(2.75dvh,50px)]',
                      { 'opacity-0': searchIsOpen }
                   ]}
