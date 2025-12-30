@@ -33,12 +33,12 @@ export const TransactionSheetHeader = (props: HeaderProps) => {
          {() => (
             <>
                <CategoryIcon icon={category.icon} class='h-4 w-4 border-3 mt-1' />
-               <div class='flex justify-center items-center w-full gap-x-0.25 translate-y-[15%]'>
+               <div class='flex justify-center items-center w-full gap-x-0.25 translate-y-[25%]'>
                   <Arrow class='h-1 w-1 justify-self-end' />
-                  <span class='justify-self-start'>{category.name}</span>
+                  <span class='justify-self-start font-medium'>{category.name}</span>
                </div>
                <FitText
-                  class='col-span-2 min-w-full text-center'
+                  class='col-span-2 min-w-full text-center font-medium'
                   scalingFactor={1.5}
                   maxFontSize='var(--text-logo)'
                >

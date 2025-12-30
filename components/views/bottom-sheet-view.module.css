@@ -6,6 +6,7 @@
    display: grid;
    align-items: end;
    width: 100dvw;
+   height: 100dvh;
    background-color: transparent;
    grid-template-rows: 1fr;
    grid-template-columns: 1fr;
@@ -14,9 +15,7 @@
    contain-intrinsic-height: 100dvh;
 
    &::before {
-      position: fixed;
-      top: 0;
-      left: 0;
+      align-self: flex-start;
       display: block;
       width: 100dvw;
       height: 1dvh;
@@ -34,7 +33,7 @@
       pointer-events: none;
 
       &::before {
-         display: none;
+         opacity: 0;
       }
    }
 
@@ -75,6 +74,7 @@
 
    position: relative;
    pointer-events: auto;
+   align-self: end;
    grid-area: 1 / 1;
    animation: slide-up-from-under var(--speed-device) var(--timing) backwards;
    transition:

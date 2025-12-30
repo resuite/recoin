@@ -53,7 +53,7 @@
 }
 
 body {
-   font-family: 'Instrument Sans Italic O', 'Instrument Sans Regular', sans-serif;
+   font-family: system-ui, 'Instrument Sans Italic O', 'Instrument Sans Regular', sans-serif;
    @apply dark-scheme;
 }
 
