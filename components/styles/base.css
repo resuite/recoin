@@ -365,6 +365,11 @@ body {
    }
 }
 
+
+@utility font-custom {
+   font-family: 'Instrument Sans Italic O', 'Instrument Sans Regular', sans-serif;
+}
+
 @utility no-scrollbar {
    scrollbar-width: none;
    &::-webkit-scrollbar {

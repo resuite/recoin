@@ -46,5 +46,9 @@ export function FormattedMoney(props: FormattedMoneyProps) {
       return formatter.get().format(Number(value.get()) / 10 ** currencyDecimals.get())
    })
 
-   return <output {...rest}>{formattedValue}</output>
+   return (
+      <output {...rest} class={['font-custom', rest.class]}>
+         {formattedValue}
+      </output>
+   )
 }
