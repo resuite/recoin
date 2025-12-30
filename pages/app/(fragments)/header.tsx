@@ -5,6 +5,7 @@ import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { useAuthContext } from '@/scopes/auth'
+import { createPointerOrClickHandler } from '@/utilities/miscellaneous'
 
 export function Header() {
    const { toggleSidebar } = useSidebarContext()
@@ -12,16 +13,21 @@ export function Header() {
    const { navigate } = useRouter()
    const avatarUrl = Cell.derived(() => userData.get()?.avatarUrl)
 
-   const handleProfileClick = () => {
+   const handleProfileClick = createPointerOrClickHandler(() => {
       navigate('/app/profile')
-   }
+   })
+
+   const toggleAppSidebar = createPointerOrClickHandler(() => {
+      toggleSidebar()
+   })
 
    return (
       <header class='grid grid-cols-[auto_1fr_auto] place-items-center p-1'>
          <Button
             style={{ rotate: 'calc(var(--sidebar-reveal) * 180deg)' }}
             class='touch-target button-bare pointer-events-auto'
-            onClick={() => toggleSidebar()}
+            onClick={toggleAppSidebar}
+            onPointerDown={toggleAppSidebar}
          >
             <Hamburger class='h-1' />
          </Button>
@@ -31,6 +37,7 @@ export function Header() {
             alt='Profile'
             class='touch-target button-bare'
             onClick={handleProfileClick}
+            onPointerDown={handleProfileClick}
          />
       </header>
    )
