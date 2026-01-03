@@ -1,6 +1,7 @@
 import { Cell } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
+import Add from '@/components/icons/svg/add'
 import { FloatingMenu, type FloatingMenuItem } from '@/components/ui/floating-action-menu'
 import { ExpandingView } from '@/components/views/expanding-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
@@ -100,12 +101,26 @@ export function AddNewTransactionButton() {
       }
    }
 
+   const FloatingIcon = () => {
+      return (
+         <div
+            class={[
+               'w-1/2 h-1/2 duration-slow transition-transform bouncy',
+               { 'rotate-45': transactionFlowIsOpen }
+            ]}
+         >
+            <Add />
+         </div>
+      )
+   }
+
    return (
       <FloatingMenu
          teleportTarget={ROOT_APP_OUTLET_ID}
          isOpen={floatingButtonMenuOpen}
          onStateChange={toggleState}
          items={items}
+         icon={FloatingIcon}
       >
          <ThemeProvider scheme='dark'>
             {() => (
