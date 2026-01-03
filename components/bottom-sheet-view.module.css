@@ -14,17 +14,15 @@
    contain-intrinsic-width: 100dvw;
    contain-intrinsic-height: 100dvh;
 
-   &::before {
+   & > .overlay {
       align-self: flex-start;
       display: block;
       width: 100dvw;
-      height: 1dvh;
-      scale: 1 100;
-      transform-origin: top left;
+      height: 100dvh;
       grid-area: 1 / 1;
       background-color: #00000080;
-      content: '';
       z-index: -1;
+      will-change: opacity;
       animation: fade-in var(--speed-device) var(--timing) backwards;
       transition: opacity var(--speed-device) var(--timing);
    }
@@ -32,14 +30,8 @@
    &:not([open]) {
       pointer-events: none;
 
-      &::before {
-         opacity: 0;
-      }
-   }
-
-   &.closing {
-      &::before {
-         opacity: 0;
+      & > .overlay {
+         display: none;
       }
    }
 }
@@ -68,14 +60,11 @@
       }
    }
 
-   .dialog.closing & {
-      translate: 0 100%;
-   }
-
    position: relative;
    pointer-events: auto;
    align-self: end;
    grid-area: 1 / 1;
+   will-change: transform, opacity;
    animation: slide-up-from-under var(--speed-device) var(--timing) backwards;
    transition:
       translate var(--speed-device) var(--timing),

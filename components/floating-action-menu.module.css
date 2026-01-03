@@ -1,29 +1,10 @@
-.teleport {
-   &::before {
-      position: fixed;
-      top: 0;
-      left: 0;
-      background-color: #00000050;
-      height: 1dvh;
-      width: 1dvw;
-      transform-origin: top left;
-      scale: 103 103;
-      display: block;
-      content: '';
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity var(--speed-slow);
-   }
-
-   &.open:not(.closing)::before {
-      opacity: 1;
-      pointer-events: auto;
-   }
-}
-
 .popover {
    margin-bottom: var(--half-spacing);
    z-index: var(--floating-button-layer);
+}
+
+.button {
+   pointer-events: auto;
 }
 
 .menu {
@@ -31,6 +12,7 @@
    flex-direction: column;
    justify-content: flex-end;
    row-gap: calc(var(--half-spacing) * 0.5);
+   pointer-events: auto;
 }
 
 .floatingListItem {

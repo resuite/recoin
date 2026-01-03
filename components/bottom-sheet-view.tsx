@@ -2,6 +2,8 @@ import { Cell, createScope, If, type SourceCell, useObserver, useScopeContext } 
 import type { JSX } from 'retend/jsx-runtime'
 import { useRouteQuery } from 'retend/router'
 import { useDerivedValue } from 'retend-utils/hooks'
+import { Overlay } from '@/components/overlay'
+import { Easing, Speed } from '@/constants'
 import { ThemeAwareTeleport } from '@/scopes/theme'
 import { animationsSettled } from '@/utilities/animations'
 import styles from './bottom-sheet-view.module.css'
@@ -112,11 +114,18 @@ export function BottomSheet(props: BottomSheetProps) {
          })
       })
    }
+
+   let isClosing = false
    async function startCloseSequence() {
-      dialogRef.peek()?.classList.add(styles.closing)
+      isClosing = true
       ;(globalScope.isOpen as SourceCell<boolean>).set(false)
-      await animationsSettled(contentRef)
-      dialogRef.peek()?.classList.remove(styles.closing)
+      const content = contentRef.peek()
+      const animation = content?.animate(
+         { translate: '0 100%' },
+         { duration: Speed.Device, easing: Easing.Timing, fill: 'forwards' }
+      )
+      await Promise.allSettled([animation?.finished])
+      isClosing = false
    }
 
    async function handleClickOutside() {
@@ -132,7 +141,7 @@ export function BottomSheet(props: BottomSheetProps) {
          dialogElement?.show()
       } else if (!isOpen) {
          // closing the sheet
-         if (!dialogElement?.classList.contains(styles.closing)) {
+         if (!isClosing) {
             await startCloseSequence()
          }
          dialogElement?.close()
@@ -220,11 +229,11 @@ export function BottomSheet(props: BottomSheetProps) {
                <dialog
                   ref={dialogRef}
                   class={styles.dialog}
-                  onClick--self={handleClickOutside}
                   data-dynamic-sizing={dynamicSizing}
                   onClose={onClose}
                   style={{ '--sheet-content-height': sheetContentHeightStr }}
                >
+                  <Overlay isDimmed={globalScope.isOpen} onPointerDown={handleClickOutside} />
                   {If(dialogOpen, () => (
                      <div
                         {...rest}
@@ -278,14 +287,14 @@ function AnimatedBackground(props: AnimatedBackgroundProps) {
          lastAfterPseudoElementTranslation = `1 ${nextHeight / initialHeight}`
          div.animate([{ translate: lastBeforePseudoTranslation }], {
             pseudoElement: ':before',
-            duration: 300,
-            easing: 'cubic-bezier(0.3, 0.4, 0.05, 1)',
+            duration: Speed.Slow,
+            easing: Easing.Timing,
             fill: 'forwards'
          })
          div.animate([{ scale: lastAfterPseudoElementTranslation }], {
             pseudoElement: ':after',
-            duration: 300,
-            easing: 'cubic-bezier(0.3, 0.4, 0.05, 1)',
+            duration: Speed.Slow,
+            easing: Easing.Timing,
             fill: 'forwards'
          })
       }

@@ -4,8 +4,8 @@ import { useDerivedValue } from 'retend-utils/hooks'
 import { FloatingActionButton } from '@/components/floating-action-button'
 import { Icon, type IconName } from '@/components/icons'
 import Add from '@/components/icons/svg/add'
+import { Overlay } from '@/components/overlay'
 import { PopoverView } from '@/components/popover-view'
-import { useSidebarContext } from '@/components/sidebar-provider-view'
 import { VibrationPatterns } from '@/constants/vibration'
 import { ThemeAwareTeleport } from '@/scopes/theme'
 import { animationsSettled } from '@/utilities/animations'
@@ -44,7 +44,6 @@ export function FloatingMenu(props: FloatingMenuProps) {
    const count = Cell.derived(() => {
       return items.get().length
    })
-   const { toggleSidebarEnabled } = useSidebarContext()
    const isOpen = useDerivedValue(isOpenProp)
    const trigger = Cell.source<HTMLButtonElement | null>(null)
    const containerRef = Cell.source<HTMLElement | null>(null)
@@ -56,13 +55,14 @@ export function FloatingMenu(props: FloatingMenuProps) {
    })
 
    isOpen.runAndListen(async (menuIsOpen) => {
-      toggleSidebarEnabled(!menuIsOpen)
-
       const isClosing = !menuIsOpen
       if (isClosing) {
          containerRef.get()?.classList.add(styles.closing)
          await animationsSettled(containerRef, { subtree: true })
          containerRef.get()?.classList.remove(styles.closing)
+         if (isOpen.get()) {
+            return
+         }
       }
       contentIsOpen.set(menuIsOpen)
    })
@@ -72,12 +72,13 @@ export function FloatingMenu(props: FloatingMenuProps) {
          to={teleportTarget}
          ref={containerRef}
          class={[styles.teleport, { [styles.open]: contentIsOpen }]}
-         onClick--self={toggleState}
       >
+         <Overlay isDimmed={isOpen} onPointerDown={toggleState} />
          <FloatingActionButton
             ref={trigger}
             inline='right'
             block='bottom'
+            class={styles.button}
             onClick={toggleState}
             onPointerDown={toggleState}
          >

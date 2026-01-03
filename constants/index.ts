@@ -12,3 +12,23 @@ export const SHEET_SIZING_ANIMATION_STYLES = {
    animationTimingFunction: 'ease',
    animationDuration: 'var(--sheet-sizing-speed)'
 }
+
+export const Easing = {
+   Timing: 'cubic-bezier(0.3, 0.4, 0.05, 1)',
+   TimingKeyboard: 'cubic-bezier(0.17, 0.59, 0.4, 0.77)',
+   TimingBounce: 'cubic-bezier(0.3, 0.75, 0.45, 1.2)',
+   TimingBounceSlower: 'cubic-bezier(0.3, 0.4, 0, 1.75)'
+}
+const DefaultSpeed = 150
+export const Speed = {
+   Default: DefaultSpeed,
+   Keyboard: DefaultSpeed * 0.75,
+   Device: DefaultSpeed * 2.2,
+   Faster: DefaultSpeed * 0.5,
+   Fast: DefaultSpeed * 0.75,
+   Slow: DefaultSpeed * 2,
+   BitSlower: DefaultSpeed * 2.5,
+   Slower: DefaultSpeed * 4.5,
+   MuchSlower: DefaultSpeed * 6,
+   Slowest: DefaultSpeed * 8
+}
