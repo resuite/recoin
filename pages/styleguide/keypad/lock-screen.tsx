@@ -1,7 +1,7 @@
 import { Cell, useScopeContext } from 'retend'
 import RecoinBaseIcon from '@/components/icons/svg/recoin'
-import { PinInput } from '@/components/ui/pin-input'
-import { StackView, useStackViewFocusEffect } from '@/components/views/stack-view-group'
+import { PinInput } from '@/components/pin-input'
+import { StackView, useStackViewFocusEffect } from '@/components/stack-view-group'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { AuthenticationScope } from './scope'
 

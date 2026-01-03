@@ -1,5 +1,5 @@
+import { FloatingActionButton } from '@/components/floating-action-button'
 import Add from '@/components/icons/svg/add'
-import { FloatingActionButton } from '@/components/ui/floating-action-button'
 
 export const AddNewBudget = () => {
    return (

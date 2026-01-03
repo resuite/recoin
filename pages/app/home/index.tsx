@@ -1,4 +1,4 @@
-import { ScrollView } from '@/components/views/scroll-view'
+import { ScrollView } from '@/components/scroll-view'
 import { Header } from '@/pages/app/(fragments)/header'
 import { Stage } from '@/pages/app/(fragments)/stage'
 import { AddNewTransactionButton } from '@/pages/app/home/(fragments)/add-new-transaction-button'

@@ -1,4 +1,4 @@
-import { TabSwitcherView } from '@/components/views/tab-switcher-view'
+import { TabSwitcherView } from '@/components/tab-switcher-view'
 import { PageHeading } from '@/pages/app/(fragments)/page-heading'
 import { Stage } from '@/pages/app/(fragments)/stage'
 

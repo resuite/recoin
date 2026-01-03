@@ -1,7 +1,7 @@
 import { Cell } from 'retend'
+import { Button } from '@/components/button'
 import { Icon } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { StackView, StackViewGroup } from '@/components/views/stack-view-group'
+import { StackView, StackViewGroup } from '@/components/stack-view-group'
 import { ThemeProvider } from '@/scopes/theme'
 
 const page2IsOpen = Cell.source(false)

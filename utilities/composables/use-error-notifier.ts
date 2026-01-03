@@ -1,5 +1,5 @@
 import { RecoinError } from '@/api/error'
-import { useToast } from '@/components/ui/toast'
+import { useToast } from '@/components/toast'
 import { defaultError, errorCodeToHumanReadable } from '../error-messages'
 
 export function useErrorNotifier() {

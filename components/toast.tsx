@@ -1,10 +1,10 @@
 import { Cell, createScope, For, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver, useWindowSize } from 'retend-utils/hooks'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/button'
 import { ThemeAwareTeleport } from '@/scopes/theme'
 import { defer } from '@/utilities/miscellaneous'
-import Add from '../icons/svg/add'
+import Add from './icons/svg/add'
 import styles from './toast.module.css'
 
 interface ToastScopeData {

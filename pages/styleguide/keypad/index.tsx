@@ -1,5 +1,5 @@
 import { Cell } from 'retend'
-import { StackViewGroup } from '@/components/views/stack-view-group'
+import { StackViewGroup } from '@/components/stack-view-group'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { AuthScreen } from './auth-screen'
 import { LockScreen } from './lock-screen'

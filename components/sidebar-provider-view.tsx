@@ -1,8 +1,8 @@
 import { Cell, createScope, useObserver, useScopeContext } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver } from 'retend-utils/hooks'
-import { useBottomSheetGlobalContext } from '@/components/views/bottom-sheet-view'
-import { ScrollView, useScrollTimeline } from '@/components/views/scroll-view'
+import { useBottomSheetGlobalContext } from '@/components/bottom-sheet-view'
+import { ScrollView, useScrollTimeline } from '@/components/scroll-view'
 import styles from './sidebar-provider-view.module.css'
 
 type DivProps = JSX.IntrinsicElements['div']

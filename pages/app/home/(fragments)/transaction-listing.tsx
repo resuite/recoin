@@ -1,6 +1,6 @@
 import { Cell, For, If } from 'retend'
 import { FluidList } from 'retend-utils/components'
-import { Sticky } from '@/components/ui/sticky'
+import { Sticky } from '@/components/sticky'
 import { TRANSACTION_ITEM_HEIGHT } from '@/constants'
 import { TransactionItem } from '@/pages/app/home/(fragments)/transaction-item'
 import TransactionItemBottomSheet from '@/pages/app/home/transaction-sheet'

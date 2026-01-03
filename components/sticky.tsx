@@ -1,7 +1,7 @@
 import { Cell, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useIntersectionObserver } from 'retend-utils/hooks'
-import { useScrollTimeline } from '@/components/views/scroll-view'
+import { useScrollTimeline } from '@/components/scroll-view'
 import { Flags } from '@/constants/flags'
 import styles from './sticky.module.css'
 

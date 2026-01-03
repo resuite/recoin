@@ -1,9 +1,9 @@
 import { Cell } from 'retend'
 import { useRouter } from 'retend/router'
+import { Avatar } from '@/components/avatar'
+import { Button } from '@/components/button'
 import Hamburger from '@/components/icons/svg/hamburger'
-import { Avatar } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { useSidebarContext } from '@/components/views/sidebar-provider-view'
+import { useSidebarContext } from '@/components/sidebar-provider-view'
 import { useAuthContext } from '@/scopes/auth'
 import { createPointerOrClickHandler } from '@/utilities/miscellaneous'
 

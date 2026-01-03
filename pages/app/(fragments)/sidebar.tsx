@@ -1,10 +1,10 @@
 import { Cell, For } from 'retend'
 import { useRouter } from 'retend/router'
+import { Button } from '@/components/button'
 import type { IconName } from '@/components/icons'
 import { AsyncMaskIcon } from '@/components/icons/icon-mask'
-import { Button } from '@/components/ui/button'
-import { useScrollTimeline } from '@/components/views/scroll-view'
-import { useSidebarContext } from '@/components/views/sidebar-provider-view'
+import { useScrollTimeline } from '@/components/scroll-view'
+import { useSidebarContext } from '@/components/sidebar-provider-view'
 import { VibrationPatterns } from '@/constants/vibration'
 import { vibrate } from '@/utilities/miscellaneous'
 

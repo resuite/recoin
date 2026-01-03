@@ -1,5 +1,5 @@
 import { Cell } from 'retend'
-import { SidebarProviderView } from '@/components/views/sidebar-provider-view'
+import { SidebarProviderView } from '@/components/sidebar-provider-view'
 import { ThemeProvider } from '@/scopes/theme'
 import { createPartitions } from '@/utilities/animations'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'

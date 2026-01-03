@@ -1,14 +1,14 @@
 import { Cell, For, If, type SourceCell, useObserver, useSetupEffect } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
-import CaretDown from '@/components/icons/svg/caret-down'
-import Checkmark from '@/components/icons/svg/checkmark'
 import {
    ContextMenu,
    type ContextMenuItemProps,
    type ContextMenuState,
    ItemTypes
-} from '@/components/ui/context-menu'
+} from '@/components/context-menu'
+import CaretDown from '@/components/icons/svg/caret-down'
+import Checkmark from '@/components/icons/svg/checkmark'
 import { SEARCH_BUFFER_TIMEOUT_MS } from '@/constants'
 import { getFocusableElementInItem } from '@/utilities/miscellaneous'
 import styles from './dropdown.module.css'

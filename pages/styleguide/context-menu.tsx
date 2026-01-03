@@ -1,5 +1,5 @@
 import { Cell } from 'retend'
-import { ContextMenu, type ContextMenuItemProps, ItemTypes } from '@/components/ui/context-menu'
+import { ContextMenu, type ContextMenuItemProps, ItemTypes } from '@/components/context-menu'
 
 const ContextMenuTest = () => {
    const trigger = Cell.source<HTMLElement | null>(null)

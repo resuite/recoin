@@ -1,4 +1,4 @@
-import { Coin } from '@/components/ui/coin'
+import { Coin } from '@/components/coin'
 
 const CoinTest = () => {
    return (

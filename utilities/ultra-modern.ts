@@ -1,6 +1,6 @@
 // Contains global types that are not yet bundled with typescript.
 
-import type { KeyboardVisibilityEvent } from '@/components/views/virtual-keyboard-aware-view'
+import type { KeyboardVisibilityEvent } from '@/components/virtual-keyboard-aware-view'
 
 declare global {
    // Scroll timeline API

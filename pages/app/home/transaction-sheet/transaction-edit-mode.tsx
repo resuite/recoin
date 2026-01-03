@@ -1,19 +1,19 @@
 import { Cell, useSetupEffect } from 'retend'
+import { useBottomSheetContext } from '@/components/bottom-sheet-view'
+import { Button } from '@/components/button'
+import { DateInput } from '@/components/date-input'
 import Add from '@/components/icons/svg/add'
 import Checkmark from '@/components/icons/svg/checkmark'
-import { Button } from '@/components/ui/button'
-import { DateInput } from '@/components/ui/date-input'
-import { Input } from '@/components/ui/input'
-import { LocationInput } from '@/components/ui/location-input'
-import { TimeInput } from '@/components/ui/time-input'
-import { useToast } from '@/components/ui/toast'
-import { useBottomSheetContext } from '@/components/views/bottom-sheet-view'
-import { ScrollView } from '@/components/views/scroll-view'
+import { Input } from '@/components/input'
+import { LocationInput } from '@/components/location-input'
+import { ScrollView } from '@/components/scroll-view'
+import { TimeInput } from '@/components/time-input'
+import { useToast } from '@/components/toast'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
-} from '@/components/views/virtual-keyboard-aware-view'
+} from '@/components/virtual-keyboard-aware-view'
 import { SHEET_SIZING_ANIMATION_STYLES, TOAST_DEFAULT_DURATION } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import type { Transaction } from '@/database/models/transaction'

@@ -1,6 +1,6 @@
 import { useRouteQuery } from 'retend/router'
-import { Button } from '@/components/ui/button'
-import { QueryControlledBottomSheet } from '@/components/views/bottom-sheet-view'
+import { QueryControlledBottomSheet } from '@/components/bottom-sheet-view'
+import { Button } from '@/components/button'
 import { ThemeProvider } from '@/scopes/theme'
 
 const BottomSheetTest = () => {

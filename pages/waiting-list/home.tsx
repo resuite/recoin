@@ -1,11 +1,11 @@
 import { Cell, If, useScopeContext } from 'retend'
 import { useRouter } from 'retend/router'
 import { addEmailToWaitingList } from '@/api/modules/waiting-list/client'
+import { Button } from '@/components/button'
 import ArrowTopLeft from '@/components/icons/svg/arrow-top-left'
 import Loader from '@/components/icons/svg/loader'
 import { Coins } from '@/components/illustrations/coins'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/input'
 import { WaitingListStateScope } from '@/scopes'
 import { useErrorNotifier } from '@/utilities/composables/use-error-notifier'
 

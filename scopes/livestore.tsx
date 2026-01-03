@@ -11,8 +11,8 @@ import {
    type FullScreenTransitionEvent,
    FullScreenTransitionView,
    useFullScreenTransitionContext
-} from '@/components/views/full-screen-transition-view'
-import { useVerticalPanContext } from '@/components/views/vertical-pan-view'
+} from '@/components/full-screen-transition-view'
+import { useVerticalPanContext } from '@/components/vertical-pan-view'
 import { createAchievementListener } from '@/database/seeds/achievements'
 import type { RecoinStore } from '@/database/store'
 import { useAuthContext } from '@/scopes/auth'

@@ -1,14 +1,14 @@
 import { Cell, If } from 'retend'
 import { useRouteQuery } from 'retend/router'
+import { Button } from '@/components/button'
 import Loader from '@/components/icons/svg/loader'
-import { Button } from '@/components/ui/button'
-import { MoneyInput } from '@/components/ui/money-input'
-import { SafeAreaView } from '@/components/views/safe-area-view'
+import { MoneyInput } from '@/components/money-input'
+import { SafeAreaView } from '@/components/safe-area-view'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
-} from '@/components/views/virtual-keyboard-aware-view'
+} from '@/components/virtual-keyboard-aware-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { useAuthContext } from '@/scopes/auth'
 

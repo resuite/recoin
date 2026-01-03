@@ -1,8 +1,8 @@
 import { Cell } from 'retend'
 import { useRouteQuery } from 'retend/router'
-import { Button } from '@/components/ui/button'
-import { Dropdown } from '@/components/ui/dropdown'
-import { SafeAreaView } from '@/components/views/safe-area-view'
+import { Button } from '@/components/button'
+import { Dropdown } from '@/components/dropdown'
+import { SafeAreaView } from '@/components/safe-area-view'
 import { QueryKeys } from '@/constants/query-keys'
 
 const CurrencySelection = () => {

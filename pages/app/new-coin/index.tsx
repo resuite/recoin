@@ -1,8 +1,8 @@
 import { Cell } from 'retend'
-import { Button } from '@/components/ui/button'
-import { Coin } from '@/components/ui/coin'
-import { SafeAreaView } from '@/components/views/safe-area-view'
-import { useVerticalPanContext } from '@/components/views/vertical-pan-view'
+import { Button } from '@/components/button'
+import { Coin } from '@/components/coin'
+import { SafeAreaView } from '@/components/safe-area-view'
+import { useVerticalPanContext } from '@/components/vertical-pan-view'
 import type { Achievement } from '@/database/models/achievement'
 import { achievementTitleAndMessage } from '@/utilities/achievement-messages'
 

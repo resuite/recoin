@@ -1,6 +1,6 @@
 import { Cell } from 'retend'
 import { useRouter } from 'retend/router'
-import { ToastProvider } from '@/components/ui/toast'
+import { ToastProvider } from '@/components/toast'
 import { WaitingListStateScope } from '@/scopes'
 
 function WaitingList() {

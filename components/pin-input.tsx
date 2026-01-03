@@ -1,7 +1,7 @@
 import { Cell, For, If } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
-import { NumericKeypad } from '@/components/ui/numeric-keypad'
+import { NumericKeypad } from '@/components/numeric-keypad'
 import { VibrationPatterns } from '@/constants/vibration'
 import { animationsSettled } from '@/utilities/animations'
 import { vibrate } from '@/utilities/miscellaneous'
@@ -36,7 +36,7 @@ interface PinInputProps {
  *
  * @example
  * ```tsx
- * import { PinInput } from '@/components/ui/pin-input'
+ * import { PinInput } from '@/components/pin-input'
  *
  * function MyPinComponent() {
  *   const handleFill = async (pin: string) => {

@@ -2,7 +2,7 @@ import { Cell } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { type RouterLinkProps, useRouter } from 'retend/router'
 import { useDerivedValue } from 'retend-utils/hooks'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/button'
 import styles from './floating-action-button.module.css'
 
 type ButtonProps = JSX.IntrinsicElements['button']

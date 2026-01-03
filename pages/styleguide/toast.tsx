@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button'
-import { ToastProvider, useToast } from '@/components/ui/toast'
+import { Button } from '@/components/button'
+import { ToastProvider, useToast } from '@/components/toast'
 
 const Toast = () => {
    return (

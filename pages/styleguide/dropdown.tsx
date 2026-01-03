@@ -1,5 +1,5 @@
 import { Cell } from 'retend'
-import { Dropdown } from '@/components/ui/dropdown'
+import { Dropdown } from '@/components/dropdown'
 
 const DropdownTest = () => {
    const options = [

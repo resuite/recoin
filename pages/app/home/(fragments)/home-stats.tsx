@@ -1,8 +1,8 @@
+import { FitText } from '@/components/fit-text'
+import { FormattedMoney } from '@/components/formatted-money'
 import { MaskIcon } from '@/components/icons/icon-mask'
 import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
 import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
-import { FitText } from '@/components/ui/fit-text'
-import { FormattedMoney } from '@/components/ui/formatted-money'
 import { useAuthContext } from '@/scopes/auth'
 import { useWorkspaceBalance } from '@/utilities/composables/use-workspace-balance'
 

@@ -1,14 +1,14 @@
 import { Cell, useScopeContext } from 'retend'
+import { Button } from '@/components/button'
 import { Icon } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useSidebarContext } from '@/components/views/sidebar-provider-view'
-import { StackView, StackViewGroup } from '@/components/views/stack-view-group'
+import { Input } from '@/components/input'
+import { useSidebarContext } from '@/components/sidebar-provider-view'
+import { StackView, StackViewGroup } from '@/components/stack-view-group'
 import {
    type KeyboardVisibilityEvent,
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
-} from '@/components/views/virtual-keyboard-aware-view'
+} from '@/components/virtual-keyboard-aware-view'
 import { ThemeProvider } from '@/scopes/theme'
 import FloatingActionButtonTest from '../fab'
 import { Scope } from './scope'

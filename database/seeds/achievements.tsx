@@ -1,5 +1,5 @@
 import { type LiveStoreSchema, queryDb, Schema, type Store, sql } from '@livestore/livestore'
-import type { VerticalPanContext } from '@/components/views/vertical-pan-view'
+import type { VerticalPanContext } from '@/components/vertical-pan-view'
 import type { Achievement } from '@/database/models/achievement'
 import AchievementModel from '@/database/models/achievement'
 import type { RecoinStore } from '@/database/store'

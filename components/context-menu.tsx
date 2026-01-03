@@ -11,13 +11,13 @@ import {
 } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useCursorPosition, useDerivedValue, useDocumentVisibility } from 'retend-utils/hooks'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/button'
 import {
    type Alignment,
    generateNewAnchorName,
    PopoverView,
    type PositionArea
-} from '@/components/views/popover-view'
+} from '@/components/popover-view'
 import { Flags } from '@/constants/flags'
 import { ThemeAwareTeleport } from '@/scopes/theme'
 import {
@@ -25,10 +25,10 @@ import {
    removeTouchContextMenuEventPolyfill
 } from '@/utilities/contextmenu-event-ios-polyfill'
 import { clamp, defer, getFocusableElementInItem } from '@/utilities/miscellaneous'
-import { DynamicIcon, type IconName } from '../icons'
-import Checkmark from '../icons/svg/checkmark'
-import { ScrollView } from '../views/scroll-view'
 import styles from './context-menu.module.css'
+import { DynamicIcon, type IconName } from './icons'
+import Checkmark from './icons/svg/checkmark'
+import { ScrollView } from './scroll-view'
 
 export const ItemTypes = {
    Check: 'check',

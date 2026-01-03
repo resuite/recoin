@@ -1,4 +1,4 @@
-import { TabSwitcherView } from '@/components/views/tab-switcher-view'
+import { TabSwitcherView } from '@/components/tab-switcher-view'
 import { ThemeProvider } from '@/scopes/theme'
 
 const Tabs = () => {

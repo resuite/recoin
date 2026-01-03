@@ -1,6 +1,6 @@
 import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
-import { QueryControlledBottomSheet } from '@/components/views/bottom-sheet-view'
+import { QueryControlledBottomSheet } from '@/components/bottom-sheet-view'
 import { QueryKeys } from '@/constants/query-keys'
 import { BottomSheetHeader } from '@/pages/app/(fragments)/bottom-sheet-header'
 import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
