@@ -152,13 +152,6 @@ export function SidebarProviderView(props: SidebarProviderViewProps) {
       })
 
       timeline.add({
-         target: contentRef,
-         // I dont know if this is a bug in Chromium, or if its intentional,
-         // but if i set the final scale to 1, I get re-paint flashes on the
-         // whole content the second I gesture to open and close of the sidebar.
-         keyframes: { scale: ['0.95', '1.0000001'] }
-      })
-      timeline.add({
          target: providerRef,
          keyframes: { opacity: ['1', '0'] },
          pseudoElement: ':after'

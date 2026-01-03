@@ -225,7 +225,7 @@ function computePosition(
    let bottom: Cell<number> | undefined
    let right: Cell<number> | undefined
 
-   const rect = useElementBounding(anchorRef)
+   const rect = useElementBounding(anchorRef, { updateTiming: 'next-frame' })
    const popoverRect = useElementBounding(popoverRef)
    const { width: vw, height: vh } = useWindowSize()
    const [areaY, areaX] = positionArea.split(' ') as Split<PositionArea, ' '>

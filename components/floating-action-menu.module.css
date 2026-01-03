@@ -34,11 +34,12 @@
       opacity: 0;
       transform: translateY(10px) scale(0.5);
    }
+}
 
-   & svg {
-      width: 1rem;
-      height: 1rem;
-   }
+.itemIcon {
+   width: 1rem;
+   height: 1rem;
+   background-color: currentColor;
 }
 
 .icon {

@@ -2,7 +2,8 @@ import { Cell, For } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
 import { FloatingActionButton } from '@/components/floating-action-button'
-import { Icon, type IconName } from '@/components/icons'
+import type { IconName } from '@/components/icons'
+import { AsyncMaskIcon } from '@/components/icons/icon-mask'
 import Add from '@/components/icons/svg/add'
 import { Overlay } from '@/components/overlay'
 import { PopoverView } from '@/components/popover-view'
@@ -99,9 +100,7 @@ export function FloatingMenu(props: FloatingMenuProps) {
                         style={{ '--fa-index': index }}
                         onClick={item.onClick}
                      >
-                        <div>
-                           <Icon name={item.icon} />
-                        </div>
+                        <AsyncMaskIcon name={item.icon} class={styles.itemIcon} />
                         {item.label}
                      </button>
                   ))}
