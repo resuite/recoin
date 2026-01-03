@@ -73,19 +73,19 @@ body {
    --color-canvas-text-lighter: var(--canvas-text-lighter);
    --color-canvas-shadow: var(--canvas-shadow);
 
-   --text-smallest: min(0.5rem, 1.979dvh);
-   --text-smaller: min(0.625rem, 2.223dvh);
-   --text-small: min(0.75rem, 2.469dvh);
-   --text-sm: min(0.875rem, 2.714dvh);
-   --text-normal: min(0.9375rem, 2.836dvh);
-   --text-big: min(1.0625rem, 3.081dvh);
-   --text-lg: min(1.125rem, 3.203dvh);
-   --text-xl: min(1.25rem, 3.448dvh);
-   --text-bigger: min(1.5rem, 3.93dvh);
-   --text-header: min(1.35625rem, 3.656dvh);
-   --text-title: min(1.875rem, 4.672dvh);
-   --text-large: min(3.125rem, 7.11dvh);
-   --text-logo: min(4.0625rem, 8.956dvh);
+   --text-smallest: 0.75rem;
+   --text-smaller: 0.8125rem;
+   --text-small: 0.875rem;
+   --text-sm: 0.875rem;
+   --text-normal: 1rem;
+   --text-big: 1.125rem;
+   --text-lg: 1.25rem;
+   --text-xl: 1.375rem;
+   --text-bigger: 1.5rem;
+   --text-header: 1.75rem;
+   --text-title: 2.125rem;
+   --text-large: 3.5rem;
+   --text-logo: 4rem;
 
    --default-speed: 150ms;
    --timing: cubic-bezier(0.3, 0.4, 0.05, 1);
