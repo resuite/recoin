@@ -1,6 +1,6 @@
 /// <reference types="google.accounts" />
 
-import { createWebRouter, lazy } from 'retend/router'
+import { lazy, Router } from 'retend/router'
 import Index from '@/pages'
 
 const metadata = {
@@ -11,7 +11,7 @@ const metadata = {
 }
 
 export const createRouter = () => {
-   return createWebRouter({
+   return new Router({
       stackMode: true,
       routes: [
          {
