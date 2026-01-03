@@ -6,7 +6,7 @@
    min-width: unset;
    height: var(--fab-size);
    padding: 0;
-   border: 2px solid var(--color-canvas);
+   border: 0;
    border-radius: 30%;
    color: var(--color-canvas-background);
    background-color: var(--color-canvas-text);
@@ -39,7 +39,11 @@
    }
 
    &.block.bottom {
-      top: calc(100dvh - var(--fab-size) - calc(var(--spacing) * 2));
+      top: calc(
+         100dvh -
+         var(--fab-size) -
+         max(calc(var(--spacing) * 2), env(safe-area-inset-bottom))
+      );
    }
 
    &.block.center:not(.top, .bottom) {
@@ -63,8 +67,8 @@
    }
 
    & svg {
-      width: calc(var(--spacing) * 1.25);
-      height: calc(var(--spacing) * 1.25);
+      width: calc(min(var(--spacing) * 1.25), 90%);
+      height: calc(min(var(--spacing) * 1.25), 90%);
    }
 
    &[data-outlined] {

@@ -48,7 +48,7 @@ export interface AnchoredPopoverProps extends BasePopoverProps {
     * A `SourceCell` that holds a reference to the anchor element. The popover's
     * position will be calculated relative to this element.
     */
-   anchor: SourceCell<HTMLElement | null>
+   anchor: Cell<HTMLElement | null>
    /**
     * Defines where the popover should appear relative to the anchor element, in a
     * 3x3 grid, where the anchor is in the center.
@@ -215,7 +215,7 @@ export function generateNewAnchorName() {
 
 function computePosition(
    positionArea: PositionArea,
-   anchorRef: SourceCell<HTMLElement | null>,
+   anchorRef: Cell<HTMLElement | null>,
    popoverRef: SourceCell<HTMLElement | null>,
    justifySelf: Alignment | undefined,
    alignSelf: Alignment | undefined

@@ -66,13 +66,13 @@
 
 @keyframes expanding {
    to {
-      scale: 19;
+      scale: 29;
    }
 }
 
 @keyframes collapsing {
    from {
-      scale: 19;
+      scale: 29;
    }
    to {
       scale: 1;

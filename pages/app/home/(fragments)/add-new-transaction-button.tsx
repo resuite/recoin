@@ -1,7 +1,7 @@
+import { Cell } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
-import Add from '@/components/icons/svg/add'
-import { FloatingActionButton } from '@/components/ui/floating-action-button'
+import { FloatingMenu, type FloatingMenuItem } from '@/components/ui/floating-action-menu'
 import { ExpandingView } from '@/components/views/expanding-view'
 import { useSidebarContext } from '@/components/views/sidebar-provider-view'
 import { ROOT_APP_OUTLET_ID } from '@/constants'
@@ -12,11 +12,11 @@ import TransactionFlow from '@/pages/app/transaction-flow'
 import { useAuthContext } from '@/scopes/auth'
 import { type TransactionDetailsForm, TransactionDetailsFormScope } from '@/scopes/forms'
 import { useStore } from '@/scopes/livestore'
-import { ThemeAwareTeleport, ThemeProvider } from '@/scopes/theme'
+import { ThemeProvider } from '@/scopes/theme'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
 import { useWorkspaceId } from '@/utilities/composables/use-workspace-id'
 import { createForm } from '@/utilities/form'
-import { createPointerOrClickHandler, mergeDateAndTime, vibrate } from '@/utilities/miscellaneous'
+import { mergeDateAndTime, vibrate } from '@/utilities/miscellaneous'
 
 export function AddNewTransactionButton() {
    const workspaceId = useWorkspaceId()
@@ -29,7 +29,30 @@ export function AddNewTransactionButton() {
       hasKey: transactionFlowIsOpen,
       remove: closeNewTransactionFlow
    } = useRouteQueryControl(QueryKeys.TransactionFlow)
-   const { hasKey: isOnSuccessPage } = useRouteQueryControl(QueryKeys.TransactionFlow.Success)
+   const type = query.get(QueryKeys.TransactionFlow.Type)
+   const typeChosen = Cell.derived(() => {
+      return type.get() !== null
+   })
+   const floatingButtonMenuOpen = Cell.derived(() => {
+      return transactionFlowIsOpen.get() && !typeChosen.get()
+   })
+
+   const items: Array<FloatingMenuItem> = [
+      {
+         label: 'Expense',
+         icon: 'arrow-top-right',
+         onClick() {
+            query.set(QueryKeys.TransactionFlow.Type, 'expense')
+         }
+      },
+      {
+         label: 'Income',
+         icon: 'arrow-bottom-left',
+         onClick() {
+            query.set(QueryKeys.TransactionFlow.Type, 'income')
+         }
+      }
+   ]
 
    const defaultValues = (): TransactionDetailsForm => ({
       amount: 0,
@@ -66,7 +89,7 @@ export function AddNewTransactionButton() {
       }
    })
 
-   const toggleState = createPointerOrClickHandler(() => {
+   const toggleState = () => {
       vibrate(VibrationPatterns.ButtonPress)
       if (transactionFlowIsOpen.get()) {
          sidebarCtx.toggleSidebarEnabled(true)
@@ -75,27 +98,18 @@ export function AddNewTransactionButton() {
          sidebarCtx.toggleSidebarEnabled(false)
          startNewTransactionFlow()
       }
-   })
+   }
 
    return (
-      <ThemeAwareTeleport to={ROOT_APP_OUTLET_ID}>
-         <FloatingActionButton
-            class={[
-               { 'rotate-90 scale-90 dark-scheme': transactionFlowIsOpen },
-               { 'scale-0': isOnSuccessPage }
-            ]}
-            inline='right'
-            block='bottom'
-            onClick={toggleState}
-            onPointerDown={toggleState}
-         >
-            <div class={{ 'rotate-45': transactionFlowIsOpen }}>
-               <Add />
-            </div>
-         </FloatingActionButton>
+      <FloatingMenu
+         teleportTarget={ROOT_APP_OUTLET_ID}
+         isOpen={floatingButtonMenuOpen}
+         onStateChange={toggleState}
+         items={items}
+      >
          <ThemeProvider scheme='dark'>
             {() => (
-               <ExpandingView isOpen={transactionFlowIsOpen} expandColor='var(--color-base)'>
+               <ExpandingView isOpen={typeChosen} expandColor='var(--color-base)'>
                   {() => (
                      <TransactionDetailsFormScope.Provider value={details}>
                         {TransactionFlow}
@@ -104,6 +118,6 @@ export function AddNewTransactionButton() {
                </ExpandingView>
             )}
          </ThemeProvider>
-      </ThemeAwareTeleport>
+      </FloatingMenu>
    )
 }

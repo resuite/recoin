@@ -111,7 +111,7 @@ interface ContextMenuProps<T extends HTMLElement> extends MenuProps {
     * A reactive cell containing the element that triggers the context menu.
     * The context menu will attach event listeners to this element based on the strategy.
     */
-   trigger: SourceCell<T | null>
+   trigger: Cell<T | null>
 
    /**
     * If true, the context menu will use the trigger element as the anchor for positioning,

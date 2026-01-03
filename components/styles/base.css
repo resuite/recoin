@@ -111,7 +111,7 @@ body {
    --animate-fade-y: fade-y var(--speed-default) ease-in-out backwards;
 
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
-   --fab-size: max(9dvh, 40px);
+   --fab-size: max(7dvh, 50px);
    --recent-transactions-header-height: calc((var(--spacing) * 1.5) + var(--text-lg));
 
    --epxanding-view-layer: 93;
@@ -364,7 +364,6 @@ body {
       content: '';
    }
 }
-
 
 @utility font-custom {
    font-family: 'Instrument Sans Italic O', 'Instrument Sans Regular', sans-serif;

@@ -27,9 +27,9 @@
       grid-area: 1 / 2;
       background-color: #00000080;
       scroll-snap-align: start;
-      height: 1dvh;
-      width: 1dvw;
-      scale: 100 100;
+      height: 2dvh;
+      width: 2dvw;
+      scale: 50 50;
       transform-origin: top left;
       pointer-events: none;
       opacity: 0;
