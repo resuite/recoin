@@ -12,6 +12,8 @@
    max-height: 100dvh;
    max-width: 100dvw;
    contain: strict;
+   touch-action: none;
+   overscroll-behavior: none;
 
    &[data-open],
    &[data-content-loaded] {

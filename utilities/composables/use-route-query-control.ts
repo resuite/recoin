@@ -12,11 +12,11 @@ export function useRouteQueryControl(_key: string | { _root: string }, value = '
       query.set(key, value)
    }
    const remove = (options: { subKeys?: boolean } = { subKeys: true }) => {
-      const subKeys = [...current.get().query.keys()].filter((_key) => {
-         return _key.startsWith(`${key}.`)
-      })
       query.delete(key)
       if (options.subKeys) {
+         const subKeys = [...current.get().query.keys()].filter((_key) => {
+            return _key.startsWith(`${key}.`)
+         })
          defer(() => {
             // This tries to prevent any subtle timing/rendering issues
             // that can come from trying to remove all the keys at once.

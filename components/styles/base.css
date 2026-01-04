@@ -114,8 +114,8 @@ body {
    --fab-size: max(7dvh, 50px);
    --recent-transactions-header-height: calc((var(--spacing) * 1.5) + var(--text-lg));
 
-   --epxanding-view-layer: 93;
-   --floating-button-layer: 94;
+   --floating-button-layer: 93;
+   --epxanding-view-layer: 94;
    --overlay-layer: 95;
    --popover-layer: 96;
    --z-index-bottom-sheet: 97;

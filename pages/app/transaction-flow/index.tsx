@@ -1,7 +1,6 @@
 import { Cell, useScopeContext, useSetupEffect } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import { FullScreenTransitionView } from '@/components/full-screen-transition-view'
-import { useSidebarContext } from '@/components/sidebar-provider-view'
 import { QueryKeys } from '@/constants/query-keys'
 import ChooseCategory from '@/pages/app/transaction-flow/choose-category'
 import EnterTransactionDetails from '@/pages/app/transaction-flow/enter-transaction-details'
@@ -12,7 +11,6 @@ import { useRouteQueryControl } from '@/utilities/composables/use-route-query-co
 const TransactionFlow = () => {
    const query = useRouteQuery()
    const form = useScopeContext(TransactionDetailsFormScope)
-   const sidebarCtx = useSidebarContext()
 
    const category = query.get(QueryKeys.TransactionFlow.Category)
    const { hasKey: completed } = useRouteQueryControl(QueryKeys.TransactionFlow.Success)
@@ -21,9 +19,7 @@ const TransactionFlow = () => {
    })
 
    useSetupEffect(() => {
-      sidebarCtx.toggleSidebarEnabled(false)
       return () => {
-         sidebarCtx.toggleSidebarEnabled(true)
          form.reset()
       }
    })
