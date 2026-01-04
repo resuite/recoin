@@ -1,8 +1,8 @@
 import { Cell, If, useScopeContext } from 'retend'
 import { useRouteQuery } from 'retend/router'
 import type { TransactionType } from '@/api/database/types'
+import { Button } from '@/components/button'
 import { DateInput } from '@/components/date-input'
-import { FloatingActionButton } from '@/components/floating-action-button'
 import { Icon } from '@/components/icons'
 import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
 import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
@@ -17,22 +17,21 @@ import {
    VirtualKeyboardAwareView,
    VirtualKeyboardTriggers
 } from '@/components/virtual-keyboard-aware-view'
-import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { VibrationPatterns } from '@/constants/vibration'
 import { BackButton } from '@/pages/app/(fragments)/back-btn'
 import { TransactionTypeName } from '@/pages/app/(fragments)/transaction-type-name'
 import { useAuthContext } from '@/scopes/auth'
 import { TransactionDetailsFormScope } from '@/scopes/forms'
-import { ThemeAwareTeleport } from '@/scopes/theme'
 import { useCategory } from '@/utilities/composables/use-categories'
 import { useRouteQueryControl } from '@/utilities/composables/use-route-query-control'
-import { createPointerOrClickHandler, scrollIntoView, vibrate } from '@/utilities/miscellaneous'
+import { scrollIntoView, vibrate } from '@/utilities/miscellaneous'
 
 const EnterTransactionDetails = () => {
    const query = useRouteQuery()
    const { currency } = useAuthContext()
    const form = useScopeContext(TransactionDetailsFormScope)
+   const formId = 'transaction-details-form'
    const type = query.get(QueryKeys.TransactionFlow.Type).get() as TransactionType
    const { add: completeTransactionFlow } = useRouteQueryControl(QueryKeys.TransactionFlow.Success)
    const Arrow = type === 'income' ? ArrowBottomLeft : ArrowTopRight
@@ -56,18 +55,15 @@ const EnterTransactionDetails = () => {
       }
    }
 
-   const handleSubmit = createPointerOrClickHandler((event?: Event) => {
-      if (event?.currentTarget instanceof HTMLButtonElement) {
-         event.currentTarget.style.scale = '0'
-         vibrate(VibrationPatterns.ButtonPress)
-      }
+   const handleSubmit = () => {
+      vibrate(VibrationPatterns.ButtonPress)
       form.submit()
       completeTransactionFlow()
-   })
+   }
 
    return (
       <VirtualKeyboardAwareView
-         class='px-1 pb-2 grid grid-cols-1 place-items-center gap-1 place-content-center'
+         class='px-1 pb-2 grid grid-cols-1 place-items-center relative gap-1 place-content-center'
          onKeyboardVisibilityChange={handleKeyboardOpen}
       >
          {() => (
@@ -93,6 +89,7 @@ const EnterTransactionDetails = () => {
                <ScrollView ref={scrollViewRef} class='h-[45dvh] max-h-[45dvh]'>
                   {() => (
                      <form
+                        id={formId}
                         style={{ paddingBottom }}
                         class='[&_input]:duration-slow [&_input]:transition-opacity'
                         onSubmit--prevent={handleSubmit}
@@ -107,22 +104,19 @@ const EnterTransactionDetails = () => {
                               label='Location (Optional)'
                            />
                         </VirtualKeyboardTriggers>
-                        {If(form.values.amount, () => (
-                           <ThemeAwareTeleport to={ROOT_APP_OUTLET_ID}>
-                              <FloatingActionButton
-                                 outlined
-                                 fixed
-                                 onPointerDown={handleSubmit}
-                                 onClick={handleSubmit}
-                                 class='bg-transparent dark-scheme translate-x-[60%]'
-                              >
-                                 <Checkmark class='text-canvas-text' />
-                              </FloatingActionButton>
-                           </ThemeAwareTeleport>
-                        ))}
                      </form>
                   )}
                </ScrollView>
+               {If(form.values.amount, () => (
+                  <Button
+                     type='submit'
+                     form={formId}
+                     class='absolute! bottom-0 mb-2 w-[calc(100%-var(--spacing)*2)]'
+                  >
+                     <Checkmark class='btn-icon' />
+                     Save Transaction
+                  </Button>
+               ))}
             </>
          )}
       </VirtualKeyboardAwareView>

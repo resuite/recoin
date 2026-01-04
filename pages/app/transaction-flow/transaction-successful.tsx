@@ -29,11 +29,7 @@ const TransactionSuccessful = () => {
    useSetupEffect(async () => {
       await animationsSettled(activeViewRef)
       await new Promise((resolve) => setTimeout(resolve, TRANSACTION_SUCCESS_SCREEN_DELAY))
-      closeTransactionFlow({ subKeys: false })
-
-      return () => {
-         closeTransactionFlow()
-      }
+      closeTransactionFlow()
    })
 
    return (
