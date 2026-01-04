@@ -40,7 +40,7 @@ export const HomeStats = () => {
             <FitText
                scalingFactor={1.5}
                maxFontSize='var(--text-4xl)'
-               class='col-span-2 min-h-[6.98dvh] justify-items-start!'
+               class='col-span-2 mb-0.25 justify-items-start!'
             >
                <FormattedMoney currency={currency}>{totalIncome}</FormattedMoney>
             </FitText>
@@ -58,7 +58,7 @@ export const HomeStats = () => {
             <FitText
                scalingFactor={1.5}
                maxFontSize='var(--text-4xl)'
-               class='col-span-2 min-h-[6.98dvh] justify-items-start!'
+               class='col-span-2 mb-0.25 justify-items-start!'
             >
                <FormattedMoney currency={currency}>{totalExpense}</FormattedMoney>
             </FitText>
