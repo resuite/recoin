@@ -8,6 +8,11 @@
    padding: 0;
    border: 0;
    border-radius: 30%;
+
+   body[data-ios] & {
+      border-radius: 50%;
+   }
+
    color: var(--color-canvas-background);
    background-color: var(--color-canvas-text);
    transition:

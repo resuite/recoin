@@ -45,6 +45,7 @@
    width: var(--expand-size);
    height: var(--expand-size);
    border-radius: 30%;
+
    background-color: var(--expand-color);
    pointer-events: none;
    animation-duration: calc(var(--speed-default) * 1.75);
@@ -64,6 +65,10 @@
    .container:not([data-open]) > & {
       animation-name: collapsing;
    }
+}
+
+body[data-ios] .clipPath {
+   border-radius: 50%;
 }
 
 @keyframes expanding {

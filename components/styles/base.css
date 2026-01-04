@@ -112,6 +112,7 @@ body {
 
    --toast-slide-in: toast-slide-in var(--speed-slow) ease;
    --fab-size: max(7dvh, 50px);
+
    --recent-transactions-header-height: calc((var(--spacing) * 1.5) + var(--text-lg));
 
    --floating-button-layer: 93;
@@ -121,6 +122,10 @@ body {
    --z-index-bottom-sheet: 97;
    --toasts-layer: 98;
    --z-index-transition: 99;
+}
+
+body[data-ios] {
+   --fab-size: max(9dvh, 50px);
 }
 
 @layer base {
