@@ -7,14 +7,22 @@
    height: var(--fab-size);
    padding: 0;
    border: 0;
-   border-radius: 30%;
 
-   body[data-ios] & {
-      border-radius: 50%;
+   @layer utilities {
+      :where(&) {
+         color: var(--color-canvas-background);
+         background-color: var(--color-canvas-text);
+      }
+
+      body[data-android] & {
+         border-radius: 30%;
+      }
+
+      body[data-ios] & {
+         border-radius: 50%;
+      }
    }
 
-   color: var(--color-canvas-background);
-   background-color: var(--color-canvas-text);
    transition:
       translate var(--speed-default),
       scale var(--speed-slow),
@@ -47,7 +55,8 @@
       top: calc(
          100dvh -
          var(--fab-size) -
-         max(calc(var(--spacing) * 2), env(safe-area-inset-bottom))
+         calc(var(--spacing) * 2) -
+         env(safe-area-inset-bottom, 0px)
       );
    }
 

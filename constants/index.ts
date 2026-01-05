@@ -17,7 +17,7 @@ export const Easing = {
    Timing: 'cubic-bezier(0.3, 0.4, 0.05, 1)',
    TimingKeyboard: 'cubic-bezier(0.17, 0.59, 0.4, 0.77)',
    TimingBounce: 'cubic-bezier(0.3, 0.75, 0.45, 1.2)',
-   TimingBounceSlower: 'cubic-bezier(0.3, 0.4, 0, 1.75)'
+   TimingBounceSlower: 'cubic-bezier(0.3, 0.47, 0, 1.35)'
 }
 const DefaultSpeed = 150
 export const Speed = {

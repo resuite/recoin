@@ -68,22 +68,22 @@ export function getFocusableElementInItem(parent: Element) {
  */
 export function createPointerOrClickHandler(handler: () => void) {
    return (event: Event) => {
-      const target = event.currentTarget as HTMLButtonElement
       if (event.type.startsWith('pointer')) {
          // Prevents click from firing, given that pointerdown has already been fired.
          const preventDblClick = (event: Event) => {
             event.preventDefault()
+            event.stopImmediatePropagation()
+            event.stopPropagation()
          }
-         target.addEventListener('click', preventDblClick, { capture: true, once: true })
+         document.body.addEventListener('click', preventDblClick, { capture: true, once: true })
          defer(() => {
-            target.removeEventListener('click', preventDblClick)
+            document.body.removeEventListener('click', preventDblClick)
          })
       }
 
       if (event.defaultPrevented) {
          return
       }
-
       handler()
    }
 }

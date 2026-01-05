@@ -4,7 +4,6 @@
    background-color: #00000050;
    pointer-events: none;
    opacity: 0;
-   will-change: opacity;
    transition: opacity var(--speed-slow);
 
    &.dimmed {

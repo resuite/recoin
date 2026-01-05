@@ -4,6 +4,8 @@ import type { TransactionType } from '@/api/database/types'
 import { ExpandingView } from '@/components/expanding-view'
 import { FloatingMenu, type FloatingMenuItem } from '@/components/floating-action-menu'
 import Add from '@/components/icons/svg/add'
+import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
+import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
 import { ROOT_APP_OUTLET_ID } from '@/constants'
 import { QueryKeys } from '@/constants/query-keys'
 import { VibrationPatterns } from '@/constants/vibration'
@@ -39,14 +41,14 @@ export function AddNewTransactionButton() {
    const items: Array<FloatingMenuItem> = [
       {
          label: 'Expense',
-         icon: 'arrow-top-right',
+         icon: ArrowTopRight,
          onClick() {
             query.set(QueryKeys.TransactionFlow.Type, 'expense')
          }
       },
       {
          label: 'Income',
-         icon: 'arrow-bottom-left',
+         icon: ArrowBottomLeft,
          onClick() {
             query.set(QueryKeys.TransactionFlow.Type, 'income')
          }
@@ -105,7 +107,7 @@ export function AddNewTransactionButton() {
                { 'rotate-45': transactionFlowIsOpen }
             ]}
          >
-            <Add />
+            <Add class='ios:text-canvas-text' />
          </div>
       )
    }

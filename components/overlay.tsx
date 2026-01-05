@@ -6,7 +6,7 @@ interface OverlayProps extends JSX.BaseContainerProps {
 }
 
 export function Overlay(props: OverlayProps) {
-   const { isDimmed, ...rest } = props
+   const { isDimmed, class: className, ...rest } = props
 
-   return <div class={[styles.overlay, { [styles.dimmed]: isDimmed }, rest.class]} {...rest} />
+   return <div class={[styles.overlay, { [styles.dimmed]: isDimmed }, className]} {...rest} />
 }

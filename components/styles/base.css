@@ -92,7 +92,7 @@ body {
    --timing-keyboard: cubic-bezier(0.17, 0.59, 0.4, 0.77);
    --speed-keyboard: calc(var(--default-speed) * 0.75);
    --timing-bounce: cubic-bezier(0.3, 0.75, 0.45, 1.2);
-   --timing-bounce-slower: cubic-bezier(0.3, 0.4, 0, 1.75);
+   --timing-bounce-slower: cubic-bezier(0.3, 0.47, 0, 1.35);
 
    --speed-device: calc(var(--default-speed) * 2.2);
    --speed-default: var(--default-speed);
@@ -125,7 +125,7 @@ body {
 }
 
 body[data-ios] {
-   --fab-size: max(9dvh, 50px);
+   --fab-size: max(8dvh, 50px);
 }
 
 @layer base {
@@ -351,7 +351,7 @@ body[data-ios] {
    @apply grid place-items-center;
 }
 
-@utility bg-glass {
+@utility bg-glass-old {
    -webkit-backdrop-filter: blur(8px);
    backdrop-filter: blur(8px);
 
@@ -415,6 +415,56 @@ body[data-ios] {
 @custom-variant expanded-ctx {
    &:where([data-expanded-ctx] &) {
       @slot;
+   }
+}
+
+@custom-variant ios {
+   body[data-ios] &:nth-child(n) {
+      @slot;
+   }
+}
+
+@custom-variant android {
+   &:where(body[data-android] &) {
+      @slot;
+   }
+}
+
+@utility bg-glass {
+   background-color: rgba(255, 255, 255, 0.8);
+   border: 0.25px solid #00000020;
+   backdrop-filter: blur(2px) brightness(93%);
+   -webkit-backdrop-filter: blur(2px) brightness(93%);
+   box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.2);
+   overflow: visible;
+   color: var(--color-base);
+
+   :where(&) {
+      border-radius: 20px;
+   }
+
+   &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+   }
+
+   &::after {
+      content: '';
+      inset: 0;
+      position: absolute;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      box-shadow:
+         inset 2px 2px 4px 0px white,
+         inset -2px -2px 4px 0px white;
    }
 }
 

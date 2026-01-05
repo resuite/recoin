@@ -2,8 +2,7 @@ import { Cell, For } from 'retend'
 import type { JSX } from 'retend/jsx-runtime'
 import { useDerivedValue } from 'retend-utils/hooks'
 import { FloatingActionButton } from '@/components/floating-action-button'
-import type { IconName } from '@/components/icons'
-import { AsyncMaskIcon } from '@/components/icons/icon-mask'
+import type { IconProps } from '@/components/icons'
 import Add from '@/components/icons/svg/add'
 import { Overlay } from '@/components/overlay'
 import { PopoverView } from '@/components/popover-view'
@@ -15,7 +14,7 @@ import styles from './floating-action-menu.module.css'
 
 export interface FloatingMenuItem {
    label: string
-   icon: IconName
+   icon: (props: IconProps) => JSX.Template
    onClick?: () => void
 }
 
@@ -46,8 +45,9 @@ export function FloatingMenu(props: FloatingMenuProps) {
       return items.get().length
    })
    const isOpen = useDerivedValue(isOpenProp)
-   const trigger = Cell.source<HTMLButtonElement | null>(null)
+   const triggerRef = Cell.source<HTMLButtonElement | null>(null)
    const containerRef = Cell.source<HTMLElement | null>(null)
+   const popoverRef = Cell.source<HTMLDivElement | null>(null)
    const contentIsOpen = Cell.source(isOpen.get())
 
    const toggleState = createPointerOrClickHandler(() => {
@@ -55,57 +55,63 @@ export function FloatingMenu(props: FloatingMenuProps) {
       onStateChange?.(!isOpen.get())
    })
 
-   isOpen.runAndListen(async (menuIsOpen) => {
-      const isClosing = !menuIsOpen
-      if (isClosing) {
-         containerRef.get()?.classList.add(styles.closing)
-         await animationsSettled(containerRef, { subtree: true })
-         containerRef.get()?.classList.remove(styles.closing)
-         if (isOpen.get()) {
-            return
+   const PopoverContent = () => (
+      <menu class={[styles.menu]} style={{ '--fa-item-count': count }}>
+         {For(items, (item, index) => {
+            const ref = Cell.source<HTMLButtonElement | null>(null)
+
+            return (
+               <button
+                  ref={ref}
+                  type='button'
+                  class={styles.floatingListItem}
+                  style={{ '--fa-index': index }}
+                  onClick={item.onClick}
+               >
+                  <item.icon class={styles.itemIcon} />
+                  {item.label}
+               </button>
+            )
+         })}
+      </menu>
+   )
+
+   isOpen.runAndListen(
+      async (open) => {
+         const isClosing = !open
+         if (isClosing) {
+            await animationsSettled(containerRef, { subtree: true })
+            if (isOpen.get()) {
+               return
+            }
          }
-      }
-      contentIsOpen.set(menuIsOpen)
-   })
+
+         contentIsOpen.set(open)
+      },
+      { priority: -1 }
+   )
 
    return (
-      <ThemeAwareTeleport
-         to={teleportTarget}
-         ref={containerRef}
-         class={[styles.teleport, { [styles.open]: contentIsOpen }]}
-      >
-         <Overlay isDimmed={isOpen} onPointerDown={toggleState} />
+      <ThemeAwareTeleport to={teleportTarget} ref={containerRef} class={styles.teleport}>
+         <Overlay class={styles.overlay} isDimmed={isOpen} onClick={toggleState} />
          <FloatingActionButton
-            ref={trigger}
+            ref={triggerRef}
             inline='right'
             block='bottom'
-            class={styles.button}
+            class={[styles.button, 'ios:bg-glass']}
             onClick={toggleState}
             onPointerDown={toggleState}
          >
             <FloatingIcon />
          </FloatingActionButton>
          <PopoverView
+            ref={popoverRef}
             isOpen={contentIsOpen}
-            anchor={trigger}
-            class={styles.popover}
+            anchor={triggerRef}
+            class={[styles.popover, { [styles.open]: isOpen }, 'ios:bg-glass']}
             justifySelf='end'
          >
-            {() => (
-               <menu class={styles.menu} style={{ '--fa-item-count': count }}>
-                  {For(items, (item, index) => (
-                     <button
-                        type='button'
-                        class={styles.floatingListItem}
-                        style={{ '--fa-index': index }}
-                        onClick={item.onClick}
-                     >
-                        <AsyncMaskIcon name={item.icon} class={styles.itemIcon} />
-                        {item.label}
-                     </button>
-                  ))}
-               </menu>
-            )}
+            {PopoverContent}
          </PopoverView>
          {children}
       </ThemeAwareTeleport>
