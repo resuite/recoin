@@ -74,7 +74,7 @@ body[data-ios] {
    .popover {
       will-change: scale, translate, opacity;
       transform-origin: bottom right;
-      transition-property: transform, opacity;
+      transition-property: transform, scale, opacity;
       transition-timing-function: var(--timing-bounce-slower);
       transition-duration: var(--speed-bit-slower);
       animation-fill-mode: backwards;
@@ -91,15 +91,24 @@ body[data-ios] {
       }
 
       &:not(.open) {
-         scale: 0.25;
-         opacity: 0;
+         /*
+         This should be a transition, but for reasons that are beyond me
+         the transitions fail and glitch on safari 26. Rubbish browser.
+         */
+         animation-name: liquid-glass-menu-close;
       }
    }
 
    .button {
+      transition-duration: var(--speed-slower);
+
       &:has(+ .popover.open) {
-         transform: scale(1.5) translateX(-20%) translateY(-20%);
+         transform: scale(1.5) translateX(-20%) translateY(-40%);
          opacity: 0;
+
+         & > * {
+            visibility: hidden;
+         }
       }
    }
 
@@ -110,6 +119,7 @@ body[data-ios] {
       grid-template-columns: auto 1fr;
       justify-items: start;
       animation: none;
+      transition-duration: 0ms;
 
       &:active {
          scale: 1;
@@ -134,6 +144,13 @@ body[data-ios] {
 
 @keyframes liquid-glass-menu-open {
    from {
+      scale: 0.25;
+      opacity: 0;
+   }
+}
+
+@keyframes liquid-glass-menu-close {
+   to {
       scale: 0.25;
       opacity: 0;
    }

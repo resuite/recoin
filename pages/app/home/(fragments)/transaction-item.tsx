@@ -57,9 +57,8 @@ export function TransactionItem(props: TransactionItemProps) {
             'grid grid-cols-[auto_auto_1fr_auto] grid-rows-2 px-1 w-full whitespace-nowrap',
             '[body[data-chrome]_&]:[content-visibility:auto]',
             'rounded-none',
-            'button-bare button-click-effect'
+            'button-bare'
          ]}
-         trackClickedState
          onClick={openDrawer}
       >
          <CategoryIcon icon={category.icon} class='h-2 w-2 row-span-2 mr-0.5 self-center' />

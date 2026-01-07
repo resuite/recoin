@@ -5,8 +5,8 @@
    left: 0;
    display: grid;
    align-items: end;
-   width: 100dvw;
-   height: 100dvh;
+   width: var(--screen-width);
+   height: var(--screen-height);
    background-color: transparent;
    grid-template-rows: 1fr;
    grid-template-columns: 1fr;
@@ -17,8 +17,8 @@
    & > .overlay {
       align-self: flex-start;
       display: block;
-      width: 100dvw;
-      height: 100dvh;
+      width: var(--screen-width);
+      height: var(--screen-height);
       grid-area: 1 / 1;
       background-color: #00000080;
       z-index: -1;
@@ -37,72 +37,94 @@
 }
 
 .sheetContentContainer {
-   &::before {
-      --width: 45px;
-      position: absolute;
-      top: calc(var(--spacing) / 1.5);
-      left: calc(50% - var(--width) / 2);
-      display: block;
-      width: var(--width);
-      height: 7px;
-      border-radius: 3dvh;
-      background-color: #00000045;
-      content: '';
-   }
+   --sheet-top-spacing: 0px;
+   --sheet-bottom-spacing: 0px;
+   --sheet-inline-spacing: 0px;
+   --sheet-curve-raw: 30;
+   --sheet-curve-raw-doubled: calc(var(--sheet-curve-raw) * 2);
+   --sheet-curve-raw-tripled: calc(var(--sheet-curve-raw) * 3);
+   --sheet-curve: calc(var(--sheet-curve-raw) * 1px);
+   --sheet-curve-half: calc(var(--sheet-curve) / 1.5);
 
-   .dialog:not([data-dynamic-sizing]) > & {
-      height: var(--sheet-content-height);
-      box-shadow: 0 -2px 8px 0 #00000015;
-      border-radius: 3dvh 3dvh 0 0;
-
-      body[data-android] & {
-         border-radius: 0;
+   @media (display-mode: standalone) {
+      body[data-ios] & {
+         --sheet-top-spacing: max(env(safe-area-inset-top, 0px), var(--half-spacing));
+         --sheet-bottom-spacing: calc(var(--half-spacing) * 0.85);
+         --sheet-inline-spacing: calc(var(--half-spacing) * 0.5);
       }
    }
 
+   .dialog:not([data-dynamic-sizing]) > & {
+      min-height: 70dvh;
+   }
+
+   display: grid;
    position: relative;
    pointer-events: auto;
    align-self: end;
    grid-area: 1 / 1;
-   will-change: transform, opacity;
+   will-change: translate, opacity;
    animation: slide-up-from-under var(--speed-device) var(--timing) backwards;
-   transition:
-      translate var(--speed-device) var(--timing),
-      opacity var(--speed-device) var(--timing);
-
-   --sheet-sizing-speed: 300ms;
+   transition-property: translate, opacity;
+   transition-duration: var(--speed-device);
+   transition-timing-function: var(--timing);
+   margin-inline: var(--sheet-inline-spacing);
+   margin-block: var(--sheet-top-spacing) var(--sheet-bottom-spacing);
+   width: calc(100% - var(--sheet-inline-spacing) * 2);
 }
 
 .sheetContentContainerBackground {
    position: absolute;
-   z-index: -1;
-   bottom: 0;
-   left: 0;
+   display: grid;
+   grid-template-rows: auto 1fr auto;
+   grid-template-columns: 1fr;
    width: 100%;
    height: 100%;
-   pointer-events: none;
-   --nextHeight: var(--initialHeight);
+   bottom: 0;
+   z-index: -1;
 
    &::before {
       display: block;
       content: '';
-      height: 3dvh;
-      border-radius: 3dvh 3dvh 0 0;
+      /* The extra 1px helps with CSS rounding errors. */
+      transform: translateY(
+         calc(((var(--sheet-initial-height) - var(--sheet-next-height)) * 1px) + 1px)
+      );
+      transition: transform var(--speed-device) var(--timing);
+      height: var(--sheet-curve);
       background-color: var(--color-canvas-background);
-      translate: 0 1px;
+      border-radius: var(--sheet-curve-half) var(--sheet-curve-half) 0 0;
+   }
+
+   .sheetContentContainerBackgroundScalable {
+      --sheet-next-height-normalized: calc(
+         var(--sheet-next-height) -
+         var(--sheet-curve-raw-tripled)
+      );
+      --sheet-initial-height-normalized: calc(
+         var(--sheet-initial-height) -
+         var(--sheet-curve-raw-tripled)
+      );
+      transform-origin: bottom;
+      transition: transform var(--speed-device) var(--timing);
+      background-color: var(--color-canvas-background);
+      transform: scaleY(
+         calc((var(--sheet-next-height-normalized)) / (var(--sheet-initial-height-normalized)))
+      );
    }
 
    &::after {
       display: block;
       content: '';
-      height: 100%;
-      width: 100%;
+      height: calc(var(--sheet-curve) * 2);
       background-color: var(--color-canvas-background);
-      transform-origin: bottom;
+      border-radius: 0;
    }
 
-   body[data-android] &::before {
-      border-radius: 0;
+   @media (display-mode: standalone) {
+      body[data-ios] &::after {
+         border-radius: 0 0 5.5dvh 5.5dvh;
+      }
    }
 }
 

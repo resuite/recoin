@@ -7,10 +7,8 @@
    grid: 1fr / 1fr;
    isolation: isolate;
    overflow: hidden;
-   height: 100dvh;
-   width: 100dvw;
-   max-height: 100dvh;
-   max-width: 100dvw;
+   width: var(--screen-width);
+   height: var(--screen-height);
    contain: strict;
    touch-action: none;
    overscroll-behavior: none;
@@ -23,8 +21,8 @@
 
 .content {
    top: 0;
-   width: 100dvw;
-   height: 100dvh;
+   width: var(--screen-width);
+   height: var(--screen-height);
    grid-area: 1 / 1;
 
    &:empty,

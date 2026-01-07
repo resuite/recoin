@@ -27,8 +27,8 @@
       grid-area: 1 / 2;
       background-color: #00000080;
       scroll-snap-align: start;
-      height: 100dvh;
-      width: 100dvw;
+      width: var(--screen-width);
+      height: var(--screen-height);
       pointer-events: none;
       will-change: opacity;
       opacity: 0;
@@ -50,7 +50,7 @@
    grid-area: 1 / 2;
    scroll-snap-align: start;
    will-change: transform; /* Do not remove: without this the bottom sheet scale transform triggers a repaint of all the content. */
-   transition: transform var(--speed-device) var(--timing);
+   transition: transform var(--speed-bit-slower) var(--timing);
 
    &[data-opened] {
       pointer-events: none;

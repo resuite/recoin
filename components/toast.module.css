@@ -7,8 +7,8 @@
    top: 0;
    left: 0;
    display: grid;
-   width: 100dvw;
-   height: 100dvh;
+   width: var(--screen-width);
+   height: var(--screen-height);
    padding-top: calc(var(--spacing) + var(--safe-area-inset-top));
    z-index: var(--toasts-layer);
    pointer-events: none;

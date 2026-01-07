@@ -127,7 +127,7 @@ export function Sidebar() {
       <div
          style={{
             contain: 'strict',
-            containIntrinsicHeight: '100dvh',
+            containIntrinsicHeight: 'var(--screen-height)',
             containIntrinsicWidth: '65dvw',
             contentVisibility: 'auto'
          }}

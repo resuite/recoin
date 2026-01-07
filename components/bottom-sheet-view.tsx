@@ -35,8 +35,9 @@ interface BottomSheetGlobalContext {
    isOpen: Cell<boolean>
 }
 
-const BottomSheetScope = createScope<BottomSheetContext>()
-export const BottomSheetGlobalScope = createScope<BottomSheetGlobalContext>()
+const BottomSheetScope = createScope<BottomSheetContext>('BottomSheet')
+export const BottomSheetGlobalScope =
+   createScope<BottomSheetGlobalContext>('BottomSheetGlobalScope')
 
 /**
  * A bottom-aligned sheet component that can be opened and closed.
@@ -89,10 +90,6 @@ export function BottomSheet(props: BottomSheetProps) {
    const dialogOpen = Cell.source(isOpen.get())
    const dialogRef = Cell.source<HTMLDialogElement | null>(null)
    const sheetContentHeight = Cell.source(0)
-   const sheetContentHeightStr = Cell.derived(() => {
-      const height = sheetContentHeight.get()
-      return height ? `${height}px` : '70dvh'
-   })
 
    if (dynamicSizing) {
       contentRef.listen(() => {
@@ -121,9 +118,10 @@ export function BottomSheet(props: BottomSheetProps) {
       ;(globalScope.isOpen as SourceCell<boolean>).set(false)
       const content = contentRef.peek()
       const animation = content?.animate(
-         { translate: '0 100%' },
+         { translate: '0 calc(100% + var(--sheet-top-spacing))' },
          { duration: Speed.Device, easing: Easing.Timing, fill: 'forwards' }
       )
+      animation?.commitStyles()
       await Promise.allSettled([animation?.finished])
       isClosing = false
    }
@@ -166,7 +164,7 @@ export function BottomSheet(props: BottomSheetProps) {
    }
 
    function resizeToScreen() {
-      resize('100dvh')
+      resize('calc(var(--screen-height) - var(--sheet-top-spacing) - var(--sheet-bottom-spacing))')
    }
 
    function close() {
@@ -231,7 +229,6 @@ export function BottomSheet(props: BottomSheetProps) {
                   class={styles.dialog}
                   data-dynamic-sizing={dynamicSizing}
                   onClose={onClose}
-                  style={{ '--sheet-content-height': sheetContentHeightStr }}
                >
                   <Overlay isDimmed={globalScope.isOpen} onPointerDown={handleClickOutside} />
                   {If(dialogOpen, () => (
@@ -240,12 +237,7 @@ export function BottomSheet(props: BottomSheetProps) {
                         ref={contentRef}
                         class={[styles.sheetContentContainer, rest.class]}
                      >
-                        {If(dynamicSizing, () => (
-                           <AnimatedBackground
-                              class={styles.sheetContentContainerBackground}
-                              height={sheetContentHeight}
-                           />
-                        ))}
+                        <AnimatedBackground height={sheetContentHeight} />
                         <Content />
                      </div>
                   ))}
@@ -256,53 +248,36 @@ export function BottomSheet(props: BottomSheetProps) {
    )
 }
 
-interface AnimatedBackgroundProps extends DivProps {
+interface AnimatedBackgroundProps {
    height: JSX.ValueOrCell<number>
-   ref?: Cell<HTMLElement | null>
 }
 
 function AnimatedBackground(props: AnimatedBackgroundProps) {
-   const { height: heightProp, ref = Cell.source(null), ...rest } = props
+   const { height: heightProp } = props
+   const ref = Cell.source<HTMLDivElement | null>(null)
    const height = useDerivedValue(heightProp)
    let initialHeight: number | undefined
 
-   let lastAfterPseudoElementTranslation = '1'
-   let lastBeforePseudoTranslation = '0px'
-
    const updateHeight = (nextHeight: number) => {
       const div = ref.get()
-      if (div === null) {
-         return
-      }
-
-      if (initialHeight === undefined) {
-         initialHeight = nextHeight
-         if (div.attributeStyleMap) {
-            div.attributeStyleMap.set('height', CSS.px(initialHeight))
+      if (div !== null) {
+         if (initialHeight === undefined) {
+            initialHeight = nextHeight
+            div.style.height = `${initialHeight}px`
+            div.style.setProperty('--sheet-initial-height', initialHeight.toString())
          } else {
-            div.style.height = `${initialHeight}`
+            div.style.setProperty('--sheet-next-height', nextHeight.toString())
          }
-      } else {
-         lastBeforePseudoTranslation = `0 ${initialHeight - nextHeight + 1}px`
-         lastAfterPseudoElementTranslation = `1 ${nextHeight / initialHeight}`
-         div.animate([{ translate: lastBeforePseudoTranslation }], {
-            pseudoElement: ':before',
-            duration: Speed.Slow,
-            easing: Easing.Timing,
-            fill: 'forwards'
-         })
-         div.animate([{ scale: lastAfterPseudoElementTranslation }], {
-            pseudoElement: ':after',
-            duration: Speed.Slow,
-            easing: Easing.Timing,
-            fill: 'forwards'
-         })
       }
    }
 
    height.listen(updateHeight)
 
-   return <div {...rest} ref={ref} />
+   return (
+      <div ref={ref} class={styles.sheetContentContainerBackground}>
+         <div class={styles.sheetContentContainerBackgroundScalable} />
+      </div>
+   )
 }
 
 /**
@@ -376,12 +351,7 @@ export function QueryControlledBottomSheet(props: QueryControlledBottomSheetProp
    }
 
    return (
-      <BottomSheet
-         isOpen={isOpen}
-         onClose={onClose}
-         {...rest}
-         class={[rest.dynamicSizing ? 'bg-transparent' : 'bg-canvas-background', rest.class]}
-      >
+      <BottomSheet isOpen={isOpen} onClose={onClose} {...rest}>
          {children}
       </BottomSheet>
    )

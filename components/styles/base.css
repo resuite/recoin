@@ -52,9 +52,15 @@
    color-scheme: initial;
 }
 
+html,
+body {
+   overscroll-behavior: none;
+   height: 100%;
+   background-color: var(--color-base);
+}
+
 body {
    font-family: system-ui, 'Instrument Sans Italic O', 'Instrument Sans Regular', sans-serif;
-   @apply dark-scheme;
 }
 
 @theme {
@@ -62,6 +68,8 @@ body {
    --half-spacing: calc(var(--spacing) / 2);
    --safe-area-inset-top: env(safe-area-inset-top, 0px);
    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+   --screen-height: 100dvh;
+   --screen-width: 100dvw;
 
    --color-base: rgb(39, 39, 39);
    --color-light-yellow: rgb(250, 255, 237);
@@ -87,8 +95,8 @@ body {
    --text-large: 3.5rem;
    --text-logo: 4rem;
 
-   --default-speed: 150ms;
-   --timing: cubic-bezier(0.3, 0.4, 0.05, 1);
+   --default-speed: 160ms;
+   --timing: cubic-bezier(0.3, 0, 0.05, 1);
    --timing-keyboard: cubic-bezier(0.17, 0.59, 0.4, 0.77);
    --speed-keyboard: calc(var(--default-speed) * 0.75);
    --timing-bounce: cubic-bezier(0.3, 0.75, 0.45, 1.2);
@@ -268,6 +276,16 @@ body[data-ios] {
    height: 100dvh;
 }
 
+/* iOS 26 have very irritating distortions in safari */
+body[data-ios] {
+   --screen-height: 100lvh;
+   --screen-width: 100lvw;
+}
+
+body[data-ios] .h-screen {
+   height: 100lvh;
+}
+
 @utility w-screen {
    width: 100dvw;
 }
@@ -431,11 +449,11 @@ body[data-ios] {
 }
 
 @utility bg-glass {
-   background-color: rgba(255, 255, 255, 0.8);
-   border: 0.25px solid #00000020;
+   background-color: rgba(255, 255, 255, 0.75);
+   /*border: 0.25px solid #00000020;*/
    backdrop-filter: blur(2px) brightness(93%);
    -webkit-backdrop-filter: blur(2px) brightness(93%);
-   box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.2);
+   box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.3);
    overflow: visible;
    color: var(--color-base);
 

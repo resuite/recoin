@@ -4,6 +4,7 @@ import { FitText } from '@/components/fit-text'
 import { FormattedMoney } from '@/components/formatted-money'
 import ArrowBottomLeft from '@/components/icons/svg/arrow-bottom-left'
 import ArrowTopRight from '@/components/icons/svg/arrow-top-right'
+import { Easing, Speed } from '@/constants'
 import type { Category } from '@/database/models/category'
 import type { Transaction } from '@/database/models/transaction'
 import { CategoryIcon } from '@/pages/app/home/(fragments)/category-icon'
@@ -27,8 +28,8 @@ export const TransactionSheetHeader = (props: HeaderProps) => {
       <UniqueTransition
          name={`transaction-header-${transaction.get().id}`}
          class='w-full! flex! flex-col items-center gap-y-0.25 border-b-2 border-b-gray-500/50 mb-1'
-         transitionTimingFunction='ease'
-         transitionDuration='300ms'
+         transitionTimingFunction={Easing.Timing}
+         transitionDuration={`${Speed.Device}ms`}
       >
          {() => (
             <>

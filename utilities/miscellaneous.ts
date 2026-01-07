@@ -67,24 +67,25 @@ export function getFocusableElementInItem(parent: Element) {
  * @returns An event handler that triggers the action on the first pointer interaction.
  */
 export function createPointerOrClickHandler(handler: () => void) {
+   let pointerEventRun = false
+   let timeout: NodeJS.Timeout | null = null
    return (event: Event) => {
-      if (event.type.startsWith('pointer')) {
-         // Prevents click from firing, given that pointerdown has already been fired.
-         const preventDblClick = (event: Event) => {
-            event.preventDefault()
-            event.stopImmediatePropagation()
-            event.stopPropagation()
+      if (pointerEventRun) {
+         if (timeout) {
+            clearTimeout(timeout)
          }
-         document.body.addEventListener('click', preventDblClick, { capture: true, once: true })
-         defer(() => {
-            document.body.removeEventListener('click', preventDblClick)
-         })
-      }
-
-      if (event.defaultPrevented) {
+         pointerEventRun = false
          return
       }
+
+      if (event.type.startsWith('pointer')) {
+         pointerEventRun = true
+      }
+
       handler()
+      timeout = setTimeout(() => {
+         pointerEventRun = false
+      }, 500)
    }
 }
 

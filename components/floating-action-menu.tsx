@@ -49,6 +49,10 @@ export function FloatingMenu(props: FloatingMenuProps) {
    const containerRef = Cell.source<HTMLElement | null>(null)
    const popoverRef = Cell.source<HTMLDivElement | null>(null)
    const contentIsOpen = Cell.source(isOpen.get())
+   const itemsEnabled = Cell.source(false)
+   const pointerEvents = Cell.derived(() => {
+      return itemsEnabled.get() ? 'auto' : 'none'
+   })
 
    const toggleState = createPointerOrClickHandler(() => {
       vibrate(VibrationPatterns.ButtonPress)
@@ -65,7 +69,7 @@ export function FloatingMenu(props: FloatingMenuProps) {
                   ref={ref}
                   type='button'
                   class={styles.floatingListItem}
-                  style={{ '--fa-index': index }}
+                  style={{ '--fa-index': index, pointerEvents }}
                   onClick={item.onClick}
                >
                   <item.icon class={styles.itemIcon} />
@@ -76,10 +80,22 @@ export function FloatingMenu(props: FloatingMenuProps) {
       </menu>
    )
 
-   isOpen.runAndListen(
+   let timeout: NodeJS.Timeout | undefined
+   isOpen.listen((isOpen) => {
+      itemsEnabled.set(false)
+      if (isOpen) {
+         if (timeout) {
+            clearTimeout(timeout)
+         }
+         timeout = setTimeout(() => {
+            itemsEnabled.set(true)
+         }, 300)
+      }
+   })
+
+   isOpen.listen(
       async (open) => {
-         const isClosing = !open
-         if (isClosing) {
+         if (!open) {
             await animationsSettled(containerRef, { subtree: true })
             if (isOpen.get()) {
                return

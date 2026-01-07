@@ -23,8 +23,8 @@
 .fullScreenTransition {
    top: 0;
    display: grid;
-   height: 100dvh;
-   width: 100dvw;
+   width: var(--screen-width);
+   height: var(--screen-height);
    grid-template-columns: 100% 100%;
 
    &[data-modified] {
@@ -91,7 +91,7 @@
 
 @keyframes slide-up-entering {
    from {
-      translate: 0 100dvh;
+      translate: 0 var(--screen-height);
       opacity: 30%;
    }
 }

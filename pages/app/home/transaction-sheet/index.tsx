@@ -69,7 +69,10 @@ const TransactionItemBottomSheetContent = () => {
    })
 
    return (
-      <SafeAreaView class='grid justify-center place-items-center gap-y-0.25 grid-cols-1 h-full w-full'>
+      <SafeAreaView
+         class='grid justify-center place-items-center gap-y-0.25 grid-cols-1 h-full w-full'
+         containerClass='pt-1!'
+      >
          {Switch(mode, {
             details: () => (
                <TransactionViewMode

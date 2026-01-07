@@ -106,7 +106,10 @@ const TransactionEditMode = (props: TransactionEditModeProps) => {
    })
 
    return (
-      <form class='w-full h-full grid grid-rows-[1fr_auto] pt-1.5' onSubmit--prevent={handleSave}>
+      <form
+         class='w-full h-full grid grid-rows-[1fr_auto] pt-(--safe-area-inset-top)'
+         onSubmit--prevent={handleSave}
+      >
          <div
             ref={contentRef}
             class={[
