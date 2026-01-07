@@ -96,6 +96,7 @@ body[data-ios] {
          the transitions fail and glitch on safari 26. Rubbish browser.
          */
          animation-name: liquid-glass-menu-close;
+         animation-fill-mode: forwards;
       }
    }
 
