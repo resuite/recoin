@@ -15,7 +15,11 @@ export function MoneyInput(props: MoneyInputProps) {
    const { model, currency: currencyProp, ...rest } = props
    const currency = useDerivedValue(currencyProp)
    const currencyDecimals = Cell.derived(() => {
-      return getCurrencyDecimals(currency.get())
+      const currencyValue = currency.get()
+      if (currencyValue === undefined) {
+         return 2
+      }
+      return getCurrencyDecimals(currencyValue)
    })
    const inputRef = Cell.source<HTMLInputElement | null>(null)
    const formatter = Cell.derived(() => {
