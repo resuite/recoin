@@ -51,7 +51,7 @@ const StartingBalance = (props: StartingBalanceProps) => {
             >
                <div
                   class={[
-                     'duration-slow transition-transform',
+                     'duration-slow transition-transform w-full',
                      { '-translate-y-2': keyboardIsOpen }
                   ]}
                >
