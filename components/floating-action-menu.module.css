@@ -97,6 +97,7 @@ body[data-ios] {
          */
          animation-name: liquid-glass-menu-close;
          animation-fill-mode: forwards;
+         animation-duration: var(--speed-slower);
       }
    }
 
