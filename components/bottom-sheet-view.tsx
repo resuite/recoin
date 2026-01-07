@@ -127,6 +127,9 @@ export function BottomSheet(props: BottomSheetProps) {
    }
 
    async function handleClickOutside() {
+      if (isClosing) {
+         return
+      }
       await startCloseSequence()
       onClose?.()
    }

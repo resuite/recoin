@@ -27,15 +27,14 @@ const TransactionDeleteMode = (props: TransactionDeleteModeProps) => {
    const transactionId = transaction.get().id
    const store = useStore()
    const { showToast } = useToast()
-   const { contentRef } = useBottomSheetContext()
-   const { remove: closeSheet } = useRouteQueryControl(QueryKeys.TransactionSheet)
+   const { contentRef, close: closeBottomSheet } = useBottomSheetContext()
    const { remove: closeDeleteMode } = useRouteQueryControl(
       QueryKeys.TransactionSheet.Mode,
       'Delete'
    )
 
    const handleDelete = async () => {
-      closeSheet()
+      closeBottomSheet()
       showToast({
          content: <ToastMessage Icon={Checkmark} message='Transaction deleted.' />,
          duration: TOAST_DEFAULT_DURATION
