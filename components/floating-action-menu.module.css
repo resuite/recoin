@@ -26,6 +26,7 @@
    justify-content: flex-end;
    row-gap: calc(var(--half-spacing) * 0.5);
    pointer-events: auto;
+   padding-left: var(--half-spacing);
 }
 
 .floatingListItem {
@@ -37,11 +38,14 @@
    border-radius: 35px;
    border: none;
    min-width: unset;
-   animation: show-item var(--speed-default) backwards;
+   animation: show-item var(--speed-default) var(--timing-bounce) backwards;
    animation-delay: calc(30ms * var(--fa-rev-index));
    transition-delay: calc(30ms * var(--fa-index));
+   transition-timing-function: var(--timing-bounce);
    transition-property: opacity, transform;
    transform-origin: right;
+   font-size: var(--text-big);
+   padding-inline: var(--spacing);
 
    .popover:not(.open) & {
       opacity: 0;
@@ -136,7 +140,7 @@ body[data-ios] {
 @keyframes show-item {
    from {
       opacity: 0;
-      transform: translateY(10px) scale(0.5);
+      transform: translateY(20px) scale(0.5);
    }
    to {
       opacity: 1;
