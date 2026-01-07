@@ -57,6 +57,7 @@
       "retend-server": "https://pkg.pr.new/resuite/retend/retend-server@9fbf97e7",
       "retend-utils": "https://pkg.pr.new/resuite/retend/retend-utils@9fbf97e7",
       "retend-web": "https://pkg.pr.new/resuite/retend/retend-web@9fbf97e7",
+      "typescript": "^5.9.3",
       "zod": "^3.25.46"
    },
    "lint-staged": {

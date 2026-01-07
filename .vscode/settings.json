@@ -33,5 +33,6 @@
    // "typescript.experimental.useTsgo": true,
    "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
-   }
+   },
+   "typescript.tsdk": "node_modules/typescript/lib"
 }
